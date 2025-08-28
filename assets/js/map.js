@@ -742,3 +742,9 @@ region7Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r7_smal
 region8Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r8_small.geojson', region8Roads));
 region9Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r9_small.geojson', region9Roads));
 
+map.enableAutoSpiderfy({
+    precision: 6,
+    footSeparation: 30,
+    legLength: 40,
+    keepSpiderfied: true
+});
