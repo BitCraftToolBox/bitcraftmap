@@ -529,7 +529,7 @@ L.geoJSON(geoJson, {
         } else {
         finalPopupText = popupText;
         }
-        layer.bindPopup(finalPopupText);
+        layer.bindPopup(finalPopupText, { pane: 'markerOnTop' });
     }
 
     if (feature.properties?.turnLayerOn) {
