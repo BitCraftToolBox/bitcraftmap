@@ -33,5 +33,17 @@ const iconsManifest = {
   "temple": "assets/images/other/temple.svg",
   "travelerTree": "assets/images/other/travelerTree.svg",
   "waypoint": "assets/images/other/waypoint.png",
-  "search-icon": "assets/images/search-icon.png"
+  "search-icon": "assets/images/search-icon.png",
+  "iconCarpentry": "assets/images/iconCarpentry.svg",
+  "iconTailor": "assets/images/iconTailor.svg",
+  "iconMasonry": "assets/images/iconMasonry.svg",
+  "iconFarming": "assets/images/iconFarming.svg",
+  "iconForaging": "assets/images/iconForaging.svg",
+  "iconForestry": "assets/images/iconForestry.svg",
+  "iconHunting": "assets/images/iconHunting.svg",
+  "iconLeatherWorking": "assets/images/iconLeatherWorking.svg",
+  "iconScholar": "assets/images/iconScholar.svg",
+  "iconMining": "assets/images/iconMining.svg",
+  "iconSmithing": "assets/images/iconSmithing.svg",
+  "iconFishing": "assets/images/iconFishing.svg"
 };
