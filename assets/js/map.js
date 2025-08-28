@@ -744,8 +744,8 @@ region9Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r9_smal
 
 map.enableAutoSpiderfy({
     precision: 6,
-    footSeparation: 30,
-    legLength: 10,
+    footSeparation: 32,
+    legLength: 1,
     keepSpiderfied: true,
     legOptions: { color: '#fff', weight: 0 }
 });
