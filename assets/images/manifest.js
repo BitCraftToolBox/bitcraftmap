@@ -45,5 +45,6 @@ const iconsManifest = {
   "iconScholar": "assets/images/wiki/iconScholar.svg",
   "iconMining": "assets/images/wiki/iconMining.svg",
   "iconSmithing": "assets/images/wiki/iconSmithing.svg",
-  "iconFishing": "assets/images/wiki/iconFishing.svg"
+  "iconFishing": "assets/images/wiki/iconFishing.svg",
+  "iconCooking": "assets/images/wiki/iconCooking.svg"
 };
