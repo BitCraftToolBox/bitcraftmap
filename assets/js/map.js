@@ -629,13 +629,6 @@ function groupLayersControl(control, groups) {
     }
 }
 
-groupLayersControl(controlLayer, {
-    'Points of Interest': ['Wonders','Temples','Ruined Cities','Banks','Markets','Waystones','Grids','Waypoints'],
-    'Claims': ['Claims T1','Claims T2','Claims T3','Claims T4','Claims T5','Claims T6','Claims T7','Claims T8','Claims T9','Claims T10'],
-    'Caves':  ['Caves T1','Caves T2','Caves T3','Caves T4','Caves T5','Caves T6','Caves T7','Caves T8','Caves T9','Caves T10'],
-    'Roads':  ['R1 roads','R2 roads','R3 roads','R4 roads','R5 roads','R6 roads','R7 roads','R8 roads','R9 roads']
-});
-
 function escapeHTML(string) {
     return string
         .replace(/&/g, "&amp;")
@@ -753,3 +746,35 @@ map.enableAutoSpiderfy({
     keepSpiderfied: true,
     legOptions: { color: '#fff', weight: 0 }
 });
+
+const GROUPS = {
+    'Points of Interest': ['Wonders','Temples','Ruined Cities','Banks','Markets','Waystones','Grids','Waypoints'],
+    'Claims': ['Claims T1','Claims T2','Claims T3','Claims T4','Claims T5','Claims T6','Claims T7','Claims T8','Claims T9','Claims T10'],
+    'Caves':  ['Caves T1','Caves T2','Caves T3','Caves T4','Caves T5','Caves T6','Caves T7','Caves T8','Caves T9','Caves T10'],
+    'Roads':  ['R1 roads','R2 roads','R3 roads','R4 roads','R5 roads','R6 roads','R7 roads','R8 roads','R9 roads']
+};
+
+const _origUpdate = controlLayer._update.bind(controlLayer);
+controlLayer._update = function () {
+    const prevOpen = {};
+    if (this._overlaysList) {
+        this._overlaysList
+        .querySelectorAll('details.lc-section')
+        .forEach(d => {
+            const key = d.querySelector('summary')?.textContent.trim();
+            if (key) prevOpen[key] = d.open;
+        });
+    }
+
+    _origUpdate();
+    groupLayersControl(this, GROUPS);
+
+    this._overlaysList
+    .querySelectorAll('details.lc-section')
+    .forEach(d => {
+        const key = d.querySelector('summary')?.textContent.trim();
+        if (key && prevOpen.hasOwnProperty(key)) d.open = prevOpen[key];
+    });
+};
+
+groupLayersControl(controlLayer, GROUPS);
