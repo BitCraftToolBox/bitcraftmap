@@ -41,7 +41,7 @@ const iconsManifest = {
   "iconForaging": "assets/images/wiki/iconForaging.svg",
   "iconForestry": "assets/images/wiki/iconForestry.svg",
   "iconHunting": "assets/images/wiki/iconHunting.svg",
-  "iconLeatherWorking": "assets/images/wiki/iconLeatherWorking.svg",
+  "iconLeatherWorking": "assets/images/wiki/iconLeatherworking.svg",
   "iconScholar": "assets/images/wiki/iconScholar.svg",
   "iconMining": "assets/images/wiki/iconMining.svg",
   "iconSmithing": "assets/images/wiki/iconSmithing.svg",
