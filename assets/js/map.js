@@ -431,20 +431,36 @@ async function loadGeoJsonFromGist() {
 async function loadGeoJsonFromBackend() {
     const resourceId = new URLSearchParams(window.location.search).get('resourceId');
     if(!resourceId) return;
-    if(!/^[0-9]+$/.test(resourceId)) return;
-    const response = await fetch('https://api.bitcraftmap.com/resource/' + resourceId)
-    const geoJson = await response.json();
-    paintGeoJson(geoJson, waypointsLayer);
+    if(!/^([0-9]+,?)+$/.test(resourceId)) return;
+    const ids = resourceId.split(',');
+    const fetchPromises = ids.map(id =>
+        fetch('https://api.bitcraftmap.com/resource/' + id)
+            .then(response => response.json())
+    );
+    const geoJsonResults = await Promise.all(fetchPromises);
+
+    geoJsonResults.forEach(geoJson => {
+        paintGeoJson(geoJson, waypointsLayer);
+    });
+
     map.addLayer(waypointsLayer);
 };
 
 async function loadEnemyGeoJsonFromBackend() {
     const resourceId = new URLSearchParams(window.location.search).get('enemyId');
     if(!resourceId) return;
-    if(!/^[0-9]+$/.test(resourceId)) return;
-    const response = await fetch('https://api.bitcraftmap.com/enemy/' + resourceId)
-    const geoJson = await response.json();
-    paintGeoJson(geoJson, waypointsLayer);
+    if(!/^([0-9]+,?)+$/.test(resourceId)) return;
+    const ids = resourceId.split(',');
+    const fetchPromises = ids.map(id =>
+        fetch('https://api.bitcraftmap.com/enemy/' + id)
+            .then(response => response.json())
+    );
+    const geoJsonResults = await Promise.all(fetchPromises);
+
+    geoJsonResults.forEach(geoJson => {
+        paintGeoJson(geoJson, waypointsLayer);
+    });
+
     map.addLayer(waypointsLayer);
 };
 
