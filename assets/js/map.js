@@ -492,7 +492,11 @@ L.geoJSON(geoJson, {
     }
 
     map.createPane('markerOnTop');
-    map.getPane('markerOnTop').style.zIndex = 999;
+    map.getPane('markerOnTop').style.zIndex = 980;
+
+    map.createPane('popupOnTop');
+    map.getPane('popupOnTop').style.zIndex = 990;
+
 
     let waypointIcon;
     if (feature.properties?.iconName || feature.properties?.iconSize) {
@@ -529,7 +533,7 @@ L.geoJSON(geoJson, {
         } else {
         finalPopupText = popupText;
         }
-        layer.bindPopup(finalPopupText, { pane: 'markerOnTop' });
+        layer.bindPopup(finalPopupText, { pane: 'popupOnTop' });
     }
 
     if (feature.properties?.turnLayerOn) {
