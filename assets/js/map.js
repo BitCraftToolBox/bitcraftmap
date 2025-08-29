@@ -649,7 +649,6 @@ function validateGeoJson(untrustedString) {
     catch { throw new Error('Bad URI encoding'); }
 
     let jsonFormString;
-    console.log(decodedString)
     try { jsonFormString = JSON.parse(decodedString); }
     catch { throw new Error('Invalid JSON'); }
 
