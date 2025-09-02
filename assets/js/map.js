@@ -429,12 +429,16 @@ async function loadGeoJsonFromGist() {
 };
 
 async function loadGeoJsonFromBackend() {
+    // Get region id or default to region 2
+    const regionId = new URLSearchParams(window.location.search).get('regionId') || 2;
     const resourceId = new URLSearchParams(window.location.search).get('resourceId');
+    if(!regionId) return;
     if(!resourceId) return;
+    if(!/^[1-9]$/.test(regionId)) return;
     if(!/^([0-9]+,?)+$/.test(resourceId)) return;
-    const ids = resourceId.split(',');
-    const fetchPromises = ids.map(id =>
-        fetch('https://api.bitcraftmap.com/resource/' + id)
+    const resourceIds = resourceId.split(',');
+    const fetchPromises = resourceIds.map(id =>
+        fetch('https://api.bitcraftmap.com/region' + regionId + '/resource/' + id)
             .then(response => response.json())
     );
     const geoJsonResults = await Promise.all(fetchPromises);
@@ -447,12 +451,15 @@ async function loadGeoJsonFromBackend() {
 };
 
 async function loadEnemyGeoJsonFromBackend() {
+    const regionId = new URLSearchParams(window.location.search).get('regionId') || 2;
     const resourceId = new URLSearchParams(window.location.search).get('enemyId');
+    if(!regionId) return;
     if(!resourceId) return;
+    if(!/^[1-9]$/.test(regionId)) return;
     if(!/^([0-9]+,?)+$/.test(resourceId)) return;
-    const ids = resourceId.split(',');
-    const fetchPromises = ids.map(id =>
-        fetch('https://api.bitcraftmap.com/enemy/' + id)
+    const resourceIds = resourceId.split(',');
+    const fetchPromises = resourceIds.map(id =>
+        fetch('https://api.bitcraftmap.com/region' + regionId + '/enemy/' + id)
             .then(response => response.json())
     );
     const geoJsonResults = await Promise.all(fetchPromises);
