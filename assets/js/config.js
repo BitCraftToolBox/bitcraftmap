@@ -25,6 +25,8 @@ function createMapOptions() {
         minZoom: -5,
         maxZoom: 5,
         zoomSnap: 0.1,
+
+        // This is a custom CRS (Coordinate Reference System) that fit bitcraft special hex grid
         crs: L.extend({}, L.CRS.Simple, {
             projection: {
                 project(latlng) {
