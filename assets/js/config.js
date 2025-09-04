@@ -1,8 +1,6 @@
 'use strict';
-function createNewProjection() {
-    
-}
 
+// Generic option for the website map
 function createMapOptions(config) {
     return {
         mapId : config.mapId ?? "map",
@@ -23,6 +21,7 @@ function createMapOptions(config) {
     };
 }
 
+
 function createRenderingOptions() {
     return {
 
@@ -32,5 +31,20 @@ function createRenderingOptions() {
 function createIconsManifest() {
     return {
 
+    };
+}
+
+
+
+// This maybe not in config.js
+function createBitcraftProjection(LeafletObject, apothem) {
+    return {
+        project(latlng) {
+            return new LeafletObject.Point(latlng.lng, -latlng.lat / apothem);
+        },
+        unproject(point) {
+            return new LeafletObject.LatLng(-point.y * apothem, point.x);
+        },
+        bounds: LeafletObject.bounds([-Infinity, -Infinity], [Infinity, Infinity])
     };
 }

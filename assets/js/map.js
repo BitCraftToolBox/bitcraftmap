@@ -750,6 +750,8 @@ region7Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r7_smal
 region8Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r8_small.geojson', region8Roads));
 region9Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r9_small.geojson', region9Roads));
 
+/* removing this for now, seems unnecessary (spread markers that are too close together)
+// Note : don't forget to add back <script src="assets/js/spider.js"></script> if you want this
 map.enableAutoSpiderfy({
     precision: 6,
     footSeparation: 32,
@@ -757,6 +759,7 @@ map.enableAutoSpiderfy({
     keepSpiderfied: true,
     legOptions: { color: '#fff', weight: 0 }
 });
+*/
 
 const GROUPS = {
     'Points of Interest': ['Wonders','Temples','Ruined Cities','Banks','Markets','Waystones','Grids','Dungeons','Waypoints'],
