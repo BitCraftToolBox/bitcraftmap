@@ -391,6 +391,45 @@
                 "type": "Point",
                 "coordinates": [12495,16779]
             }
+        },
+        {
+            "type": "Feature",
+            "id": "432345564329806520",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [18442,13439]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "432345564329817714",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [19602,8932]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "432345564329795268",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [21530,11649]
+            }
         }
     ]
 }

@@ -1,65 +1,20 @@
-'use strict';
-const s = 2 / Math.sqrt(3);
+"use strict"
+// Reminder
+// N = Z = lat = Bottom to top
+// E = X = lgt = left to right
 
-const bitcraftWidth = 23040;  
-const bitcraftHeight = 23040;
-const bitcraftHeightWithOcean = 23040 * s;
+const mapOptions = createMapOptions()
+const appOptions = createAppOptions()
+const map = L.map('map', mapOptions)
+const mapBounds = [[0, 0], [mapOptions.mapWidth, mapOptions.mapHeight]]
+const mapBoundsWithOcean = [[0, 0], [mapOptions.mapHeight * mapOptions.apothem, mapOptions.mapWidth]]
+const mapImageLayer = L.imageOverlay('assets/maps/map.png', mapBoundsWithOcean)
 
-
-const SquishXProjection = {
-    project(latlng) {
-        const x = latlng.lng;  // treat "lng" as your game X
-        const y = latlng.lat;  // treat "lat" as your game Y
-        const X = x;
-        const Y = -y / s ;          // Leaflet's layer point Y goes down; negate to keep Y-up world
-        return new L.Point(X, Y);
-    },
-    unproject(point) {
-        const X = point.x;
-        const Y = point.y;
-        const x = X;
-        const y = -Y * s;
-        return new L.LatLng(y, x);
-    },
-    bounds: L.bounds([-Infinity, -Infinity], [Infinity, Infinity])
-};
-
-// 2) Build a CRS using that projection
-const CRS_SquishX = L.extend({}, L.CRS.Simple, {
-    projection: SquishXProjection,
-    // No extra Transformation: we've baked the scaling/flip into project/unproject
-    transformation: new L.Transformation(1, 0, 1, 0),
-    scale(z) { return Math.pow(2, z); },
-    infinite: false
-});
-
-
-const map = L.map('map', {
-    crs: CRS_SquishX,
-    minZoom: -6,
-    maxZoom: 6,
-    zoomSnap: 0.1,
-    attributionControl: false, // Remove watermark
-    zoomControl: false, // Remove the zoom control top left
-    preferCanvas: true,
-    boxZoom: false
-});
-
-//               N                     E
-//              lat                   lgt
-//           locationZ             locationX
-//         bottom to top         left to right
-//               v                     v
-
-const mapBounds = [[0, 0], [bitcraftHeight, bitcraftWidth]];
-const mapBoundsWithOcean = [[0, 0], [bitcraftHeightWithOcean, bitcraftWidth]];
-
-L.imageOverlay('assets/maps/map.png', mapBoundsWithOcean).addTo(map);
+map.addLayer(mapImageLayer)
 map.fitBounds(mapBounds);
 
-
 // Overwriting the default icon parameters
-delete L.Icon.Default.prototype._getIconUrl;
+delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
     "iconUrl": iconsManifest['Hex_Logo'],
     "iconRetinaUrl": iconsManifest['Hex_Logo'],
@@ -71,30 +26,31 @@ L.Icon.Default.mergeOptions({
     "shadowSize": null,
     "shadowAnchor": null,
     "shadowRetinaUrl": null
-});
+})
 
 function createIcon(iconName = 'Hex_Logo', iconSize = [32,32]) {
-    const [w = 32, h = 32] = iconSize || [];
+    const width = iconSize[0] ?? 32
+    const height = iconSize[1] ?? 32
     return L.icon({
         iconUrl: iconsManifest[iconName],
-        iconSize: [w, h],
-        iconAnchor: [w/2, h/2],
-        popupAnchor: [0, -h/2],
+        iconSize: [width, height],
+        iconAnchor: [width/2, height/2],
+        popupAnchor: [0, -height/2],
         shadowUrl: null,
         shadowSize: null,
         shadowAnchor: null
-    });
-};
+    })
+}
 
 const caveIcons = [
     createIcon('t1'),createIcon('t2'),createIcon('t3'),createIcon('t4'),createIcon('t5'),
     createIcon('t6'),createIcon('t7'),createIcon('t8'),createIcon('t9'),createIcon('t10')
-];
+]
 
 const claimIcons = [
     createIcon('claimT0'),createIcon('claimT1'),createIcon('claimT2'),createIcon('claimT3'),createIcon('claimT4'),createIcon('claimT5'),
     createIcon('claimT6'),createIcon('claimT7'),createIcon('claimT8'),createIcon('claimT9'),createIcon('claimT10')
-];
+]
 
 const ruinedIcon = createIcon('ruinedCity');
 const templeIcon = createIcon('temple');
@@ -323,8 +279,8 @@ L.geoJSON(geojsonData, {
     const marker = L.marker(
         latlng,
         {
-        title: feature.properties.name + ' N '+ coords[0] + ' E ' + coords[1],
-        icon: claimIcons[feature.properties.tier]
+            title: feature.properties.name + ' N '+ coords[0] + ' E ' + coords[1],
+            icon: claimIcons[feature.properties.tier]
         }
     );
 
@@ -474,7 +430,6 @@ async function loadEnemyGeoJsonFromBackend() {
 };
 
 async function loadGeoJsonFromFile(fileUrl, layer) {
-    console.log('loading : ' + fileUrl)
     const file = await fetch(fileUrl);
     const content = await file.text()
     const geoJson = validateGeoJson(content);
