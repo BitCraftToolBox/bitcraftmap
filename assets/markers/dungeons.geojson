@@ -261,6 +261,97 @@
                 "type": "Point",
                 "coordinates": [5630,9403]
             }
+        },
+        {
+            "type": "Feature",
+            "id": "idkyet(r3)",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [18417,4065]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "idkyet(r3)",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [19806,2142]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "idkyet(r3)",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [15954,4215]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "648518346433972687",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [17608,18649]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "648518346433996547",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [22052,18145]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "648518346434009855",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [19527,16363]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "648518346434036606",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [21859,20385]
+            }
         }
     ]
 }
