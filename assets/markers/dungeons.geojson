@@ -1,0 +1,156 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "id": "360287970318314335",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8303,
+                    10659
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "360287970318326942",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12496,
+                    12165
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "360287970318340107",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    14525,
+                    11034
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "144115188190708446",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10948,
+                    7173
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "144115188190721543",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12380,
+                    3195
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "144115188190732123",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8783,
+                    5605
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "216172782220131756",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    19806,
+                    2143
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "216172782220149235",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18417,
+                    4065
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "216172782220159980",
+            "properties": {
+                "popupText": "Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [35,35]
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    15956,
+                    4216
+                ]
+            }
+        }
+    ]
+}
+
+
+
+
+
+
+

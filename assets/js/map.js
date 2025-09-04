@@ -87,13 +87,13 @@ function createIcon(iconName = 'Hex_Logo', iconSize = [32,32]) {
 };
 
 const caveIcons = [
-createIcon('t1'),createIcon('t2'),createIcon('t3'),createIcon('t4'),createIcon('t5'),
-createIcon('t6'),createIcon('t7'),createIcon('t8'),createIcon('t9'),createIcon('t10')
+    createIcon('t1'),createIcon('t2'),createIcon('t3'),createIcon('t4'),createIcon('t5'),
+    createIcon('t6'),createIcon('t7'),createIcon('t8'),createIcon('t9'),createIcon('t10')
 ];
 
 const claimIcons = [
-createIcon('claimT0'),createIcon('claimT1'),createIcon('claimT2'),createIcon('claimT3'),createIcon('claimT4'),createIcon('claimT5'),
-createIcon('claimT6'),createIcon('claimT7'),createIcon('claimT8'),createIcon('claimT9'),createIcon('claimT10')
+    createIcon('claimT0'),createIcon('claimT1'),createIcon('claimT2'),createIcon('claimT3'),createIcon('claimT4'),createIcon('claimT5'),
+    createIcon('claimT6'),createIcon('claimT7'),createIcon('claimT8'),createIcon('claimT9'),createIcon('claimT10')
 ];
 
 const ruinedIcon = createIcon('ruinedCity');
@@ -106,7 +106,8 @@ const templesLayer = L.layerGroup();
 const banksLayer = L.layerGroup();
 const marketsLayer = L.layerGroup();
 const waystonesLayer = L.layerGroup();
-const gridsLayer =  L.layerGroup();
+const gridsLayer = L.layerGroup();
+const dungeonsLayer = L.layerGroup();
 const waypointsLayer = L.layerGroup();
 
 const claimT0Layer = L.layerGroup();
@@ -122,8 +123,8 @@ const claimT9Layer = L.layerGroup();
 const claimT10Layer = L.layerGroup();
 
 const claimLayers = [
-claimT0Layer, claimT1Layer, claimT2Layer, claimT3Layer, claimT4Layer, claimT5Layer,
-claimT6Layer, claimT7Layer, claimT8Layer, claimT9Layer, claimT10Layer
+    claimT0Layer, claimT1Layer, claimT2Layer, claimT3Layer, claimT4Layer, claimT5Layer,
+    claimT6Layer, claimT7Layer, claimT8Layer, claimT9Layer, claimT10Layer
 ];
 
 const allClaims = L.layerGroup(claimLayers);
@@ -172,6 +173,7 @@ const genericToggle = {
     "Markets": marketsLayer,
     "Waystones": waystonesLayer,
     "Grids": gridsLayer,
+    "Dungeons": dungeonsLayer,
     "Waypoints": waypointsLayer,
     "Claims": allClaims,
     "Claims T1": claimT1Layer,
@@ -213,7 +215,7 @@ const allLayers = {
     caveT1Layer, caveT2Layer, caveT3Layer, caveT4Layer, caveT5Layer,
     caveT6Layer, caveT7Layer, caveT8Layer, caveT9Layer, caveT10Layer,
     region1Roads,region2Roads,region3Roads,region4Roads,region5Roads,
-    region6Roads,region7Roads,region8Roads,region9Roads,
+    region6Roads,region7Roads,region8Roads,region9Roads,dungeonsLayer
 };
 
 
@@ -221,20 +223,20 @@ const allLayers = {
 // This is leaflet.search plugin configuration
 // This plugin need a "title" parameter in each marker to find stuff
 const searchControlOptions = {
-position:'topleft',		
-layer: searchGroup,
-initial: false,
-marker: false,
-firstTipSubmit: true,
-zoom: 0
+    position:'topleft',		
+    layer: searchGroup,
+    initial: false,
+    marker: false,
+    firstTipSubmit: true,
+    zoom: 0
 };
 const searchControl = new L.Control.Search(searchControlOptions);
 
 // Load the marker if it is no already on the map
 searchControl.on('search:locationfound', function(marker) {
-if (!map.hasLayer(marker.layer)) {
-    map.addLayer(marker.layer);
-}
+    if (!map.hasLayer(marker.layer)) {
+        map.addLayer(marker.layer);
+    }
 });
 
 // -------------------------------------- //
@@ -472,6 +474,7 @@ async function loadEnemyGeoJsonFromBackend() {
 };
 
 async function loadGeoJsonFromFile(fileUrl, layer) {
+    console.log('loading : ' + fileUrl)
     const file = await fetch(fileUrl);
     const content = await file.text()
     const geoJson = validateGeoJson(content);
@@ -724,8 +727,10 @@ function validateGeoJson(untrustedString) {
 loadTreesGeoJson();
 loadTemplesGeoJson();
 loadRuinedGeoJson();
-loadCavesGeoJson(); // will lazy load this
-loadClaimsGeoJson(); // will lazy load this
+loadCavesGeoJson();
+loadClaimsGeoJson();
+
+loadGeoJsonFromFile('assets/markers/dungeons.geojson', dungeonsLayer)
 
 // Load from gist / load from hash
 loadGeoJsonFromGist();
@@ -754,7 +759,7 @@ map.enableAutoSpiderfy({
 });
 
 const GROUPS = {
-    'Points of Interest': ['Wonders','Temples','Ruined Cities','Banks','Markets','Waystones','Grids','Waypoints'],
+    'Points of Interest': ['Wonders','Temples','Ruined Cities','Banks','Markets','Waystones','Grids','Dungeons','Waypoints'],
     'Claims': ['Claims T1','Claims T2','Claims T3','Claims T4','Claims T5','Claims T6','Claims T7','Claims T8','Claims T9','Claims T10'],
     'Caves':  ['Caves T1','Caves T2','Caves T3','Caves T4','Caves T5','Caves T6','Caves T7','Caves T8','Caves T9','Caves T10'],
     'Roads':  ['R1 roads','R2 roads','R3 roads','R4 roads','R5 roads','R6 roads','R7 roads','R8 roads','R9 roads']
