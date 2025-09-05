@@ -387,47 +387,54 @@ async function loadGeoJsonFromGist() {
 };
 
 async function loadGeoJsonFromBackend() {
-    // Get region id or default to region 2
-    const regionId = new URLSearchParams(window.location.search).get('regionId') || 2;
-    const resourceId = new URLSearchParams(window.location.search).get('resourceId');
-    if(!regionId) return;
-    if(!resourceId) return;
-    if(!/^[1-9]$/.test(regionId)) return;
-    if(!/^([0-9]+,?)+$/.test(resourceId)) return;
-    const resourceIds = resourceId.split(',');
-    const fetchPromises = resourceIds.map(id =>
-        fetch('https://api.bitcraftmap.com/region' + regionId + '/resource/' + id)
-            .then(response => response.json())
-    );
+    const query = new URLSearchParams(window.location.search);
+    const regionParameter   = query.get('regionId')   || '2'; // default to region 2
+    const resourceParameter = query.get('resourceId') || '';
+    const enemyParameter    = query.get('enemyId')    || '';
+
+    if(!resourceParameter && !enemyParameter) return;
+    if(!regionParameter) return;
+
+    if(!/^([1-9])(,([1-9]))*$/.test(regionParameter)) return;
+    // 1: split, 2: map to number, 3: make number uniques, 4: back to array
+    const regionIds   = [... new Set(regionParameter.split(',').map(Number))]
+
+    let resourceIds = []
+    if(resourceParameter) {
+        if(!/^([0-9]\d*)(,([0-9]\d*))*$/.test(resourceParameter)) return;
+        resourceIds = [... new Set(resourceParameter.split(',').map(Number))]
+    }
+
+    let enemyIds = []
+    if(enemyParameter) {
+        if(!/^([0-9]\d*)(,([0-9]\d*))*$/.test(enemyParameter)) return;
+        enemyIds = [... new Set(enemyParameter.split(',').map(Number))]
+    }
+
+    const fetchPromises = []
+    for (const regionId of regionIds) {
+        for (const resourceId of resourceIds) {
+            fetchPromises.push(
+                fetch('https://api.bitcraftmap.com/region' + regionId + '/resource/' + resourceId)
+                .then(response => response.json())
+            );
+        }
+        for (const enemyId of enemyIds) {
+            fetchPromises.push(
+                fetch( 'https://api.bitcraftmap.com/region' + regionId + '/enemy/' + enemyId )
+                .then(response => response.json())
+            );
+        }
+    }
+    if (fetchPromises.length === 0) return;
     const geoJsonResults = await Promise.all(fetchPromises);
-
     geoJsonResults.forEach(geoJson => {
-        paintGeoJson(geoJson, waypointsLayer);
+        if (geoJson.features[0].geometry.coordinates.length > 0) {
+            paintGeoJson(geoJson, waypointsLayer)
+        }
     });
-
-    map.addLayer(waypointsLayer);
-};
-
-async function loadEnemyGeoJsonFromBackend() {
-    const regionId = new URLSearchParams(window.location.search).get('regionId') || 2;
-    const resourceId = new URLSearchParams(window.location.search).get('enemyId');
-    if(!regionId) return;
-    if(!resourceId) return;
-    if(!/^[1-9]$/.test(regionId)) return;
-    if(!/^([0-9]+,?)+$/.test(resourceId)) return;
-    const resourceIds = resourceId.split(',');
-    const fetchPromises = resourceIds.map(id =>
-        fetch('https://api.bitcraftmap.com/region' + regionId + '/enemy/' + id)
-            .then(response => response.json())
-    );
-    const geoJsonResults = await Promise.all(fetchPromises);
-
-    geoJsonResults.forEach(geoJson => {
-        paintGeoJson(geoJson, waypointsLayer);
-    });
-
-    map.addLayer(waypointsLayer);
-};
+    map.addLayer(waypointsLayer)
+}
 
 async function loadGeoJsonFromFile(fileUrl, layer) {
     const file = await fetch(fileUrl);
@@ -527,9 +534,12 @@ L.geoJSON(geoJson, {
 
     if (feature.properties?.flyTo && feature.properties?.zoomTo) {
         map.flyTo(feature.properties.flyTo, feature.properties.zoomTo);
-    } else if (layer?.getBounds && !feature.properties.noPan) {
-        map.fitBounds(layer.getBounds());
-    }
+    } else if (
+        layer?.getBounds
+        && layer?.getBounds().isValid()
+        && !feature.properties.noPan) {
+            map.fitBounds(layer.getBounds());
+        }
     }
 }).addTo(layer);
 };
@@ -691,7 +701,6 @@ loadGeoJsonFromFile('assets/markers/dungeons.geojson', dungeonsLayer)
 loadGeoJsonFromGist();
 loadGeoJsonFromHash();
 loadGeoJsonFromBackend();
-loadEnemyGeoJsonFromBackend();
 
 // Load only when the user is requesting it
 gridsLayer.once('add', () => loadGeoJsonFromFile('assets/markers/grids.geojson', gridsLayer));
