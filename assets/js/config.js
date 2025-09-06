@@ -94,6 +94,14 @@ function createIconsManifest() {
     }
 }
 
+// huge object to tell how to format something, color, text..
+// The user might want to change these parameters dynamically
+// We need to generate it
+const formating = {
+    "resource_2": {"tier": 1, "popupText": "something", "rendering": "markers or canvas ?"},
+    "enemy_2": {"tier": 1, "popupText": "name", "rendering": "markers or canvas ?"},
+    // need one line for each resource and enemy...
+}
 
 // Aytimothy colors
 const tierColors = [
