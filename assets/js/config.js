@@ -3,9 +3,9 @@
 function createMapOptions() {
 
     // Bitcraft specific options
-    const apothem = 2 / Math.sqrt(3);
-    const mapWidth = 23040;
-    const mapHeight = 23040;
+    const apothem = 2 / Math.sqrt(3)
+    const mapWidth = 23040
+    const mapHeight = 23040
 
     return {
         apothem,
@@ -74,16 +74,16 @@ function createAppOptions() {
 }
 
 // Hold default config resource/id -> formating
-function createResourceStyle () {
+function createResourceStyle() {
     return {
-        
+
     }
 }
 
 // Hold default config enemy/id -> formating
-function createEnemyStyle () {
+function createEnemyStyle() {
     return {
-        
+
     }
 }
 
@@ -98,17 +98,24 @@ function createIconsManifest() {
 // The user might want to change these parameters dynamically
 // We need to generate it
 const formating = {
-    "resource_2": {"tier": 1, "popupText": "something", "rendering": "markers or canvas ?"},
-    "enemy_2": {"tier": 1, "popupText": "name", "rendering": "markers or canvas ?"},
+    "resource_2": { "tier": 1, "popupText": "something", "rendering": "markers or canvas ?" },
+    "enemy_2": { "tier": 1, "popupText": "name", "rendering": "markers or canvas ?" },
     // need one line for each resource and enemy...
+
+    // What other types ?
+    // Claims
+    // wonders
+    // ruined cities
+    // Caves
+    // Dungeons
 }
 
 // Aytimothy colors
 const tierColors = [
-    "#636a74ff","#865f45ff","#5c6f4dff","#49619bff","#804f86ff",
-    "#973a44ff","#937014ff","#538383ff","#464953ff","#96aebdff"
-];
+    "#636a74ff", "#865f45ff", "#5c6f4dff", "#49619bff", "#804f86ff",
+    "#973a44ff", "#937014ff", "#538383ff", "#464953ff", "#96aebdff"
+]
 const brighterTierColors = [
-    "#838e9eff","#a8663aff","#729b53ff","#3a63c4ff","#a349afff",
-    "#bd2c3bff","#c09015ff","#46a1a1ff","#4f5361ff","#81b6d6ff"
-];
+    "#838e9eff", "#a8663aff", "#729b53ff", "#3a63c4ff", "#a349afff",
+    "#bd2c3bff", "#c09015ff", "#46a1a1ff", "#4f5361ff", "#81b6d6ff"
+]
