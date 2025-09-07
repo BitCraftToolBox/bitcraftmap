@@ -67,8 +67,8 @@ function createLayerRegistry(leafletMap) {
      * Create a new layer or reuse an existing one
      * @param {string} layerName - The unique layer name
      * @param {string} [layerType="group"] - The type of layer ("group", "geojson", "tile", etc.)
-     * @param {boolean} [addToMap=true] - Whether to immediately add the layer to the map
      * @param {object} [options={}] - Options to pass to the layer factory
+     * @param {boolean} [addToMap=true] - Whether to immediately add the layer to the map
      * @returns {L.Layer} The created or existing Leaflet layer
      */
     function createLayer(layerName, layerType = "group", options = {}, addToMap = true) {
@@ -105,8 +105,9 @@ function createLayerRegistry(leafletMap) {
     function showLayer(layerName) {
         const leafletLayer = getLayer(layerName)
         if (!leafletLayer || !leafletMap) return false
+        if (leafletMap.hasLayer(leafletLayer)) return true
         leafletMap.addLayer(leafletLayer)
-        return leafletMap.hasLayer(leafletLayer)
+        return true
     }
 
     /**
@@ -117,7 +118,9 @@ function createLayerRegistry(leafletMap) {
     function hideLayer(layerName) {
         const leafletLayer = getLayer(layerName)
         if (!leafletLayer || !leafletMap) return false
+        if (!leafletMap.hasLayer(leafletLayer)) return true
         leafletMap.removeLayer(leafletLayer)
+        return true
     }
 
     /**
@@ -129,9 +132,9 @@ function createLayerRegistry(leafletMap) {
         const leafletLayer = getLayer(layerName)
         if (!leafletLayer || !leafletMap) return false
         if (isLayerVisible(layerName)) {
-            leafletMap.removeLayer(leafletLayer)
+            hideLayer(layerName)
         } else {
-            leafletMap.addLayer(leafletLayer)
+            showLayer(layerName)
         }
     }
 
@@ -146,6 +149,10 @@ function createLayerRegistry(leafletMap) {
         if (!leafletLayer || !leafletMap) return false
         return leafletMap.hasLayer(leafletLayer)
     }
+
+    // TODO Bulk functions 
+    function showLayers() { }
+    function hideLayers() { }
 
     return {
         hasLayer,
