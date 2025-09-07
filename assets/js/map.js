@@ -1,15 +1,23 @@
 "use strict"
+
 // N = Z = lat = Bottom to top
 // E = X = lgt = left to right
 
 const mapOptions = createMapOptions()
 const appOptions = createAppOptions()
 const map = L.map('map', mapOptions)
-const mapBounds = [[0, 0], [mapOptions.mapWidth, mapOptions.mapHeight]]
-const mapBoundsWithOcean = [[0, 0], [mapOptions.mapHeight * mapOptions.apothem, mapOptions.mapWidth]]
-const mapImageLayer = L.imageOverlay('assets/maps/map.png', mapBoundsWithOcean)
+const layerRegistry = createLayerRegistry(map)
 
-map.addLayer(mapImageLayer)
+layerRegistry.createLayer(
+    "mapImageLayer",
+    "imageOverlay",
+    {
+        url: mapOptions.mapImageURL,
+        bounds: [[0, 0], [mapOptions.mapHeight * mapOptions.apothem, mapOptions.mapWidth]],
+    }
+)
+
+const mapBounds = [[0, 0], [mapOptions.mapWidth, mapOptions.mapHeight]]
 map.fitBounds(mapBounds)
 
 // Overwriting the default icon parameters
@@ -600,15 +608,6 @@ function groupLayersControl(control, groups) {
             })
         })
     }
-}
-
-function escapeHTML(string) {
-    return string
-        .replace(/&/g, "&amp")
-        .replace(/</g, "&lt")
-        .replace(/>/g, "&gt")
-        .replace(/"/g, "&quot")
-        .replace(/'/g, "&#x27")
 }
 
 function validateGeoJson(untrustedString) {

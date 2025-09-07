@@ -6,11 +6,13 @@ function createMapOptions() {
     const apothem = 2 / Math.sqrt(3)
     const mapWidth = 23040
     const mapHeight = 23040
+    const mapImageURL = 'assets/maps/map.png'
 
     return {
         apothem,
         mapWidth,
         mapHeight,
+        mapImageURL,
 
         // Rendering
         preferCanvas: true,

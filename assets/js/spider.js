@@ -1,3 +1,4 @@
+// This is unused
 class AutoSpiderfy {
   constructor(map, opts = {}) {
     this.map = map
