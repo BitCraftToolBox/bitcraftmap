@@ -433,7 +433,7 @@ async function loadGeoJsonFromBackend() {
     const geoJsonResults = await Promise.all(fetchPromises)
     geoJsonResults.forEach(geoJson => {
         if (geoJson.features[0].geometry.coordinates.length > 0) {
-            paintGeoJson(geoJson, waypointsLayer)
+            paintGeoJson(geoJson, waypointsLayer, false)
         }
     })
     map.addLayer(waypointsLayer)
@@ -447,7 +447,7 @@ async function loadGeoJsonFromFile(fileUrl, layer) {
 }
 
 
-function paintGeoJson(geoJson, layer) {
+function paintGeoJson(geoJson, layer, pan = true) {
     L.geoJSON(geoJson, {
         pointToLayer: function (feature, latlng) {
 
@@ -538,12 +538,14 @@ function paintGeoJson(geoJson, layer) {
             if (
                 feature.properties?.flyTo
                 && feature.properties?.zoomTo
-                && !feature.properties.noPan) {
+                && !feature.properties.noPan
+                && pan) {
                 map.flyTo(feature.properties.flyTo, feature.properties.zoomTo)
             } else if (
                 layer?.getBounds
                 && layer?.getBounds().isValid()
-                && !feature.properties.noPan) {
+                && !feature.properties.noPan
+                && pan) {
                 map.fitBounds(layer.getBounds())
             }
         }
