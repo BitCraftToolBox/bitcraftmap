@@ -756,7 +756,7 @@ controlLayer._update = function () {
 
 groupLayersControl(controlLayer, GROUPS)
 
-
+/*
 const liveLayer = L.featureGroup().addTo(map)
 const playerStore = new Map()
 const destinationStore = new Map()
@@ -846,3 +846,4 @@ function connectWebSocket() {
 }
 
 getAllOnlinePlayers()
+*/
