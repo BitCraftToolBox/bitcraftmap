@@ -756,50 +756,40 @@ controlLayer._update = function () {
 
 groupLayersControl(controlLayer, GROUPS)
 
-/*
+
 const liveLayer = L.featureGroup().addTo(map)
 const playerStore = new Map()
 const destinationStore = new Map()
-const namesStore = new Map()
-const playersToSub = []
-
-async function getAllOnlinePlayers() {
-    const playersURL = "https://api.bitcraftmap.com/players"
-    const playersResponse = await fetch(playersURL)
-    const playersJson = await playersResponse.json();
-
-    for (const player of playersJson["players"]) {
-        namesStore.set(player["entity_id"], player["username"])
-    }
-
-    connectWebSocket()
-}
-
 
 function updateMarker(state) {
+
     const playerId = state.entity_id
-    const playerMarker = playerStore.get(playerId) || false
-    const playerDestination = destinationStore.get(playerId) || false
-    const playerName = namesStore.get(playerId) || false
     const playerlatLng = L.latLng(state.location_z / 1000, state.location_x / 1000)
     const destinationlatLng = L.latLng(state.destination_z / 1000, state.destination_x / 1000)
     const directionLine = [playerlatLng, destinationlatLng]
+
+    const playerMarker = playerStore.get(playerId) || false
+    const playerDestination = destinationStore.get(playerId) || false
+
+
     if (!playerMarker || !playerDestination) {
-        const playerMarker = L.circleMarker(playerlatLng, {
+        const playerMarker = new L.circleMarker(playerlatLng, {
+            color: '#00ff00ff',
             radius: 4,
             weight: 1,
             opacity: 1,
             fillOpacity: 1
         }).addTo(liveLayer)
-        playerMarker.bindPopup(playerName)
-        playerStore.set(playerId, playerMarker)
+        playerMarker.bindPopup("PlayerId : " + playerId)
 
         const playerTrail = new L.Polyline(directionLine, {
-            color: 'red',
+            color: '#ff0000ff',
             weight: 1,
             opacity: 1,
             smoothFactor: 1
         }).addTo(liveLayer)
+
+        playerStore.set(playerId, playerMarker)
         destinationStore.set(playerId, playerTrail)
     } else {
         playerMarker.setLatLng(playerlatLng)
@@ -807,27 +797,21 @@ function updateMarker(state) {
     }
 }
 
+
 function connectWebSocket() {
 
-    const url = "wss://craft-api.resubaka.dev/websocket"
     const query = new URLSearchParams(window.location.search)
-    const playerParameter = query.get('playerIds')
-    if (!playerParameter) return
-    if (!/^(?:[0-9]{1,32})(?:,(?:[0-9]{1,32}))*$/.test(playerParameter)) return
-    const playersIds = playerParameter.split(',')
-
-    for (const id of playersIds) {
-        playersToSub.push("mobile_entity_state." + id)
-    }
-
-
+    const playerId = query.get('playerId')
+    if (!playerId) return
+    if (!/^[0-9]{0,32}$/.test(playerId)) return
 
     const subscribeMsg = {
         t: "Subscribe",
-        c: { topics: playersToSub }
+        c: { topics: ["mobile_entity_state." + playerId] }
     }
 
-    const webSocket = new WebSocket(url)
+    const resubakaURL = "wss://craft-api.resubaka.dev/websocket"
+    const webSocket = new WebSocket(resubakaURL)
 
     webSocket.onopen = () => {
         console.log("WebSocket connected")
@@ -845,5 +829,4 @@ function connectWebSocket() {
     webSocket.onclose = () => console.log("WebSocket closed")
 }
 
-getAllOnlinePlayers()
-*/
+connectWebSocket()
