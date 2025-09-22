@@ -1,6 +1,3 @@
-## 🗺️
-https://bitcraftmap.com
-
 ## Things I found
 
 - https://msgpack.org/
@@ -17,14 +14,7 @@ https://bitcraftmap.com
 - https://docs.mapbox.com/mapbox-gl-js/api/
 - https://github.com/mapbox/geobuf
 
-## Roadmap
-
-0 rewrite code to have generic geoJson
-
-1 Sort icons, make icon list and layer list for validation
-0.1 0.2 : move coordinate finder + coordinate a mouse cursor + coordinate and biome finder
-2 Work on user interface
-3 make the higher resolution hexagon map with opencv and numpy
+move coordinate finder + coordinate a mouse cursor + coordinate and biome finder
 
 ## Wild ideas board
 

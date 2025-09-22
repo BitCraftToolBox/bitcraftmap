@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BitCraft Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Game map for BitCraft Online">
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self';
+        style-src 'self';
+        img-src 'self';
+        connect-src 'self' https://api.bitcraftmap.com/ https://api.github.com https://gist.githubusercontent.com wss://craft-api.resubaka.dev/;
+        font-src 'self';
+        frame-src 'none';
+        object-src 'none';
+        base-uri 'none';
+        upgrade-insecure-requests
+    ">
+    <link rel="icon" href="img/other/Hex_Logo.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://bitcraftmap.com/" />
+    <link rel="stylesheet" href="css/map.css" />
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/leaflet-search.css" />
+    <script src="js/leaflet.js"></script>
+    <script src="js/leaflet-search.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/library.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/images-manifest.js"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="coords"></div>
+    <script src="js/map.js"></script>
+</body>
+
+</html>
