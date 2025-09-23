@@ -17,6 +17,18 @@ layerRegistry.createLayer(
     }
 )
 
+const turnOnHeatmap = new URLSearchParams(window.location.search).get('heatmap')
+if (turnOnHeatmap) {
+    layerRegistry.createLayer(
+        "heatmapImageLayer",
+        "imageOverlay",
+        {
+            url: "assets/maps/heatmap.png",
+            bounds: [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]],
+        }
+    )
+}
+
 const mapBounds = [[0, 0], [mapOptions.mapWidth, mapOptions.mapHeight]]
 map.fitBounds(mapBounds)
 
