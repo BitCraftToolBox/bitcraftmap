@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "juzulsong_claim",
+      "properties": {
+        "popupText": "Halloween Event",
+        "iconName": "jack-o-lantern",
+        "iconSize": [
+          45,
+          45
+        ],
+        "type": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13830,
+          12714
+        ]
+      }
+    }
+  ]
+}
