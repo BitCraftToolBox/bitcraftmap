@@ -5,7 +5,12 @@
       "type": "Feature",
       "id": "juzulsong_claim",
       "properties": {
-        "popupText": ["Happy Halloween!", " Event Location"],
+        "popupText": [
+         "Happy Halloween!",
+         "Seasonal Event Location",
+         "N 4610 E 4238",
+         "Waystone: Yes"
+         ],
         "iconName": "jack-o-lantern",
         "iconSize": [
           40,

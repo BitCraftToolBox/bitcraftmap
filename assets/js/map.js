@@ -70,11 +70,12 @@ const claimIcons = [
     createIcon('claimT0'), createIcon('claimT1'), createIcon('claimT2'), createIcon('claimT3'), createIcon('claimT4'), createIcon('claimT5'),
     createIcon('claimT6'), createIcon('claimT7'), createIcon('claimT8'), createIcon('claimT9'), createIcon('claimT10')
 ]
-
+const eventIcon = createIcon('jack-o-lantern')
 const ruinedIcon = createIcon('ruinedCity')
 const templeIcon = createIcon('temple')
 const treeIcon = createIcon('travelerTree')
 
+const eventsLayer = L.layerGroup()
 const treesLayer = L.layerGroup()
 const ruinedLayer = L.layerGroup()
 const templesLayer = L.layerGroup()
@@ -141,6 +142,7 @@ const roadsLayers = [
 const allRoads = L.layerGroup(roadsLayers)
 
 const genericToggle = {
+    "Events": eventsLayer,
     "Wonders": treesLayer,
     "Temples": templesLayer,
     "Ruined Cities": ruinedLayer,
@@ -182,7 +184,7 @@ const genericToggle = {
 }
 
 const allLayers = {
-    treesLayer, templesLayer, ruinedLayer, banksLayer, marketsLayer, waystonesLayer, waypointsLayer,
+    eventsLayer, treesLayer, templesLayer, ruinedLayer, banksLayer, marketsLayer, waystonesLayer, waypointsLayer,
     claimT0Layer, claimT1Layer, claimT2Layer, claimT3Layer, claimT4Layer, claimT5Layer,
     claimT6Layer, claimT7Layer, claimT8Layer, claimT9Layer, claimT10Layer,
     caveT1Layer, caveT2Layer, caveT3Layer, caveT4Layer, caveT5Layer,
@@ -565,6 +567,7 @@ function paintGeoJson(geoJson, layer, pan = true) {
 }
 
 // Default layer to show on map opening
+eventsLayer.addTo(map)
 treesLayer.addTo(map)
 templesLayer.addTo(map)
 ruinedLayer.addTo(map)
@@ -707,6 +710,7 @@ loadCavesGeoJson()
 loadClaimsGeoJson()
 
 loadGeoJsonFromFile('assets/markers/dungeons.geojson', dungeonsLayer)
+loadGeoJsonFromFile('assets/markers/events.geojson', eventsLayer)
 
 // Load from gist / load from hash
 loadGeoJsonFromGist()
@@ -737,7 +741,7 @@ map.enableAutoSpiderfy({
 */
 
 const GROUPS = {
-    'Points of Interest': ['Wonders', 'Temples', 'Ruined Cities', 'Banks', 'Markets', 'Waystones', 'Grids', 'Dungeons', 'Waypoints'],
+    'Points of Interest': ['Events','Wonders', 'Temples', 'Ruined Cities', 'Banks', 'Markets', 'Waystones', 'Grids', 'Dungeons', 'Waypoints'],
     'Claims': ['Claims T1', 'Claims T2', 'Claims T3', 'Claims T4', 'Claims T5', 'Claims T6', 'Claims T7', 'Claims T8', 'Claims T9', 'Claims T10'],
     'Caves': ['Caves T1', 'Caves T2', 'Caves T3', 'Caves T4', 'Caves T5', 'Caves T6', 'Caves T7', 'Caves T8'],
     'Roads': ['R1 roads', 'R2 roads', 'R3 roads', 'R4 roads', 'R5 roads', 'R6 roads', 'R7 roads', 'R8 roads', 'R9 roads']
