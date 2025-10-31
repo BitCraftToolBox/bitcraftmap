@@ -5,11 +5,11 @@
       "type": "Feature",
       "id": "juzulsong_claim",
       "properties": {
-        "popupText": "Halloween Event",
+        "popupText": "Happy Halloween<br>Event Location",
         "iconName": "jack-o-lantern",
         "iconSize": [
-          45,
-          45
+          40,
+          40
         ],
         "type": 0
       },
