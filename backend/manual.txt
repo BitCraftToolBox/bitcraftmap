@@ -1,0 +1,56 @@
+These are all the step I do to compile and deploy the backend :
+
+1/ clone https://github.com/vis-eyth/bitcraft-nodeindex.git
+
+2/ Add this file in the folder : "Dcokerfile"
+
+# syntax=docker/dockerfile:1
+
+FROM rust:1.89.0-bookworm
+WORKDIR /app
+COPY . .
+RUN cargo build --release -p nodeindex && cp ./target/release/nodeindex ./  && rm -rf ./target
+CMD ["./nodeindex"]
+
+
+3/ Launch command 
+docker build -t bitcraftmap-api:latest
+
+
+4/ Lauch command 
+docker save bitcraftmap-api:latest | gzip > bitcraftmap-api.tar.gz
+
+
+5/ Upload zip to server
+
+6/ Lauch command 
+gunzip -c bitcraftmap-api.tar.gz | docker load
+These are the basic step to get a docker image and upload the image to the server
+When the image is on the server, you can use this script to start the backend for one region. However it would be much better to make a docker compose file for it :
+
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ -z "${1:-}" ] || [ -z "${2:-}" ]; then
+    echo "Usage: $0 <region_number> <token>"
+    exit 1
+fi
+
+REGION="$1"
+TOKEN="$2"
+PORT="400${REGION}"
+IMAGE_NAME="bitcraftmap-api"
+IMAGE_TAG="latest"
+
+docker run -d \
+    --name "bitcraftmap-api-r${REGION}" \
+    --restart unless-stopped \
+    -p 127.0.0.1:${PORT}:${PORT} \
+    -e SOCKET_ADDR=0.0.0.0:${PORT} \
+    -e REGION="${REGION}" \
+    -e TOKEN="${TOKEN}" \
+    "${IMAGE_NAME}:${IMAGE_TAG}"
+ 
+Manserk — 20:06
+to use : 
+./docker_up.sh 1 eyJ...

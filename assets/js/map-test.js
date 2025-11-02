@@ -432,13 +432,13 @@ async function loadGeoJsonFromBackend() {
     for (const regionId of regionIds) {
         for (const resourceId of resourceIds) {
             fetchPromises.push(
-                fetch('https://api.bitcraftmap.com/region' + regionId + '/resource/' + resourceId)
+                fetch('http://83.222.12.17/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
         }
         for (const enemyId of enemyIds) {
             fetchPromises.push(
-                fetch('https://api.bitcraftmap.com/region' + regionId + '/enemy/' + enemyId)
+                fetch('http://83.222.12.17/region' + regionId + '/enemy/' + enemyId)
                     .then(response => response.json())
             )
         }

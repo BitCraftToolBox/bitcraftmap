@@ -2,6 +2,7 @@ import requests
 import json
 import math
 import time
+import os
 
 start_time = time.time()
 
@@ -11,7 +12,7 @@ all_claims_with_buildings = []
 current_page = 1
 sleep_time = 0.5
 claims_url = 'https://bitjita.com/api/claims/'
-user_agent = {'User-agent': 'Manserk For bitcraftmap.com'}
+user_agent = {'User-agent': 'LittleDaimon For bitcraftmap.com'}
 raw_claims_file = 'assets/data/claims.json' # This file will be too big we need to gitignore it
 geojson_claims_file = 'assets/markers/claims.geojson'
 
@@ -25,7 +26,7 @@ total_pages = math.ceil(total_claims / limit)
 print('There are ' + data['count'] + ' claims to request in a total of ' + str(total_pages) + ' pages')
 
 # Collecting list of claim entityId from bitjita
-for page in range(total_pages) :
+for page in range(total_pages):
     time.sleep(sleep_time)
     full_url = claims_url + '?limit=' + str(limit) + '&page=' + str(page+1)
     print('Requesting ' + full_url)
@@ -43,6 +44,7 @@ if total_claims - len(all_claims) > 0:
     exit(1)
 
 # For each entityId, requesting the list of buildings
+
 counter = total_claims
 for claim in all_claims:
     time.sleep(sleep_time)
@@ -54,8 +56,12 @@ for claim in all_claims:
 
 print('Counted ' + str(total_claims) + ' claims and there are ' + str(len(all_claims_with_buildings)) + ' total claims in the json file')
 
+# Ensure the directory exists
+os.makedirs(os.path.dirname(raw_claims_file), exist_ok=True)
+# Write the JSON data to the file
 with open(raw_claims_file, "w") as file:
     json.dump(all_claims_with_buildings, file)
+
 
 def generate_claims_json(json_key):
 
@@ -90,6 +96,7 @@ def generate_claims_json(json_key):
         }
     }
 
+
 with open(raw_claims_file, 'r', encoding='utf-8') as file:
     data = json.load(file)
 
@@ -98,6 +105,9 @@ claims_geojson = {
     "features": [generate_claims_json(key) for key in data]
 }
 
+# Ensure the directory exists
+os.makedirs(os.path.dirname(geojson_claims_file), exist_ok=True)
+# Write the JSON data to the file
 with open(geojson_claims_file, 'w') as file:
     json.dump(claims_geojson, file)
 
