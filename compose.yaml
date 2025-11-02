@@ -9,7 +9,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4001"
       REGION: "1"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-2:
     container_name: bitcraftmap-api-2
     image: bitcraftmap-api:latest
@@ -19,7 +19,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4002"
       REGION: "2"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-3:
     container_name: bitcraftmap-api-3
     image: bitcraftmap-api:latest
@@ -29,7 +29,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4003"
       REGION: "3"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-4:
     container_name: bitcraftmap-api-4
     image: bitcraftmap-api:latest
@@ -39,7 +39,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4004"
       REGION: "4"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-5:
     container_name: bitcraftmap-api-5
     image: bitcraftmap-api:latest
@@ -49,7 +49,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4005"
       REGION: "5"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-6:
     container_name: bitcraftmap-api-6
     image: bitcraftmap-api:latest
@@ -59,7 +59,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4006"
       REGION: "6"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-7:
     container_name: bitcraftmap-api-7
     image: bitcraftmap-api:latest
@@ -69,7 +69,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4007"
       REGION: "7"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-8:
     container_name: bitcraftmap-api-8
     image: bitcraftmap-api:latest
@@ -89,4 +89,4 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4009"
       REGION: "9"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
