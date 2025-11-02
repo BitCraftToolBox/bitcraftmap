@@ -79,7 +79,7 @@ services:
     environment:
       SOCKET_ADDR: "0.0.0.0:4008"
       REGION: "8"
-      TOKEN: "eyJ..."
+      TOKEN: "${TOKEN}"
   bitcraftmap-api-9:
     container_name: bitcraftmap-api-9
     image: bitcraftmap-api:latest
