@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # --- Configuration ---
-REPO_URL="https://github.com/vis-eyth/bitcraft-nodeindex.git"
+REPO_URL="https://github.com/BitCraftToolBox/bitcraft-nodeindex"
 TARGET_DIR="nodeindex"
 DOCKERFILE_SRC="./Dockerfile"
 IMAGE_NAME="bitcraftmap-api"

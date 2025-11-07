@@ -1,0 +1,80 @@
+# This is a docker compose file for the backend, not the website
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"  # QUIC
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./logs:/var/log/caddy
+  bitcraftmap-api-1:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "1"
+      TOKEN: "${REGION_1_TOKEN}"
+  bitcraftmap-api-2:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "2"
+      TOKEN: "${REGION_2_TOKEN}"
+  bitcraftmap-api-3:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "3"
+      TOKEN: "${REGION_3_TOKEN}"
+  bitcraftmap-api-4:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "4"
+      TOKEN: "${REGION_4_TOKEN}"
+  bitcraftmap-api-5:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "5"
+      TOKEN: "${REGION_5_TOKEN}"
+  bitcraftmap-api-6:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "6"
+      TOKEN: "${REGION_6_TOKEN}"
+  bitcraftmap-api-7:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "7"
+      TOKEN: "${REGION_7_TOKEN}"
+  bitcraftmap-api-8:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "8"
+      TOKEN: "${REGION_8_TOKEN}"
+  bitcraftmap-api-9:
+    image: bitcraftmap-api:latest
+    restart: unless-stopped
+    environment:
+      SOCKET_ADDR: "0.0.0.0:3000"
+      REGION: "9"
+      TOKEN: "${REGION_9_TOKEN}"
+volumes:
+  caddy_data:
+  caddy_config:
