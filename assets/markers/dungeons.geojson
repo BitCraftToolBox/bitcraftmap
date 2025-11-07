@@ -363,6 +363,66 @@
         },
         {
             "type": "Feature",
+            "id": 216172782259354483,
+            "properties": {
+                "popupText": "Araknir Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18485,
+                    5822
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 216172782259355027,
+            "properties": {
+                "popupText": "Araknir Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    16836,
+                    4947
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 216172782259354772,
+            "properties": {
+                "popupText": "Araknir Dungeon",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    20746,
+                    1528
+                ]
+            }
+        },
+        {
+            "type": "Feature",
             "id": 216172782234147030,
             "properties": {
                 "popupText": "Giant Skitch Dungeon",
