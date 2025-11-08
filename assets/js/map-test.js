@@ -446,14 +446,11 @@ async function loadGeoJsonFromBackend() {
     }
     if (fetchPromises.length === 0) return
     const geoJsonResults = await Promise.all(fetchPromises)
-    const colors = ["#3388ff", "#00b1ff", "#00cff2", "#00e5bd", "#8bf389", "#f9f871"];
     geoJsonResults.forEach(geoJson => {
-        waypointsLayer.color = colors[Math.floor(Math.random() * colors.length)];  //
         if (geoJson.features[0].geometry.coordinates.length > 0) {
             paintGeoJson(geoJson, waypointsLayer, false, colorParameter)
         }
     })
-    
     map.addLayer(waypointsLayer)
 }
 
@@ -505,6 +502,8 @@ function paintGeoJson(geoJson, layer, pan = true) {
         },
 
         style: function (feature) {
+            const colors = ["#3388ff", "#00b1ff", "#00cff2", "#00e5bd", "#8bf389", "#f9f871"];
+            feature.properties.color = colors[Math.floor(Math.random() * colors.length)]; 
             return {
                 color: feature.properties?.color || "#3388ff",
                 weight: feature.properties?.weight || 3,
