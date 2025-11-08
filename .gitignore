@@ -4,3 +4,4 @@ data/
 .env.local
 /scripts/littledaimon/workspace
 /scripts/littledaimon/__pycache__
+backend/logs

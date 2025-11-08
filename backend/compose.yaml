@@ -1,4 +1,9 @@
 # This is a docker compose file for the backend, not the website
+
+x-api-template: &api
+  image: ghcr.io/bitcrafttoolbox/bitcraftmap-api:latest
+  restart: unless-stopped
+
 services:
   caddy:
     image: caddy:2-alpine
@@ -13,68 +18,51 @@ services:
       - caddy_config:/config
       - ./logs:/var/log/caddy
   bitcraftmap-api-1:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "1"
-      TOKEN: "${REGION_1_TOKEN}"
+      TOKEN: "${REGION_1_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-2:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "2"
-      TOKEN: "${REGION_2_TOKEN}"
+      TOKEN: "${REGION_2_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-3:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "3"
-      TOKEN: "${REGION_3_TOKEN}"
+      TOKEN: "${REGION_3_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-4:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "4"
-      TOKEN: "${REGION_4_TOKEN}"
+      TOKEN: "${REGION_4_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-5:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "5"
-      TOKEN: "${REGION_5_TOKEN}"
+      TOKEN: "${REGION_5_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-6:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "6"
-      TOKEN: "${REGION_6_TOKEN}"
+      TOKEN: "${REGION_6_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-7:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "7"
-      TOKEN: "${REGION_7_TOKEN}"
+      TOKEN: "${REGION_7_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-8:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "8"
-      TOKEN: "${REGION_8_TOKEN}"
+      TOKEN: "${REGION_8_TOKEN:-${TOKEN:?missing token}}"
   bitcraftmap-api-9:
-    image: bitcraftmap-api:latest
-    restart: unless-stopped
+    <<: *api
     environment:
-      SOCKET_ADDR: "0.0.0.0:3000"
       REGION: "9"
-      TOKEN: "${REGION_9_TOKEN}"
+      TOKEN: "${REGION_9_TOKEN:-${TOKEN:?missing token}}"
+
 volumes:
   caddy_data:
   caddy_config:
