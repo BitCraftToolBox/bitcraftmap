@@ -408,7 +408,6 @@ async function loadGeoJsonFromBackend() {
     const regionParameter = query.get('regionId') || '2' // default to region 2
     const resourceParameter = query.get('resourceId') || ''
     const enemyParameter = query.get('enemyId') || ''
-    const colorParameter = query.get('color') || ''
 
     if (!resourceParameter && !enemyParameter) return
     if (!regionParameter) return
@@ -428,14 +427,20 @@ async function loadGeoJsonFromBackend() {
         if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(enemyParameter)) return
         enemyIds = [... new Set(enemyParameter.split(',').map(Number))]
     }
-
+    var colorIdx = 0;
+    const colors = ["#3388ff", "#00cff2", "#00e5bd", "#8bf389", "#f9f871"];
     const fetchPromises = []
     for (const regionId of regionIds) {
-        for (const resourceId of resourceIds) {
-            fetchPromises.push(
+        colorIdx = 0;
+        for (const resourceId of resourceIds)
+        {
+            var responce =(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
+            responce.properties.color = colors[colorIdx]; 
+            colorIdx += 1;
+            fetchPromises.push(responce)
         }
         for (const enemyId of enemyIds) {
             fetchPromises.push(
@@ -448,7 +453,7 @@ async function loadGeoJsonFromBackend() {
     const geoJsonResults = await Promise.all(fetchPromises)
     geoJsonResults.forEach(geoJson => {
         if (geoJson.features[0].geometry.coordinates.length > 0) {
-            paintGeoJson(geoJson, waypointsLayer, false, colorParameter)
+            paintGeoJson(geoJson, waypointsLayer, false)
         }
     })
     map.addLayer(waypointsLayer)
@@ -502,8 +507,6 @@ function paintGeoJson(geoJson, layer, pan = true) {
         },
 
         style: function (feature) {
-            const colors = ["#3388ff", "#00b1ff", "#00cff2", "#00e5bd", "#8bf389", "#f9f871"];
-            feature.properties.color = colors[Math.floor(Math.random() * colors.length)]; 
             return {
                 color: feature.properties?.color || "#3388ff",
                 weight: feature.properties?.weight || 3,
