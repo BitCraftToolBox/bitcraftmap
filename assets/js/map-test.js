@@ -448,7 +448,7 @@ async function loadGeoJsonFromBackend() {
     const geoJsonResults = await Promise.all(fetchPromises)
     const colors = ["#3388ff", "#00b1ff", "#00cff2", "#00e5bd", "#8bf389", "#f9f871"];
     geoJsonResults.forEach(geoJson => {
-        waypointsLayer.color = Math.floor(Math.random() * colors.length);  //
+        waypointsLayer.color = colors[Math.floor(Math.random() * colors.length)];  //
         if (geoJson.features[0].geometry.coordinates.length > 0) {
             paintGeoJson(geoJson, waypointsLayer, false, colorParameter)
         }
