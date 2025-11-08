@@ -408,6 +408,7 @@ async function loadGeoJsonFromBackend() {
     const regionParameter = query.get('regionId') || '2' // default to region 2
     const resourceParameter = query.get('resourceId') || ''
     const enemyParameter = query.get('enemyId') || ''
+    const colorParameter = query.get('color') || ''
 
     if (!resourceParameter && !enemyParameter) return
     if (!regionParameter) return
@@ -432,13 +433,13 @@ async function loadGeoJsonFromBackend() {
     for (const regionId of regionIds) {
         for (const resourceId of resourceIds) {
             fetchPromises.push(
-                fetch('http://83.222.12.17/region' + regionId + '/resource/' + resourceId)
+                fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
         }
         for (const enemyId of enemyIds) {
             fetchPromises.push(
-                fetch('http://83.222.12.17/region' + regionId + '/enemy/' + enemyId)
+                fetch('https://bcmap-api.bitjita.com/region' + regionId + '/enemy/' + enemyId)
                     .then(response => response.json())
             )
         }
@@ -450,6 +451,7 @@ async function loadGeoJsonFromBackend() {
             paintGeoJson(geoJson, waypointsLayer, false)
         }
     })
+    waypointsLayer.color = "#FF000000"
     map.addLayer(waypointsLayer)
 }
 
@@ -457,11 +459,11 @@ async function loadGeoJsonFromFile(fileUrl, layer) {
     const file = await fetch(fileUrl)
     const content = await file.text()
     const geoJson = validateGeoJson(content)
-    paintGeoJson(geoJson, layer)
+    paintGeoJson(geoJson, layer, colorParameter)
 }
 
 
-function paintGeoJson(geoJson, layer, pan = true) {
+function paintGeoJson(geoJson, layer, colorParameter = "#3388ff", pan = true) {
     L.geoJSON(geoJson, {
         pointToLayer: function (feature, latlng) {
 
@@ -502,10 +504,12 @@ function paintGeoJson(geoJson, layer, pan = true) {
 
         style: function (feature) {
             return {
-                color: feature.properties?.color || "#3388ff",
+                //color: feature.properties?.color || "#3388ff",
+                color: colorParameter || "#ff88ff",
                 weight: feature.properties?.weight || 3,
                 opacity: feature.properties?.opacity || 1,
-                fillColor: feature.properties?.fillColor || "#3388ff",
+                //fillColor: feature.properties?.fillColor || "#3388ff",
+                fillColor: colorParameter || "#ff88ff",
                 fillOpacity: feature.properties?.fillOpacity ?? 0.2
             }
         },
