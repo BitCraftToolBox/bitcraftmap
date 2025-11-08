@@ -1,38 +1,51 @@
 {
-email admin@bitcraftmap.com
+    email admin@bitcraftmap.com
 }
 
 api.bitcraftmap.com {
+    log {
+        output file /var/log/caddy/api.access.log {
+            roll_size 500MiB
+            roll_keep 5
+        }
+    }
 
-log {
-output file /var/log/caddy/api.access.log {
-roll_size 500MiB
-roll_keep 5
-}
-}
+    # CORS Preflight
+    @preflight {
+        method OPTIONS
+        path /*
+    }
+    handle @preflight {
+        header {
+            Access-Control-Allow-Origin  https://bitcraftmap.com
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
+            Access-Control-Max-Age 600
+            Vary Origin
+        }
+        respond "" 204
+    }
 
-@preflight {
-method OPTIONS
-path /*
-}
-handle @preflight {
-header {
-Access-Control-Allow-Origin  https://bitcraftmap.com
-Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-Access-Control-Allow-Headers "Content-Type, Authorization"
-Access-Control-Max-Age 600
-Vary Origin
-}
-respond "" 204
-}
+    # Match /region1 to /region9
+    @region {
+        path_regexp id ^/region([1-9])(/.*)?$
+    }
+    handle @region {
+        header {
+            Access-Control-Allow-Origin  https://bitcraftmap.com
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
+            Vary Origin
+        }
 
-handle {
-header {
-Access-Control-Allow-Origin  https://bitcraftmap.com
-Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-Access-Control-Allow-Headers "Content-Type, Authorization"
-Vary Origin
-}
-reverse_proxy 127.0.0.1:9000
-}
+        # Strip /regionX from path
+        uri strip_prefix /region { re.id.1 }
+
+        # Build upstream host: region1, region2, ...
+        reverse_proxy bitcraftmap-api- { re.id.1 }:3000
+    }
+    # Fallback
+    handle {
+        respond "Not Found" 404
+    }
 }
