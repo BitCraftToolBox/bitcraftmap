@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>BitCraft Map</title>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Game map for BitCraft Online">
   <meta name="referrer" content="no-referrer" />
@@ -20,24 +19,32 @@
       upgrade-insecure-requests
     ">
   <link rel="icon" href="assets/images/other/Hex_Logo.svg" type="image/svg+xml">
-  <link rel="canonical" href="https://bitcraftmap.com/" />
-  <link rel="stylesheet" href="assets/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="assets/search/leaflet-search.src.css" />
-  <link rel="stylesheet" href="assets/css/map.css" />
-  <script src="assets/leaflet/leaflet.js"></script>
-  <script src="assets/search/leaflet-search.src.js"></script>
-  <script src="assets/js/config.js"></script>
-  <script src="assets/js/library.js"></script>
-  <script src="assets/js/utils.js"></script>
-  <script src="assets/images/manifest.js"></script>
+  <link rel="canonical" href="https://bitcraftmap.com/">
+  
+  <link rel="preconnect" href="https://api.bitcraftmap.com">
+  <link rel="preconnect" href="https://bcmap-api.bitjita.com">
+  <link rel="preconnect" href="https://api.github.com">
+  <link rel="preconnect" href="https://gist.githubusercontent.com">
+  <link rel="dns-prefetch" href="https://craft-api.resubaka.dev">
+  
+  <link rel="preload" href="assets/leaflet/leaflet.css" as="style">
+  <link rel="stylesheet" href="assets/leaflet/leaflet.css">
+  <link rel="stylesheet" href="assets/search/leaflet-search.src.css">
+  <link rel="stylesheet" href="assets/css/map.css">
+  
+  <script src="assets/leaflet/leaflet.js" defer></script>
+  <script src="assets/search/leaflet-search.src.js" defer></script>
+  <script src="assets/js/config.js" defer></script>
+  <script src="assets/js/library.js" defer></script>
+  <script src="assets/js/utils.js" defer></script>
+  <script src="assets/images/manifest.js" defer></script>
+  <script src="assets/js/map.js" defer></script>
 </head>
 
 <body>
   <div id="map"></div>
   <div id="coords"></div>
-  <script src="assets/js/map.js"></script>
 </body>
 <!-- Source: https://github.com/bitcraftmap/bitcraftmap -->
 <!-- Made by Manserk -->
-
 </html>
