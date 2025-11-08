@@ -434,11 +434,11 @@ async function loadGeoJsonFromBackend() {
         colorIdx = 0;
         for (const resourceId of resourceIds)
         {
-            var responce =(
+            var responce = (
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
-            responce.properties.color = colors[colorIdx]; 
+            responce.features[0].properties.color = colors[colorIdx]; 
             colorIdx += 1;
             fetchPromises.push(responce)
         }
