@@ -68,9 +68,9 @@ function createMapOptions() {
     }
 }
 
-function createAppOptions() {
+function createAppOptions() { // is anything even using that function?
     return {
-        backendUrl: "https://api.bitcraftmap.com/",
+        backendUrl: "https://bcmap-api.bitjita.com", 
         gistApi: "https://api.github.com/gists/"
     }
 }
@@ -112,12 +112,22 @@ const formating = {
     // Dungeons
 }
 
-// Aytimothy colors
-const tierColors = [
-    "#636a74ff", "#865f45ff", "#5c6f4dff", "#49619bff", "#804f86ff",
-    "#973a44ff", "#937014ff", "#538383ff", "#464953ff", "#96aebdff"
-]
+// wiz tier colors
+const tierColors = {
+    0: "#413A64",
+    1: "#636A74",
+    2: "#875F45",
+    3: "#5C6F4D",
+    4: "#49619C",
+    5: "#814F87",
+    6: "#983A44",
+    7: "#947014",
+    8: "#538484",
+    9: "#464953",
+    10: "#97AFBE",
+}
 const brighterTierColors = [
     "#838e9eff", "#a8663aff", "#729b53ff", "#3a63c4ff", "#a349afff",
     "#bd2c3bff", "#c09015ff", "#46a1a1ff", "#4f5361ff", "#81b6d6ff"
 ]
+

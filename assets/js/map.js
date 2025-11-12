@@ -427,16 +427,22 @@ async function loadGeoJsonFromBackend() {
         if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(enemyParameter)) return
         enemyIds = [... new Set(enemyParameter.split(',').map(Number))]
     }
-
     const fetchPromises = []
+    const geoJsonMeta = []
     for (const regionId of regionIds) {
-        for (const resourceId of resourceIds) {
+
+        for (const resourceId of resourceIds)
+        {
+            var color = tierColors[resourceIndex[resourceId]?.tier] || "#3388ff";
+            geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId } );
             fetchPromises.push(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
         }
         for (const enemyId of enemyIds) {
+            var color = tierColors[resourceIndex[resourceId]?.tier] || "#3388ff";
+            geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId });
             fetchPromises.push(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/enemy/' + enemyId)
                     .then(response => response.json())
@@ -445,10 +451,22 @@ async function loadGeoJsonFromBackend() {
     }
     if (fetchPromises.length === 0) return
     const geoJsonResults = await Promise.all(fetchPromises)
+    var idx = 0;
     geoJsonResults.forEach(geoJson => {
-        if (geoJson.features[0].geometry.coordinates.length > 0) {
+        if (geoJson.features[0].geometry.coordinates.length > 0)
+        {
+            geoJson.features[0].properties.fillColor = geoJsonMeta[idx].fillColor || "#3388ff"; // check local resource-index
+            if (geoJson.features[0].properties?.hasOwnProperty("tier")) // if geojson from server has tier defined, use it
+                geoJson.features[0].properties.fillColor = tierColors[geoJson.features[0].properties?.tier] || tierColors[0];
+            if (geoJson.features[0].properties?.hasOwnProperty("fillColor")) // if geojson from server has color defined, use it
+                geoJson.features[0].properties.fillColor = geoJson.features[0].properties.fillColor;
+
+            if (geoJson.features[0].properties.fillColor != "#3388ff")
+                geoJson.features[0].properties.color = "#000000";
+
             paintGeoJson(geoJson, waypointsLayer, false)
         }
+        idx++;
     })
     map.addLayer(waypointsLayer)
 }
@@ -462,6 +480,7 @@ async function loadGeoJsonFromFile(fileUrl, layer) {
 
 
 function paintGeoJson(geoJson, layer, pan = true) {
+
     L.geoJSON(geoJson, {
         pointToLayer: function (feature, latlng) {
 
@@ -502,11 +521,12 @@ function paintGeoJson(geoJson, layer, pan = true) {
 
         style: function (feature) {
             return {
-                color: feature.properties?.color || "#3388ff",
-                weight: feature.properties?.weight || 3,
+                color: feature.properties?.color || "#3388ff", // outline color
+                fillColor: feature.properties?.fillColor || "#3388ff", // fill color                   
+                radius: 4, // colored dot size
+                weight: feature.properties?.weight || 1, // outline width
                 opacity: feature.properties?.opacity || 1,
-                fillColor: feature.properties?.fillColor || "#3388ff",
-                fillOpacity: feature.properties?.fillOpacity ?? 0.2
+                fillOpacity: feature.properties?.fillOpacity ?? 1
             }
         },
 
