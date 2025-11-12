@@ -2,3 +2,5 @@ data/
 /.vs
 .env
 .env.local
+/scripts/littledaimon/workspace
+/scripts/littledaimon/__pycache__
