@@ -441,8 +441,8 @@ async function loadGeoJsonFromBackend() {
             )
         }
         for (const enemyId of enemyIds) {
-            var color = tierColors[resourceIndex[resourceId]?.tier] || "#3388ff";
-            geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId });
+            var color = tierColors[resourceIndex[enemyId]?.tier] || "#3388ff";
+            geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
             fetchPromises.push(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/enemy/' + enemyId)
                     .then(response => response.json())
