@@ -429,40 +429,48 @@ async function loadGeoJsonFromBackend() {
     }
     const fetchPromises = []
     const geoJsonMeta = []
+    var trackingList = []
     for (const regionId of regionIds) {
 
         for (const resourceId of resourceIds)
         {
             var color = tierColors[resourceIndex[resourceId]?.tier] || "#3388ff";
+            var resource_name = resourceIndex[resourceId]?.name || "ID "+ resourceId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId } );
             fetchPromises.push(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
+            trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + resourceIndex[resourceId]?.tier, color: color })
         }
         for (const enemyId of enemyIds) {
             var color = tierColors[resourceIndex[enemyId]?.tier] || "#3388ff";
+            var enemy_name = resourceIndex[enemyId]?.name || "ID " + enemyId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
             fetchPromises.push(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/enemy/' + enemyId)
                     .then(response => response.json())
             )
+            trackingList.push({ text: "Tracking: " + enemy_name + ", Tier " + resourceIndex[enemyId]?.tier, color: color })
         }
     }
+    trackingList = filterUnique(trackingList); // filter out all the duplicates
+    for (const item of trackingList)
+    {
+        createTrackingNotice(item.text, item.color);
+    }
+
     if (fetchPromises.length === 0) return
     const geoJsonResults = await Promise.all(fetchPromises)
     var idx = 0;
     geoJsonResults.forEach(geoJson => {
         if (geoJson.features[0].geometry.coordinates.length > 0)
         {
-            geoJson.features[0].properties.fillColor = geoJsonMeta[idx].fillColor || "#3388ff"; // check local resource-index
+            geoJson.features[0].properties.fillColor = geoJsonMeta[idx].fillColor || "#3388ff"; // check local resource-index for color and tier
             if (geoJson.features[0].properties?.hasOwnProperty("tier")) // if geojson from server has tier defined, use it
                 geoJson.features[0].properties.fillColor = tierColors[geoJson.features[0].properties?.tier] || tierColors[0];
             if (geoJson.features[0].properties?.hasOwnProperty("fillColor")) // if geojson from server has color defined, use it
                 geoJson.features[0].properties.fillColor = geoJson.features[0].properties.fillColor;
-
-            if (geoJson.features[0].properties.fillColor != "#3388ff")
-                geoJson.features[0].properties.color = "#000000";
 
             paintGeoJson(geoJson, waypointsLayer, false)
         }
@@ -476,6 +484,49 @@ async function loadGeoJsonFromFile(fileUrl, layer) {
     const content = await file.text()
     const geoJson = validateGeoJson(content)
     paintGeoJson(geoJson, layer)
+}
+
+
+function filterUnique(array) {
+    const hash = {};
+    const result = [];
+
+    for (let item of array) {
+        // Serialize the item
+        const serialized = JSON.stringify(item);
+        if (!hash.hasOwnProperty(serialized)) {
+            hash[serialized] = true;        // Mark as seen
+            result.push(item);              // Add original item
+        }
+    }
+
+    return result;
+}
+
+function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "#ffffff", parentDivId = "tracking_container")
+{
+    // Purspose: Create a small text panel with info about which resources are being tracked
+    // Find the parent container by ID
+    const parentDiv = document.getElementById(parentDivId);
+
+    // If the parent container doesn't exist, optionally create it or throw an error
+    if (!parentDiv) {
+        console.error(`Parent div with id "${parentDivId}" not found.`);
+        return;
+    }
+
+    // Create the new div element
+    const newDiv = document.createElement('div');
+
+    // Set its text content
+    newDiv.id = "tracking_item";
+    newDiv.textContent = displayText;
+
+    // Apply background color TODO: check all bg color and change font color if dark
+    newDiv.style.backgroundColor = bgColor;
+
+    // Append the new div to the parent container
+    parentDiv.appendChild(newDiv);
 }
 
 
@@ -521,7 +572,7 @@ function paintGeoJson(geoJson, layer, pan = true) {
 
         style: function (feature) {
             return {
-                color: feature.properties?.color || "#3388ff", // outline color
+                color: feature.properties?.color || "#000000", // outline color // eh, lets always gave a black border and override if needed
                 fillColor: feature.properties?.fillColor || "#3388ff", // fill color                   
                 radius: 4, // colored dot size
                 weight: feature.properties?.weight || 1, // outline width
@@ -860,6 +911,8 @@ function connectWebSocket() {
             updateMarker(msg.c)
         }
     }
+
+    createTrackingNotice("Tracking Player: "+playerId, "#00ff00");
 
     webSocket.onerror = (error) => console.error("WebSocket error:", error)
     webSocket.onclose = () => console.log("WebSocket closed")

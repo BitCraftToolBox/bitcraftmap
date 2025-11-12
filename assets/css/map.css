@@ -10,7 +10,7 @@ html, body {
     background-color: #2a3145;
 }
 #coords {
-position: absolute;
+    position: absolute;
     bottom: 10px;
     left: 10px;
     background: white;
@@ -44,4 +44,22 @@ position: absolute;
 .leaflet-control-layers .lc-list label {
     display: flex;
     align-items: center;
+}
+
+#tracking_container {
+    position: absolute;
+    bottom: 31px;
+    left: -1px;
+    padding: 5px 10px;
+    z-index: 1000;
+}
+
+#tracking_item {
+    background: white;
+    padding: 5px 10px;
+    z-index: 1000;
+    font-family: monospace;
+    border-radius: .25em;
+    margin-bottom: 5px;
+    border: 1px solid black;
 }
