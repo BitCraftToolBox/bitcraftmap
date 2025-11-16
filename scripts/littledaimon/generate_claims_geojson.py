@@ -132,7 +132,7 @@ def claims_from_rawdata():
                                 geojson = {
                                     "type": "Feature",
                                     "properties": {
-                                        "entityId": claim_data['entity_id'],
+                                        "entityId": str(claim_data['entity_id']),
                                         "name": claim_data['name'],
                                         "tier": claim_data['tier'],
                                         "has_bank": claim_data['bank'],
