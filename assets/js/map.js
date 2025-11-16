@@ -434,7 +434,8 @@ async function loadGeoJsonFromBackend() {
 
         for (const resourceId of resourceIds)
         {
-            var color = tierColors[resourceIndex[resourceId]?.tier] || "#3388ff";
+            var color = resourceIndex[resourceId]?.color || tierColors[resourceIndex[resourceId]?.tier] || "#3388ff";
+
             var resource_name = resourceIndex[resourceId]?.name || "ID "+ resourceId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId } );
             fetchPromises.push(
@@ -444,7 +445,8 @@ async function loadGeoJsonFromBackend() {
             trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + resourceIndex[resourceId]?.tier, color: color })
         }
         for (const enemyId of enemyIds) {
-            var color = tierColors[resourceIndex[enemyId]?.tier] || "#3388ff";
+            var color = resourceIndex[enemyId]?.color || tierColors[resourceIndex[enemyId]?.tier] || "#3388ff";
+
             var enemy_name = resourceIndex[enemyId]?.name || "ID " + enemyId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
             fetchPromises.push(
