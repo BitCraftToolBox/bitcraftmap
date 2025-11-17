@@ -452,20 +452,21 @@ async function loadGeoJsonFromBackend() {
         }
         for (const enemyId of enemyIds) {
             var color =
-                resourceIndexOverride[enemyId]?.color ||
-                tierColors[resourceIndexOverride[enemyId]?.tier] ||
-                resourceIndex[enemyId]?.color ||
-                tierColors[resourceIndex[enemyId]?.tier] ||
+                //creatureIndex[enemyId]?.color ||
+                //tierColors[creatureIndex[enemyId]?.tier] ||
+                creatureIndex[enemyId]?.color ||
+                tierColors[creatureIndex[enemyId]?.tier] ||
                 "#3388ff";
-            var tier = resourceIndexOverride[enemyId]?.tier || resourceIndex[enemyId]?.tier || 0;
+            var tier = //creatureIndex[enemyId]?.tier ||
+                creatureIndex[enemyId]?.tier || 0;
 
-            var enemy_name = resourceIndex[enemyId]?.name || "ID " + enemyId;
+            var enemy_name = creatureIndex[enemyId]?.name || "ID " + enemyId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
             fetchPromises.push(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/enemy/' + enemyId)
                     .then(response => response.json())
             )
-            trackingList.push({ text: "Tracking: " + enemy_name + ", Tier " + resourceIndex[enemyId]?.tier, color: color })
+            trackingList.push({ text: "Tracking: " + enemy_name + ", Tier " + creatureIndex[enemyId]?.tier, color: color })
         }
     }
     trackingList = filterUnique(trackingList); // filter out all the duplicates

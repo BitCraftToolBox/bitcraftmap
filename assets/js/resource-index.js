@@ -1823,3 +1823,162 @@ const resourceIndex = { // Generated array
             name: "Jakyl Den"
     }
 }
+
+const creatureIndex = {
+    "18": {
+        tier: 1,
+        name: "Alpha Jakyl"
+    },
+    "27": {
+        tier: 1,
+        name: "Alpha Umbura"
+    },
+    "40": {
+        tier: 1,
+        name: "Araknir Nest"
+    },
+    "4": {
+        tier: 4,
+        name: "Ardea"
+    },
+    "37": {
+        tier: 1,
+        name: "Cave Skitch"
+    },
+    "21": {
+        tier: 1,
+        name: "Desert Crab"
+    },
+    "16": {
+        tier: 10,
+        name: "Desert Terrorbird"
+    },
+    "3": {
+        tier: 5,
+        name: "Dromai"
+    },
+    "29": {
+        tier: 1,
+        name: "Drone"
+    },
+    "12": {
+        tier: 8,
+        name: "Elder Scrofa"
+    },
+    "7": {
+        tier: 3,
+        name: "Female Cervus"
+    },
+    "10": {
+        tier: 4,
+        name: "Female Scrofa"
+    },
+    "32": {
+        tier: 1,
+        name: "Feral Sentinel"
+    },
+    "22": {
+        tier: 1,
+        name: "Frost Crab"
+    },
+    "36": {
+        tier: 1,
+        name: "Giant Skitch"
+    },
+    "17": {
+        tier: 1,
+        name: "Jakyl"
+    },
+    "15": {
+        tier: 7,
+        name: "Jungle Terrorbird"
+    },
+    "19": {
+        tier: 1,
+        name: "King Jakyl"
+    },
+    "28": {
+        tier: 1,
+        name: "King Umbura"
+    },
+    "8": {
+        tier: 3,
+        name: "Male Cervus"
+    },
+    "11": {
+        tier: 4,
+        name: "Male Scrofa"
+    },
+    "38": {
+        tier: 1,
+        name: "Massive Araknir"
+    },
+    "5": {
+        tier: 2,
+        name: "Nubi Goat"
+    },
+    "13": {
+        tier: 5,
+        name: "Ox"
+    },
+    "1": {
+        tier: 1,
+        name: "Practice Dummy"
+    },
+    "31": {
+        tier: 1,
+        name: "Queen"
+    },
+    "9": {
+        tier: 4,
+        name: "Rangifer"
+    },
+    "2": {
+        tier: 1,
+        name: "Sagi Bird"
+    },
+    "20": {
+        tier: 1,
+        name: "Skitch"
+    },
+    "39": {
+        tier: 1,
+        name: "Small Araknir"
+    },
+    "30": {
+        tier: 1,
+        name: "Soldier"
+    },
+    "33": {
+        tier: 1,
+        name: "Subterranean Jakyl"
+    },
+    "35": {
+        tier: 1,
+        name: "Subterranean Jakyl Protector"
+    },
+    "34": {
+        tier: 1,
+        name: "Subterranean Skitch"
+    },
+    "24": {
+        tier: 1,
+        name: "Swamp Terratoad"
+    },
+    "23": {
+        tier: 1,
+        name: "Terratoad"
+    },
+    "14": {
+        tier: 9,
+        name: "Tundra Ox"
+    },
+    "26": {
+        tier: 1,
+        name: "Umbura"
+    },
+    "6": {
+        tier: 6,
+        name: "Yagi"
+    }
+}
