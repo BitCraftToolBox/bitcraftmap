@@ -408,6 +408,7 @@ async function loadGeoJsonFromBackend() {
     const regionParameter = query.get('regionId') || '2' // default to region 2
     const resourceParameter = query.get('resourceId') || ''
     const enemyParameter = query.get('enemyId') || ''
+    const noColors = parseInt(query.get('noColors') ) || 0
 
     if (!resourceParameter && !enemyParameter) return
     if (!regionParameter) return
@@ -440,6 +441,8 @@ async function loadGeoJsonFromBackend() {
                 resourceIndex[resourceId]?.color ||
                 tierColors[resourceIndex[resourceId]?.tier] ||
                 "#3388ff";
+            if (noColors == 1)
+                color = "#3388ff";
             var tier = resourceIndexOverride[resourceId]?.tier || resourceIndex[resourceId]?.tier || 0;
 
             var resource_name = resourceIndex[resourceId]?.name || "ID "+ resourceId;
@@ -459,7 +462,8 @@ async function loadGeoJsonFromBackend() {
                 "#3388ff";
             var tier = //creatureIndex[enemyId]?.tier ||
                 creatureIndex[enemyId]?.tier || 0;
-
+            if (noColors == 1)
+                color = "#3388ff";
             var enemy_name = creatureIndex[enemyId]?.name || "ID " + enemyId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
             fetchPromises.push(
