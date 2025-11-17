@@ -434,7 +434,13 @@ async function loadGeoJsonFromBackend() {
 
         for (const resourceId of resourceIds)
         {
-            var color = resourceIndex[resourceId]?.color || tierColors[resourceIndex[resourceId]?.tier] || "#3388ff";
+            var color =
+                resourceIndexOverride[resourceId]?.color ||
+                tierColors[resourceIndexOverride[resourceId]?.tier] ||
+                resourceIndex[resourceId]?.color ||
+                tierColors[resourceIndex[resourceId]?.tier] ||
+                "#3388ff";
+            var tier = resourceIndexOverride[resourceId]?.tier || resourceIndex[resourceId]?.tier || 0;
 
             var resource_name = resourceIndex[resourceId]?.name || "ID "+ resourceId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId } );
@@ -442,10 +448,16 @@ async function loadGeoJsonFromBackend() {
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
-            trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + resourceIndex[resourceId]?.tier, color: color })
+            trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + tier, color: color })
         }
         for (const enemyId of enemyIds) {
-            var color = resourceIndex[enemyId]?.color || tierColors[resourceIndex[enemyId]?.tier] || "#3388ff";
+            var color =
+                resourceIndexOverride[enemyId]?.color ||
+                tierColors[resourceIndexOverride[enemyId]?.tier] ||
+                resourceIndex[enemyId]?.color ||
+                tierColors[resourceIndex[enemyId]?.tier] ||
+                "#3388ff";
+            var tier = resourceIndexOverride[enemyId]?.tier || resourceIndex[enemyId]?.tier || 0;
 
             var enemy_name = resourceIndex[enemyId]?.name || "ID " + enemyId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
