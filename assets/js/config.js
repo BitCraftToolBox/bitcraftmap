@@ -112,8 +112,8 @@ const formating = {
     // Dungeons
 }
 
-// wiz tier colors
-const tierColors = {
+// wiz tier colors from ingame
+const drabTierColors = {
     0: "#413A64",
     1: "#636A74",
     2: "#875F45",
@@ -124,10 +124,18 @@ const tierColors = {
     7: "#947014",
     8: "#538484",
     9: "#464953",
-    10: "#97AFBE",
+    10:"#97AFBE",
 }
-const brighterTierColors = [
-    "#838e9eff", "#a8663aff", "#729b53ff", "#3a63c4ff", "#a349afff",
-    "#bd2c3bff", "#c09015ff", "#46a1a1ff", "#4f5361ff", "#81b6d6ff"
-]
-
+const tierColors = {
+    0: "#413a64",
+    1: "#838e9e",
+    2: "#a8663a",
+    3: "#2d6bff",
+    4: "#3a63c4",
+    5: "#a349af",
+    6: "#bd2c3b",
+    7: "#c09015",
+    8: "#5ae2e2",
+    9: "#1f1f1f",
+    10:"#deffff",
+}
