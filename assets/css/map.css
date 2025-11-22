@@ -63,3 +63,14 @@ html, body {
     margin-bottom: 5px;
     border: 1px solid black;
 }
+
+#reset_view {
+    background: white;
+    padding: 4px 8px;
+    z-index: 1000;
+    border-radius: .25em;
+    border: 1px solid black;
+    position: absolute;
+    bottom: 9px;
+    left: 173px;
+}

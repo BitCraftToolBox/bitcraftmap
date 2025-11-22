@@ -938,3 +938,31 @@ function connectWebSocket() {
 }
 
 connectWebSocket()
+
+// grab default map postion and zoom
+const defaultCenter = map.getCenter();
+const defaultZoom = map.getZoom();
+// Restore saved state if exists
+const savedCenter = localStorage.getItem('mapCenter');
+const savedZoom = localStorage.getItem('mapZoom');
+
+if (savedCenter && savedZoom) { // set the state
+    const centerCoords = JSON.parse(savedCenter);
+    const zoomLevel = parseFloat(savedZoom, 10);
+    map.setView(centerCoords, zoomLevel);
+}
+
+map.on('moveend', () => { // Save map state on move or zoom
+    const center = map.getCenter();
+    localStorage.setItem('mapCenter', JSON.stringify([center.lat, center.lng]));
+    localStorage.setItem('mapZoom', map.getZoom());
+});
+
+function reset_view() { // Reset view if lost too far
+    map.setView(defaultCenter, defaultZoom);
+    localStorage.setItem('mapCenter', JSON.stringify(defaultCenter));
+    localStorage.setItem('mapZoom', defaultZoom);
+}
+
+// Button to reset map view
+document.getElementById('reset_view').addEventListener('click', reset_view);
