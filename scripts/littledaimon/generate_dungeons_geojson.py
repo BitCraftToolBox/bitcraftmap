@@ -52,9 +52,11 @@ def claimlist_from_rawdata():
                         location = claim_local_state.get('location', [])
                         if claim_data['building_description_id'] == 405:  #
                             claim_data['icon'] = "claim"
-                        if claim_data['building_description_id'] in [208697589,
-                                                                     1785852446,
-                                                                     1084069097]:  # sentinel dungeon, skitch dungeon
+                        if claim_data['building_description_id'] in [
+                            208697589, # Sentinel dungeon
+                            1785852446, #Giant Skitch Dungeon
+                            1084069097 #Araknir dungeon
+                            ]:  
                             claim_data['icon'] = "dungeon"
                             geojson = {
                                 "type": "Feature",
