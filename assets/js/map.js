@@ -408,7 +408,7 @@ async function loadGeoJsonFromBackend() {
     const regionParameter = query.get('regionId') || '2' // default to region 2
     const resourceParameter = query.get('resourceId') || ''
     const enemyParameter = query.get('enemyId') || ''
-    const noColors = parseInt(query.get('noColors') ) || 0
+    const noColors = parseInt(query.get('noColors')) || 0
 
     if (!resourceParameter && !enemyParameter) return
     if (!regionParameter) return
@@ -433,8 +433,7 @@ async function loadGeoJsonFromBackend() {
     var trackingList = []
     for (const regionId of regionIds) {
 
-        for (const resourceId of resourceIds)
-        {
+        for (const resourceId of resourceIds) {
             var color =
                 resourceIndexOverride[resourceId]?.color ||
                 tierColors[resourceIndexOverride[resourceId]?.tier] ||
@@ -445,8 +444,8 @@ async function loadGeoJsonFromBackend() {
                 color = "#3388ff";
             var tier = resourceIndexOverride[resourceId]?.tier || resourceIndex[resourceId]?.tier || 0;
 
-            var resource_name = resourceIndex[resourceId]?.name || "ID "+ resourceId;
-            geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId } );
+            var resource_name = resourceIndex[resourceId]?.name || "ID " + resourceId;
+            geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId });
             fetchPromises.push(
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
@@ -474,8 +473,7 @@ async function loadGeoJsonFromBackend() {
         }
     }
     trackingList = filterUnique(trackingList); // filter out all the duplicates
-    for (const item of trackingList)
-    {
+    for (const item of trackingList) {
         createTrackingNotice(item.text, item.color);
     }
 
@@ -483,8 +481,7 @@ async function loadGeoJsonFromBackend() {
     const geoJsonResults = await Promise.all(fetchPromises)
     var idx = 0;
     geoJsonResults.forEach(geoJson => {
-        if (geoJson.features[0].geometry.coordinates.length > 0)
-        {
+        if (geoJson.features[0].geometry.coordinates.length > 0) {
             geoJson.features[0].properties.fillColor = geoJsonMeta[idx].fillColor || "#3388ff"; // check local resource-index for color and tier
             if (geoJson.features[0].properties?.hasOwnProperty("tier")) // if geojson from server has tier defined, use it
                 geoJson.features[0].properties.fillColor = tierColors[geoJson.features[0].properties?.tier] || tierColors[0];
@@ -522,8 +519,7 @@ function filterUnique(array) {
     return result;
 }
 
-function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "#ffffff", parentDivId = "tracking_container")
-{
+function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "#ffffff", parentDivId = "tracking_container") {
     // Purspose: Create a small text panel with info about which resources are being tracked
     // Find the parent container by ID
     const parentDiv = document.getElementById(parentDivId);
@@ -831,7 +827,7 @@ map.enableAutoSpiderfy({
 */
 
 const GROUPS = {
-    'Points of Interest': ['Events','Wonders', 'Temples', 'Ruined Cities', 'Banks', 'Markets', 'Waystones', 'Grids', 'Dungeons', 'Waypoints'],
+    'Points of Interest': ['Events', 'Wonders', 'Temples', 'Ruined Cities', 'Banks', 'Markets', 'Waystones', 'Grids', 'Dungeons', 'Waypoints'],
     'Claims': ['Claims T1', 'Claims T2', 'Claims T3', 'Claims T4', 'Claims T5', 'Claims T6', 'Claims T7', 'Claims T8', 'Claims T9', 'Claims T10'],
     'Caves': ['Caves T1', 'Caves T2', 'Caves T3', 'Caves T4', 'Caves T5', 'Caves T6', 'Caves T7', 'Caves T8'],
     'Roads': ['R1 roads', 'R2 roads', 'R3 roads', 'R4 roads', 'R5 roads', 'R6 roads', 'R7 roads', 'R8 roads', 'R9 roads']
@@ -912,12 +908,12 @@ function connectWebSocket() {
     if (!/^[0-9]{0,32}$/.test(playerId)) return
 
     const subscribeMsg = {
-        t: "Subscribe",
-        c: { topics: ["mobile_entity_state." + playerId] }
+        type: "subscribe",
+        channels: [`mobile_entity_state:${playerId}`]
     }
 
-    const resubakaURL = "wss://craft-api.resubaka.dev/websocket"
-    const webSocket = new WebSocket(resubakaURL)
+    const bitjitaLiveURL = "wss://live.bitjita.com"
+    const webSocket = new WebSocket(bitjitaLiveURL)
 
     webSocket.onopen = () => {
         console.log("WebSocket connected")
@@ -926,12 +922,12 @@ function connectWebSocket() {
 
     webSocket.onmessage = (event) => {
         const msg = JSON.parse(event.data)
-        if (msg && msg.t === "MobileEntityState" && msg.c) {
-            updateMarker(msg.c)
+        if (msg && msg.type === "event" && msg.channel === `mobile_entity_state:${playerId}`) {
+            updateMarker(msg.data)
         }
     }
 
-    createTrackingNotice("Tracking Player: "+playerId, "#00ff00");
+    createTrackingNotice("Tracking Player: " + playerId, "#00ff00");
 
     webSocket.onerror = (error) => console.error("WebSocket error:", error)
     webSocket.onclose = () => console.log("WebSocket closed")
