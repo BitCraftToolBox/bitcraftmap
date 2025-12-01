@@ -546,6 +546,14 @@ function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "
 
 
 function paintGeoJson(geoJson, layer, pan = true) {
+    // Handle flyTo for features with null geometry (Leaflet won't process them)
+    if (pan && geoJson?.features) {
+        for (const feature of geoJson.features) {
+            if (feature.properties?.flyTo && feature.properties?.zoomTo && !feature.properties?.noPan && !feature.geometry) {
+                map.flyTo(feature.properties.flyTo, feature.properties.zoomTo)
+            }
+        }
+    }
 
     L.geoJSON(geoJson, {
         pointToLayer: function (feature, latlng) {
@@ -938,11 +946,21 @@ connectWebSocket()
 // grab default map postion and zoom
 const defaultCenter = map.getCenter();
 const defaultZoom = map.getZoom();
-// Restore saved state if exists
+
+// Check if hash has flyTo - if so, skip localStorage restore so flyTo takes priority
+const hashFromUrl = location.hash.slice(1)
+const hasHashWithFlyTo = hashFromUrl && (() => {
+    try {
+        const geoJson = JSON.parse(decodeURIComponent(hashFromUrl))
+        return geoJson?.features?.some(f => f.properties?.flyTo && f.properties?.zoomTo)
+    } catch { return false }
+})()
+
+// Restore saved state if exists (but skip if hash has flyTo)
 const savedCenter = localStorage.getItem('mapCenter');
 const savedZoom = localStorage.getItem('mapZoom');
 
-if (savedCenter && savedZoom) { // set the state
+if (savedCenter && savedZoom && !hasHashWithFlyTo) { // set the state
     const centerCoords = JSON.parse(savedCenter);
     const zoomLevel = parseFloat(savedZoom, 10);
     map.setView(centerCoords, zoomLevel);
