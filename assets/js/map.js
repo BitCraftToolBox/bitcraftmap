@@ -581,7 +581,6 @@ function paintGeoJson(geoJson, layer, pan = true) {
                     if (feature.properties?.flyTo && feature.properties?.zoomTo != null) {
                         map.flyTo(feature.properties.flyTo, feature.properties.zoomTo)
                     } else if (feature.properties?.zoomTo != null) {
-                        // Zoom only (at current center) - delay to ensure map is ready and after localStorage restore
                         const zoomLevel = feature.properties.zoomTo
                         const center = map.getCenter()
                         if (center && center.isValid && center.isValid()) {
