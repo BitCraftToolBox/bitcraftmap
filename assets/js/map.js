@@ -546,11 +546,51 @@ function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "
 
 
 function paintGeoJson(geoJson, layer, pan = true) {
-    // Handle flyTo for features with null geometry (Leaflet won't process them)
-    if (pan && geoJson?.features) {
+    // Handle flyTo/zoomTo/turnLayerOn/turnLayerOff for features with null geometry (Leaflet won't process them)
+    if (geoJson?.features) {
         for (const feature of geoJson.features) {
-            if (feature.properties?.flyTo && feature.properties?.zoomTo && !feature.properties?.noPan && !feature.geometry) {
-                map.flyTo(feature.properties.flyTo, feature.properties.zoomTo)
+            if (!feature.geometry) {
+                // Handle turnLayerOn
+                if (feature.properties?.turnLayerOn) {
+                    if (Array.isArray(feature.properties.turnLayerOn)) {
+                        for (const layerName of feature.properties.turnLayerOn) {
+                            const layer = allLayers[layerName]
+                            if (layer) map.addLayer(layer)
+                        }
+                    } else {
+                        const layer = allLayers[feature.properties.turnLayerOn]
+                        if (layer) map.addLayer(layer)
+                    }
+                }
+
+                // Handle turnLayerOff
+                if (feature.properties?.turnLayerOff) {
+                    if (Array.isArray(feature.properties.turnLayerOff)) {
+                        for (const layerName of feature.properties.turnLayerOff) {
+                            const layer = allLayers[layerName]
+                            if (layer) map.removeLayer(layer)
+                        }
+                    } else {
+                        const layer = allLayers[feature.properties.turnLayerOff]
+                        if (layer) map.removeLayer(layer)
+                    }
+                }
+
+                // Handle flyTo/zoomTo
+                if (pan && !feature.properties?.noPan) {
+                    if (feature.properties?.flyTo && feature.properties?.zoomTo != null) {
+                        map.flyTo(feature.properties.flyTo, feature.properties.zoomTo)
+                    } else if (feature.properties?.zoomTo != null) {
+                        // Zoom only (at current center) - delay to ensure map is ready and after localStorage restore
+                        const zoomLevel = feature.properties.zoomTo
+                        const center = map.getCenter()
+                        if (center && center.isValid && center.isValid()) {
+                            map.flyTo(center, zoomLevel)
+                        } else {
+                            map.setZoom(zoomLevel)
+                        }
+                    }
+                }
             }
         }
     }
@@ -645,10 +685,15 @@ function paintGeoJson(geoJson, layer, pan = true) {
 
             if (
                 feature.properties?.flyTo
-                && feature.properties?.zoomTo
+                && feature.properties?.zoomTo != null
                 && !feature.properties.noPan
                 && pan) {
                 map.flyTo(feature.properties.flyTo, feature.properties.zoomTo)
+            } else if (
+                feature.properties?.zoomTo != null
+                && !feature.properties.noPan
+                && pan) {
+                map.flyTo(map.getCenter(), feature.properties.zoomTo)
             } else if (
                 layer?.getBounds
                 && layer?.getBounds().isValid()
@@ -947,20 +992,24 @@ connectWebSocket()
 const defaultCenter = map.getCenter();
 const defaultZoom = map.getZoom();
 
-// Check if hash has flyTo - if so, skip localStorage restore so flyTo takes priority
+// Check if hash has flyTo or zoomTo - if so, skip localStorage restore so they take priority
 const hashFromUrl = location.hash.slice(1)
-const hasHashWithFlyTo = hashFromUrl && (() => {
+const hasHashWithFlyToOrZoom = hashFromUrl && (() => {
     try {
         const geoJson = JSON.parse(decodeURIComponent(hashFromUrl))
-        return geoJson?.features?.some(f => f.properties?.flyTo && f.properties?.zoomTo)
+        return geoJson?.features?.some(f =>
+            (f.properties?.flyTo && f.properties?.zoomTo != null) ||
+            f.properties?.zoomTo != null
+        )
     } catch { return false }
 })()
+
 
 // Restore saved state if exists (but skip if hash has flyTo)
 const savedCenter = localStorage.getItem('mapCenter');
 const savedZoom = localStorage.getItem('mapZoom');
 
-if (savedCenter && savedZoom && !hasHashWithFlyTo) { // set the state
+if (savedCenter && savedZoom && !hasHashWithFlyToOrZoom) { // set the state
     const centerCoords = JSON.parse(savedCenter);
     const zoomLevel = parseFloat(savedZoom, 10);
     map.setView(centerCoords, zoomLevel);
