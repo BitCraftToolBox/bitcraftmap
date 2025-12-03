@@ -915,7 +915,7 @@ const liveLayer = L.featureGroup().addTo(map)
 const playerStore = new Map()
 const destinationStore = new Map()
 
-function updateMarker(state) {
+function updateMarker(state, followPlayer) {
 
     const playerId = state.entity_id
     const playerlatLng = L.latLng(state.location_z / 1000, state.location_x / 1000)
@@ -934,7 +934,7 @@ function updateMarker(state) {
             opacity: 1,
             fillOpacity: 1
         }).addTo(liveLayer)
-        playerMarker.bindPopup("PlayerId : " + playerId)
+        playerMarker.bindPopup("PlayerId: " + playerId)
 
         const playerTrail = new L.Polyline(directionLine, {
             color: '#ff0000ff',
@@ -949,6 +949,9 @@ function updateMarker(state) {
         playerMarker.setLatLng(playerlatLng)
         playerDestination.setLatLngs(directionLine)
     }
+    if (followPlayer) {
+        map.flyTo(playerlatLng, map.getZoom())
+    }
 }
 
 
@@ -958,6 +961,7 @@ function connectWebSocket() {
     const playerId = query.get('playerId')
     if (!playerId) return
     if (!/^[0-9]{0,32}$/.test(playerId)) return
+    const followPlayer = ['true', '1'].includes(query.get('followPlayer')?.toString().toLowerCase());
 
     const subscribeMsg = {
         type: "subscribe",
@@ -975,7 +979,7 @@ function connectWebSocket() {
     webSocket.onmessage = (event) => {
         const msg = JSON.parse(event.data)
         if (msg && msg.type === "event" && msg.channel === `mobile_entity_state:${playerId}`) {
-            updateMarker(msg.data)
+            updateMarker(msg.data, followPlayer)
         }
     }
 
