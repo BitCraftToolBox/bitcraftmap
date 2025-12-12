@@ -616,60 +616,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "72057594195402343",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1389,
-                    2734
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "72057594201165256",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1459,
-                    2838
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "72057594194171642",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1747,
-                    3319
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "72057594192573544",
                 "name": "Claimed area",
                 "tier": 2,
@@ -796,24 +742,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "72057594195408654",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1101,
-                    2607
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "72057594122395230",
                 "name": "Claimed area",
                 "tier": 4,
@@ -826,24 +754,6 @@
                 "coordinates": [
                     4656,
                     4269
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "72057594193930493",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    6752,
-                    4586
                 ]
             }
         },
@@ -1048,9 +958,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "72057594072445140",
-                "name": "Dusty",
-                "tier": 3,
+                "entityId": "72057594207837514",
+                "name": "Duck neighbor",
+                "tier": 2,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -1058,8 +968,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    3466,
-                    2313
+                    4994,
+                    6325
                 ]
             }
         },
@@ -1212,7 +1122,7 @@
             "properties": {
                 "entityId": "72057594066653131",
                 "name": "Eulmore",
-                "tier": 4,
+                "tier": 5,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -1606,9 +1516,45 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "72057594060645184",
-                "name": "Ironshore",
-                "tier": 3,
+                "entityId": "72057594207011233",
+                "name": "Jackyl Island",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5433,
+                    5852
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "72057594207226553",
+                "name": "Jungle Safari",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1389,
+                    2734
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "72057594207227524",
+                "name": "Jungle Safari End",
+                "tier": 2,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -1616,8 +1562,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    6578,
-                    5668
+                    1101,
+                    2607
                 ]
             }
         },
@@ -1852,24 +1798,6 @@
                 "coordinates": [
                     2495,
                     7110
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "72057594169040200",
-                "name": "MCNALDOS",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2351,
-                    4279
                 ]
             }
         },
@@ -2428,6 +2356,24 @@
                 "coordinates": [
                     1894,
                     2941
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "72057594201165256",
+                "name": "Pathway",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1459,
+                    2838
                 ]
             }
         },
@@ -3064,6 +3010,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "72057594207268324",
+                "name": "T1 Hunting Camp",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1747,
+                    3319
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "72057594148140542",
                 "name": "T2 Cave 30 Smelters",
                 "tier": 2,
@@ -3076,6 +3040,24 @@
                 "coordinates": [
                     3581,
                     2666
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "72057594207224118",
+                "name": "T2 Hunting Camp",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    6752,
+                    4586
                 ]
             }
         },
@@ -3256,24 +3238,6 @@
                 "coordinates": [
                     5648,
                     5431
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "72057594175783253",
-                "name": "The Deck",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    3575,
-                    6871
                 ]
             }
         },
@@ -3622,7 +3586,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "72057594194026436",
+                "entityId": "72057594207302834",
                 "name": "Travel Fruit r1",
                 "tier": 2,
                 "has_bank": 1,
@@ -3694,7 +3658,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "72057594191677661",
+                "entityId": "72057594206906506",
                 "name": "UMB Road Project",
                 "tier": 1,
                 "has_bank": 0,
@@ -3705,14 +3669,14 @@
                 "type": "Point",
                 "coordinates": [
                     6432,
-                    3430
+                    3431
                 ]
             }
         },
         {
             "type": "Feature",
             "properties": {
-                "entityId": "72057594192433363",
+                "entityId": "72057594207636992",
                 "name": "UMB Temple 8 Desert",
                 "tier": 1,
                 "has_bank": 0,
@@ -3788,7 +3752,7 @@
                 "name": "Unta Rice Fields",
                 "tier": 4,
                 "has_bank": 1,
-                "has_market": 0,
+                "has_market": 1,
                 "has_waystone": 1
             },
             "geometry": {
@@ -3796,6 +3760,24 @@
                 "coordinates": [
                     6328,
                     5648
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "72057594060645184",
+                "name": "Unta T3 Mine",
+                "tier": 3,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    6578,
+                    5668
                 ]
             }
         },
@@ -4138,6 +4120,24 @@
                 "coordinates": [
                     14169,
                     6618
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188255497017",
+                "name": "AMBA FATIMA",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11986,
+                    7027
                 ]
             }
         },
@@ -4541,7 +4541,7 @@
             "type": "Feature",
             "properties": {
                 "entityId": "144115188167447620",
-                "name": "Bog Bay T5 WoodStoneOre T3 Fiber",
+                "name": "Bog Bay",
                 "tier": 5,
                 "has_bank": 1,
                 "has_market": 0,
@@ -4990,6 +4990,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188256262464",
+                "name": "Chill collective",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    13322,
+                    3218
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188234455711",
                 "name": "Claimed area",
                 "tier": 2,
@@ -5002,42 +5020,6 @@
                 "coordinates": [
                     12079,
                     4434
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188238001152",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    14110,
-                    3792
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188253762082",
-                "name": "Claimed area",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    8084,
-                    1247
                 ]
             }
         },
@@ -5062,43 +5044,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "144115188252886903",
-                "name": "Claimed area",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    8278,
-                    1443
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188243757082",
-                "name": "Claimed area",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    10041,
-                    5335
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188247219677",
+                "entityId": "144115188255978380",
                 "name": "Claimed area",
                 "tier": 1,
                 "has_bank": 0,
@@ -5108,8 +5054,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    10144,
-                    6081
+                    10145,
+                    6079
                 ]
             }
         },
@@ -5152,7 +5098,25 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "144115188252893421",
+                "entityId": "144115188255030108",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    14110,
+                    3792
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188256090340",
                 "name": "Claimed area",
                 "tier": 2,
                 "has_bank": 0,
@@ -5162,8 +5126,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    8171,
-                    1439
+                    11475,
+                    4040
                 ]
             }
         },
@@ -5182,6 +5146,24 @@
                 "coordinates": [
                     9159,
                     2772
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188256967799",
+                "name": "Corner Desert Bank",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8663,
+                    794
                 ]
             }
         },
@@ -5620,24 +5602,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "144115188242098868",
-                "name": "Duskfall water transport",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    11644,
-                    3656
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "144115188253769216",
                 "name": "Duskfarm",
                 "tier": 2,
@@ -6016,24 +5980,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "144115188251310541",
-                "name": "Future fish storage",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    8531,
-                    894
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "144115188150459409",
                 "name": "GALAXIAN",
                 "tier": 3,
@@ -6190,24 +6136,6 @@
                 "coordinates": [
                     14572,
                     3208
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188133871018",
-                "name": "GreenGrass",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    11565,
-                    5574
                 ]
             }
         },
@@ -6630,7 +6558,7 @@
             "properties": {
                 "entityId": "144115188250414744",
                 "name": "Infernal Exchange",
-                "tier": 2,
+                "tier": 3,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -6892,6 +6820,24 @@
                 "coordinates": [
                     14245,
                     5241
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188256846823",
+                "name": "Kind Bud T1 CalmPlains Cave",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    13328,
+                    3049
                 ]
             }
         },
@@ -7546,6 +7492,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188255568678",
+                "name": "Npc Task 2",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11640,
+                    3663
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188100370347",
                 "name": "Nut A Watchtower",
                 "tier": 3,
@@ -7648,6 +7612,24 @@
                 "coordinates": [
                     8109,
                     3363
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188256819001",
+                "name": "Path of Eternity",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10876,
+                    4095
                 ]
             }
         },
@@ -7764,7 +7746,7 @@
             "properties": {
                 "entityId": "144115188198779413",
                 "name": "Pirate Bay",
-                "tier": 4,
+                "tier": 5,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -7828,6 +7810,24 @@
                 "coordinates": [
                     14914,
                     4191
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188256744428",
+                "name": "Puff Puff Pass T1 Autumn Cave",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    9298,
+                    6647
                 ]
             }
         },
@@ -7918,6 +7918,24 @@
                 "coordinates": [
                     13321,
                     5324
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188255408908",
+                "name": "River Otters Rest",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11377,
+                    5552
                 ]
             }
         },
@@ -8050,6 +8068,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188256834025",
+                "name": "Sea Bay",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8623,
+                    5275
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188089840357",
                 "name": "Seabrook",
                 "tier": 5,
@@ -8080,24 +8116,6 @@
                 "coordinates": [
                     11802,
                     2544
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188232542679",
-                "name": "Sell me sagi or goat",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    10718,
-                    5135
                 ]
             }
         },
@@ -8176,24 +8194,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "144115188106910348",
-                "name": "Sinraia T4",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    10255,
-                    6258
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "144115188131370610",
                 "name": "Sirwood T5",
                 "tier": 5,
@@ -8232,7 +8232,7 @@
             "properties": {
                 "entityId": "144115188094614136",
                 "name": "Skunkia",
-                "tier": 4,
+                "tier": 5,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -8376,7 +8376,7 @@
             "properties": {
                 "entityId": "144115188252053393",
                 "name": "Swamp Processing st1",
-                "tier": 1,
+                "tier": 2,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -8404,24 +8404,6 @@
                 "coordinates": [
                     9173,
                     3172
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188200066288",
-                "name": "T2 Mine",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    8190,
-                    3120
                 ]
             }
         },
@@ -8494,6 +8476,42 @@
                 "coordinates": [
                     14386,
                     6779
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188243757082",
+                "name": "Taco Bell",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10041,
+                    5335
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188232542679",
+                "name": "Task Town",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10718,
+                    5135
                 ]
             }
         },
@@ -8662,6 +8680,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188252886903",
+                "name": "The Drowned King",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8278,
+                    1443
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188175400463",
                 "name": "The Factory",
                 "tier": 3,
@@ -8752,6 +8788,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188252893421",
+                "name": "The Shattered Throne",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8171,
+                    1439
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188230682731",
                 "name": "The Shrining",
                 "tier": 3,
@@ -8782,6 +8836,24 @@
                 "coordinates": [
                     13204,
                     4672
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "144115188253762082",
+                "name": "The Silent Oath",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8084,
+                    1247
                 ]
             }
         },
@@ -9094,6 +9166,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188200066288",
+                "name": "Unta T2 Mine",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8190,
+                    3120
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188087564731",
                 "name": "Valeria",
                 "tier": 6,
@@ -9220,6 +9310,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188106910348",
+                "name": "Wayfarers Rest",
+                "tier": 4,
+                "has_bank": 1,
+                "has_market": 1,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10255,
+                    6258
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188149093593",
                 "name": "We Share",
                 "tier": 2,
@@ -9310,6 +9418,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "144115188149795000",
+                "name": "Witchy Halt",
+                "tier": 3,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11487,
+                    4164
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "144115188090117932",
                 "name": "Witchy Mire",
                 "tier": 3,
@@ -9340,24 +9466,6 @@
                 "coordinates": [
                     8297,
                     5649
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "144115188149795000",
-                "name": "Witchy Weavers",
-                "tier": 3,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    11487,
-                    4164
                 ]
             }
         },
@@ -9908,7 +10016,7 @@
                 "name": "Buns Burrow",
                 "tier": 4,
                 "has_bank": 1,
-                "has_market": 0,
+                "has_market": 1,
                 "has_waystone": 1
             },
             "geometry": {
@@ -10012,6 +10120,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "216172782278547357",
+                "name": "Chez Meme",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18749,
+                    1829
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "216172782273032696",
                 "name": "Claimed area",
                 "tier": 1,
@@ -10060,24 +10186,6 @@
                 "coordinates": [
                     18682,
                     2646
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "216172782263073052",
-                "name": "Claimed area",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    17886,
-                    4437
                 ]
             }
         },
@@ -11830,24 +11938,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782225069624",
-                "name": "Paradise Reborn",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18452,
-                    1693
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "216172782207061673",
                 "name": "Passierschein A38",
                 "tier": 4,
@@ -11938,7 +12028,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782270370807",
+                "entityId": "216172782279334962",
                 "name": "Planet Aqua",
                 "tier": 1,
                 "has_bank": 1,
@@ -12010,9 +12100,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782266819099",
-                "name": "Planet EmberSilk",
-                "tier": 2,
+                "entityId": "216172782279338828",
+                "name": "Planet Embersilk",
+                "tier": 1,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -12046,9 +12136,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782266831412",
+                "entityId": "216172782279336647",
                 "name": "Planet Hide",
-                "tier": 2,
+                "tier": 1,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -12064,7 +12154,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782277663499",
+                "entityId": "216172782279595580",
                 "name": "Planet Kai",
                 "tier": 1,
                 "has_bank": 0,
@@ -12136,7 +12226,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782275994118",
+                "entityId": "216172782279488406",
                 "name": "Planet Sadala",
                 "tier": 1,
                 "has_bank": 1,
@@ -12190,9 +12280,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782267785208",
+                "entityId": "216172782279337866",
                 "name": "Planet Verde",
-                "tier": 2,
+                "tier": 1,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -12238,24 +12328,6 @@
                 "coordinates": [
                     16045,
                     4374
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "216172782262376249",
-                "name": "Port Ithaca by Knox",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18994,
-                    4503
                 ]
             }
         },
@@ -12310,6 +12382,24 @@
                 "coordinates": [
                     20528,
                     2810
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "216172782278217131",
+                "name": "Port Prawn",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    17861,
+                    1377
                 ]
             }
         },
@@ -12586,24 +12676,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782259466417",
-                "name": "Rimuru",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    20208,
-                    2081
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "216172782190395921",
                 "name": "Rivers End",
                 "tier": 4,
@@ -12832,6 +12904,24 @@
                 "coordinates": [
                     20566,
                     1121
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "216172782277514416",
+                "name": "SmeltersGrace",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18544,
+                    1612
                 ]
             }
         },
@@ -13180,24 +13270,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "216172782257493671",
-                "name": "Thiccan farms",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18993,
-                    3926
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "216172782145315224",
                 "name": "Three Rivers Point",
                 "tier": 4,
@@ -13228,24 +13300,6 @@
                 "coordinates": [
                     16895,
                     439
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "216172782277514416",
-                "name": "To Be Smelter City",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18544,
-                    1612
                 ]
             }
         },
@@ -13300,24 +13354,6 @@
                 "coordinates": [
                     18492,
                     6606
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "216172782229095211",
-                "name": "Tsurugaoka",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18431,
-                    2570
                 ]
             }
         },
@@ -13612,6 +13648,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "216172782279773854",
+                "name": "thiccan relic",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18993,
+                    3926
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "288230376166834145",
                 "name": "0011",
                 "tier": 3,
@@ -13714,24 +13768,6 @@
                 "coordinates": [
                     2790,
                     13123
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "288230376306770942",
-                "name": "Araknir Dungeon",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1217,
-                    12294
                 ]
             }
         },
@@ -14044,24 +14080,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376257070124",
-                "name": "Blokes on Blokes",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1316,
-                    11030
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "288230376180436532",
                 "name": "BootCamp",
                 "tier": 2,
@@ -14188,6 +14206,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "288230376330550784",
+                "name": "Centra Fishing Lands",
+                "tier": 1,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1316,
+                    11030
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "288230376204383370",
                 "name": "Centra Hunting Lodge",
                 "tier": 2,
@@ -14242,6 +14278,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "288230376330614055",
+                "name": "Centra T7 Dungeon",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1217,
+                    12294
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "288230376323497254",
                 "name": "Chinook Crossroads",
                 "tier": 2,
@@ -14278,9 +14332,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376320441868",
+                "entityId": "288230376328741498",
                 "name": "Claimed area",
-                "tier": 1,
+                "tier": 4,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -14288,8 +14342,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    3367,
-                    8301
+                    6126,
+                    8202
                 ]
             }
         },
@@ -14458,6 +14512,42 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "288230376329772349",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5484,
+                    9965
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "288230376330143031",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    6224,
+                    8194
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "288230376288537696",
                 "name": "Claimed area",
                 "tier": 2,
@@ -14478,7 +14568,7 @@
             "properties": {
                 "entityId": "288230376328488876",
                 "name": "Claimed area",
-                "tier": 1,
+                "tier": 4,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -14524,6 +14614,24 @@
                 "coordinates": [
                     5958,
                     9385
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "288230376331010527",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    3367,
+                    8301
                 ]
             }
         },
@@ -14998,24 +15106,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376315634974",
-                "name": "H Jungle",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2697,
-                    13296
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "288230376293333247",
                 "name": "H Mountain of Hope",
                 "tier": 5,
@@ -15056,7 +15146,7 @@
                 "name": "HAKATA",
                 "tier": 4,
                 "has_bank": 1,
-                "has_market": 0,
+                "has_market": 1,
                 "has_waystone": 1
             },
             "geometry": {
@@ -15272,7 +15362,7 @@
                 "name": "Hopes End",
                 "tier": 4,
                 "has_bank": 1,
-                "has_market": 1,
+                "has_market": 0,
                 "has_waystone": 1
             },
             "geometry": {
@@ -15484,24 +15574,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376240267372",
-                "name": "Kedai Mamak",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    5979,
-                    11541
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "288230376245487292",
                 "name": "Kedai Tomyam",
                 "tier": 3,
@@ -15586,42 +15658,6 @@
                 "coordinates": [
                     3634,
                     8619
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "288230376311473606",
-                "name": "Kyts Homestead and Farmers markket",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1963,
-                    12577
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "288230376297450892",
-                "name": "Lake Siss",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2179,
-                    11805
                 ]
             }
         },
@@ -15736,24 +15772,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376269143679",
-                "name": "Lothlorien",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2116,
-                    13174
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "288230376256270903",
                 "name": "Lumbridge",
                 "tier": 5,
@@ -15774,7 +15792,7 @@
             "properties": {
                 "entityId": "288230376276214732",
                 "name": "Luminite Cove WIP",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -16024,6 +16042,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "288230376240267372",
+                "name": "Mystic Jita Bay",
+                "tier": 3,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5979,
+                    11541
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "288230376242341180",
                 "name": "Mystic Marmalade",
                 "tier": 2,
@@ -16204,24 +16240,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376180537358",
-                "name": "Nuthing",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    6638,
-                    11591
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "288230376185424137",
                 "name": "Oakshade T3T4 Hunting",
                 "tier": 4,
@@ -16242,7 +16260,7 @@
             "properties": {
                 "entityId": "288230376317729121",
                 "name": "Oldhelm T6 Mine",
-                "tier": 4,
+                "tier": 6,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -16350,7 +16368,7 @@
             "properties": {
                 "entityId": "288230376267696737",
                 "name": "Pelican Town",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -16564,24 +16582,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376178438909",
-                "name": "ProtoCore",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    6956,
-                    9923
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "288230376213373803",
                 "name": "Pyrelite Mine",
                 "tier": 2,
@@ -16648,24 +16648,6 @@
                 "coordinates": [
                     2632,
                     10281
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "288230376253072559",
-                "name": "RavenGlade",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    7049,
-                    14518
                 ]
             }
         },
@@ -16746,7 +16728,7 @@
             "properties": {
                 "entityId": "288230376167519302",
                 "name": "Rimuru City",
-                "tier": 6,
+                "tier": 7,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -16890,7 +16872,7 @@
             "properties": {
                 "entityId": "288230376322556690",
                 "name": "Sailors Rest",
-                "tier": 2,
+                "tier": 3,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -17080,6 +17062,24 @@
                 "coordinates": [
                     2442,
                     13125
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "288230376330706488",
+                "name": "Snow Leopard Transport Company",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    6532,
+                    9326
                 ]
             }
         },
@@ -17608,24 +17608,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376314796386",
-                "name": "The Grove Greenway",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    5454,
-                    9821
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "288230376236846913",
                 "name": "The Hunters Paw",
                 "tier": 4,
@@ -17914,7 +17896,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "288230376315439231",
+                "entityId": "288230376329670800",
                 "name": "Travel Fruit 4 top",
                 "tier": 2,
                 "has_bank": 0,
@@ -17924,8 +17906,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    4832,
-                    13989
+                    4833,
+                    13990
                 ]
             }
         },
@@ -18006,7 +17988,7 @@
             "properties": {
                 "entityId": "288230376317576634",
                 "name": "Unspoken Tale",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -18600,7 +18582,7 @@
             "properties": {
                 "entityId": "360287970358189600",
                 "name": "Apia",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -19102,24 +19084,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970374519579",
-                "name": "Bunswood",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    11899,
-                    13500
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "360287970303686138",
                 "name": "Calhata",
                 "tier": 2,
@@ -19336,9 +19300,27 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "360287970402650808",
+                "name": "Claimed area",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    13768,
+                    13813
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "360287970370117868",
                 "name": "Claimed area",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -19356,7 +19338,7 @@
             "properties": {
                 "entityId": "360287970399604540",
                 "name": "Claimed area",
-                "tier": 2,
+                "tier": 3,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -19426,6 +19408,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "360287970402582703",
+                "name": "Claimed area",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12391,
+                    11783
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "360287970356254109",
                 "name": "Claimed area",
                 "tier": 1,
@@ -19438,6 +19438,24 @@
                 "coordinates": [
                     12703,
                     11157
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "360287970403278856",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12912,
+                    12012
                 ]
             }
         },
@@ -19464,7 +19482,7 @@
             "properties": {
                 "entityId": "360287970382978999",
                 "name": "Claimed area",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -19914,7 +19932,7 @@
             "properties": {
                 "entityId": "360287970374368672",
                 "name": "Dragon Park",
-                "tier": 2,
+                "tier": 3,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -19960,24 +19978,6 @@
                 "coordinates": [
                     12534,
                     12093
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970346377295",
-                "name": "Dragons Croft",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12714,
-                    9980
                 ]
             }
         },
@@ -20040,7 +20040,7 @@
             "properties": {
                 "entityId": "360287970202488740",
                 "name": "Dragons Head",
-                "tier": 9,
+                "tier": 10,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -20122,6 +20122,24 @@
                 "coordinates": [
                     11962,
                     11747
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "360287970346377295",
+                "name": "DragonsThere",
+                "tier": 3,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12714,
+                    9980
                 ]
             }
         },
@@ -20362,27 +20380,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970400765480",
-                "name": "Fall Magic",
+                "entityId": "360287970402745143",
+                "name": "FallWhere",
                 "tier": 2,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12436,
-                    12055
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970228915326",
-                "name": "Fallwhere",
-                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -20390,8 +20390,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    12868,
-                    11901
+                    12880,
+                    11909
                 ]
             }
         },
@@ -20446,24 +20446,6 @@
                 "coordinates": [
                     12727,
                     8871
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970262125029",
-                "name": "Fartsmouth Bay Harbor",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12655,
-                    8696
                 ]
             }
         },
@@ -21028,24 +21010,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970215516263",
-                "name": "Jaruudian Autumn Retreat",
-                "tier": 5,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12121,
-                    12196
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "360287970358360058",
                 "name": "Jaruudian Kingdom Island Resort",
                 "tier": 2,
@@ -21408,7 +21372,7 @@
             "properties": {
                 "entityId": "360287970356370421",
                 "name": "Lakeside",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -21442,9 +21406,27 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "360287970402800848",
+                "name": "Leather Processing",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11079,
+                    11113
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "360287970397376548",
                 "name": "Logging Retreat",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -21454,24 +21436,6 @@
                 "coordinates": [
                     8914,
                     10935
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970297870985",
-                "name": "Lone Star",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    10720,
-                    11433
                 ]
             }
         },
@@ -21814,24 +21778,6 @@
                 "coordinates": [
                     13966,
                     8841
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970400726469",
-                "name": "More Fall Magic",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12339,
-                    12248
                 ]
             }
         },
@@ -22290,7 +22236,7 @@
             "properties": {
                 "entityId": "360287970218623536",
                 "name": "Nowhere",
-                "tier": 7,
+                "tier": 8,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -22669,9 +22615,9 @@
                 "entityId": "360287970342469805",
                 "name": "Quarry Lake Campsite",
                 "tier": 2,
-                "has_bank": 0,
+                "has_bank": 1,
                 "has_market": 0,
-                "has_waystone": 0
+                "has_waystone": 1
             },
             "geometry": {
                 "type": "Point",
@@ -22702,7 +22648,61 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970398116714",
+                "entityId": "360287970402183771",
+                "name": "R5 Autumn Hunting Lodge",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 1,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12412,
+                    12122
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "360287970215516263",
+                "name": "R5 Autumn Retreat",
+                "tier": 5,
+                "has_bank": 1,
+                "has_market": 1,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12121,
+                    12196
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "360287970403341166",
+                "name": "R5 Jungle Gym",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 1,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    13862,
+                    12717
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "360287970402697536",
                 "name": "R5 N Sapwoods",
                 "tier": 2,
                 "has_bank": 1,
@@ -22720,7 +22720,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970396843293",
+                "entityId": "360287970401082943",
                 "name": "R5 North Autumn Outpost",
                 "tier": 2,
                 "has_bank": 1,
@@ -22738,9 +22738,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970399697154",
+                "entityId": "360287970403705998",
                 "name": "R5 S Sapwoods",
-                "tier": 1,
+                "tier": 2,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -22900,24 +22900,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970295547588",
-                "name": "Remnants 1",
-                "tier": 4,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12912,
-                    12012
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "360287970203715017",
                 "name": "Retirement Home",
                 "tier": 6,
@@ -23020,42 +23002,6 @@
                 "coordinates": [
                     12012,
                     9966
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970354832952",
-                "name": "Royal Road Pt 1",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    11920,
-                    10632
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970354842985",
-                "name": "Royal Road Pt 2",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12017,
-                    10615
                 ]
             }
         },
@@ -23332,24 +23278,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "360287970355889877",
-                "name": "Spice is Life",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    10137,
-                    10576
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "360287970375774695",
                 "name": "Spiderwhere",
                 "tier": 3,
@@ -23443,9 +23371,9 @@
                 "entityId": "360287970400968171",
                 "name": "Star",
                 "tier": 2,
-                "has_bank": 0,
+                "has_bank": 1,
                 "has_market": 0,
-                "has_waystone": 0
+                "has_waystone": 1
             },
             "geometry": {
                 "type": "Point",
@@ -23596,6 +23524,24 @@
                 "coordinates": [
                     12081,
                     11388
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "360287970402037709",
+                "name": "T5 Cave",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10831,
+                    14871
                 ]
             }
         },
@@ -23776,24 +23722,6 @@
                 "coordinates": [
                     12484,
                     12239
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "360287970229444010",
-                "name": "Thaliana",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    14453,
-                    12457
                 ]
             }
         },
@@ -24054,7 +23982,7 @@
             "properties": {
                 "entityId": "360287970399687849",
                 "name": "The Shattered Plains",
-                "tier": 1,
+                "tier": 2,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -25150,6 +25078,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "360287970262125029",
+                "name": "Windward",
+                "tier": 3,
+                "has_bank": 1,
+                "has_market": 1,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12655,
+                    8696
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "360287970391693206",
                 "name": "Wingman 2",
                 "tier": 1,
@@ -25816,6 +25762,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "432345564393428472",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    19441,
+                    9783
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "432345564256353117",
                 "name": "Claimed area",
                 "tier": 2,
@@ -25834,24 +25798,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "432345564377634567",
-                "name": "Claimed area",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    16345,
-                    10351
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "432345564345381655",
                 "name": "Claimed area",
                 "tier": 5,
@@ -25864,24 +25810,6 @@
                 "coordinates": [
                     21298,
                     13911
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "432345564380463521",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    19441,
-                    9783
                 ]
             }
         },
@@ -26122,6 +26050,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "432345564391681861",
+                "name": "Dol Guldur",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    22096,
+                    8037
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "432345564305612345",
                 "name": "Driftcove",
                 "tier": 4,
@@ -26304,7 +26250,7 @@
             "properties": {
                 "entityId": "432345564381143581",
                 "name": "Epixium",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -26446,24 +26392,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "432345564259963962",
-                "name": "For Sale T4 100k",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    17540,
-                    12303
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "432345564343349969",
                 "name": "Foragers Gulf",
                 "tier": 2,
@@ -26484,7 +26412,7 @@
             "properties": {
                 "entityId": "432345564381349993",
                 "name": "Free Tacos",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -26968,12 +26896,30 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "432345564389652518",
+                "name": "JnR Mining Outpost",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    22124,
+                    7928
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "432345564390566323",
                 "name": "Koltuk",
                 "tier": 2,
-                "has_bank": 0,
+                "has_bank": 1,
                 "has_market": 0,
-                "has_waystone": 0
+                "has_waystone": 1
             },
             "geometry": {
                 "type": "Point",
@@ -27088,6 +27034,24 @@
                 "coordinates": [
                     19909,
                     8801
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "432345564392759272",
+                "name": "LoLu",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    17175,
+                    12055
                 ]
             }
         },
@@ -27274,6 +27238,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "432345564393520468",
+                "name": "Moonbeam River",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18660,
+                    11688
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "432345564271370132",
                 "name": "Moonlight Harbor",
                 "tier": 8,
@@ -27364,6 +27346,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "432345564392255728",
+                "name": "Murwud",
+                "tier": 3,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    15944,
+                    9784
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "432345564389189226",
                 "name": "Mystic Peach",
                 "tier": 1,
@@ -27394,24 +27394,6 @@
                 "coordinates": [
                     19537,
                     12966
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "432345564335896519",
-                "name": "Nature reserve",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    20360,
-                    9589
                 ]
             }
         },
@@ -28138,6 +28120,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "432345564392434594",
+                "name": "Single Cell Port",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    22040,
+                    11831
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "432345564333119157",
                 "name": "Slavers Bay",
                 "tier": 5,
@@ -28150,24 +28150,6 @@
                 "coordinates": [
                     21304,
                     9713
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "432345564378319685",
-                "name": "Slimeville",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18437,
-                    10552
                 ]
             }
         },
@@ -28445,7 +28427,7 @@
             "type": "Feature",
             "properties": {
                 "entityId": "432345564333718580",
-                "name": "TessadeBIRDia",
+                "name": "Tessadebemarry",
                 "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
@@ -28570,24 +28552,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "432345564389652518",
-                "name": "The Eighth Mountain",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    22124,
-                    7928
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "432345564273498283",
                 "name": "The Emerald Silence",
                 "tier": 3,
@@ -28608,7 +28572,7 @@
             "properties": {
                 "entityId": "432345564242397323",
                 "name": "The Gulf of Bitcraft",
-                "tier": 8,
+                "tier": 9,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -28662,7 +28626,7 @@
             "properties": {
                 "entityId": "432345564301805720",
                 "name": "The Iron Ratkin",
-                "tier": 2,
+                "tier": 3,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -28834,6 +28798,24 @@
                 "coordinates": [
                     19673,
                     9335
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "432345564259963962",
+                "name": "The Vale Gates",
+                "tier": 4,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    17540,
+                    12303
                 ]
             }
         },
@@ -29236,6 +29218,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "432345564377634567",
+                "name": "Zenthereal",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    16345,
+                    10351
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "432345564362102070",
                 "name": "Zion",
                 "tier": 3,
@@ -29454,7 +29454,7 @@
             "properties": {
                 "entityId": "504403158402660850",
                 "name": "Bayside Landing",
-                "tier": 4,
+                "tier": 5,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -29464,24 +29464,6 @@
                 "coordinates": [
                     1833,
                     19574
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "504403158335404366",
-                "name": "Bitzstantinople",
-                "tier": 5,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    4505,
-                    18323
                 ]
             }
         },
@@ -29974,24 +29956,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "504403158414623771",
-                "name": "Claimed area",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2124,
-                    19542
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "504403158401700710",
                 "name": "Claimed area",
                 "tier": 1,
@@ -30118,24 +30082,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "504403158299768352",
-                "name": "Deepantler",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    3069,
-                    19350
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "504403158375296580",
                 "name": "Desolation",
                 "tier": 2,
@@ -30228,7 +30174,7 @@
             "properties": {
                 "entityId": "504403158346263229",
                 "name": "Drone Queen Falls",
-                "tier": 4,
+                "tier": 5,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -30535,9 +30481,9 @@
                 "entityId": "504403158398552552",
                 "name": "Granado Espada T3 4 Animal Outpost",
                 "tier": 2,
-                "has_bank": 0,
+                "has_bank": 1,
                 "has_market": 1,
-                "has_waystone": 0
+                "has_waystone": 1
             },
             "geometry": {
                 "type": "Point",
@@ -30562,24 +30508,6 @@
                 "coordinates": [
                     3162,
                     15918
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "504403158286094482",
-                "name": "Ironman",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2661,
-                    19710
                 ]
             }
         },
@@ -30838,6 +30766,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "504403158393899057",
+                "name": "Mystic Midway",
+                "tier": 3,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    7179,
+                    16794
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "504403158325668362",
                 "name": "Mystic Prospect",
                 "tier": 3,
@@ -31018,6 +30964,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "504403158415480614",
+                "name": "North Pole",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    6396,
+                    21659
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "504403158334212641",
                 "name": "Northererwestershire",
                 "tier": 4,
@@ -31048,24 +31012,6 @@
                 "coordinates": [
                     4872,
                     19997
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "504403158394866068",
-                "name": "Nublet Brigade",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    1353,
-                    19088
                 ]
             }
         },
@@ -31216,6 +31162,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "504403158414623771",
+                "name": "P2",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    2124,
+                    19542
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "504403158317596815",
                 "name": "Pastel Kingdom",
                 "tier": 4,
@@ -31336,24 +31300,6 @@
                 "coordinates": [
                     2170,
                     18536
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "504403158385525156",
-                "name": "Polanka",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2528,
-                    17912
                 ]
             }
         },
@@ -31684,24 +31630,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "504403158405905521",
-                "name": "Rivers Spire Tree Farm",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2179,
-                    18385
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "504403158377200162",
                 "name": "Rootport",
                 "tier": 2,
@@ -31722,7 +31650,7 @@
             "properties": {
                 "entityId": "504403158413732028",
                 "name": "Rovaniemi nuclear Weapons RnD",
-                "tier": 1,
+                "tier": 2,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -32026,24 +31954,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "504403158352937887",
-                "name": "Sassinoth",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    5684,
-                    22117
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "504403158287759826",
                 "name": "Satomura",
                 "tier": 4,
@@ -32182,24 +32092,6 @@
                 "coordinates": [
                     4564,
                     18894
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "504403158393899057",
-                "name": "Smoke Shack",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    7179,
-                    16794
                 ]
             }
         },
@@ -33160,7 +33052,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752475527037",
+                "entityId": "576460752490333655",
                 "name": "A1",
                 "tier": 1,
                 "has_bank": 0,
@@ -33178,7 +33070,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752475532774",
+                "entityId": "576460752490336147",
                 "name": "A2",
                 "tier": 1,
                 "has_bank": 0,
@@ -33412,24 +33304,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752475163155",
-                "name": "Albern Destruction Company",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    9318,
-                    16316
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "576460752379250781",
                 "name": "Albern Farmers Market",
                 "tier": 2,
@@ -33532,24 +33406,6 @@
                 "coordinates": [
                     11229,
                     21132
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "576460752397254452",
-                "name": "Amazon Clearing Company",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    14604,
-                    17696
                 ]
             }
         },
@@ -33730,24 +33586,6 @@
                 "coordinates": [
                     14497,
                     21799
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "576460752488772280",
-                "name": "BUNG TOWN",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    13314,
-                    18532
                 ]
             }
         },
@@ -34420,24 +34258,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752487991819",
-                "name": "Claimed area",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    8724,
-                    18570
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "576460752484814031",
                 "name": "Claimed area",
                 "tier": 2,
@@ -34450,6 +34270,24 @@
                 "coordinates": [
                     11869,
                     19732
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "576460752491677089",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    13315,
+                    18533
                 ]
             }
         },
@@ -35070,7 +34908,7 @@
             "properties": {
                 "entityId": "576460752475132340",
                 "name": "Faeder",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -35338,24 +35176,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752370974919",
-                "name": "Gates Reach",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    13071,
-                    19823
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "576460752338526702",
                 "name": "Gergovie",
                 "tier": 5,
@@ -35602,6 +35422,24 @@
                 "coordinates": [
                     13802,
                     16704
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "576460752491511192",
+                "name": "Harmony",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12083,
+                    19333
                 ]
             }
         },
@@ -36260,7 +36098,7 @@
                 "name": "Krazil",
                 "tier": 3,
                 "has_bank": 1,
-                "has_market": 1,
+                "has_market": 0,
                 "has_waystone": 1
             },
             "geometry": {
@@ -36358,6 +36196,24 @@
                 "coordinates": [
                     12227,
                     16335
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "576460752323753039",
+                "name": "Le Promontoire Mystic de Draxionne",
+                "tier": 4,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11943,
+                    16256
                 ]
             }
         },
@@ -37642,24 +37498,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752359277425",
-                "name": "Pizza Margherita",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    12265,
-                    17013
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "576460752320442340",
                 "name": "Polish Vodka",
                 "tier": 3,
@@ -37840,24 +37678,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752323753039",
-                "name": "Promontoire du Lion",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    11943,
-                    16256
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "576460752459531089",
                 "name": "Puycelsi",
                 "tier": 4,
@@ -37968,7 +37788,7 @@
             "properties": {
                 "entityId": "576460752444060136",
                 "name": "Redwolfs Enclave",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -38848,6 +38668,42 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "576460752359277425",
+                "name": "Subway",
+                "tier": 4,
+                "has_bank": 1,
+                "has_market": 1,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    12265,
+                    17013
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "576460752492004217",
+                "name": "Subway",
+                "tier": 2,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8373,
+                    18834
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "576460752320317777",
                 "name": "Sukima Village",
                 "tier": 2,
@@ -39190,7 +39046,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "576460752477486694",
+                "entityId": "576460752491401627",
                 "name": "Transport to r8 to r5",
                 "tier": 2,
                 "has_bank": 1,
@@ -39893,7 +39749,7 @@
             "type": "Feature",
             "properties": {
                 "entityId": "648518346356801633",
-                "name": "Ashen",
+                "name": "Ashenanor",
                 "tier": 6,
                 "has_bank": 1,
                 "has_market": 1,
@@ -39904,24 +39760,6 @@
                 "coordinates": [
                     19624,
                     17106
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "648518346369458278",
-                "name": "Ashen Murlocs",
-                "tier": 4,
-                "has_bank": 1,
-                "has_market": 1,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18767,
-                    17402
                 ]
             }
         },
@@ -40036,9 +39874,9 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "648518346462946482",
+                "entityId": "648518346497778677",
                 "name": "Beyond the Pines",
-                "tier": 2,
+                "tier": 1,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -40216,7 +40054,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "648518346481884945",
+                "entityId": "648518346497341991",
                 "name": "CSB Boomtown",
                 "tier": 1,
                 "has_bank": 0,
@@ -40540,6 +40378,24 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "648518346369458278",
+                "name": "Chaos Jungle",
+                "tier": 4,
+                "has_bank": 1,
+                "has_market": 1,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18767,
+                    17402
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "648518346371341038",
                 "name": "Chaos SW",
                 "tier": 3,
@@ -40614,7 +40470,7 @@
             "properties": {
                 "entityId": "648518346485783007",
                 "name": "Claimed area",
-                "tier": 4,
+                "tier": 5,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -40648,24 +40504,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "648518346485791406",
-                "name": "Claimed area",
-                "tier": 3,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    17775,
-                    16785
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "648518346389591245",
                 "name": "Claimed area",
                 "tier": 3,
@@ -40678,6 +40516,42 @@
                 "coordinates": [
                     18878,
                     15938
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "648518346497610756",
+                "name": "Claimed area",
+                "tier": 1,
+                "has_bank": 1,
+                "has_market": 0,
+                "has_waystone": 1
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18736,
+                    16398
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "648518346498821473",
+                "name": "Claimed area",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    22293,
+                    20033
                 ]
             }
         },
@@ -41008,24 +40882,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "648518346486267703",
-                "name": "Driftwood Northwest",
-                "tier": 1,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    20211,
-                    17195
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "648518346493730921",
                 "name": "Edge of Sanity",
                 "tier": 2,
@@ -41056,24 +40912,6 @@
                 "coordinates": [
                     16311,
                     17124
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "648518346475003457",
-                "name": "Endor",
-                "tier": 1,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18735,
-                    16398
                 ]
             }
         },
@@ -41218,24 +41056,6 @@
                 "coordinates": [
                     17742,
                     19278
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "648518346490388967",
-                "name": "Firefly Glade",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    21187,
-                    20399
                 ]
             }
         },
@@ -41674,6 +41494,42 @@
         {
             "type": "Feature",
             "properties": {
+                "entityId": "648518346497781221",
+                "name": "January",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    17216,
+                    20604
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "648518346498098673",
+                "name": "Joes Bank and Loan",
+                "tier": 2,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    20213,
+                    16707
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
                 "entityId": "648518346448073319",
                 "name": "Joes Crap Shack",
                 "tier": 3,
@@ -41748,7 +41604,7 @@
             "properties": {
                 "entityId": "648518346395563345",
                 "name": "Korriban",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 1,
                 "has_waystone": 1
@@ -41812,24 +41668,6 @@
                 "coordinates": [
                     19036,
                     17769
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "648518346492317870",
-                "name": "Lantern Dock",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    17538,
-                    17472
                 ]
             }
         },
@@ -42394,24 +42232,6 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "648518346481324221",
-                "name": "New Coldstone Landing",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    18297,
-                    21894
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "entityId": "648518346363347974",
                 "name": "New Lumiere",
                 "tier": 6,
@@ -42460,6 +42280,24 @@
                 "coordinates": [
                     22261,
                     19779
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "entityId": "648518346498194411",
+                "name": "North Araknir Dungeon",
+                "tier": 1,
+                "has_bank": 0,
+                "has_market": 0,
+                "has_waystone": 0
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18297,
+                    21894
                 ]
             }
         },
@@ -42702,7 +42540,7 @@
             "properties": {
                 "entityId": "648518346481067345",
                 "name": "Pines valley",
-                "tier": 3,
+                "tier": 4,
                 "has_bank": 1,
                 "has_market": 0,
                 "has_waystone": 1
@@ -42828,7 +42666,7 @@
             "properties": {
                 "entityId": "648518346479978073",
                 "name": "Rathium Bay",
-                "tier": 5,
+                "tier": 6,
                 "has_bank": 0,
                 "has_market": 0,
                 "has_waystone": 0
@@ -43006,25 +42844,7 @@
         {
             "type": "Feature",
             "properties": {
-                "entityId": "648518346355675744",
-                "name": "SHANKS AND SHAMBLES",
-                "tier": 4,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    20189,
-                    16752
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "648518346489921732",
+                "entityId": "648518346497261283",
                 "name": "Saint Creme Mining Co Project Site",
                 "tier": 2,
                 "has_bank": 0,
@@ -43082,7 +42902,7 @@
                 "name": "Scholars Society",
                 "tier": 4,
                 "has_bank": 1,
-                "has_market": 0,
+                "has_market": 1,
                 "has_waystone": 1
             },
             "geometry": {
@@ -43180,24 +43000,6 @@
                 "coordinates": [
                     20252,
                     21940
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "648518346493328130",
-                "name": "Secret Cove",
-                "tier": 2,
-                "has_bank": 1,
-                "has_market": 0,
-                "has_waystone": 1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    16461,
-                    17700
                 ]
             }
         },
@@ -43594,24 +43396,6 @@
                 "coordinates": [
                     20174,
                     19125
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "entityId": "648518346482300578",
-                "name": "The Sticky Hinge",
-                "tier": 2,
-                "has_bank": 0,
-                "has_market": 0,
-                "has_waystone": 0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    16259,
-                    18298
                 ]
             }
         },
