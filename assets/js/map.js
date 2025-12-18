@@ -956,37 +956,55 @@ function updateMarker(state, followPlayer) {
 
 
 function connectWebSocket() {
+    const query = new URLSearchParams(window.location.search);
+    const playerIdsParam = query.get('playerId');
 
-    const query = new URLSearchParams(window.location.search)
-    const playerId = query.get('playerId')
-    if (!playerId) return
-    if (!/^[0-9]{0,32}$/.test(playerId)) return
+    if (!playerIdsParam) return;
+
+    // Split by comma and trim whitespace
+    const playerIds = playerIdsParam.split(',').map(id => id.trim()).filter(id => id !== '');
+
+    // Validate each playerId
+    const validPlayerIds = playerIds.filter(id => /^[0-9]{1,32}$/.test(id));
+    if (validPlayerIds.length === 0) return;
+
     const followPlayer = ['true', '1'].includes(query.get('followPlayer')?.toString().toLowerCase());
+
+    // Create subscription channels for all valid player IDs
+    const channels = validPlayerIds.map(id => `mobile_entity_state:${id}`);
 
     const subscribeMsg = {
         type: "subscribe",
-        channels: [`mobile_entity_state:${playerId}`]
-    }
+        channels: channels
+    };
 
-    const bitjitaLiveURL = "wss://live.bitjita.com"
-    const webSocket = new WebSocket(bitjitaLiveURL)
+    const bitjitaLiveURL = "wss://live.bitjita.com";
+    const webSocket = new WebSocket(bitjitaLiveURL);
 
     webSocket.onopen = () => {
-        console.log("WebSocket connected")
-        webSocket.send(JSON.stringify(subscribeMsg))
-    }
+        console.log("WebSocket connected");
+        webSocket.send(JSON.stringify(subscribeMsg));
+        // Optional: show the tracking notice for multiple players
+        createTrackingNotice("Tracking Players: " + validPlayerIds.join(', '), "#00ff00");
+    };
 
     webSocket.onmessage = (event) => {
-        const msg = JSON.parse(event.data)
-        if (msg && msg.type === "event" && msg.channel === `mobile_entity_state:${playerId}`) {
-            updateMarker(msg.data, followPlayer)
+        const msg = JSON.parse(event.data);
+
+        if (msg && msg.type === "event" && msg.channel) {
+            // Extract playerId from channel name
+            const channelParts = msg.channel.split(':');
+            const channelPlayerId = channelParts[1];
+
+            // Check if this message is for one of the subscribed playerIds
+            if (validPlayerIds.includes(channelPlayerId)) {
+                updateMarker(msg.data, followPlayer);
+            }
         }
-    }
+    };
 
-    createTrackingNotice("Tracking Player: " + playerId, "#00ff00");
-
-    webSocket.onerror = (error) => console.error("WebSocket error:", error)
-    webSocket.onclose = () => console.log("WebSocket closed")
+    webSocket.onerror = (error) => console.error("WebSocket error:", error);
+    webSocket.onclose = () => console.log("WebSocket closed");
 }
 
 connectWebSocket()
