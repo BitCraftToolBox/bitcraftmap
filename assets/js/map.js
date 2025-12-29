@@ -556,7 +556,6 @@ function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "
 
     // Set its text content
     newDiv.id = "tracking_item";
-    newDiv.textContent = displayText;
 
     // Apply background color TODO: check all bg color and change font color if dark
     newDiv.style.backgroundColor = bgColor;
