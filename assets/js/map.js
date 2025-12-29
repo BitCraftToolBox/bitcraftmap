@@ -183,6 +183,8 @@ const genericToggle = {
     "R9 roads": region9Roads
 }
 
+const resourceLayers = {}
+
 const allLayers = {
     eventsLayer, treesLayer, templesLayer, ruinedLayer, banksLayer, marketsLayer, waystonesLayer, waypointsLayer,
     claimT0Layer, claimT1Layer, claimT2Layer, claimT3Layer, claimT4Layer, claimT5Layer,
@@ -431,6 +433,16 @@ async function loadGeoJsonFromBackend() {
     const fetchPromises = []
     const geoJsonMeta = []
     var trackingList = []
+
+    // Create layers for each resource and enemy
+    for (const resourceId of resourceIds) {
+        resourceLayers[resourceId] = L.layerGroup()
+        map.addLayer(resourceLayers[resourceId])
+    }
+    for (const enemyId of enemyIds) {
+        resourceLayers[enemyId] = L.layerGroup()
+        map.addLayer(resourceLayers[enemyId])
+    }
     for (const regionId of regionIds) {
 
         for (const resourceId of resourceIds) {
@@ -450,7 +462,7 @@ async function loadGeoJsonFromBackend() {
                 fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
                     .then(response => response.json())
             )
-            trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + tier, color: color })
+            trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + tier, color: color, id: resourceId })
         }
         for (const enemyId of enemyIds) {
             var color =
@@ -466,15 +478,22 @@ async function loadGeoJsonFromBackend() {
             var enemy_name = creatureIndex[enemyId]?.name || "ID " + enemyId;
             geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
             fetchPromises.push(
-                fetch('https://bcmap-api.bitjita.com/region' + regionId + '/enemy/' + enemyId)
+                fetch(appOptions.backendUrl + '/region' + regionId + '/enemy/' + enemyId)
                     .then(response => response.json())
             )
-            trackingList.push({ text: "Tracking: " + enemy_name + ", Tier " + creatureIndex[enemyId]?.tier, color: color })
+            trackingList.push({ text: "Tracking: " + enemy_name + ", Tier " + creatureIndex[enemyId]?.tier, color: color, id: enemyId })
         }
     }
     trackingList = filterUnique(trackingList); // filter out all the duplicates
     for (const item of trackingList) {
-        createTrackingNotice(item.text, item.color);
+        createTrackingNotice(item.text, item.color, "tracking_container", () => {
+            const layer = resourceLayers[item.id]
+            if (map.hasLayer(layer)) {
+                map.removeLayer(layer)
+            } else {
+                map.addLayer(layer)
+            }
+        });
     }
 
     if (fetchPromises.length === 0) return
@@ -488,7 +507,9 @@ async function loadGeoJsonFromBackend() {
             if (geoJson.features[0].properties?.hasOwnProperty("fillColor")) // if geojson from server has color defined, use it
                 geoJson.features[0].properties.fillColor = geoJson.features[0].properties.fillColor;
 
-            paintGeoJson(geoJson, waypointsLayer, false)
+            const meta = geoJsonMeta[idx]
+            const layer = resourceLayers[meta.resource]
+            paintGeoJson(geoJson, layer, false)
         }
         idx++;
     })
@@ -519,7 +540,7 @@ function filterUnique(array) {
     return result;
 }
 
-function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "#ffffff", parentDivId = "tracking_container") {
+function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "#ffffff", parentDivId = "tracking_container", toggleCallback = null) {
     // Purspose: Create a small text panel with info about which resources are being tracked
     // Find the parent container by ID
     const parentDiv = document.getElementById(parentDivId);
@@ -539,6 +560,16 @@ function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "
 
     // Apply background color TODO: check all bg color and change font color if dark
     newDiv.style.backgroundColor = bgColor;
+    if (toggleCallback) {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = true;
+        checkbox.style.marginRight = '5px';
+        checkbox.addEventListener('change', toggleCallback);
+        newDiv.appendChild(checkbox);
+    }
+
+    newDiv.appendChild(document.createTextNode(displayText));
 
     // Append the new div to the parent container
     parentDiv.appendChild(newDiv);
