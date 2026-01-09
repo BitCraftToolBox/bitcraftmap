@@ -11,6 +11,7 @@ const iconsManifest = {
     "claimT7": "assets/images/claim/claimT7.png",
     "claimT8": "assets/images/claim/claimT8.png",
     "claimT9": "assets/images/claim/claimT9.png",
+    "claimRed": "ssets/images/claim/claimRed.png",
     "ruinedCity": "assets/images/claim/ruinedCity.png",
     "HexCoin": "assets/images/coin/HexCoin.png",
     "HexCoin10": "assets/images/coin/HexCoin10.png",
