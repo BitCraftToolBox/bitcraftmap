@@ -124,27 +124,14 @@ const caveLayers = [
 
 const allCaves = L.layerGroup(caveLayers)
 
-const region1Roads = L.layerGroup()
-const region2Roads = L.layerGroup()
-const region3Roads = L.layerGroup()
-const region4Roads = L.layerGroup()
-const region5Roads = L.layerGroup()
-const region6Roads = L.layerGroup()
-const region7Roads = L.layerGroup()
-const region8Roads = L.layerGroup()
-const region9Roads = L.layerGroup()
-
-const roadsLayers = [
-    region1Roads, region2Roads, region3Roads, region4Roads, region5Roads,
-    region6Roads, region7Roads, region8Roads, region9Roads,
-]
-
-const allRoads = L.layerGroup(roadsLayers)
+// Roads image overlay
+const roadsBounds = [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]]
+const roadsImage = L.imageOverlay('https://exports.bitjita.com/bitcraftmap/roads/global-16k.webp', roadsBounds)
+const roadsLayer = L.layerGroup([roadsImage])
 
 const genericToggle = {
     "Events": eventsLayer,
     "Wonders": treesLayer,
-    "Temples": templesLayer,
     "Ruined Cities": ruinedLayer,
     "Banks": banksLayer,
     "Markets": marketsLayer,
@@ -172,15 +159,7 @@ const genericToggle = {
     "Caves T6": caveT6Layer,
     "Caves T7": caveT7Layer,
     "Caves T8": caveT8Layer,
-    "R1 roads": region1Roads,
-    "R2 roads": region2Roads,
-    "R3 roads": region3Roads,
-    "R4 roads": region4Roads,
-    "R5 roads": region5Roads,
-    "R6 roads": region6Roads,
-    "R7 roads": region7Roads,
-    "R8 roads": region8Roads,
-    "R9 roads": region9Roads
+    "Roads": roadsLayer
 }
 
 const resourceLayers = {}
@@ -191,8 +170,7 @@ const allLayers = {
     claimT6Layer, claimT7Layer, claimT8Layer, claimT9Layer, claimT10Layer,
     caveT1Layer, caveT2Layer, caveT3Layer, caveT4Layer, caveT5Layer,
     caveT6Layer, caveT7Layer, caveT8Layer, caveT9Layer, caveT10Layer,
-    region1Roads, region2Roads, region3Roads, region4Roads, region5Roads,
-    region6Roads, region7Roads, region8Roads, region9Roads, dungeonsLayer
+    roadsLayer, dungeonsLayer
 }
 
 
@@ -749,12 +727,15 @@ function groupLayersControl(control, groups) {
     const byName = Object.fromEntries(labels.map(l => [l.textContent.trim(), l]))
     root.innerHTML = ''
 
+    // Track which items are grouped (include group names like "Claims", "Caves" which are master toggles)
+    const groupedNames = new Set([...Object.values(groups).flat(), ...Object.keys(groups)])
+
     for (const [title, names] of Object.entries(groups)) {
         const section = L.DomUtil.create('details', 'lc-section', root)
         const summary = L.DomUtil.create('summary', 'lc-summary', section)
 
         // Colapse all but poi
-        if (!['Claims', 'Caves', 'Roads'].includes(title)) {
+        if (!['Claims', 'Caves'].includes(title)) {
             section.open = true
         }
 
@@ -792,6 +773,13 @@ function groupLayersControl(control, groups) {
                 master.checked = all
             })
         })
+    }
+
+    // Add ungrouped items at the bottom (like Roads)
+    for (const [name, label] of Object.entries(byName)) {
+        if (!groupedNames.has(name)) {
+            root.appendChild(label)
+        }
     }
 }
 
@@ -887,15 +875,6 @@ loadGeoJsonFromBackend()
 
 // Load only when the user is requesting it
 gridsLayer.once('add', () => loadGeoJsonFromFile('assets/markers/grids.geojson', gridsLayer))
-region1Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r1_small.geojson', region1Roads))
-region2Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r2_small.geojson', region2Roads))
-region3Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r3_small.geojson', region3Roads))
-region4Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r4_small.geojson', region4Roads))
-region5Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r5_small.geojson', region5Roads))
-region6Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r6_small.geojson', region6Roads))
-region7Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r7_small.geojson', region7Roads))
-region8Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r8_small.geojson', region8Roads))
-region9Roads.once('add', () => loadGeoJsonFromFile('assets/markers/roads_r9_small.geojson', region9Roads))
 
 /* removing this for now, seems unnecessary (spread markers that are too close together)
 // Note : don't forget to add back <script src="assets/js/spider.js"></script> if you want this
@@ -911,8 +890,7 @@ map.enableAutoSpiderfy({
 const GROUPS = {
     'Points of Interest': ['Events', 'Wonders', 'Temples', 'Ruined Cities', 'Banks', 'Markets', 'Waystones', 'Grids', 'Dungeons', 'Waypoints'],
     'Claims': ['Claims T1', 'Claims T2', 'Claims T3', 'Claims T4', 'Claims T5', 'Claims T6', 'Claims T7', 'Claims T8', 'Claims T9', 'Claims T10'],
-    'Caves': ['Caves T1', 'Caves T2', 'Caves T3', 'Caves T4', 'Caves T5', 'Caves T6', 'Caves T7', 'Caves T8'],
-    'Roads': ['R1 roads', 'R2 roads', 'R3 roads', 'R4 roads', 'R5 roads', 'R6 roads', 'R7 roads', 'R8 roads', 'R9 roads']
+    'Caves': ['Caves T1', 'Caves T2', 'Caves T3', 'Caves T4', 'Caves T5', 'Caves T6', 'Caves T7', 'Caves T8']
 }
 
 const _origUpdate = controlLayer._update.bind(controlLayer)
