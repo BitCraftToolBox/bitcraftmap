@@ -132,6 +132,7 @@ const roadsLayer = L.layerGroup([roadsImage])
 const genericToggle = {
     "Events": eventsLayer,
     "Wonders": treesLayer,
+    "Temples": templesLayer,
     "Ruined Cities": ruinedLayer,
     "Banks": banksLayer,
     "Markets": marketsLayer,
