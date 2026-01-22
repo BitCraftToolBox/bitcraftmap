@@ -26,6 +26,12 @@ html, body {
     image-rendering: crisp-edges;
 }
 
+/* GPU acceleration for smoother panning with large images */
+.leaflet-image-layer {
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
 .leaflet-control-layers .lc-section {
     margin-bottom: 10px;
     margin-left: 0;
