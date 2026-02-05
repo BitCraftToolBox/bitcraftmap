@@ -2319,161 +2319,200 @@ const resourceIndex = { // Generated array
     }
 }
 
-const creatureIndex = {
+const creatureIndex = { // Generated array
     "18": {
         tier: 1,
-        name: "Alpha Jakyl"
+        name: "Alpha Jakyl",
+        tag: "Monster"
     },
     "27": {
         tier: 1,
-        name: "Alpha Umbura"
+        name: "Alpha Umbura",
+        tag: "Monster"
     },
     "40": {
         tier: 1,
-        name: "Araknir Nest"
+        name: "Araknir Nest",
+        tag: "Monster"
     },
     "4": {
         tier: 4,
-        name: "Ardea"
+        name: "Ardea",
+        tag: "Huntable Animal"
     },
     "37": {
         tier: 1,
-        name: "Cave Skitch"
+        name: "Cave Skitch",
+        tag: "Monster"
     },
     "21": {
         tier: 1,
-        name: "Desert Crab"
+        name: "Desert Crab",
+        tag: "Monster"
     },
     "16": {
         tier: 10,
-        name: "Desert Terrorbird"
+        name: "Desert Terrorbird",
+        tag: "Huntable Animal"
     },
     "3": {
         tier: 5,
-        name: "Dromai"
+        name: "Dromai",
+        tag: "Huntable Animal"
     },
     "29": {
         tier: 1,
-        name: "Drone"
+        name: "Drone",
+        tag: "Monster"
     },
     "12": {
         tier: 8,
-        name: "Elder Scrofa"
+        name: "Elder Scrofa",
+        tag: "Huntable Animal"
     },
     "7": {
         tier: 3,
-        name: "Female Cervus"
+        name: "Female Cervus",
+        tag: "Huntable Animal"
     },
     "10": {
         tier: 4,
-        name: "Female Scrofa"
+        name: "Female Scrofa",
+        tag: "Huntable Animal"
     },
     "32": {
         tier: 1,
-        name: "Feral Sentinel"
+        name: "Feral Sentinel",
+        tag: "Monster"
     },
     "22": {
         tier: 1,
-        name: "Frost Crab"
+        name: "Frost Crab",
+        tag: "Monster"
     },
     "36": {
         tier: 1,
-        name: "Giant Skitch"
+        name: "Giant Skitch",
+        tag: "Monster"
     },
     "17": {
         tier: 1,
-        name: "Jakyl"
+        name: "Jakyl",
+        tag: "Monster"
     },
     "15": {
         tier: 7,
-        name: "Jungle Terrorbird"
+        name: "Jungle Terrorbird",
+        tag: "Huntable Animal"
     },
     "19": {
         tier: 1,
-        name: "King Jakyl"
+        name: "King Jakyl",
+        tag: "Monster"
     },
     "28": {
         tier: 1,
-        name: "King Umbura"
+        name: "King Umbura",
+        tag: "Monster"
     },
     "8": {
         tier: 3,
-        name: "Male Cervus"
+        name: "Male Cervus",
+        tag: "Huntable Animal"
     },
     "11": {
         tier: 4,
-        name: "Male Scrofa"
+        name: "Male Scrofa",
+        tag: "Huntable Animal"
     },
     "38": {
         tier: 1,
-        name: "Massive Araknir"
+        name: "Massive Araknir",
+        tag: "Monster"
     },
     "5": {
         tier: 2,
-        name: "Nubi Goat"
+        name: "Nubi Goat",
+        tag: "Huntable Animal"
     },
     "13": {
         tier: 5,
-        name: "Ox"
+        name: "Ox",
+        tag: "Huntable Animal"
     },
     "1": {
         tier: 1,
-        name: "Practice Dummy"
+        name: "Practice Dummy",
+        tag: "Monster"
     },
     "31": {
         tier: 1,
-        name: "Queen"
+        name: "Queen",
+        tag: "Monster"
     },
     "9": {
         tier: 4,
-        name: "Rangifer"
+        name: "Rangifer",
+        tag: "Huntable Animal"
     },
     "2": {
         tier: 1,
-        name: "Sagi Bird"
+        name: "Sagi Bird",
+        tag: "Huntable Animal"
     },
     "20": {
         tier: 1,
-        name: "Skitch"
+        name: "Skitch",
+        tag: "Monster"
     },
     "39": {
         tier: 1,
-        name: "Small Araknir"
+        name: "Small Araknir",
+        tag: "Monster"
     },
     "30": {
         tier: 1,
-        name: "Soldier"
+        name: "Soldier",
+        tag: "Monster"
     },
     "33": {
         tier: 1,
-        name: "Subterranean Jakyl"
+        name: "Subterranean Jakyl",
+        tag: "Monster"
     },
     "35": {
         tier: 1,
-        name: "Subterranean Jakyl Protector"
+        name: "Subterranean Jakyl Protector",
+        tag: "Monster"
     },
     "34": {
         tier: 1,
-        name: "Subterranean Skitch"
+        name: "Subterranean Skitch",
+        tag: "Monster"
     },
     "24": {
         tier: 1,
-        name: "Swamp Terratoad"
+        name: "Swamp Terratoad",
+        tag: "Monster"
     },
     "23": {
         tier: 1,
-        name: "Terratoad"
+        name: "Terratoad",
+        tag: "Monster"
     },
     "14": {
         tier: 9,
-        name: "Tundra Ox"
+        name: "Tundra Ox",
+        tag: "Huntable Animal"
     },
     "26": {
         tier: 1,
-        name: "Umbura"
+        name: "Umbura",
+        tag: "Monster"
     },
     "6": {
         tier: 6,
-        name: "Yagi"
+        name: "Yagi",
+        tag: "Huntable Animal"
     }
 }
