@@ -1477,6 +1477,11 @@ const resourceIndex = { // Generated array
         name: "Medium Ferralith Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "158059491": {
+        tier: -1,
+        name: "King Jakyl Puppy Den",
+        tag: "Monster Den"
+    },
     "182331452": {
         tier: 1,
         name: "Traveler's Fruit",
@@ -1507,6 +1512,11 @@ const resourceIndex = { // Generated array
         name: "Ferralith Outcrop Interior",
         tag: "Ore Vein"
     },
+    "222537784": {
+        tier: -1,
+        name: "King Jakyl Puppy Paw Imprints",
+        tag: "Prospecting Clue"
+    },
     "233091253": {
         tier: -1,
         name: "Ancient Broken Bridge",
@@ -1529,7 +1539,7 @@ const resourceIndex = { // Generated array
     },
     "331687458": {
         tier: 9,
-        name: "Magnificient Hieroglyphs",
+        name: "Magnificent Hieroglyphs",
         tag: "Research"
     },
     "368570220": {
@@ -1567,10 +1577,20 @@ const resourceIndex = { // Generated array
         name: "Aurumite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "419920080": {
+        tier: -1,
+        name: "Pine Water Point of Interest",
+        tag: "Quest Resource"
+    },
     "424796674": {
         tier: 10,
         name: "School Of Flawless Ocean Fish",
         tag: "Ocean Fish School"
+    },
+    "427032893": {
+        tier: -1,
+        name: "Disturbed Alpha Puppy Den",
+        tag: "Monster Den"
     },
     "457752715": {
         tier: 8,
@@ -1612,6 +1632,11 @@ const resourceIndex = { // Generated array
         name: "Frenzied School Of Mysterious Anglerfish",
         tag: "Chummed Ocean Fish School"
     },
+    "517819121": {
+        tier: -1,
+        name: "Berserker Mushroom",
+        tag: "Rare Mushroom"
+    },
     "532077242": {
         tier: 4,
         name: "Indigo Milk Cap",
@@ -1639,7 +1664,7 @@ const resourceIndex = { // Generated array
     },
     "562432497": {
         tier: 9,
-        name: "Magnificient Sand",
+        name: "Magnificent Sand",
         tag: "Sand"
     },
     "569033113": {
@@ -1656,6 +1681,11 @@ const resourceIndex = { // Generated array
         tier: 7,
         name: "Ornate Mushroom",
         tag: "Mushroom"
+    },
+    "596660873": {
+        tier: -1,
+        name: "Hexite Meteor",
+        tag: "Hexite Meteor"
     },
     "623041128": {
         tier: 2,
@@ -1714,7 +1744,7 @@ const resourceIndex = { // Generated array
     },
     "756579517": {
         tier: 9,
-        name: "Magnificient Baitfish",
+        name: "Magnificent Baitfish",
         tag: "Baitfish"
     },
     "762731569": {
@@ -1767,6 +1797,11 @@ const resourceIndex = { // Generated array
         name: "Ornate Clay",
         tag: "Clay"
     },
+    "849939303": {
+        tier: -1,
+        name: "Alpha Jakyl Puppy Den",
+        tag: "Monster Den"
+    },
     "875245395": {
         tier: 6,
         name: "Mistberry Bush",
@@ -1802,9 +1837,14 @@ const resourceIndex = { // Generated array
         name: "Gigantic Sapwood Tree",
         tag: "Tree"
     },
+    "949468358": {
+        tier: -1,
+        name: "Grand Treasure Chest",
+        tag: "Treasure"
+    },
     "963451338": {
         tier: 9,
-        name: "Magnificient Berry Bush",
+        name: "Magnificent Berry Bush",
         tag: "Berry"
     },
     "986344159": {
@@ -1831,6 +1871,11 @@ const resourceIndex = { // Generated array
         tier: 10,
         name: "Flawless Clay",
         tag: "Clay"
+    },
+    "1040719110": {
+        tier: -1,
+        name: "Luminescent Kelp",
+        tag: "Quest Resource"
     },
     "1043012047": {
         tier: -1,
@@ -1861,6 +1906,11 @@ const resourceIndex = { // Generated array
         tier: 4,
         name: "Elenvar Vein Interior",
         tag: "Ore Vein"
+    },
+    "1091832489": {
+        tier: -1,
+        name: "Docile Alpha Puppy Den",
+        tag: "Monster Den"
     },
     "1101060328": {
         tier: 8,
@@ -1894,12 +1944,17 @@ const resourceIndex = { // Generated array
     },
     "1141184831": {
         tier: 9,
-        name: "Frenzied School Of Magnificient Ocean Fish",
+        name: "Frenzied School Of Magnificent Ocean Fish",
         tag: "Chummed Ocean Fish School"
+    },
+    "1146338010": {
+        tier: -1,
+        name: "Tough Pine Bark Pile",
+        tag: "Quest Resource"
     },
     "1157887989": {
         tier: 9,
-        name: "School Of Magnificient Lake Fish",
+        name: "School Of Magnificent Lake Fish",
         tag: "Lake Fish School"
     },
     "1159270109": {
@@ -1921,6 +1976,21 @@ const resourceIndex = { // Generated array
         tier: 3,
         name: "Crystalized Sand",
         tag: "Sand"
+    },
+    "1220773790": {
+        tier: -1,
+        name: "Damaged Ancient Cargo Hold",
+        tag: "Quest Resource"
+    },
+    "1235656080": {
+        tier: -1,
+        name: "Hidden Resource",
+        tag: "Hidden Resource"
+    },
+    "1237686038": {
+        tier: -1,
+        name: "King Jakyl Puppy Fur Imprints",
+        tag: "Prospecting Clue"
     },
     "1241355606": {
         tier: 9,
@@ -1982,6 +2052,11 @@ const resourceIndex = { // Generated array
         name: "Flawless Sand",
         tag: "Sand"
     },
+    "1352550205": {
+        tier: -1,
+        name: "Lake Point of Interest",
+        tag: "Quest Resource"
+    },
     "1357154092": {
         tier: 10,
         name: "Astralite Vein Interior Depleted",
@@ -2037,6 +2112,11 @@ const resourceIndex = { // Generated array
         name: "Seaweed",
         tag: "Fiber Plant"
     },
+    "1464160790": {
+        tier: -1,
+        name: "Lost Gift",
+        tag: "Seasonal Resource"
+    },
     "1467799531": {
         tier: 10,
         name: "Dewberry Bush",
@@ -2054,7 +2134,7 @@ const resourceIndex = { // Generated array
     },
     "1526038154": {
         tier: 9,
-        name: "Magnificient Clay",
+        name: "Magnificent Clay",
         tag: "Clay"
     },
     "1526350171": {
@@ -2117,15 +2197,30 @@ const resourceIndex = { // Generated array
         name: "Pyrelite Vein Interior",
         tag: "Ore Vein"
     },
+    "1622386904": {
+        tier: -1,
+        name: "Depleted Ancient Pots",
+        tag: "Depleted Resource"
+    },
     "1637125903": {
         tier: 10,
         name: "Flawless Mushroom",
         tag: "Mushroom"
     },
+    "1643773046": {
+        tier: -1,
+        name: "Baby Jakyl Den",
+        tag: "Monster Den"
+    },
     "1657885116": {
         tier: 8,
         name: "Pristine Mushroom",
         tag: "Mushroom"
+    },
+    "1661853275": {
+        tier: 2,
+        name: "Ancient Debris",
+        tag: "Rare Research"
     },
     "1673056013": {
         tier: 2,
@@ -2147,14 +2242,24 @@ const resourceIndex = { // Generated array
         name: "Elenvar Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "1712315445": {
+        tier: -1,
+        name: "Coconut Pile",
+        tag: "Coconut"
+    },
     "1731709368": {
         tier: 8,
         name: "Overwhelming Hexite Energy Font",
         tag: "Energy Font"
     },
+    "1740106662": {
+        tier: -1,
+        name: "Argent Ore",
+        tag: "Ore Vein"
+    },
     "1742959882": {
         tier: 9,
-        name: "Magnificient Mushroom",
+        name: "Magnificent Mushroom",
         tag: "Mushroom"
     },
     "1747556974": {
@@ -2174,7 +2279,7 @@ const resourceIndex = { // Generated array
     },
     "1812221896": {
         tier: 9,
-        name: "School Of Magnificient Ocean Fish",
+        name: "School Of Magnificent Ocean Fish",
         tag: "Ocean Fish School"
     },
     "1821415333": {
@@ -2196,6 +2301,11 @@ const resourceIndex = { // Generated array
         tier: 2,
         name: "Medium Pyrelite Vein Interior Depleted",
         tag: "Ore Vein"
+    },
+    "1886066214": {
+        tier: -1,
+        name: "Depleted Ancient Chest",
+        tag: "Depleted Resource"
     },
     "1902966974": {
         tier: 9,
@@ -2257,6 +2367,11 @@ const resourceIndex = { // Generated array
         name: "Rathium Vein Interior",
         tag: "Ore Vein"
     },
+    "2029466380": {
+        tier: -1,
+        name: "Fiery Hexite Meteor",
+        tag: "Hexite Meteor"
+    },
     "2031243337": {
         tier: 7,
         name: "Aurumite Vein Interior",
@@ -2301,6 +2416,11 @@ const resourceIndex = { // Generated array
         tier: 7,
         name: "Ornate Hieroglyphs",
         tag: "Research"
+    },
+    "2137589174": {
+        tier: -1,
+        name: "King Jakyl Puppy Nose Imprints",
+        tag: "Prospecting Clue"
     },
     "2140754992": {
         tier: 8,
@@ -2369,6 +2489,11 @@ const creatureIndex = { // Generated array
         tier: 8,
         name: "Elder Scrofa",
         tag: "Huntable Animal"
+    },
+    "41": {
+        tier: 1,
+        name: "Enraged Alpha Jakyl",
+        tag: "Monster"
     },
     "7": {
         tier: 3,
