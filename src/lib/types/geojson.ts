@@ -56,6 +56,19 @@ export interface PlayerSearchResponse {
 	total: number;
 }
 
+export interface ResourceSearchResult {
+	id: number;
+	name: string;
+	tier: number;
+	tag: string;
+	rarity: number;
+}
+
+export interface ResourceSearchResponse {
+	resources: ResourceSearchResult[];
+	count: number;
+}
+
 export interface UrlParams {
 	heatmap: boolean;
 	gistId: string | null;

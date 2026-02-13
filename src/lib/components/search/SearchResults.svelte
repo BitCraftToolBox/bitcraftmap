@@ -1,17 +1,20 @@
 <script lang="ts">
-	import type { SearchEntry, PlayerEntry, SearchResult } from '$lib/stores/search-store.svelte';
+	import type { SearchEntry, PlayerEntry, ResourceEntry, SearchResult } from '$lib/stores/search-store.svelte';
+	import { tierColors } from '$lib/config/tiers';
 
 	let {
 		locationResults,
+		resourceResults,
 		playerResults,
 		selectedIndex = $bindable(),
-		isLoadingPlayers,
+		isLoadingRemote,
 		handleSelect
 	}: {
 		locationResults: (SearchEntry & { type: 'location' })[];
+		resourceResults: ResourceEntry[];
 		playerResults: PlayerEntry[];
 		selectedIndex: number;
-		isLoadingPlayers: boolean;
+		isLoadingRemote: boolean;
 		handleSelect: (entry: SearchResult) => void;
 	} = $props();
 </script>
@@ -36,15 +39,36 @@
 		{/each}
 	{/if}
 
-	{#if playerResults.length > 0 || isLoadingPlayers}
+	{#if resourceResults.length > 0 || isLoadingRemote}
 		<div class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-white/5">
-			Players
-			{#if isLoadingPlayers}
+			Resources
+			{#if isLoadingRemote}
 				<span class="ml-1 text-gray-600">...</span>
 			{/if}
 		</div>
-		{#each playerResults as player, j}
+		{#each resourceResults as resource, j}
 			{@const globalIndex = locationResults.length + j}
+			<button
+				class="w-full text-left px-3 py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5'}"
+				onmousedown={() => handleSelect(resource)}
+				onmouseenter={() => selectedIndex = globalIndex}
+			>
+				<span
+					class="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
+					style:background-color={tierColors[resource.tier] || '#3388ff'}
+				></span>
+				<span class="truncate">{resource.name}</span>
+				<span class="ml-auto text-xs text-gray-600 shrink-0">T{resource.tier}</span>
+			</button>
+		{/each}
+	{/if}
+
+	{#if playerResults.length > 0}
+		<div class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-white/5">
+			Players
+		</div>
+		{#each playerResults as player, j}
+			{@const globalIndex = locationResults.length + resourceResults.length + j}
 			<button
 				class="w-full text-left px-3 py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5'}"
 				onmousedown={() => handleSelect(player)}

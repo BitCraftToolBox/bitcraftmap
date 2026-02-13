@@ -5,10 +5,12 @@
 
 	let {
 		onSelect,
-		onPlayerSelect
+		onPlayerSelect,
+		onResourceSelect
 	}: {
 		onSelect: (entry: { latlng: L.LatLng; layer: L.LayerGroup }) => void;
 		onPlayerSelect: (entityId: string, username: string) => void;
+		onResourceSelect: (id: number, name: string, tier: number) => void;
 	} = $props();
 
 	const search = getSearchState();
@@ -34,6 +36,9 @@
 	function handleSelect(entry: SearchResult): void {
 		if (entry.type === 'player') {
 			onPlayerSelect(entry.entityId, entry.username);
+		} else if (entry.type === 'resource') {
+			onResourceSelect(entry.id, entry.name, entry.tier);
+			clearSearch();
 		} else {
 			onSelect(entry);
 			clearSearch();
@@ -41,7 +46,7 @@
 	}
 </script>
 
-<div class="absolute top-3 left-3 z-[1000] w-72">
+<div class="absolute top-3 left-3 z-[1000] w-80">
 	<div class="relative">
 		<svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -49,7 +54,7 @@
 		<input
 			bind:this={inputEl}
 			type="text"
-			placeholder="Search claims, cities, players..."
+			placeholder="Search claims, cities, resources, players..."
 			bind:value={search.query}
 			onfocus={() => search.isOpen = true}
 			onblur={() => setTimeout(() => search.isOpen = false, 200)}
@@ -69,12 +74,13 @@
 		{/if}
 	</div>
 
-	{#if search.isOpen && (search.locationResults.length > 0 || search.playerResults.length > 0 || search.isLoadingPlayers)}
+	{#if search.isOpen && (search.locationResults.length > 0 || search.resourceResults.length > 0 || search.playerResults.length > 0 || search.isLoadingRemote)}
 		<SearchResults
 			locationResults={search.locationResults}
+			resourceResults={search.resourceResults}
 			playerResults={search.playerResults}
 			bind:selectedIndex={search.selectedIndex}
-			isLoadingPlayers={search.isLoadingPlayers}
+			isLoadingRemote={search.isLoadingRemote}
 			{handleSelect}
 		/>
 	{/if}

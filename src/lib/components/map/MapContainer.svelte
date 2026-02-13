@@ -365,6 +365,37 @@
 		}
 	}
 
+	async function handleResourceSelect(resourceId: number, name: string, tier: number): Promise<void> {
+		if (resourceLayers[resourceId]) return; // already loaded
+
+		const color = tierColors[tier] || '#3388ff';
+		resourceLayers[resourceId] = L.layerGroup();
+		map.addLayer(resourceLayers[resourceId]);
+
+		addTrackingItem({
+			id: resourceId,
+			type: 'resource',
+			text: `Tracking: ${name}, Tier ${tier}`,
+			color,
+			visible: true
+		});
+
+		try {
+			const urlParams = parseUrlParams();
+			const regionId = parseInt(urlParams.regionId) || 2;
+			const geoJson = await fetchResource(regionId, resourceId);
+
+			if (geoJson.features[0]?.geometry &&
+				(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0) {
+				const props = geoJson.features[0].properties as Record<string, unknown>;
+				props.fillColor = color;
+				paintGeoJson(geoJson, resourceLayers[resourceId], paintCtx, false);
+			}
+		} catch (err) {
+			console.error(`Failed to load resource ${resourceId}:`, err);
+		}
+	}
+
 	async function loadBackendData(urlParams: ReturnType<typeof parseUrlParams>, map: L.Map): Promise<void> {
 		const { regionId, resourceId: resourceParam, enemyId: enemyParam, noColors } = urlParams;
 
@@ -501,7 +532,7 @@
 	<div bind:this={mapElement} class="absolute inset-0 z-0"></div>
 
 	{#if mapReady}
-		<SearchBar onSelect={handleSearchSelect} onPlayerSelect={handlePlayerSelect} />
+		<SearchBar onSelect={handleSearchSelect} onPlayerSelect={handlePlayerSelect} onResourceSelect={handleResourceSelect} />
 		<LayerPanel
 			{genericToggle}
 			{map}

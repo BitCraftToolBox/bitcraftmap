@@ -1,5 +1,6 @@
 import type L from 'leaflet';
 import { searchPlayers } from '$lib/services/player-service';
+import { searchResources } from '$lib/services/resource-service';
 
 export interface SearchEntry {
 	title: string;
@@ -15,37 +16,58 @@ export interface PlayerEntry {
 	signedIn: boolean;
 }
 
+export interface ResourceEntry {
+	type: 'resource';
+	id: number;
+	name: string;
+	tier: number;
+	tag: string;
+}
+
 export type SearchResult =
 	| (SearchEntry & { type: 'location' })
-	| PlayerEntry;
+	| PlayerEntry
+	| ResourceEntry;
 
 let entries = $state<SearchEntry[]>([]);
 let query = $state('');
 let selectedIndex = $state(-1);
 let isOpen = $state(false);
 let playerResults = $state<PlayerEntry[]>([]);
-let isLoadingPlayers = $state(false);
+let resourceResults = $state<ResourceEntry[]>([]);
+let isLoadingRemote = $state(false);
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-function triggerPlayerSearch(q: string): void {
+function triggerRemoteSearch(q: string): void {
 	if (debounceTimer) clearTimeout(debounceTimer);
 
 	if (!q || q.trim().length < 2) {
 		playerResults = [];
-		isLoadingPlayers = false;
+		resourceResults = [];
+		isLoadingRemote = false;
 		return;
 	}
 
-	isLoadingPlayers = true;
+	isLoadingRemote = true;
 	debounceTimer = setTimeout(async () => {
-		const results = await searchPlayers(q);
-		playerResults = results.map((p) => ({
+		const [players, resources] = await Promise.all([
+			searchPlayers(q),
+			searchResources(q)
+		]);
+		playerResults = players.map((p) => ({
 			type: 'player' as const,
 			entityId: p.entityId,
 			username: p.username,
 			signedIn: p.signedIn
 		}));
-		isLoadingPlayers = false;
+		resourceResults = resources.map((r) => ({
+			type: 'resource' as const,
+			id: r.id,
+			name: r.name,
+			tier: r.tier,
+			tag: r.tag
+		}));
+		isLoadingRemote = false;
 	}, 300);
 }
 
@@ -56,13 +78,13 @@ export function getSearchState() {
 		set query(v: string) {
 			query = v;
 			selectedIndex = -1;
-			triggerPlayerSearch(v);
+			triggerRemoteSearch(v);
 		},
 		get selectedIndex() { return selectedIndex; },
 		set selectedIndex(v: number) { selectedIndex = v; },
 		get isOpen() { return isOpen; },
 		set isOpen(v: boolean) { isOpen = v; },
-		get isLoadingPlayers() { return isLoadingPlayers; },
+		get isLoadingRemote() { return isLoadingRemote; },
 
 		get locationResults(): (SearchEntry & { type: 'location' })[] {
 			if (!query.trim()) return [];
@@ -77,8 +99,12 @@ export function getSearchState() {
 			return playerResults;
 		},
 
+		get resourceResults(): ResourceEntry[] {
+			return resourceResults;
+		},
+
 		get results(): SearchResult[] {
-			return [...this.locationResults, ...this.playerResults];
+			return [...this.locationResults, ...this.resourceResults, ...this.playerResults];
 		}
 	};
 }
@@ -92,6 +118,7 @@ export function clearSearch(): void {
 	selectedIndex = -1;
 	isOpen = false;
 	playerResults = [];
-	isLoadingPlayers = false;
+	resourceResults = [];
+	isLoadingRemote = false;
 	if (debounceTimer) clearTimeout(debounceTimer);
 }

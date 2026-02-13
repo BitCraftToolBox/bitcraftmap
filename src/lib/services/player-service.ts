@@ -5,7 +5,7 @@ export async function lookupPlayer(entityId: string): Promise<string> {
 		const response = await fetch(`/api/players/${entityId}`);
 		if (!response.ok) return entityId;
 		const data = await response.json();
-		return data.username || entityId;
+		return data.player?.username || entityId;
 	} catch {
 		return entityId;
 	}
