@@ -13,10 +13,7 @@
 		onToggle: (name: string) => void;
 	} = $props();
 
-	let open = $state(true);
-	$effect(() => {
-		open = !defaultCollapsed;
-	});
+	let open = $state(!defaultCollapsed);
 
 	let masterChecked = $derived(layers.every((l) => isActive(l)));
 	let masterIndeterminate = $derived(
