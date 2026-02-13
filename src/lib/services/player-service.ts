@@ -1,5 +1,16 @@
 import type { PlayerSearchResult, PlayerSearchResponse } from '$lib/types/geojson';
 
+export async function lookupPlayer(entityId: string): Promise<string> {
+	try {
+		const response = await fetch(`/api/players/${entityId}`);
+		if (!response.ok) return entityId;
+		const data = await response.json();
+		return data.username || entityId;
+	} catch {
+		return entityId;
+	}
+}
+
 let abortController: AbortController | null = null;
 
 export async function searchPlayers(query: string): Promise<PlayerSearchResult[]> {

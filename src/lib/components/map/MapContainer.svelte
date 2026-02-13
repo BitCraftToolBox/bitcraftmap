@@ -15,6 +15,7 @@
 	import { getLatestGistRaw } from '$lib/services/gist-service';
 	import { fetchResource, fetchEnemy } from '$lib/services/api-service';
 	import { connectWebSocket, type PlayerState } from '$lib/services/websocket-service';
+	import { lookupPlayer } from '$lib/services/player-service';
 	import { readableCoordinates, formatCoordinates } from '$lib/map/coordinate-utils';
 	import { resourceIndex, resourceIndexOverride, creatureIndex } from '$lib/data/resource-index';
 	import { tierColors } from '$lib/config/tiers';
@@ -241,16 +242,19 @@
 			const ws = connectWebSocket(playerIds, (state: PlayerState) => {
 				updatePlayerMarker(state, urlParams.followPlayer);
 			}, () => {
-				for (const id of playerIds) {
-					addTrackingItem({
-						id: -1,
-						entityId: id,
-						type: 'player',
-						text: `Player: ${id}`,
-						color: '#00ff00',
-						visible: true
+				// Resolve player names in parallel
+				Promise.all(playerIds.map((id) => lookupPlayer(id))).then((usernames) => {
+					playerIds.forEach((id, i) => {
+						addTrackingItem({
+							id: -1,
+							entityId: id,
+							type: 'player',
+							text: `Player: ${usernames[i]}`,
+							color: '#00ff00',
+							visible: true
+						});
 					});
-				}
+				});
 			});
 			if (ws) {
 				for (const id of playerIds) {
