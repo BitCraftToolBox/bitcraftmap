@@ -32,23 +32,33 @@
 
 <div
 	class="absolute top-3 right-3 z-[1000] max-h-[calc(100vh-6rem)] overflow-y-auto rounded-lg bg-[#1e2433]/95 shadow-xl backdrop-blur-sm border border-white/10 transition-all duration-300"
-	class:w-10={collapsed}
+	class:w-8={collapsed}
 	class:w-64={!collapsed}
 >
-	<div class="flex items-center justify-between px-3 py-2 border-b border-white/10">
-		{#if !collapsed}
-			<h2 class="text-sm font-semibold text-gray-200 uppercase tracking-wider">Layers</h2>
-		{/if}
+	{#if collapsed}
 		<button
-			onclick={() => collapsed = !collapsed}
-			class="p-1 text-gray-400 hover:text-gray-200 transition-colors"
-			aria-label={collapsed ? 'Expand layer panel' : 'Collapse layer panel'}
+			onclick={() => collapsed = false}
+			class="flex items-center justify-center w-full h-8 text-gray-400 hover:text-gray-200 transition-colors"
+			aria-label="Expand layer panel"
 		>
-			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" class:rotate-180={collapsed}>
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={collapsed ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
+			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
 			</svg>
 		</button>
-	</div>
+	{:else}
+		<div class="flex items-center justify-between px-3 py-1.5 border-b border-white/10">
+			<h2 class="text-xs font-semibold text-gray-200 uppercase tracking-wider">Layers</h2>
+			<button
+				onclick={() => collapsed = true}
+				class="p-0.5 text-gray-400 hover:text-gray-200 transition-colors"
+				aria-label="Collapse layer panel"
+			>
+				<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+				</svg>
+			</button>
+		</div>
+	{/if}
 
 	{#if !collapsed}
 		<div class="p-2 space-y-1">
