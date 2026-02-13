@@ -1,4 +1,4 @@
-data/
+/data/
 /.vs
 .env
 .env.local
