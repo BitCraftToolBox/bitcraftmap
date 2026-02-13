@@ -16,6 +16,20 @@ export function parseUrlParams(): UrlParams {
 	};
 }
 
+export function updateResourceIdParam(resourceIds: Set<number>): void {
+	const url = new URL(window.location.href);
+	if (resourceIds.size > 0) {
+		url.searchParams.set('resourceId', [...resourceIds].join(','));
+	} else {
+		url.searchParams.delete('resourceId');
+	}
+	goto(`${url.pathname}${url.search}${url.hash}`, {
+		replaceState: true,
+		noScroll: true,
+		keepFocus: true
+	});
+}
+
 export function updatePlayerIdParam(playerIds: Set<string>): void {
 	const url = new URL(window.location.href);
 	if (playerIds.size > 0) {

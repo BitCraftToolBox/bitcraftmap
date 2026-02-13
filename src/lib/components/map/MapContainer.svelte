@@ -9,7 +9,7 @@
 	import { validateGeoJson } from '$lib/map/geojson-validator';
 	import { paintGeoJson, type PaintContext } from '$lib/map/geojson-painter';
 	import { setMap, saveMapState, restoreMapState, hashHasFlyToOrZoom, resetView } from '$lib/stores/map-store';
-	import { parseUrlParams, updatePlayerIdParam } from '$lib/utils/url-params';
+	import { parseUrlParams, updatePlayerIdParam, updateResourceIdParam } from '$lib/utils/url-params';
 	import { addSearchEntries, type SearchEntry } from '$lib/stores/search-store.svelte';
 	import { addTrackingItem, toggleTrackingItem } from '$lib/stores/tracking-store.svelte';
 	import { getLatestGistRaw } from '$lib/services/gist-service';
@@ -278,6 +278,9 @@
 		};
 	});
 
+	// Resource tracking state
+	const trackedResourceIds = new Set<number>();
+
 	// Player tracking state
 	const playerStore = new Map<string, L.CircleMarker>();
 	const destinationStore = new Map<string, L.Polyline>();
@@ -368,6 +371,9 @@
 	async function handleResourceSelect(resourceId: number, name: string, tier: number): Promise<void> {
 		if (resourceLayers[resourceId]) return; // already loaded
 
+		trackedResourceIds.add(resourceId);
+		updateResourceIdParam(trackedResourceIds);
+
 		const color = tierColors[tier] || '#3388ff';
 		resourceLayers[resourceId] = L.layerGroup();
 		map.addLayer(resourceLayers[resourceId]);
@@ -381,8 +387,7 @@
 		});
 
 		try {
-			const urlParams = parseUrlParams();
-			const regionId = parseInt(urlParams.regionId) || 2;
+			const regionId = parseInt(parseUrlParams().regionId) || 2;
 			const geoJson = await fetchResource(regionId, resourceId);
 
 			if (geoJson.features[0]?.geometry &&
@@ -409,6 +414,9 @@
 		if (resourceParam) {
 			if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(resourceParam)) return;
 			resourceIds = [...new Set(resourceParam.split(',').map(Number))];
+			for (const id of resourceIds) {
+				trackedResourceIds.add(id);
+			}
 		}
 
 		let enemyIds: number[] = [];
