@@ -9,7 +9,7 @@
 	import { validateGeoJson } from '$lib/map/geojson-validator';
 	import { paintGeoJson, type PaintContext } from '$lib/map/geojson-painter';
 	import { setMap, saveMapState, restoreMapState, hashHasFlyToOrZoom, resetView } from '$lib/stores/map-store';
-	import { parseUrlParams } from '$lib/stores/url-params-store';
+	import { parseUrlParams, updatePlayerIdParam } from '$lib/utils/url-params';
 	import { addSearchEntries, type SearchEntry } from '$lib/stores/search-store.svelte';
 	import { addTrackingItem, toggleTrackingItem } from '$lib/stores/tracking-store.svelte';
 	import { getLatestGistRaw } from '$lib/services/gist-service';
@@ -232,19 +232,31 @@
 			L.imageOverlay('/maps/heatmap.png', heatmapBounds).addTo(map);
 		}
 
-		// WebSocket player tracking
+		// WebSocket player tracking from URL params
 		if (urlParams.playerId) {
 			const playerIds = urlParams.playerId.split(',').map((id) => id.trim()).filter(Boolean);
-			connectWebSocket(playerIds, (state: PlayerState) => {
+			for (const id of playerIds) {
+				trackedPlayerIds.add(id);
+			}
+			const ws = connectWebSocket(playerIds, (state: PlayerState) => {
 				updatePlayerMarker(state, urlParams.followPlayer);
 			}, () => {
-				addTrackingItem({
-					id: -1,
-					text: 'Tracking Players: ' + playerIds.join(', '),
-					color: '#00ff00',
-					visible: true
-				});
+				for (const id of playerIds) {
+					addTrackingItem({
+						id: -1,
+						entityId: id,
+						type: 'player',
+						text: `Player: ${id}`,
+						color: '#00ff00',
+						visible: true
+					});
+				}
 			});
+			if (ws) {
+				for (const id of playerIds) {
+					playerWebSockets.set(id, ws);
+				}
+			}
 		}
 
 		// Restore map state
@@ -274,6 +286,7 @@
 	function handlePlayerSelect(entityId: string, username: string): void {
 		if (trackedPlayerIds.has(entityId)) return;
 		trackedPlayerIds.add(entityId);
+		updatePlayerIdParam(trackedPlayerIds);
 
 		const color = playerColorPalette[playerColorIndex % playerColorPalette.length];
 		playerColorIndex++;
