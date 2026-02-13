@@ -1,9 +1,9 @@
 from pathlib import Path
 import json
 
-url_prefix = 'assets/images/'
+url_prefix = 'static/images/'
 icons_directory = Path(url_prefix)
-manifest_file = 'assets/images/manifest.js'
+manifest_file = 'static/images/manifest.js'
 
 extensions = {'.png', '.svg', '.jpg', '.jpeg', '.webp'}
 manifest = {}

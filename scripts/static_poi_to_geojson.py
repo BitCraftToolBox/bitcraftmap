@@ -85,24 +85,24 @@ def generate_ruined_geojson(json_key):
     }
 
 # Load data from caves.json
-with open('assets/data/caves.json', 'r', encoding='utf-8') as file:
+with open('static/data/caves.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 print(data)
 
 # Parse and save date to respective geojson files
-with open('assets/markers/caves.geojson', 'w') as file:
+with open('static/markers/caves.geojson', 'w') as file:
     caves_json = [generate_caves_geojson(key) for key in data if generate_caves_geojson(key) is not None]
     json.dump(caves_json, file)
 
-with open('assets/markers/trees.geojson', 'w') as file:
+with open('static/markers/trees.geojson', 'w') as file:
     trees_json = [generate_trees_geojson(key) for key in data if generate_trees_geojson(key) is not None]
     json.dump(trees_json, file)
 
-with open('assets/markers/ruined.geojson', 'w') as file:
+with open('static/markers/ruined.geojson', 'w') as file:
     ruined_json = [generate_ruined_geojson(key) for key in data if generate_ruined_geojson(key) is not None]
     json.dump(ruined_json, file)
 
-with open('assets/markers/temples.geojson', 'w') as file:
+with open('static/markers/temples.geojson', 'w') as file:
     temples_json = [generate_temples_geojson(key) for key in data if generate_temples_geojson(key) is not None]
     json.dump(temples_json, file)

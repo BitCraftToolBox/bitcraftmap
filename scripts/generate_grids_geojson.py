@@ -78,5 +78,5 @@ geojson = {
 }
 
 # Output to file
-with open('assets/markers/grids.geojson', 'w') as f:
+with open('static/markers/grids.geojson', 'w') as f:
     json.dump(geojson, f, separators=(',', ':'))

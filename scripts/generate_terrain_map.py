@@ -19,7 +19,7 @@ terrain_map_file_raw = 'TerrainMap.gwm'
 terrain_map_file_unzip = 'TerrainMap.gwm.unc'
 terrain_map_file_png = 'TerrainMap.gwm.png'
 terrain_map_file_hexagon = 'TerrainMap.hex.png'
-data_folder = 'assets/data/'
+data_folder = 'static/data/'
 
 expected_size = width * height * pixel_size
 

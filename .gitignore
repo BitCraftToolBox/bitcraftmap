@@ -18,6 +18,9 @@ node_modules
 /.svelte-kit
 /build
 
+# Old version (kept for reference, safe to delete)
+_old_assets/
+
 # OS
 .DS_Store
 Thumbs.db

@@ -1,7 +1,7 @@
 from collections import defaultdict
 import json
 
-poi_json_file = 'assets/data/caves.json'
+poi_json_file = 'static/data/caves.json'
 geojson = {
     "type": "FeatureCollection",
     "features": []
