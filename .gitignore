@@ -2,5 +2,26 @@ data/
 /.vs
 .env
 .env.local
+.env.*
+!.env.example
+!.env.test
 /scripts/littledaimon/workspace
 /scripts/littledaimon/__pycache__
+
+node_modules
+
+# SvelteKit
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
