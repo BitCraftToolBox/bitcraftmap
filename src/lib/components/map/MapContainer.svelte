@@ -28,7 +28,7 @@
 	import LayerPanel from '$lib/components/layers/LayerPanel.svelte';
 	import SearchBar from '$lib/components/search/SearchBar.svelte';
 	import TrackingPanel from '$lib/components/tracking/TrackingPanel.svelte';
-	import PlayerTracker from '$lib/components/tracking/PlayerTracker.svelte';
+
 
 	let mapElement: HTMLDivElement;
 	let map = $state<L.Map>(undefined!);
@@ -255,6 +255,9 @@
 		mapReady = true;
 
 		return () => {
+			for (const ws of playerWebSockets.values()) {
+				ws.close();
+			}
 			map.remove();
 		};
 	});
@@ -262,8 +265,52 @@
 	// Player tracking state
 	const playerStore = new Map<string, L.CircleMarker>();
 	const destinationStore = new Map<string, L.Polyline>();
+	const playerWebSockets = new Map<string, WebSocket>();
+	const trackedPlayerIds = new Set<string>();
 
-	function updatePlayerMarker(state: PlayerState, followPlayer: boolean): void {
+	const playerColorPalette = ['#00ff00', '#ff6b6b', '#4ecdc4', '#ffe66d', '#a78bfa', '#f97316', '#06b6d4', '#ec4899'];
+	let playerColorIndex = 0;
+
+	function handlePlayerSelect(entityId: string, username: string): void {
+		if (trackedPlayerIds.has(entityId)) return;
+		trackedPlayerIds.add(entityId);
+
+		const color = playerColorPalette[playerColorIndex % playerColorPalette.length];
+		playerColorIndex++;
+
+		const ws = connectWebSocket([entityId], (state: PlayerState) => {
+			updatePlayerMarker(state, false, color);
+		}, () => {
+			addTrackingItem({
+				id: -1,
+				entityId,
+				type: 'player',
+				text: `Player: ${username}`,
+				color,
+				visible: true
+			});
+		});
+
+		if (ws) {
+			playerWebSockets.set(entityId, ws);
+		}
+	}
+
+	function handleTogglePlayerVisibility(entityId: string): void {
+		const marker = playerStore.get(entityId);
+		const dest = destinationStore.get(entityId);
+		if (marker) {
+			if (liveLayer.hasLayer(marker)) {
+				liveLayer.removeLayer(marker);
+				if (dest) liveLayer.removeLayer(dest);
+			} else {
+				liveLayer.addLayer(marker);
+				if (dest) liveLayer.addLayer(dest);
+			}
+		}
+	}
+
+	function updatePlayerMarker(state: PlayerState, followPlayer: boolean, color = '#00ff00'): void {
 		const playerId = state.entity_id;
 		const playerLatLng = L.latLng(state.location_z / 1000, state.location_x / 1000);
 		const destLatLng = L.latLng(state.destination_z / 1000, state.destination_x / 1000);
@@ -274,7 +321,7 @@
 
 		if (!existingMarker || !existingDest) {
 			const marker = new L.CircleMarker(playerLatLng, {
-				color: '#00ff00ff',
+				color,
 				radius: 4,
 				weight: 1,
 				opacity: 1,
@@ -437,13 +484,13 @@
 	<div bind:this={mapElement} class="absolute inset-0 z-0"></div>
 
 	{#if mapReady}
-		<SearchBar onSelect={handleSearchSelect} />
+		<SearchBar onSelect={handleSearchSelect} onPlayerSelect={handlePlayerSelect} />
 		<LayerPanel
 			{genericToggle}
 			{map}
 			onToggle={handleToggleLayer}
 		/>
-		<TrackingPanel onToggleResource={handleToggleResourceLayer} />
+		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} />
 	{/if}
 
 	<CoordinateDisplay {coords} />

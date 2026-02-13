@@ -33,9 +33,27 @@ export interface BitcraftFeatureProperties {
 
 export interface TrackingItem {
 	id: number;
+	entityId?: string;
+	type?: 'resource' | 'player';
 	text: string;
 	color: string;
 	visible: boolean;
+}
+
+export interface PlayerSearchResult {
+	entityId: string;
+	username: string;
+	signedIn: boolean;
+	timePlayed: number;
+	timeSignedIn: number;
+	createdAt: string;
+	updatedAt: string;
+	lastLoginTimestamp: string | null;
+}
+
+export interface PlayerSearchResponse {
+	players: PlayerSearchResult[];
+	total: number;
 }
 
 export interface UrlParams {

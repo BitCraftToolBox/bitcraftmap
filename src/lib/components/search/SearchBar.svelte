@@ -1,9 +1,15 @@
 <script lang="ts">
 	import type L from 'leaflet';
-	import { getSearchState, clearSearch } from '$lib/stores/search-store.svelte';
+	import { getSearchState, clearSearch, type SearchResult } from '$lib/stores/search-store.svelte';
 	import SearchResults from './SearchResults.svelte';
 
-	let { onSelect }: { onSelect: (entry: { latlng: L.LatLng; layer: L.LayerGroup }) => void } = $props();
+	let {
+		onSelect,
+		onPlayerSelect
+	}: {
+		onSelect: (entry: { latlng: L.LatLng; layer: L.LayerGroup }) => void;
+		onPlayerSelect: (entityId: string, username: string) => void;
+	} = $props();
 
 	const search = getSearchState();
 	let inputEl: HTMLInputElement;
@@ -18,19 +24,20 @@
 		} else if (e.key === 'Enter') {
 			e.preventDefault();
 			const result = search.results[Math.max(search.selectedIndex, 0)];
-			if (result) {
-				onSelect(result);
-				clearSearch();
-			}
+			if (result) handleSelect(result);
 		} else if (e.key === 'Escape') {
 			clearSearch();
 			inputEl?.blur();
 		}
 	}
 
-	function handleSelect(entry: typeof search.results[0]): void {
-		onSelect(entry);
-		clearSearch();
+	function handleSelect(entry: SearchResult): void {
+		if (entry.type === 'player') {
+			onPlayerSelect(entry.entityId, entry.username);
+		} else {
+			onSelect(entry);
+			clearSearch();
+		}
 	}
 </script>
 
@@ -42,7 +49,7 @@
 		<input
 			bind:this={inputEl}
 			type="text"
-			placeholder="Search claims, cities..."
+			placeholder="Search claims, cities, players..."
 			bind:value={search.query}
 			onfocus={() => search.isOpen = true}
 			onblur={() => setTimeout(() => search.isOpen = false, 200)}
@@ -62,10 +69,12 @@
 		{/if}
 	</div>
 
-	{#if search.isOpen && search.results.length > 0}
+	{#if search.isOpen && (search.locationResults.length > 0 || search.playerResults.length > 0 || search.isLoadingPlayers)}
 		<SearchResults
-			results={search.results}
-			selectedIndex={search.selectedIndex}
+			locationResults={search.locationResults}
+			playerResults={search.playerResults}
+			bind:selectedIndex={search.selectedIndex}
+			isLoadingPlayers={search.isLoadingPlayers}
 			{handleSelect}
 		/>
 	{/if}
