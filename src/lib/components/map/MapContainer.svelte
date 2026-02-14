@@ -9,6 +9,7 @@
 	import { initIcons, loadTreesGeoJson, loadTemplesGeoJson, loadRuinedGeoJson, loadClaimsGeoJson, loadCavesGeoJson, loadEventsGeoJson, loadDungeonsGeoJson, loadGridsGeoJson, loadGeoJsonFromHash } from '$lib/map/geojson-loader';
 	import { validateGeoJson } from '$lib/map/geojson-validator';
 	import { paintGeoJson, type PaintContext } from '$lib/map/geojson-painter';
+	import { ResourceCanvasLayer } from '$lib/map/resource-canvas-layer';
 	import { setMap, saveMapState, restoreMapState, hashHasFlyToOrZoom, resetView } from '$lib/stores/map-store';
 	import { parseUrlParams, updatePlayerIdParam, updateResourceIdParam, updateRegionIdParam } from '$lib/utils/url-params';
 	import { getRegionState, setRegions } from '$lib/stores/region-store.svelte';
@@ -57,8 +58,7 @@
 	let caveLayers: L.LayerGroup[];
 	let allClaims: L.LayerGroup;
 	let allCaves: L.LayerGroup;
-	let resourceLayers: Record<number, L.LayerGroup> = {};
-	let resourceRegionLayers: Record<string, L.LayerGroup> = {};
+	let resourceLayers: Record<number, ResourceCanvasLayer> = {};
 	let liveLayer: L.FeatureGroup;
 
 	// Toggle mapping for layer panel
@@ -329,19 +329,8 @@
 	// Resource tracking state
 	const trackedResourceIds = new Set<number>();
 
-	function getColorForResource(resourceId: number): string {
-		return resourceIndexOverride[resourceId]?.color
-			|| tierColors[resourceIndexOverride[resourceId]?.tier]
-			|| resourceIndex[resourceId]?.color
-			|| tierColors[resourceIndex[resourceId]?.tier]
-			|| '#3388ff';
-	}
-
 	const resourceUpdateCtx: ResourceUpdateContext = {
-		get resourceRegionLayers() { return resourceRegionLayers; },
 		get resourceLayers() { return resourceLayers; },
-		get paintCtx() { return paintCtx; },
-		getColorForResource,
 		getActiveRegions: () => regionState.effectiveRegions
 	};
 
@@ -451,8 +440,9 @@
 		updateResourceIdParam(trackedResourceIds);
 
 		const color = tierColors[tier] || '#3388ff';
-		resourceLayers[resourceId] = L.layerGroup();
-		map.addLayer(resourceLayers[resourceId]);
+		const canvasLayer = new ResourceCanvasLayer({ color });
+		resourceLayers[resourceId] = canvasLayer;
+		canvasLayer.addTo(map);
 
 		addTrackingItem({
 			id: resourceId,
@@ -470,14 +460,8 @@
 				const geoJson = results[idx];
 				if (geoJson.features[0]?.geometry &&
 					(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0) {
-					const key = `${resourceId}-${rId}`;
-					const regionLayer = L.layerGroup();
-					resourceRegionLayers[key] = regionLayer;
-					resourceLayers[resourceId].addLayer(regionLayer);
-
-					const props = geoJson.features[0].properties as Record<string, unknown>;
-					props.fillColor = color;
-					paintGeoJson(geoJson, regionLayer, paintCtx, false);
+					const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates;
+					canvasLayer.setRegionPoints(rId, coords as [number, number][]);
 				}
 			});
 
@@ -514,12 +498,22 @@
 		let trackingList: { text: string; color: string; id: number }[] = [];
 
 		for (const id of resourceIds) {
-			resourceLayers[id] = L.layerGroup();
-			map.addLayer(resourceLayers[id]);
+			let color = resourceIndexOverride[id]?.color
+				|| tierColors[resourceIndexOverride[id]?.tier]
+				|| resourceIndex[id]?.color
+				|| tierColors[resourceIndex[id]?.tier]
+				|| '#3388ff';
+			if (noColors) color = '#3388ff';
+			resourceLayers[id] = new ResourceCanvasLayer({ color });
+			resourceLayers[id].addTo(map);
 		}
 		for (const id of enemyIds) {
-			resourceLayers[id] = L.layerGroup();
-			map.addLayer(resourceLayers[id]);
+			let color = creatureIndex[id]?.color
+				|| tierColors[creatureIndex[id]?.tier]
+				|| '#3388ff';
+			if (noColors) color = '#3388ff';
+			resourceLayers[id] = new ResourceCanvasLayer({ color });
+			resourceLayers[id].addTo(map);
 		}
 
 		for (const rId of regionIds) {
@@ -566,18 +560,12 @@
 		geoJsonResults.forEach((geoJson, idx) => {
 			if (geoJson.features[0]?.geometry &&
 				(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0) {
-				const props = geoJson.features[0].properties as Record<string, unknown>;
-				props.fillColor = geoJsonMeta[idx].fillColor || '#3388ff';
-				if (props.tier != null) {
-					props.fillColor = tierColors[props.tier as number] || tierColors[0];
-				}
-
 				const meta = geoJsonMeta[idx];
-				const key = `${meta.resource}-${meta.region}`;
-				const regionLayer = L.layerGroup();
-				resourceRegionLayers[key] = regionLayer;
-				resourceLayers[meta.resource].addLayer(regionLayer);
-				paintGeoJson(geoJson, regionLayer, paintCtx, false);
+				const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates;
+				const canvasLayer = resourceLayers[meta.resource];
+				if (canvasLayer) {
+					canvasLayer.setRegionPoints(meta.region, coords as [number, number][]);
+				}
 			}
 		});
 
@@ -612,14 +600,8 @@
 	function handleRemoveResource(id: number): void {
 		const layer = resourceLayers[id];
 		if (layer) {
-			map.removeLayer(layer);
+			layer.remove();
 			delete resourceLayers[id];
-		}
-		// Clean up region sub-layers
-		for (const key of Object.keys(resourceRegionLayers)) {
-			if (key.startsWith(`${id}-`)) {
-				delete resourceRegionLayers[key];
-			}
 		}
 		trackedResourceIds.delete(id);
 		updateResourceIdParam(trackedResourceIds);
@@ -654,38 +636,26 @@
 
 		cancelAllPendingRefetches();
 
-		// Clear existing region sub-layers
+		// Clear all region data from canvas layers
 		for (const id of currentTrackedIds) {
 			const layer = resourceLayers[id];
-			if (layer) layer.clearLayers();
-			// Remove stale region sub-layer references
-			for (const key of Object.keys(resourceRegionLayers)) {
-				if (key.startsWith(`${id}-`)) {
-					delete resourceRegionLayers[key];
-				}
-			}
+			if (layer) layer.clearAllRegions();
 		}
 
 		const regions = regionState.effectiveRegions;
 		for (const resourceId of currentTrackedIds) {
-			const color = getColorForResource(resourceId);
-
 			Promise.all(regions.map((rId) => fetchResource(rId, resourceId)))
 				.then((results) => {
+					const canvasLayer = resourceLayers[resourceId];
+					if (!canvasLayer) return;
 					regions.forEach((rId, idx) => {
 						const geoJson = results[idx];
 						if (
 							geoJson.features[0]?.geometry &&
 							(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0
 						) {
-							const key = `${resourceId}-${rId}`;
-							const regionLayer = L.layerGroup();
-							resourceRegionLayers[key] = regionLayer;
-							resourceLayers[resourceId].addLayer(regionLayer);
-
-							const props = geoJson.features[0].properties as Record<string, unknown>;
-							props.fillColor = color;
-							paintGeoJson(geoJson, regionLayer, paintCtx, false);
+							const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates;
+							canvasLayer.setRegionPoints(rId, coords as [number, number][]);
 						}
 					});
 				})

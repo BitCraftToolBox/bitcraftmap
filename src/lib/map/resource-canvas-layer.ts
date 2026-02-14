@@ -1,0 +1,218 @@
+import L from 'leaflet';
+
+export interface ResourceCanvasLayerOptions extends L.LayerOptions {
+	color: string;
+	radius?: number;
+}
+
+interface RegionPoints {
+	lats: number[];
+	lngs: number[];
+}
+
+export class ResourceCanvasLayer extends L.Layer {
+	private _canvas!: HTMLCanvasElement;
+	private _ctx!: CanvasRenderingContext2D;
+	private _sprite!: HTMLCanvasElement;
+	private _pointsByRegion = new Map<number, RegionPoints>();
+	private _color: string;
+	private _radius: number;
+	private _dirty = false;
+	private _drawnScreenPoints: Float64Array | null = null;
+	private _drawnGameCoords: Float64Array | null = null;
+
+	constructor(options: ResourceCanvasLayerOptions) {
+		super(options);
+		this._color = options.color;
+		this._radius = options.radius ?? 4;
+		this._buildSprite();
+	}
+
+	private _buildSprite(): void {
+		const r = this._radius;
+		const size = (r + 1) * 2;
+		const sprite = document.createElement('canvas');
+		sprite.width = size;
+		sprite.height = size;
+		const ctx = sprite.getContext('2d')!;
+		ctx.beginPath();
+		ctx.arc(r + 1, r + 1, r, 0, Math.PI * 2);
+		ctx.fillStyle = this._color;
+		ctx.fill();
+		ctx.strokeStyle = '#000000';
+		ctx.lineWidth = 1;
+		ctx.stroke();
+		this._sprite = sprite;
+	}
+
+	onAdd(map: L.Map): this {
+		this._canvas = L.DomUtil.create('canvas', 'resource-canvas-layer') as HTMLCanvasElement;
+		this._canvas.style.pointerEvents = 'none';
+		this._ctx = this._canvas.getContext('2d')!;
+
+		const pane = map.getPane('overlayPane')!;
+		pane.appendChild(this._canvas);
+
+		map.on('moveend', this._onMoveEnd, this);
+		map.on('click', this._onClick, this);
+
+		this._reset();
+		return this;
+	}
+
+	onRemove(map: L.Map): this {
+		map.off('moveend', this._onMoveEnd, this);
+		map.off('click', this._onClick, this);
+
+		if (this._canvas.parentNode) {
+			this._canvas.parentNode.removeChild(this._canvas);
+		}
+
+		this._drawnScreenPoints = null;
+		this._drawnGameCoords = null;
+		return this;
+	}
+
+	setRegionPoints(regionId: number, coordinates: [number, number][]): void {
+		// GeoJSON coordinates are [lng, lat]
+		const lats = new Array<number>(coordinates.length);
+		const lngs = new Array<number>(coordinates.length);
+		for (let i = 0; i < coordinates.length; i++) {
+			lngs[i] = coordinates[i][0];
+			lats[i] = coordinates[i][1];
+		}
+		this._pointsByRegion.set(regionId, { lats, lngs });
+		this._scheduleRedraw();
+	}
+
+	clearRegion(regionId: number): void {
+		this._pointsByRegion.delete(regionId);
+		this._scheduleRedraw();
+	}
+
+	clearAllRegions(): void {
+		this._pointsByRegion.clear();
+		this._scheduleRedraw();
+	}
+
+	getPointCount(): number {
+		let count = 0;
+		for (const data of this._pointsByRegion.values()) {
+			count += data.lats.length;
+		}
+		return count;
+	}
+
+	private _scheduleRedraw(): void {
+		if (!this._map) return;
+		if (this._dirty) return;
+		this._dirty = true;
+		requestAnimationFrame(() => {
+			this._dirty = false;
+			if (this._map) this._redraw();
+		});
+	}
+
+	private _onMoveEnd(): void {
+		this._reset();
+	}
+
+	private _reset(): void {
+		if (!this._map) return;
+
+		const size = this._map.getSize();
+		const topLeft = this._map.containerPointToLayerPoint([0, 0]);
+
+		L.DomUtil.setPosition(this._canvas, topLeft);
+		this._canvas.width = size.x;
+		this._canvas.height = size.y;
+
+		this._redraw();
+	}
+
+	private _redraw(): void {
+		const map = this._map;
+		if (!map) return;
+
+		const size = map.getSize();
+		const ctx = this._ctx;
+		ctx.clearRect(0, 0, size.x, size.y);
+
+		const bounds = map.getBounds();
+		const south = bounds.getSouth();
+		const north = bounds.getNorth();
+		const west = bounds.getWest();
+		const east = bounds.getEast();
+		const r = this._radius;
+
+		// Precompute the affine transform from (lat, lng) to container pixels.
+		// The CRS projection is linear, so 2 reference points give us the full transform.
+		const p0 = map.latLngToContainerPoint([0, 0]);
+		const p1 = map.latLngToContainerPoint([1000, 1000]);
+		const sX = (p1.x - p0.x) / 1000;
+		const sY = (p1.y - p0.y) / 1000;
+		const oX = p0.x;
+		const oY = p0.y;
+
+		const sprite = this._sprite;
+		const spriteOffset = r + 1;
+
+		const screenPoints: number[] = [];
+		const gameCoords: number[] = [];
+
+		for (const data of this._pointsByRegion.values()) {
+			const { lats, lngs } = data;
+			for (let i = 0; i < lats.length; i++) {
+				const lat = lats[i];
+				const lng = lngs[i];
+
+				if (lat < south || lat > north || lng < west || lng > east) continue;
+
+				const x = lng * sX + oX;
+				const y = lat * sY + oY;
+				ctx.drawImage(sprite, x - spriteOffset, y - spriteOffset);
+
+				screenPoints.push(x, y);
+				gameCoords.push(lat, lng);
+			}
+		}
+
+		this._drawnScreenPoints = new Float64Array(screenPoints);
+		this._drawnGameCoords = new Float64Array(gameCoords);
+	}
+
+	private _onClick(e: L.LeafletMouseEvent): void {
+		if (!this._drawnScreenPoints || this._drawnScreenPoints.length === 0) return;
+
+		const pt = this._map.latLngToContainerPoint(e.latlng);
+		const r = this._radius + 3;
+		const rSq = r * r;
+		const points = this._drawnScreenPoints;
+
+		let minDist = Infinity;
+		let hitIdx = -1;
+
+		for (let i = 0; i < points.length; i += 2) {
+			const dx = points[i] - pt.x;
+			const dy = points[i + 1] - pt.y;
+			const distSq = dx * dx + dy * dy;
+			if (distSq < rSq && distSq < minDist) {
+				minDist = distSq;
+				hitIdx = i;
+			}
+		}
+
+		if (hitIdx >= 0 && this._drawnGameCoords) {
+			const lat = this._drawnGameCoords[hitIdx];
+			const lng = this._drawnGameCoords[hitIdx + 1];
+			const latlng = L.latLng(lat, lng);
+			const n = Math.round(lat / 3);
+			const eCoord = Math.round(lng / 3);
+
+			L.popup({ pane: 'popupOnTop' })
+				.setLatLng(latlng)
+				.setContent(`N ${n} E ${eCoord}`)
+				.openOn(this._map);
+		}
+	}
+}

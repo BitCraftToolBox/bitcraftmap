@@ -1,7 +1,6 @@
 import { fetchResource } from '$lib/services/api-service';
-import { paintGeoJson, type PaintContext } from '$lib/map/geojson-painter';
 import type { ResourceEvent } from '$lib/services/websocket-service';
-import type L from 'leaflet';
+import type { ResourceCanvasLayer } from '$lib/map/resource-canvas-layer';
 
 const THROTTLE_MS = 7000;
 
@@ -12,10 +11,7 @@ interface ThrottleEntry {
 const throttleMap = new Map<string, ThrottleEntry>();
 
 export interface ResourceUpdateContext {
-	resourceRegionLayers: Record<string, L.LayerGroup>;
-	resourceLayers: Record<number, L.LayerGroup>;
-	paintCtx: PaintContext;
-	getColorForResource: (resourceId: number) => string;
+	resourceLayers: Record<number, ResourceCanvasLayer>;
 	getActiveRegions: () => number[];
 }
 
@@ -54,26 +50,20 @@ async function executeRefetch(
 	regionId: number,
 	ctx: ResourceUpdateContext
 ): Promise<void> {
-	// Check still tracked
-	const parentLayer = ctx.resourceLayers[resourceId];
-	if (!parentLayer) return;
+	const canvasLayer = ctx.resourceLayers[resourceId];
+	if (!canvasLayer) return;
 
 	try {
 		const geoJson = await fetchResource(regionId, resourceId);
 
-		const key = `${resourceId}-${regionId}`;
-		const regionLayer = ctx.resourceRegionLayers[key];
-		if (regionLayer) {
-			regionLayer.clearLayers();
-
-			if (
-				geoJson.features[0]?.geometry &&
-				(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0
-			) {
-				const props = geoJson.features[0].properties as Record<string, unknown>;
-				props.fillColor = ctx.getColorForResource(resourceId);
-				paintGeoJson(geoJson, regionLayer, ctx.paintCtx, false);
-			}
+		if (
+			geoJson.features[0]?.geometry &&
+			(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0
+		) {
+			const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates;
+			canvasLayer.setRegionPoints(regionId, coords as [number, number][]);
+		} else {
+			canvasLayer.clearRegion(regionId);
 		}
 	} catch (err) {
 		console.error(`Failed to re-fetch resource ${resourceId} for region ${regionId}:`, err);
