@@ -16,7 +16,8 @@
 	import { addTrackingItem, toggleTrackingItem } from '$lib/stores/tracking-store.svelte';
 	import { getLatestGistRaw } from '$lib/services/gist-service';
 	import { fetchResource, fetchEnemy } from '$lib/services/api-service';
-	import { connectWebSocket, type PlayerState } from '$lib/services/websocket-service';
+	import { connectWebSocket, type PlayerState, setResourceEventCallback, subscribeResource, closeResourceWebSocket } from '$lib/services/websocket-service';
+	import { handleResourceEvent, cancelPendingRefetches, cancelAllPendingRefetches, type ResourceUpdateContext } from '$lib/services/resource-update-handler';
 	import { lookupPlayer } from '$lib/services/player-service';
 	import { readableCoordinates, formatCoordinates } from '$lib/map/coordinate-utils';
 	import { resourceIndex, resourceIndexOverride, creatureIndex } from '$lib/data/resource-index';
@@ -57,6 +58,7 @@
 	let allClaims: L.LayerGroup;
 	let allCaves: L.LayerGroup;
 	let resourceLayers: Record<number, L.LayerGroup> = {};
+	let resourceRegionLayers: Record<string, L.LayerGroup> = {};
 	let liveLayer: L.FeatureGroup;
 
 	// Toggle mapping for layer panel
@@ -309,16 +311,39 @@
 
 		mapReady = true;
 
+		// Wire up resource WebSocket event handler
+		setResourceEventCallback((event) => {
+			handleResourceEvent(event, resourceUpdateCtx);
+		});
+
 		return () => {
 			for (const ws of playerWebSockets.values()) {
 				ws.close();
 			}
+			closeResourceWebSocket();
+			cancelAllPendingRefetches();
 			map.remove();
 		};
 	});
 
 	// Resource tracking state
 	const trackedResourceIds = new Set<number>();
+
+	function getColorForResource(resourceId: number): string {
+		return resourceIndexOverride[resourceId]?.color
+			|| tierColors[resourceIndexOverride[resourceId]?.tier]
+			|| resourceIndex[resourceId]?.color
+			|| tierColors[resourceIndex[resourceId]?.tier]
+			|| '#3388ff';
+	}
+
+	const resourceUpdateCtx: ResourceUpdateContext = {
+		get resourceRegionLayers() { return resourceRegionLayers; },
+		get resourceLayers() { return resourceLayers; },
+		get paintCtx() { return paintCtx; },
+		getColorForResource,
+		getActiveRegions: () => regionState.effectiveRegions
+	};
 
 	// Player tracking state
 	const playerStore = new Map<string, L.CircleMarker>();
@@ -441,14 +466,22 @@
 			const regions = regionState.effectiveRegions;
 			const results = await Promise.all(regions.map((rId) => fetchResource(rId, resourceId)));
 
-			for (const geoJson of results) {
+			regions.forEach((rId, idx) => {
+				const geoJson = results[idx];
 				if (geoJson.features[0]?.geometry &&
 					(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0) {
+					const key = `${resourceId}-${rId}`;
+					const regionLayer = L.layerGroup();
+					resourceRegionLayers[key] = regionLayer;
+					resourceLayers[resourceId].addLayer(regionLayer);
+
 					const props = geoJson.features[0].properties as Record<string, unknown>;
 					props.fillColor = color;
-					paintGeoJson(geoJson, resourceLayers[resourceId], paintCtx, false);
+					paintGeoJson(geoJson, regionLayer, paintCtx, false);
 				}
-			}
+			});
+
+			subscribeResource(resourceId);
 		} catch (err) {
 			console.error(`Failed to load resource ${resourceId}:`, err);
 		}
@@ -540,10 +573,18 @@
 				}
 
 				const meta = geoJsonMeta[idx];
-				const layer = resourceLayers[meta.resource];
-				paintGeoJson(geoJson, layer, paintCtx, false);
+				const key = `${meta.resource}-${meta.region}`;
+				const regionLayer = L.layerGroup();
+				resourceRegionLayers[key] = regionLayer;
+				resourceLayers[meta.resource].addLayer(regionLayer);
+				paintGeoJson(geoJson, regionLayer, paintCtx, false);
 			}
 		});
+
+		// Subscribe to resource WebSocket channels
+		for (const id of resourceIds) {
+			subscribeResource(id);
+		}
 	}
 
 	function handleToggleLayer(name: string): void {
@@ -574,30 +615,42 @@
 		const currentTrackedIds = [...trackedResourceIds];
 		if (currentTrackedIds.length === 0) return;
 
-		// Clear existing geometry and re-fetch with new regions
+		cancelAllPendingRefetches();
+
+		// Clear existing region sub-layers
 		for (const id of currentTrackedIds) {
 			const layer = resourceLayers[id];
 			if (layer) layer.clearLayers();
+			// Remove stale region sub-layer references
+			for (const key of Object.keys(resourceRegionLayers)) {
+				if (key.startsWith(`${id}-`)) {
+					delete resourceRegionLayers[key];
+				}
+			}
 		}
 
 		const regions = regionState.effectiveRegions;
 		for (const resourceId of currentTrackedIds) {
-			const overrideColor = resourceIndexOverride[resourceId]?.color;
-			const tier = resourceIndexOverride[resourceId]?.tier || resourceIndex[resourceId]?.tier || 0;
-			const color = overrideColor || tierColors[tier] || '#3388ff';
+			const color = getColorForResource(resourceId);
 
 			Promise.all(regions.map((rId) => fetchResource(rId, resourceId)))
 				.then((results) => {
-					for (const geoJson of results) {
+					regions.forEach((rId, idx) => {
+						const geoJson = results[idx];
 						if (
 							geoJson.features[0]?.geometry &&
 							(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0
 						) {
+							const key = `${resourceId}-${rId}`;
+							const regionLayer = L.layerGroup();
+							resourceRegionLayers[key] = regionLayer;
+							resourceLayers[resourceId].addLayer(regionLayer);
+
 							const props = geoJson.features[0].properties as Record<string, unknown>;
 							props.fillColor = color;
-							paintGeoJson(geoJson, resourceLayers[resourceId], paintCtx, false);
+							paintGeoJson(geoJson, regionLayer, paintCtx, false);
 						}
-					}
+					});
 				})
 				.catch((err) => console.error(`Failed to reload resource ${resourceId}:`, err));
 		}
