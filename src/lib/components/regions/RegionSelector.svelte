@@ -10,6 +10,9 @@
 
 	const regions = getRegionState();
 	let expanded = $state(false);
+
+	// Numpad layout: bottom-left is region 1, top-right is region 9
+	const NUMPAD_ORDER = [7, 8, 9, 4, 5, 6, 1, 2, 3];
 </script>
 
 <div class="absolute top-16 sm:top-14 left-3 z-[1000]">
@@ -58,8 +61,8 @@
 			>
 				All Regions
 			</button>
-			<div class="mt-1 grid grid-cols-5 gap-1.5 sm:gap-1">
-				{#each ALL_REGIONS as id}
+			<div class="mt-1 grid grid-cols-3 gap-1.5 sm:gap-1">
+				{#each NUMPAD_ORDER as id}
 					<button
 						onclick={() => {
 							toggleRegion(id);
