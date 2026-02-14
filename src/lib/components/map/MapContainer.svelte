@@ -227,7 +227,7 @@
 		}
 
 		// Backend resource/enemy loading
-		loadBackendData(urlParams, map);
+		loadBackendData(urlParams, map).catch(console.error);
 
 		// Heatmap
 		if (urlParams.heatmap) {
@@ -437,7 +437,7 @@
 
 		if (!resourceParam && !enemyParam) return;
 		if (!regionId) return;
-		if (!/^([1-9])(,([1-9]))*$/.test(regionId)) return;
+		if (!/^([1-9]\d*)(,([1-9]\d*))*$/.test(regionId)) return;
 
 		const regionIds = [...new Set(regionId.split(',').map(Number))];
 
@@ -500,6 +500,7 @@
 		for (const item of trackingList) {
 			addTrackingItem({
 				id: item.id,
+				type: 'resource',
 				text: item.text,
 				color: item.color,
 				visible: true
@@ -556,7 +557,7 @@
 		if (!map.hasLayer(entry.layer)) {
 			map.addLayer(entry.layer);
 		}
-		map.flyTo(entry.latlng, 0);
+		map.flyTo(entry.latlng, map.getZoom());
 	}
 
 	setContext('map', {

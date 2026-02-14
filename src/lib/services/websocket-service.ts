@@ -33,12 +33,19 @@ export function connectWebSocket(
 	};
 
 	ws.onmessage = (event) => {
-		const msg = JSON.parse(event.data);
-		if (msg?.type === 'event' && msg.channel) {
-			const channelPlayerId = msg.channel.split(':')[1];
-			if (validPlayerIds.includes(channelPlayerId)) {
-				onUpdate(msg.data);
+		try {
+			const msg = JSON.parse(event.data);
+			if (msg?.type === 'event' && msg.channel) {
+				const channelPlayerId = msg.channel.split(':')[1];
+				if (validPlayerIds.includes(channelPlayerId)) {
+					const data = msg.data;
+					if (data?.entity_id && typeof data.location_x === 'number' && typeof data.location_z === 'number') {
+						onUpdate(data);
+					}
+				}
 			}
+		} catch (err) {
+			console.error('WebSocket message parse error:', err);
 		}
 	};
 

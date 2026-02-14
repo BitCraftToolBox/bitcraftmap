@@ -43,11 +43,6 @@ export function paintGeoJson(
 				return new L.CircleMarker(latlng, { radius: props.radius ?? 1 });
 			}
 
-			map.createPane('markerOnTop');
-			map.getPane('markerOnTop')!.style.zIndex = '980';
-			map.createPane('popupOnTop');
-			map.getPane('popupOnTop')!.style.zIndex = '990';
-
 			const waypointIcon =
 				props?.iconName || props?.iconSize
 					? createIcon(props.iconName, props.iconSize)

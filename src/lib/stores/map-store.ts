@@ -31,10 +31,16 @@ export function restoreMapState(map: L.Map): boolean {
 	const savedCenter = localStorage.getItem('mapCenter');
 	const savedZoom = localStorage.getItem('mapZoom');
 	if (savedCenter && savedZoom) {
-		const centerCoords = JSON.parse(savedCenter);
-		const zoomLevel = parseFloat(savedZoom);
-		map.setView(centerCoords, zoomLevel);
-		return true;
+		try {
+			const centerCoords = JSON.parse(savedCenter);
+			const zoomLevel = parseFloat(savedZoom);
+			map.setView(centerCoords, zoomLevel);
+			return true;
+		} catch {
+			localStorage.removeItem('mapCenter');
+			localStorage.removeItem('mapZoom');
+			return false;
+		}
 	}
 	return false;
 }
