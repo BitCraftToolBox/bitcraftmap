@@ -1,5 +1,18 @@
 @import 'tailwindcss';
 
+@utility z-map {
+	z-index: 0;
+}
+@utility z-ui {
+	z-index: 1000;
+}
+@utility z-search {
+	z-index: 1002;
+}
+@utility z-overlay {
+	z-index: 1010;
+}
+
 html,
 body {
 	margin: 0;

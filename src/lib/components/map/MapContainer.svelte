@@ -625,7 +625,7 @@
 </script>
 
 <div class="relative h-screen w-screen overflow-hidden bg-[#1a1f2e]">
-	<div bind:this={mapElement} class="absolute inset-0 z-0"></div>
+	<div bind:this={mapElement} class="absolute inset-0 z-map"></div>
 
 	{#if mapReady}
 		<SearchBar onSelect={handleSearchSelect} onPlayerSelect={handlePlayerSelect} onResourceSelect={handleResourceSelect} />
@@ -638,7 +638,7 @@
 		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} />
 	{/if}
 
-	<div class="absolute bottom-3 left-3 z-[1000] flex items-center gap-2">
+	<div class="absolute bottom-3 left-3 z-ui flex items-center gap-2">
 		<CoordinateDisplay {coords} />
 		<ResetViewButton onReset={resetView} />
 	</div>

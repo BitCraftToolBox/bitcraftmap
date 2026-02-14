@@ -47,7 +47,7 @@
 	}
 </script>
 
-<div class="absolute top-3 left-3 right-3 z-[1000] sm:right-auto sm:w-96">
+<div class="absolute top-3 left-3 right-3 z-search sm:right-auto sm:w-96">
 	<div class="relative">
 		<SearchIcon size="18" color="#d1d5db" class="absolute z-10 left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
 		<input

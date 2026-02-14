@@ -15,7 +15,7 @@
 	const NUMPAD_ORDER = [7, 8, 9, 4, 5, 6, 1, 2, 3];
 </script>
 
-<div class="absolute top-16 sm:top-14 left-3 z-[1000]">
+<div class="absolute top-16 sm:top-14 left-3 z-ui">
 	<button
 		onclick={() => (expanded = !expanded)}
 		class="flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 bg-[#1e2433]/95 px-3 py-2.5 sm:py-1.5 text-sm text-gray-200 shadow-lg backdrop-blur-sm transition-colors hover:bg-[#2a3245] active:bg-[#2a3245]"

@@ -32,7 +32,7 @@
 		<!-- Backdrop -->
 		<button
 			transition:fade={{ duration: 200 }}
-			class="fixed inset-0 z-[1010] bg-black/40"
+			class="fixed inset-0 z-overlay bg-black/40"
 			onclick={() => collapsed = true}
 			aria-label="Close layer panel"
 		></button>
@@ -42,7 +42,7 @@
 		<!-- Collapsed: floating button at bottom-right -->
 		<button
 			onclick={() => collapsed = false}
-			class="fixed bottom-16 right-3 z-[1010] flex items-center justify-center w-11 h-11 rounded-lg bg-[#1e2433]/95 border border-white/10 shadow-xl backdrop-blur-sm text-gray-400 active:text-gray-200"
+			class="fixed bottom-16 right-3 z-overlay flex items-center justify-center w-11 h-11 rounded-lg bg-[#1e2433]/95 border border-white/10 shadow-xl backdrop-blur-sm text-gray-400 active:text-gray-200"
 			aria-label="Open layers"
 		>
 			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@
 		<!-- Expanded: bottom sheet -->
 		<div
 			transition:fly={{ y: 300, duration: 250 }}
-			class="fixed bottom-0 left-0 right-0 z-[1010] max-h-[85dvh] overflow-y-auto rounded-t-xl bg-[#1e2433]/95 border-t border-white/10 shadow-xl backdrop-blur-sm"
+			class="fixed bottom-0 left-0 right-0 z-overlay max-h-[85dvh] overflow-y-auto rounded-t-xl bg-[#1e2433]/95 border-t border-white/10 shadow-xl backdrop-blur-sm"
 		>
 			<!-- Drag handle -->
 			<div class="flex justify-center py-2">
@@ -102,7 +102,7 @@
 
 <!-- Desktop: side panel (unchanged layout) -->
 <div
-	class="hidden sm:block absolute top-3 right-3 z-[1000] max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-lg bg-[#1e2433]/95 shadow-xl backdrop-blur-sm border border-white/10 transition-all duration-300"
+	class="hidden sm:block absolute top-3 right-3 z-ui max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-lg bg-[#1e2433]/95 shadow-xl backdrop-blur-sm border border-white/10 transition-all duration-300"
 	class:w-10={collapsed}
 	class:w-64={!collapsed}
 >
