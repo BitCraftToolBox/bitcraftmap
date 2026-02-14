@@ -638,8 +638,10 @@
 		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} />
 	{/if}
 
-	<CoordinateDisplay {coords} />
-	<ResetViewButton onReset={resetView} />
+	<div class="absolute bottom-3 left-3 z-[1000] flex items-center gap-2">
+		<CoordinateDisplay {coords} />
+		<ResetViewButton onReset={resetView} />
+	</div>
 </div>
 
 <style>
