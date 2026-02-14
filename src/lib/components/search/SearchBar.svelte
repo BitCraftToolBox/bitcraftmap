@@ -47,7 +47,7 @@
 	}
 </script>
 
-<div class="absolute top-3 left-3 z-[1000] w-96">
+<div class="absolute top-3 left-3 right-3 z-[1000] sm:right-auto sm:w-96">
 	<div class="relative">
 		<SearchIcon size="18" color="#d1d5db" class="absolute z-10 left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
 		<input
@@ -58,15 +58,15 @@
 			onfocus={() => search.isOpen = true}
 			onblur={() => setTimeout(() => search.isOpen = false, 200)}
 			onkeydown={handleKeydown}
-			class="w-full rounded-lg bg-[#1e2433]/95 border border-white/10 pl-8 pr-8 py-2 text-sm text-gray-200 placeholder-gray-500 backdrop-blur-sm shadow-lg focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all"
+			class="w-full rounded-lg bg-[#1e2433]/95 border border-white/10 pl-8 pr-10 py-2.5 text-sm text-gray-200 placeholder-gray-500 backdrop-blur-sm shadow-lg focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all"
 		/>
 		{#if search.query}
 			<button
 				onclick={() => clearSearch()}
-				class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-200"
+				class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-gray-200 active:text-gray-200"
 				aria-label="Clear search"
 			>
-				<XIcon size="12" color="currentColor" />
+				<XIcon size="16" color="currentColor" />
 			</button>
 		{/if}
 	</div>

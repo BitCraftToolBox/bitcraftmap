@@ -183,8 +183,13 @@
 		activeLayers.add('Ruined Cities');
 
 		// Coordinate display
+		let hasTouch = false;
 		map.on('mousemove', (e: L.LeafletMouseEvent) => {
 			coords = formatCoordinates(e.latlng);
+		});
+		map.getContainer().addEventListener('touchstart', () => { hasTouch = true; }, { once: true });
+		map.on('move', () => {
+			if (hasTouch) coords = formatCoordinates(map.getCenter());
 		});
 
 		// Map state persistence

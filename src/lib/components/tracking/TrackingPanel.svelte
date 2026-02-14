@@ -14,7 +14,7 @@
 </script>
 
 {#if tracking.items.length > 0}
-	<div class="absolute bottom-12 left-3 z-[1000] space-y-1">
+	<div class="absolute bottom-14 left-3 right-3 sm:right-auto z-[1000] space-y-1 max-h-[30dvh] overflow-y-auto">
 		{#each tracking.items as item (item.entityId ?? item.id)}
 			<TrackingItem
 				{item}

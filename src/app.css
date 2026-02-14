@@ -7,5 +7,16 @@ body {
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
+	overscroll-behavior: none;
 	background: #1a1f2e;
+}
+
+/* Enlarge Leaflet popup close buttons for touch devices */
+@media (pointer: coarse) {
+	.leaflet-popup-close-button {
+		width: 28px !important;
+		height: 28px !important;
+		font-size: 20px !important;
+		padding: 4px !important;
+	}
 }

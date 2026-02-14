@@ -19,14 +19,14 @@
 	} = $props();
 </script>
 
-<div class="mt-1 max-h-64 overflow-y-auto rounded-lg bg-[#1e2433]/95 border border-white/10 shadow-xl backdrop-blur-sm">
+<div class="mt-1 max-h-[50dvh] sm:max-h-64 overflow-y-auto rounded-lg bg-[#1e2433]/95 border border-white/10 shadow-xl backdrop-blur-sm">
 	{#if locationResults.length > 0}
 		<div class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-white/5">
 			Locations
 		</div>
 		{#each locationResults as result, i}
 			<button
-				class="w-full text-left px-3 py-1.5 text-sm transition-colors flex items-center gap-2 {i === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5'}"
+				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {i === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
 				onmousedown={() => handleSelect(result)}
 				onmouseenter={() => selectedIndex = i}
 			>
@@ -49,7 +49,7 @@
 		{#each resourceResults as resource, j}
 			{@const globalIndex = locationResults.length + j}
 			<button
-				class="w-full text-left px-3 py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5'}"
+				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
 				onmousedown={() => handleSelect(resource)}
 				onmouseenter={() => selectedIndex = globalIndex}
 			>
@@ -70,7 +70,7 @@
 		{#each playerResults as player, j}
 			{@const globalIndex = locationResults.length + resourceResults.length + j}
 			<button
-				class="w-full text-left px-3 py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5'}"
+				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
 				onmousedown={() => handleSelect(player)}
 				onmouseenter={() => selectedIndex = globalIndex}
 			>

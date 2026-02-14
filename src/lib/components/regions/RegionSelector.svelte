@@ -12,10 +12,10 @@
 	let expanded = $state(false);
 </script>
 
-<div class="absolute top-14 left-3 z-[1000]">
+<div class="absolute top-16 sm:top-14 left-3 z-[1000]">
 	<button
 		onclick={() => (expanded = !expanded)}
-		class="flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 bg-[#1e2433]/95 px-3 py-1.5 text-sm text-gray-200 shadow-lg backdrop-blur-sm transition-colors hover:bg-[#2a3245]"
+		class="flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 bg-[#1e2433]/95 px-3 py-2.5 sm:py-1.5 text-sm text-gray-200 shadow-lg backdrop-blur-sm transition-colors hover:bg-[#2a3245] active:bg-[#2a3245]"
 	>
 		<svg class="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 			<path
@@ -52,20 +52,20 @@
 					selectAllRegions();
 					onRegionsChange();
 				}}
-				class="w-full rounded px-2 py-1 text-left text-xs transition-colors {regions.isAllSelected
+				class="w-full rounded px-2 py-2 sm:py-1 text-left text-xs transition-colors {regions.isAllSelected
 					? 'bg-blue-500/10 text-blue-400'
-					: 'text-gray-400 hover:bg-white/5'}"
+					: 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
 			>
 				All Regions
 			</button>
-			<div class="mt-1 grid grid-cols-5 gap-1">
+			<div class="mt-1 grid grid-cols-5 gap-1.5 sm:gap-1">
 				{#each ALL_REGIONS as id}
 					<button
 						onclick={() => {
 							toggleRegion(id);
 							onRegionsChange();
 						}}
-						class="h-8 w-8 rounded text-xs font-medium transition-colors {regions.selected.has(
+						class="h-10 w-10 sm:h-8 sm:w-8 rounded text-xs font-medium transition-colors {regions.selected.has(
 							id
 						)
 							? 'border border-blue-500/50 bg-blue-500/30 text-blue-300'

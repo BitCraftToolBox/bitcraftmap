@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class="flex items-center gap-2 rounded px-3 py-1.5 font-mono text-xs shadow-lg border border-white/10 backdrop-blur-sm"
+	class="flex items-center gap-2 rounded px-3 py-2.5 sm:py-1.5 font-mono text-xs shadow-lg border border-white/10 backdrop-blur-sm"
 	style:background-color={item.color + '30'}
 >
 	<input
