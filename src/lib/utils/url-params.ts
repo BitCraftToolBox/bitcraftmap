@@ -16,44 +16,26 @@ export function parseUrlParams(): UrlParams {
 	};
 }
 
-export function updateResourceIdParam(resourceIds: Set<number>): void {
+function setParam(key: string, value: string | null): void {
 	const url = new URL(window.location.href);
-	if (resourceIds.size > 0) {
-		url.searchParams.set('resourceId', [...resourceIds].join(','));
+	if (value) {
+		url.searchParams.set(key, value);
 	} else {
-		url.searchParams.delete('resourceId');
+		url.searchParams.delete(key);
 	}
-	goto(`${url.pathname}${url.search}${url.hash}`, {
-		replaceState: true,
-		noScroll: true,
-		keepFocus: true
-	});
+	// Decode percent-encoded commas so URLs stay readable
+	const clean = `${url.pathname}${url.search}${url.hash}`.replaceAll('%2C', ',');
+	goto(clean, { replaceState: true, noScroll: true, keepFocus: true });
+}
+
+export function updateResourceIdParam(resourceIds: Set<number>): void {
+	setParam('resourceId', resourceIds.size > 0 ? [...resourceIds].join(',') : null);
 }
 
 export function updateRegionIdParam(regionIds: Set<number>): void {
-	const url = new URL(window.location.href);
-	if (regionIds.size > 0) {
-		url.searchParams.set('regionId', [...regionIds].sort((a, b) => a - b).join(','));
-	} else {
-		url.searchParams.delete('regionId');
-	}
-	goto(`${url.pathname}${url.search}${url.hash}`, {
-		replaceState: true,
-		noScroll: true,
-		keepFocus: true
-	});
+	setParam('regionId', regionIds.size > 0 ? [...regionIds].sort((a, b) => a - b).join(',') : null);
 }
 
 export function updatePlayerIdParam(playerIds: Set<string>): void {
-	const url = new URL(window.location.href);
-	if (playerIds.size > 0) {
-		url.searchParams.set('playerId', [...playerIds].join(','));
-	} else {
-		url.searchParams.delete('playerId');
-	}
-	goto(`${url.pathname}${url.search}${url.hash}`, {
-		replaceState: true,
-		noScroll: true,
-		keepFocus: true
-	});
+	setParam('playerId', playerIds.size > 0 ? [...playerIds].join(',') : null);
 }

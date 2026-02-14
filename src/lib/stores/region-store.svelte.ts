@@ -59,9 +59,13 @@ export function selectAllRegions(): void {
 }
 
 export function setRegions(regions: Iterable<number>): void {
+	const incoming = new Set(regions);
 	selectedRegions.clear();
-	for (const r of regions) {
-		selectedRegions.add(r);
+	// If every region is selected, keep the set empty (empty = all)
+	if (incoming.size < ALL_REGIONS.length || !ALL_REGIONS.every((r) => incoming.has(r))) {
+		for (const r of incoming) {
+			selectedRegions.add(r);
+		}
 	}
 	persist();
 }
