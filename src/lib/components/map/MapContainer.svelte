@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SvelteSet } from 'svelte/reactivity';
 	import { onMount, setContext } from 'svelte';
 	import L from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
@@ -9,7 +10,8 @@
 	import { validateGeoJson } from '$lib/map/geojson-validator';
 	import { paintGeoJson, type PaintContext } from '$lib/map/geojson-painter';
 	import { setMap, saveMapState, restoreMapState, hashHasFlyToOrZoom, resetView } from '$lib/stores/map-store';
-	import { parseUrlParams, updatePlayerIdParam, updateResourceIdParam } from '$lib/utils/url-params';
+	import { parseUrlParams, updatePlayerIdParam, updateResourceIdParam, updateRegionIdParam } from '$lib/utils/url-params';
+	import { getRegionState, setRegions } from '$lib/stores/region-store.svelte';
 	import { addSearchEntries, type SearchEntry } from '$lib/stores/search-store.svelte';
 	import { addTrackingItem, toggleTrackingItem } from '$lib/stores/tracking-store.svelte';
 	import { getLatestGistRaw } from '$lib/services/gist-service';
@@ -29,12 +31,14 @@
 	import LayerPanel from '$lib/components/layers/LayerPanel.svelte';
 	import SearchBar from '$lib/components/search/SearchBar.svelte';
 	import TrackingPanel from '$lib/components/tracking/TrackingPanel.svelte';
+	import RegionSelector from '$lib/components/regions/RegionSelector.svelte';
 
 
 	let mapElement: HTMLDivElement;
 	let map = $state<L.Map>(undefined!);
 	let mapReady = $state(false);
 	let coords = $state('N: 0 E: 0');
+	const regionState = getRegionState();
 
 	// All layers
 	let eventsLayer: L.LayerGroup;
@@ -57,7 +61,7 @@
 
 	// Toggle mapping for layer panel
 	let genericToggle = $state<Record<string, L.LayerGroup>>({});
-	let activeLayers = $state<Set<string>>(new Set());
+	let activeLayers = new SvelteSet<string>();
 	let allLayers: Record<string, L.LayerGroup> = {};
 
 	// Context for child components
@@ -67,6 +71,14 @@
 		const mapConfig = createMapConfig();
 		const appConfig = createAppConfig();
 		const urlParams = parseUrlParams();
+
+		// Seed region store from URL if present (URL takes priority over localStorage)
+		if (urlParams.regionId) {
+			const urlRegions = urlParams.regionId.split(',').map(Number).filter((n) => n > 0);
+			if (urlRegions.length > 0) {
+				setRegions(urlRegions);
+			}
+		}
 
 		// Initialize map
 		map = L.map(mapElement, mapConfig);
@@ -165,7 +177,10 @@
 		treesLayer.addTo(map);
 		templesLayer.addTo(map);
 		ruinedLayer.addTo(map);
-		activeLayers = new Set(['Events', 'Wonders', 'Temples', 'Ruined Cities']);
+		activeLayers.add('Events');
+		activeLayers.add('Wonders');
+		activeLayers.add('Temples');
+		activeLayers.add('Ruined Cities');
 
 		// Coordinate display
 		map.on('mousemove', (e: L.LeafletMouseEvent) => {
@@ -418,14 +433,16 @@
 		});
 
 		try {
-			const regionId = parseInt(parseUrlParams().regionId) || 2;
-			const geoJson = await fetchResource(regionId, resourceId);
+			const regions = regionState.effectiveRegions;
+			const results = await Promise.all(regions.map((rId) => fetchResource(rId, resourceId)));
 
-			if (geoJson.features[0]?.geometry &&
-				(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0) {
-				const props = geoJson.features[0].properties as Record<string, unknown>;
-				props.fillColor = color;
-				paintGeoJson(geoJson, resourceLayers[resourceId], paintCtx, false);
+			for (const geoJson of results) {
+				if (geoJson.features[0]?.geometry &&
+					(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0) {
+					const props = geoJson.features[0].properties as Record<string, unknown>;
+					props.fillColor = color;
+					paintGeoJson(geoJson, resourceLayers[resourceId], paintCtx, false);
+				}
 			}
 		} catch (err) {
 			console.error(`Failed to load resource ${resourceId}:`, err);
@@ -433,13 +450,11 @@
 	}
 
 	async function loadBackendData(urlParams: ReturnType<typeof parseUrlParams>, map: L.Map): Promise<void> {
-		const { regionId, resourceId: resourceParam, enemyId: enemyParam, noColors } = urlParams;
+		const { resourceId: resourceParam, enemyId: enemyParam, noColors } = urlParams;
 
 		if (!resourceParam && !enemyParam) return;
-		if (!regionId) return;
-		if (!/^([1-9]\d*)(,([1-9]\d*))*$/.test(regionId)) return;
 
-		const regionIds = [...new Set(regionId.split(',').map(Number))];
+		const regionIds = regionState.effectiveRegions;
 
 		let resourceIds: number[] = [];
 		if (resourceParam) {
@@ -536,7 +551,6 @@
 			map.addLayer(layer);
 			activeLayers.add(name);
 		}
-		activeLayers = new Set(activeLayers);
 	}
 
 	function handleToggleResourceLayer(id: number): void {
@@ -546,6 +560,41 @@
 			map.removeLayer(layer);
 		} else {
 			map.addLayer(layer);
+		}
+	}
+
+	function handleRegionsChange(): void {
+		updateRegionIdParam(regionState.selected);
+
+		const currentTrackedIds = [...trackedResourceIds];
+		if (currentTrackedIds.length === 0) return;
+
+		// Clear existing geometry and re-fetch with new regions
+		for (const id of currentTrackedIds) {
+			const layer = resourceLayers[id];
+			if (layer) layer.clearLayers();
+		}
+
+		const regions = regionState.effectiveRegions;
+		for (const resourceId of currentTrackedIds) {
+			const overrideColor = resourceIndexOverride[resourceId]?.color;
+			const tier = resourceIndexOverride[resourceId]?.tier || resourceIndex[resourceId]?.tier || 0;
+			const color = overrideColor || tierColors[tier] || '#3388ff';
+
+			Promise.all(regions.map((rId) => fetchResource(rId, resourceId)))
+				.then((results) => {
+					for (const geoJson of results) {
+						if (
+							geoJson.features[0]?.geometry &&
+							(geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates?.length > 0
+						) {
+							const props = geoJson.features[0].properties as Record<string, unknown>;
+							props.fillColor = color;
+							paintGeoJson(geoJson, resourceLayers[resourceId], paintCtx, false);
+						}
+					}
+				})
+				.catch((err) => console.error(`Failed to reload resource ${resourceId}:`, err));
 		}
 	}
 
@@ -575,6 +624,7 @@
 
 	{#if mapReady}
 		<SearchBar onSelect={handleSearchSelect} onPlayerSelect={handlePlayerSelect} onResourceSelect={handleResourceSelect} />
+		<RegionSelector onRegionsChange={handleRegionsChange} />
 		<LayerPanel
 			{genericToggle}
 			isActive={isLayerActive}

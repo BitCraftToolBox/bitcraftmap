@@ -6,7 +6,7 @@ export function parseUrlParams(): UrlParams {
 	return {
 		heatmap: query.has('heatmap'),
 		gistId: query.get('gistId'),
-		regionId: query.get('regionId') || '2',
+		regionId: query.get('regionId') || '',
 		resourceId: query.get('resourceId') || '',
 		enemyId: query.get('enemyId') || '',
 		noColors: parseInt(query.get('noColors') || '0') === 1,
@@ -22,6 +22,20 @@ export function updateResourceIdParam(resourceIds: Set<number>): void {
 		url.searchParams.set('resourceId', [...resourceIds].join(','));
 	} else {
 		url.searchParams.delete('resourceId');
+	}
+	goto(`${url.pathname}${url.search}${url.hash}`, {
+		replaceState: true,
+		noScroll: true,
+		keepFocus: true
+	});
+}
+
+export function updateRegionIdParam(regionIds: Set<number>): void {
+	const url = new URL(window.location.href);
+	if (regionIds.size > 0) {
+		url.searchParams.set('regionId', [...regionIds].sort((a, b) => a - b).join(','));
+	} else {
+		url.searchParams.delete('regionId');
 	}
 	goto(`${url.pathname}${url.search}${url.hash}`, {
 		replaceState: true,
