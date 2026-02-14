@@ -1,13 +1,17 @@
 <script lang="ts">
-	import { getTrackingState, toggleTrackingItem, toggleTrackingItemByEntityId } from '$lib/stores/tracking-store.svelte';
+	import { getTrackingState, toggleTrackingItem, toggleTrackingItemByEntityId, removeTrackingItem, removeTrackingItemByEntityId } from '$lib/stores/tracking-store.svelte';
 	import TrackingItem from './TrackingItem.svelte';
 
 	let {
 		onToggleResource,
-		onTogglePlayer
+		onTogglePlayer,
+		onRemoveResource,
+		onRemovePlayer
 	}: {
 		onToggleResource: (id: number) => void;
 		onTogglePlayer: (entityId: string) => void;
+		onRemoveResource: (id: number) => void;
+		onRemovePlayer: (entityId: string) => void;
 	} = $props();
 
 	const tracking = getTrackingState();
@@ -25,6 +29,15 @@
 					} else {
 						toggleTrackingItem(item.id);
 						if (item.id !== -1) onToggleResource(item.id);
+					}
+				}}
+				onRemove={() => {
+					if (item.type === 'player' && item.entityId) {
+						removeTrackingItemByEntityId(item.entityId);
+						onRemovePlayer(item.entityId);
+					} else {
+						removeTrackingItem(item.id);
+						onRemoveResource(item.id);
 					}
 				}}
 			/>

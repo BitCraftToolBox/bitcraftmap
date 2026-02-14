@@ -16,7 +16,7 @@
 	import { addTrackingItem, toggleTrackingItem } from '$lib/stores/tracking-store.svelte';
 	import { getLatestGistRaw } from '$lib/services/gist-service';
 	import { fetchResource, fetchEnemy } from '$lib/services/api-service';
-	import { connectWebSocket, type PlayerState, setResourceEventCallback, subscribeResource, closeResourceWebSocket } from '$lib/services/websocket-service';
+	import { connectWebSocket, type PlayerState, setResourceEventCallback, subscribeResource, unsubscribeResource, closeResourceWebSocket } from '$lib/services/websocket-service';
 	import { handleResourceEvent, cancelPendingRefetches, cancelAllPendingRefetches, type ResourceUpdateContext } from '$lib/services/resource-update-handler';
 	import { lookupPlayer } from '$lib/services/player-service';
 	import { readableCoordinates, formatCoordinates } from '$lib/map/coordinate-utils';
@@ -609,6 +609,43 @@
 		}
 	}
 
+	function handleRemoveResource(id: number): void {
+		const layer = resourceLayers[id];
+		if (layer) {
+			map.removeLayer(layer);
+			delete resourceLayers[id];
+		}
+		// Clean up region sub-layers
+		for (const key of Object.keys(resourceRegionLayers)) {
+			if (key.startsWith(`${id}-`)) {
+				delete resourceRegionLayers[key];
+			}
+		}
+		trackedResourceIds.delete(id);
+		updateResourceIdParam(trackedResourceIds);
+		cancelPendingRefetches(id);
+		unsubscribeResource(id);
+	}
+
+	function handleRemovePlayer(entityId: string): void {
+		// Remove markers
+		const marker = playerStore.get(entityId);
+		const dest = destinationStore.get(entityId);
+		if (marker) liveLayer.removeLayer(marker);
+		if (dest) liveLayer.removeLayer(dest);
+		playerStore.delete(entityId);
+		destinationStore.delete(entityId);
+
+		// Close WebSocket
+		const ws = playerWebSockets.get(entityId);
+		if (ws) {
+			ws.close();
+			playerWebSockets.delete(entityId);
+		}
+		trackedPlayerIds.delete(entityId);
+		updatePlayerIdParam(trackedPlayerIds);
+	}
+
 	function handleRegionsChange(): void {
 		updateRegionIdParam(regionState.selected);
 
@@ -688,7 +725,7 @@
 			isActive={isLayerActive}
 			onToggle={handleToggleLayer}
 		/>
-		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} />
+		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} onRemoveResource={handleRemoveResource} onRemovePlayer={handleRemovePlayer} />
 	{/if}
 
 	<div class="absolute bottom-3 left-3 z-ui flex items-center gap-2">

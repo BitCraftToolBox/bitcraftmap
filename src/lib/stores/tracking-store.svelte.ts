@@ -28,6 +28,14 @@ export function toggleTrackingItemByEntityId(entityId: string): void {
 	items = items.map((i) => (i.entityId === entityId ? { ...i, visible: !i.visible } : i));
 }
 
+export function removeTrackingItem(id: number): void {
+	items = items.filter((i) => i.id !== id);
+}
+
+export function removeTrackingItemByEntityId(entityId: string): void {
+	items = items.filter((i) => i.entityId !== entityId);
+}
+
 export function clearTracking(): void {
 	items = [];
 }
