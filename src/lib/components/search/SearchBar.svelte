@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { clearSearch, getSearchState, type SearchResult } from '$lib/stores/search-store.svelte';
+	import { SearchIcon, XIcon } from '@lucide/svelte';
 	import type L from 'leaflet';
-	import { getSearchState, clearSearch, type SearchResult } from '$lib/stores/search-store.svelte';
 	import SearchResults from './SearchResults.svelte';
 
 	let {
@@ -46,11 +47,9 @@
 	}
 </script>
 
-<div class="absolute top-3 left-3 z-[1000] w-80">
+<div class="absolute top-3 left-3 z-[1000] w-96">
 	<div class="relative">
-		<svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-		</svg>
+		<SearchIcon size="18" color="#d1d5db" class="absolute z-10 left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
 		<input
 			bind:this={inputEl}
 			type="text"
@@ -59,7 +58,7 @@
 			onfocus={() => search.isOpen = true}
 			onblur={() => setTimeout(() => search.isOpen = false, 200)}
 			onkeydown={handleKeydown}
-			class="w-full rounded-lg bg-[#1e2433]/95 border border-white/10 pl-9 pr-8 py-2 text-sm text-gray-200 placeholder-gray-500 backdrop-blur-sm shadow-lg focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all"
+			class="w-full rounded-lg bg-[#1e2433]/95 border border-white/10 pl-8 pr-8 py-2 text-sm text-gray-200 placeholder-gray-500 backdrop-blur-sm shadow-lg focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all"
 		/>
 		{#if search.query}
 			<button
@@ -67,9 +66,7 @@
 				class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-200"
 				aria-label="Clear search"
 			>
-				<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-				</svg>
+				<XIcon size="12" color="currentColor" />
 			</button>
 		{/if}
 	</div>
