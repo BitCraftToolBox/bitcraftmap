@@ -157,6 +157,16 @@ export class ResourceCanvasLayer extends L.Layer {
 		const sprite = this._sprite;
 		const spriteOffset = r + 1;
 
+		// LOD: show fewer points when zoomed out, all when zoomed in
+		const zoom = map.getZoom();
+		const minZoom = map.getMinZoom();
+		const maxZoom = map.getMaxZoom();
+		const t = Math.max(0, Math.min(1, (zoom - minZoom) / (maxZoom - minZoom)));
+		const showRatio = 0.08 + 0.92 * (1 - (1 - t) * (1 - t));
+		const useLod = showRatio < 1 && this.getPointCount() > 500;
+		// Threshold for fast integer comparison (Knuth multiplicative hash)
+		const lodThreshold = (showRatio * 4294967296) >>> 0;
+
 		const screenPoints: number[] = [];
 		const gameCoords: number[] = [];
 
@@ -167,6 +177,9 @@ export class ResourceCanvasLayer extends L.Layer {
 				const lng = lngs[i];
 
 				if (lat < south || lat > north || lng < west || lng > east) continue;
+
+				// Deterministic LOD sampling — same points stay visible at each zoom
+				if (useLod && ((i * 2654435761) >>> 0) > lodThreshold) continue;
 
 				const x = lng * sX + oX;
 				const y = lat * sY + oY;
