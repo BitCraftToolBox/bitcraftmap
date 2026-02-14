@@ -57,6 +57,7 @@
 
 	// Toggle mapping for layer panel
 	let genericToggle = $state<Record<string, L.LayerGroup>>({});
+	let activeLayers = $state<Set<string>>(new Set());
 	let allLayers: Record<string, L.LayerGroup> = {};
 
 	// Context for child components
@@ -164,6 +165,7 @@
 		treesLayer.addTo(map);
 		templesLayer.addTo(map);
 		ruinedLayer.addTo(map);
+		activeLayers = new Set(['Events', 'Wonders', 'Temples', 'Ruined Cities']);
 
 		// Coordinate display
 		map.on('mousemove', (e: L.LeafletMouseEvent) => {
@@ -239,17 +241,34 @@
 			for (const id of playerIds) {
 				trackedPlayerIds.add(id);
 			}
+
+			// Fetch player info once for initial markers + tracking items
+			const playerInfoPromise = Promise.all(playerIds.map((id) => lookupPlayer(id)));
+
+			playerInfoPromise.then((results) => {
+				results.forEach((info, i) => {
+					if (info.locationX !== null && info.locationZ !== null) {
+						updatePlayerMarker({
+							entity_id: playerIds[i],
+							location_x: info.locationX,
+							location_z: info.locationZ,
+							destination_x: info.locationX,
+							destination_z: info.locationZ
+						}, urlParams.followPlayer);
+					}
+				});
+			});
+
 			const ws = connectWebSocket(playerIds, (state: PlayerState) => {
 				updatePlayerMarker(state, urlParams.followPlayer);
 			}, () => {
-				// Resolve player names in parallel
-				Promise.all(playerIds.map((id) => lookupPlayer(id))).then((usernames) => {
+				playerInfoPromise.then((results) => {
 					playerIds.forEach((id, i) => {
 						addTrackingItem({
 							id: -1,
 							entityId: id,
 							type: 'player',
-							text: `Player: ${usernames[i]}`,
+							text: `Player: ${results[i].username}`,
 							color: '#00ff00',
 							visible: true
 						});
@@ -290,13 +309,25 @@
 	const playerColorPalette = ['#00ff00', '#ff6b6b', '#4ecdc4', '#ffe66d', '#a78bfa', '#f97316', '#06b6d4', '#ec4899'];
 	let playerColorIndex = 0;
 
-	function handlePlayerSelect(entityId: string, username: string): void {
+	async function handlePlayerSelect(entityId: string, username: string): Promise<void> {
 		if (trackedPlayerIds.has(entityId)) return;
 		trackedPlayerIds.add(entityId);
 		updatePlayerIdParam(trackedPlayerIds);
 
 		const color = playerColorPalette[playerColorIndex % playerColorPalette.length];
 		playerColorIndex++;
+
+		// Fetch initial location from API
+		const playerInfo = await lookupPlayer(entityId);
+		if (playerInfo.locationX !== null && playerInfo.locationZ !== null) {
+			updatePlayerMarker({
+				entity_id: entityId,
+				location_x: playerInfo.locationX,
+				location_z: playerInfo.locationZ,
+				destination_x: playerInfo.locationX,
+				destination_z: playerInfo.locationZ
+			}, false, color);
+		}
 
 		const ws = connectWebSocket([entityId], (state: PlayerState) => {
 			updatePlayerMarker(state, false, color);
@@ -305,7 +336,7 @@
 				id: -1,
 				entityId,
 				type: 'player',
-				text: `Player: ${username}`,
+				text: `Player: ${playerInfo.username}`,
 				color,
 				visible: true
 			});
@@ -499,9 +530,12 @@
 		if (!layer || !map) return;
 		if (map.hasLayer(layer)) {
 			map.removeLayer(layer);
+			activeLayers.delete(name);
 		} else {
 			map.addLayer(layer);
+			activeLayers.add(name);
 		}
+		activeLayers = new Set(activeLayers);
 	}
 
 	function handleToggleResourceLayer(id: number): void {
@@ -515,8 +549,7 @@
 	}
 
 	function isLayerActive(name: string): boolean {
-		const layer = genericToggle[name];
-		return layer ? map?.hasLayer(layer) ?? false : false;
+		return activeLayers.has(name);
 	}
 
 	function handleSearchSelect(entry: { latlng: L.LatLng; layer: L.LayerGroup }): void {
@@ -543,7 +576,7 @@
 		<SearchBar onSelect={handleSearchSelect} onPlayerSelect={handlePlayerSelect} onResourceSelect={handleResourceSelect} />
 		<LayerPanel
 			{genericToggle}
-			{map}
+			isActive={isLayerActive}
 			onToggle={handleToggleLayer}
 		/>
 		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} />

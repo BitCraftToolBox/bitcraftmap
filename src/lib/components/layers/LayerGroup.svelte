@@ -36,6 +36,7 @@
 	$effect(() => {
 		if (masterEl) {
 			masterEl.indeterminate = masterIndeterminate;
+			masterEl.checked = masterChecked;
 		}
 	});
 </script>

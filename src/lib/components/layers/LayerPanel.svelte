@@ -5,11 +5,11 @@
 
 	let {
 		genericToggle,
-		map,
+		isActive,
 		onToggle
 	}: {
 		genericToggle: Record<string, L.LayerGroup>;
-		map: L.Map;
+		isActive: (name: string) => boolean;
 		onToggle: (name: string) => void;
 	} = $props();
 
@@ -22,11 +22,6 @@
 
 	function getUngroupedLayers(): string[] {
 		return Object.keys(genericToggle).filter((name) => !groupedNames.has(name));
-	}
-
-	function isActive(name: string): boolean {
-		const layer = genericToggle[name];
-		return layer ? map?.hasLayer(layer) ?? false : false;
 	}
 </script>
 
