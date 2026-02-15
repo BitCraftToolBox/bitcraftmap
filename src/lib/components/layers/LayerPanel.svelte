@@ -102,14 +102,14 @@
 
 <!-- Desktop: side panel (unchanged layout) -->
 <div
-	class="hidden sm:block absolute top-3 right-3 z-ui max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-lg bg-[#1e2433]/95 shadow-xl backdrop-blur-sm border border-white/10 transition-all duration-300"
+	class="hidden sm:block absolute top-3 right-3 z-ui max-h-[calc(100dvh-6rem)] overflow-x-hidden overflow-y-auto rounded-lg bg-[#1e2433]/95 shadow-xl backdrop-blur-sm border border-white/10 transition-[width] duration-300"
 	class:w-10={collapsed}
 	class:w-64={!collapsed}
 >
 	{#if collapsed}
 		<button
 			onclick={() => collapsed = false}
-			class="flex items-center justify-center w-full h-10 text-gray-400 hover:text-gray-200 active:text-gray-200 transition-colors"
+			class="flex items-center justify-center w-10 h-10 text-gray-400 hover:text-gray-200 active:text-gray-200 transition-colors"
 			aria-label="Expand layer panel"
 		>
 			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@
 			</svg>
 		</button>
 	{:else}
-		<div class="flex items-center justify-between px-3 py-2 border-b border-white/10">
+		<div class="flex items-center justify-between px-3 py-2 border-b border-white/10 min-w-64">
 			<h2 class="text-xs font-semibold text-gray-200 uppercase tracking-wider">Layers</h2>
 			<button
 				onclick={() => collapsed = true}
@@ -132,7 +132,7 @@
 	{/if}
 
 	{#if !collapsed}
-		<div class="p-2 space-y-1">
+		<div class="p-2 space-y-1 min-w-64">
 			{#each Object.entries(LAYER_GROUPS) as [_key, group]}
 				<LayerGroup
 					title={group.title}
