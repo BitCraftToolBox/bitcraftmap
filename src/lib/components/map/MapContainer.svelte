@@ -88,14 +88,16 @@
 		initIcons();
 
 		// Create panes
+		map.createPane('baseMapPane');
+		map.getPane('baseMapPane')!.style.zIndex = '100';
 		map.createPane('markerOnTop');
 		map.getPane('markerOnTop')!.style.zIndex = '980';
 		map.createPane('popupOnTop');
 		map.getPane('popupOnTop')!.style.zIndex = '990';
 
-		// Base map image — must set view before calling setMap
+		// Base map image — placed in baseMapPane (below tilePane) so road tiles render on top
 		const mapBounds: L.LatLngBoundsExpression = [[0, 0], [mapConfig.mapHeight * mapConfig.apothem, mapConfig.mapWidth]];
-		L.imageOverlay(mapConfig.mapImageURL, mapBounds).addTo(map);
+		L.imageOverlay(mapConfig.mapImageURL, mapBounds, { pane: 'baseMapPane' }).addTo(map);
 		map.fitBounds([[0, 0], [mapConfig.mapWidth, mapConfig.mapHeight]]);
 		setMap(map);
 
@@ -116,10 +118,26 @@
 		allClaims = L.layerGroup(claimLayers);
 		allCaves = L.layerGroup(caveLayers);
 
-		// Roads
 		const roadsBounds: L.LatLngBoundsExpression = [[0, 0], [mapConfig.mapHeight, mapConfig.mapWidth]];
-		const roadsImage = L.imageOverlay(`${appConfig.exportsCdn}/bitcraftmap/roads/global-16k.webp`, roadsBounds);
-		roadsLayer = L.layerGroup([roadsImage]);
+		const roadsTileLayer = L.tileLayer(
+			`${appConfig.exportsCdn}/bitcraftmap/roads/tiles/{z}/{x}/{y}.webp`,
+			{
+				bounds: roadsBounds,
+				minZoom: -5,
+				maxZoom: 5,
+				minNativeZoom: -5,
+				maxNativeZoom: 0,
+				tileSize: 256,
+				keepBuffer: 4,
+				updateWhenZooming: false,
+				errorTileUrl: '',
+			}
+		);
+		(roadsTileLayer as any)._isValidTile = function (coords: { x: number; y: number; z: number }) {
+			const tileBounds = (this as any)._tileCoordsToBounds(coords);
+			return L.latLngBounds(roadsBounds).overlaps(tileBounds);
+		};
+		roadsLayer = L.layerGroup([roadsTileLayer]);
 
 		// Live tracking layer
 		liveLayer = L.featureGroup().addTo(map);
@@ -187,11 +205,14 @@
 		// Coordinate display
 		let hasTouch = false;
 		map.on('mousemove', (e: L.LeafletMouseEvent) => {
-			coords = formatCoordinates(e.latlng);
+			coords = `${formatCoordinates(e.latlng)} Zoom: ${map.getZoom().toFixed(1)}`;
 		});
 		map.getContainer().addEventListener('touchstart', () => { hasTouch = true; }, { once: true });
 		map.on('move', () => {
-			if (hasTouch) coords = formatCoordinates(map.getCenter());
+			if (hasTouch) coords = `${formatCoordinates(map.getCenter())} Zoom: ${map.getZoom().toFixed(1)}`;
+		});
+		map.on('zoomend', () => {
+			coords = coords.replace(/Zoom: -?[\d.]+/, `Zoom: ${map.getZoom().toFixed(1)}`);
 		});
 
 		// Map state persistence
