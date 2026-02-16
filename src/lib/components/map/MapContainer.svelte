@@ -753,8 +753,8 @@
 		background: #2a3145;
 	}
 
-	:global(.leaflet-tile-pane img),
-	:global(.leaflet-overlay-pane img) {
+	:global(.leaflet-image-layer),
+	:global(.leaflet-tile-pane img) {
 		image-rendering: pixelated;
 		image-rendering: -moz-crisp-edges;
 		image-rendering: crisp-edges;
