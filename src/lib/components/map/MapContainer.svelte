@@ -66,6 +66,27 @@
 	let activeLayers = new SvelteSet<string>();
 	let allLayers: Record<string, L.LayerGroup> = {};
 
+	const LAYERS_STORAGE_KEY = 'activeLayers';
+	const DEFAULT_LAYERS = ['Events', 'Wonders', 'Temples', 'Ruined Cities'];
+
+	function loadActiveLayers(): string[] | null {
+		try {
+			const stored = localStorage.getItem(LAYERS_STORAGE_KEY);
+			if (stored === null) return null;
+			const parsed = JSON.parse(stored);
+			if (!Array.isArray(parsed)) return null;
+			return parsed.filter((v): v is string => typeof v === 'string');
+		} catch {
+			return null;
+		}
+	}
+
+	function saveActiveLayers(): void {
+		try {
+			localStorage.setItem(LAYERS_STORAGE_KEY, JSON.stringify([...activeLayers]));
+		} catch { /* ignore */ }
+	}
+
 	// Context for child components
 	let paintCtx: PaintContext;
 
@@ -192,15 +213,16 @@
 
 		paintCtx = { map, allLayers };
 
-		// Default layers
-		eventsLayer.addTo(map);
-		treesLayer.addTo(map);
-		templesLayer.addTo(map);
-		ruinedLayer.addTo(map);
-		activeLayers.add('Events');
-		activeLayers.add('Wonders');
-		activeLayers.add('Temples');
-		activeLayers.add('Ruined Cities');
+		// Restore saved layers or use defaults
+		const saved = loadActiveLayers();
+		const layersToActivate = saved ?? DEFAULT_LAYERS;
+		for (const name of layersToActivate) {
+			const layer = genericToggle[name];
+			if (layer) {
+				layer.addTo(map);
+				activeLayers.add(name);
+			}
+		}
 
 		// Coordinate display
 		let hasTouch = false;
@@ -606,6 +628,7 @@
 			map.addLayer(layer);
 			activeLayers.add(name);
 		}
+		saveActiveLayers();
 	}
 
 	function handleToggleResourceLayer(id: number): void {
