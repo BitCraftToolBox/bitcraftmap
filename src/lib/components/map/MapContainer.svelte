@@ -117,7 +117,7 @@
 		map.getPane('popupOnTop')!.style.zIndex = '990';
 
 		// Base map image — placed in baseMapPane (below tilePane) so road tiles render on top
-		const mapBounds: L.LatLngBoundsExpression = [[0, 0], [mapConfig.mapHeight * mapConfig.apothem, mapConfig.mapWidth]];
+		const mapBounds: L.LatLngBoundsExpression = [[0, 0], [mapConfig.mapHeight, mapConfig.mapWidth]];
 		L.imageOverlay(mapConfig.mapImageURL, mapBounds, { pane: 'baseMapPane' }).addTo(map);
 		map.fitBounds([[0, 0], [mapConfig.mapWidth, mapConfig.mapHeight]]);
 		setMap(map);
