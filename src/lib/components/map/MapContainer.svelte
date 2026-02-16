@@ -742,7 +742,7 @@
 	});
 </script>
 
-<div class="relative h-screen w-screen overflow-hidden bg-[#1a1f2e]">
+<div class="relative h-screen w-screen overflow-hidden bg-[#1E2742]">
 	<div bind:this={mapElement} class="absolute inset-0 z-map"></div>
 
 	{#if mapReady}
@@ -775,7 +775,7 @@
 
 <style>
 	:global(.leaflet-container) {
-		background: #2a3145;
+		background: #1E2742;
 	}
 
 	:global(.leaflet-image-layer),
