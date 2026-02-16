@@ -60,6 +60,10 @@
 	let allCaves: L.LayerGroup;
 	let resourceLayers: Record<number, ResourceCanvasLayer> = {};
 	let liveLayer: L.FeatureGroup;
+	let baseMapOverlay: L.ImageOverlay;
+	let hiResLoaded = $state(false);
+	const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+	const showHiResToggle = isMobile || import.meta.env.DEV;
 
 	// Toggle mapping for layer panel
 	let genericToggle = $state<Record<string, L.LayerGroup>>({});
@@ -89,9 +93,9 @@
 
 	// Context for child components
 	let paintCtx: PaintContext;
+	const mapConfig = createMapConfig();
 
 	onMount(() => {
-		const mapConfig = createMapConfig();
 		const appConfig = createAppConfig();
 		const urlParams = parseUrlParams();
 
@@ -118,8 +122,16 @@
 
 		// Base map image — placed in baseMapPane (below tilePane) so road tiles render on top
 		const mapBounds: L.LatLngBoundsExpression = [[0, 0], [mapConfig.mapHeight, mapConfig.mapWidth]];
-		L.imageOverlay(mapConfig.mapImageURL, mapBounds, { pane: 'baseMapPane' }).addTo(map);
+		baseMapOverlay = L.imageOverlay(mapConfig.mapImageURL, mapBounds, { pane: 'baseMapPane' }).addTo(map);
 		map.fitBounds([[0, 0], [mapConfig.mapWidth, mapConfig.mapHeight]]);
+
+		// Preload hi-res map in background
+		const hiRes = new Image();
+		hiRes.onload = () => {
+			hiResLoaded = true;
+			if (!showHiResToggle) baseMapOverlay.setUrl(mapConfig.mapImageHiResURL);
+		};
+		hiRes.src = mapConfig.mapImageHiResURL;
 		setMap(map);
 
 		// Create all layer groups
@@ -745,6 +757,17 @@
 	<div class="absolute bottom-3 left-3 z-ui flex items-center gap-2">
 		<CoordinateDisplay {coords} />
 		<ResetViewButton onReset={resetView} />
+		{#if showHiResToggle && hiResLoaded}
+			<button
+				class="rounded bg-black/60 px-2 py-1 text-xs text-white backdrop-blur hover:bg-black/80"
+				onclick={() => {
+					const isHiRes = baseMapOverlay.getElement()?.src?.includes('7680');
+					baseMapOverlay.setUrl(isHiRes ? mapConfig.mapImageURL : mapConfig.mapImageHiResURL);
+				}}
+			>
+				Toggle Hi-Res
+			</button>
+		{/if}
 	</div>
 </div>
 

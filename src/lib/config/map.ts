@@ -5,13 +5,15 @@ export function createMapConfig(): MapConfig {
   const apothem = 2 / Math.sqrt(3);
   const mapWidth = 23040;
   const mapHeight = 23040;
-  const mapImageURL = "/maps/map_7680x.webp";
+  const mapImageURL = "/maps/map_2560.webp";
+  const mapImageHiResURL = "/maps/map_7680.webp";
 
   return {
     apothem,
     mapWidth,
     mapHeight,
     mapImageURL,
+    mapImageHiResURL,
     preferCanvas: true,
     zoomAnimation: false,
     attributionControl: false,
