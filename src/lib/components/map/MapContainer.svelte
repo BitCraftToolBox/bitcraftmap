@@ -62,6 +62,7 @@
 	let liveLayer: L.FeatureGroup;
 	let baseMapOverlay: L.ImageOverlay;
 	let hiResLoaded = $state(false);
+	let hiResUrl = '';
 	const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
 	const showHiResToggle = isMobile || import.meta.env.DEV;
 
@@ -125,13 +126,14 @@
 		baseMapOverlay = L.imageOverlay(mapConfig.mapImageURL, mapBounds, { pane: 'baseMapPane' }).addTo(map);
 		map.fitBounds([[0, 0], [mapConfig.mapWidth, mapConfig.mapHeight]]);
 
-		// Preload hi-res map in background
+		// Preload hi-res map in background from CDN
+		hiResUrl = `${appConfig.exportsCdn}/bitcraftmap/maps/map_7680.webp`;
 		const hiRes = new Image();
 		hiRes.onload = () => {
 			hiResLoaded = true;
-			if (!showHiResToggle) baseMapOverlay.setUrl(mapConfig.mapImageHiResURL);
+			if (!showHiResToggle) baseMapOverlay.setUrl(hiResUrl);
 		};
-		hiRes.src = mapConfig.mapImageHiResURL;
+		hiRes.src = hiResUrl;
 		setMap(map);
 
 		// Create all layer groups
@@ -762,7 +764,7 @@
 				class="rounded bg-black/60 px-2 py-1 text-xs text-white backdrop-blur hover:bg-black/80"
 				onclick={() => {
 					const isHiRes = baseMapOverlay.getElement()?.src?.includes('7680');
-					baseMapOverlay.setUrl(isHiRes ? mapConfig.mapImageURL : mapConfig.mapImageHiResURL);
+					baseMapOverlay.setUrl(isHiRes ? mapConfig.mapImageURL : hiResUrl);
 				}}
 			>
 				Toggle Hi-Res

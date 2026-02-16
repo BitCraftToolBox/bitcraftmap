@@ -6,14 +6,12 @@ export function createMapConfig(): MapConfig {
   const mapWidth = 23040;
   const mapHeight = 23040;
   const mapImageURL = "/maps/map_2560.webp";
-  const mapImageHiResURL = "/maps/map_7680.webp";
 
   return {
     apothem,
     mapWidth,
     mapHeight,
     mapImageURL,
-    mapImageHiResURL,
     preferCanvas: true,
     zoomAnimation: false,
     attributionControl: false,
