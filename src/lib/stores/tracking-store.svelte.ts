@@ -36,6 +36,14 @@ export function removeTrackingItemByEntityId(entityId: string): void {
 	items = items.filter((i) => i.entityId !== entityId);
 }
 
+export function updateTrackingItemColor(id: number, color: string): void {
+	items = items.map((i) => (i.id === id ? { ...i, color } : i));
+}
+
+export function updateTrackingItemColorByEntityId(entityId: string, color: string): void {
+	items = items.map((i) => (i.entityId === entityId ? { ...i, color } : i));
+}
+
 export function clearTracking(): void {
 	items = [];
 }

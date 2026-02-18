@@ -1,17 +1,21 @@
 <script lang="ts">
-	import { getTrackingState, toggleTrackingItem, toggleTrackingItemByEntityId, removeTrackingItem, removeTrackingItemByEntityId } from '$lib/stores/tracking-store.svelte';
+	import { getTrackingState, toggleTrackingItem, toggleTrackingItemByEntityId, removeTrackingItem, removeTrackingItemByEntityId, updateTrackingItemColor, updateTrackingItemColorByEntityId } from '$lib/stores/tracking-store.svelte';
 	import TrackingItem from './TrackingItem.svelte';
 
 	let {
 		onToggleResource,
 		onTogglePlayer,
 		onRemoveResource,
-		onRemovePlayer
+		onRemovePlayer,
+		onColorChangeResource,
+		onColorChangePlayer
 	}: {
 		onToggleResource: (id: number) => void;
 		onTogglePlayer: (entityId: string) => void;
 		onRemoveResource: (id: number) => void;
 		onRemovePlayer: (entityId: string) => void;
+		onColorChangeResource: (id: number, color: string) => void;
+		onColorChangePlayer: (entityId: string, color: string) => void;
 	} = $props();
 
 	const tracking = getTrackingState();
@@ -38,6 +42,15 @@
 					} else {
 						removeTrackingItem(item.id);
 						onRemoveResource(item.id);
+					}
+				}}
+				onColorChange={(color) => {
+					if (item.type === 'player' && item.entityId) {
+						updateTrackingItemColorByEntityId(item.entityId, color);
+						onColorChangePlayer(item.entityId, color);
+					} else {
+						updateTrackingItemColor(item.id, color);
+						onColorChangeResource(item.id, color);
 					}
 				}}
 			/>

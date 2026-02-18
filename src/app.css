@@ -33,3 +33,48 @@ body {
 		padding: 4px !important;
 	}
 }
+
+/* Player marker DivIcon */
+.player-marker-icon {
+	background: none !important;
+	border: none !important;
+}
+
+.player-dot {
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 1px solid rgba(0, 0, 0, 0.6);
+	z-index: 2;
+}
+
+.player-pulse {
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 2px solid;
+	opacity: 0;
+	z-index: 1;
+	animation: player-pulse-ring 2s ease-out infinite;
+}
+
+@keyframes player-pulse-ring {
+	0% {
+		width: 8px;
+		height: 8px;
+		opacity: 0.8;
+	}
+	100% {
+		width: 28px;
+		height: 28px;
+		opacity: 0;
+	}
+}

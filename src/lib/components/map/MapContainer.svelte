@@ -392,7 +392,7 @@
 	};
 
 	// Player tracking state
-	const playerStore = new Map<string, L.CircleMarker>();
+	const playerStore = new Map<string, L.Marker>();
 	const destinationStore = new Map<string, L.Polyline>();
 	const playerWebSockets = new Map<string, WebSocket>();
 	const trackedPlayerIds = new Set<string>();
@@ -452,6 +452,16 @@
 		}
 	}
 
+	function createPlayerIcon(color: string): L.DivIcon {
+		return L.divIcon({
+			className: 'player-marker-icon',
+			html: `<div class="player-pulse" style="border-color: ${color};"></div><div class="player-dot" style="background-color: ${color};"></div>`,
+			iconSize: [24, 24],
+			iconAnchor: [12, 12],
+			popupAnchor: [0, -12]
+		});
+	}
+
 	function updatePlayerMarker(state: PlayerState, followPlayer: boolean, color = '#00ff00'): void {
 		const playerId = state.entity_id;
 		const playerLatLng = L.latLng(state.location_z / 1000, state.location_x / 1000);
@@ -462,12 +472,10 @@
 		const existingDest = destinationStore.get(playerId);
 
 		if (!existingMarker || !existingDest) {
-			const marker = new L.CircleMarker(playerLatLng, {
-				color,
-				radius: 4,
-				weight: 1,
-				opacity: 1,
-				fillOpacity: 1
+			const icon = createPlayerIcon(color);
+			const marker = L.marker(playerLatLng, {
+				icon,
+				pane: 'markerOnTop'
 			}).addTo(liveLayer);
 			marker.bindPopup('PlayerId: ' + playerId);
 
@@ -667,6 +675,26 @@
 		unsubscribeResource(id);
 	}
 
+	function handleColorChangeResource(id: number, color: string): void {
+		const layer = resourceLayers[id];
+		if (layer) {
+			layer.setColor(color);
+		}
+	}
+
+	function handleColorChangePlayer(entityId: string, color: string): void {
+		const marker = playerStore.get(entityId);
+		if (marker) {
+			const el = marker.getElement();
+			if (el) {
+				const dot = el.querySelector('.player-dot') as HTMLElement;
+				const pulse = el.querySelector('.player-pulse') as HTMLElement;
+				if (dot) dot.style.backgroundColor = color;
+				if (pulse) pulse.style.borderColor = color;
+			}
+		}
+	}
+
 	function handleRemovePlayer(entityId: string): void {
 		// Remove markers
 		const marker = playerStore.get(entityId);
@@ -753,7 +781,7 @@
 			isActive={isLayerActive}
 			onToggle={handleToggleLayer}
 		/>
-		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} onRemoveResource={handleRemoveResource} onRemovePlayer={handleRemovePlayer} />
+		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} onRemoveResource={handleRemoveResource} onRemovePlayer={handleRemovePlayer} onColorChangeResource={handleColorChangeResource} onColorChangePlayer={handleColorChangePlayer} />
 	{/if}
 
 	<div class="absolute bottom-3 left-3 z-ui flex items-center gap-2">

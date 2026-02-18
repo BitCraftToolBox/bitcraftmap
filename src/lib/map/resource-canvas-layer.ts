@@ -95,6 +95,12 @@ export class ResourceCanvasLayer extends L.Layer {
 		this._scheduleRedraw();
 	}
 
+	setColor(color: string): void {
+		this._color = color;
+		this._buildSprite();
+		this._scheduleRedraw();
+	}
+
 	getPointCount(): number {
 		let count = 0;
 		for (const data of this._pointsByRegion.values()) {

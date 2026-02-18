@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { TrackingItem as TrackingItemType } from '$lib/types/geojson';
 
-	let { item, onToggle, onRemove }: { item: TrackingItemType; onToggle: () => void; onRemove: () => void } = $props();
+	let { item, onToggle, onRemove, onColorChange }: { item: TrackingItemType; onToggle: () => void; onRemove: () => void; onColorChange: (color: string) => void } = $props();
+
+	let colorInput: HTMLInputElement;
 </script>
 
 <div
@@ -14,10 +16,20 @@
 		onchange={onToggle}
 		class="accent-blue-500"
 	/>
-	<span
-		class="inline-block w-2 h-2 rounded-full"
+	<button
+		type="button"
+		class="inline-block w-3 h-3 rounded-full cursor-pointer ring-1 ring-white/20 hover:ring-white/50 transition-shadow shrink-0"
 		style:background-color={item.color}
-	></span>
+		onclick={() => colorInput.click()}
+		aria-label="Change color"
+	></button>
+	<input
+		bind:this={colorInput}
+		type="color"
+		value={item.color}
+		class="sr-only"
+		oninput={(e) => onColorChange(e.currentTarget.value)}
+	/>
 	<span class="text-gray-200 flex-1">{item.text}</span>
 	<button
 		onclick={onRemove}
