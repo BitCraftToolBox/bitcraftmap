@@ -2,7 +2,7 @@ import { fetchResource } from '$lib/services/api-service';
 import type { ResourceEvent } from '$lib/services/websocket-service';
 import type { ResourceCanvasLayer } from '$lib/map/resource-canvas-layer';
 
-const THROTTLE_MS = 7000;
+const THROTTLE_MS = 2000;
 
 interface ThrottleEntry {
 	timerId: ReturnType<typeof setTimeout>;
