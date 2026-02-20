@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class="rounded bg-[#1e2433]/90 px-2 py-1 sm:px-3 sm:py-1.5 font-mono text-xs sm:text-sm text-gray-200 shadow-lg backdrop-blur-sm border border-white/10"
+	class="min-w-52 sm:min-w-60 tabular-nums rounded bg-[#1e2433]/90 px-2 py-1 sm:px-3 sm:py-1.5 font-mono text-xs sm:text-sm text-gray-200 shadow-lg backdrop-blur-sm border border-white/10"
 >
 	{coords}
 </div>

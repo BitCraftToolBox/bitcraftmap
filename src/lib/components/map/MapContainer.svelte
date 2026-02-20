@@ -30,6 +30,7 @@
 	import RoadsLayer from './RoadsLayer.svelte';
 	import CoordinateDisplay from './CoordinateDisplay.svelte';
 	import ResetViewButton from './ResetViewButton.svelte';
+	import GameTimers from './GameTimers.svelte';
 	import LayerPanel from '$lib/components/layers/LayerPanel.svelte';
 	import SearchBar from '$lib/components/search/SearchBar.svelte';
 	import TrackingPanel from '$lib/components/tracking/TrackingPanel.svelte';
@@ -784,20 +785,23 @@
 		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} onRemoveResource={handleRemoveResource} onRemovePlayer={handleRemovePlayer} onColorChangeResource={handleColorChangeResource} onColorChangePlayer={handleColorChangePlayer} />
 	{/if}
 
-	<div class="absolute bottom-3 left-3 z-ui flex items-center gap-2">
-		<CoordinateDisplay {coords} />
-		<ResetViewButton onReset={resetView} />
-		{#if showHiResToggle && hiResLoaded}
-			<button
-				class="rounded bg-black/60 px-2 py-1 text-xs text-white backdrop-blur hover:bg-black/80"
-				onclick={() => {
-					const isHiRes = baseMapOverlay.getElement()?.src?.includes('7680');
-					baseMapOverlay.setUrl(isHiRes ? mapConfig.mapImageURL : hiResUrl);
-				}}
-			>
-				Toggle Hi-Res
-			</button>
-		{/if}
+	<div class="absolute bottom-3 left-3 z-ui flex flex-col items-start gap-2">
+		<GameTimers />
+		<div class="flex items-center gap-2">
+			<CoordinateDisplay {coords} />
+			<ResetViewButton onReset={resetView} />
+			{#if showHiResToggle && hiResLoaded}
+				<button
+					class="rounded bg-black/60 px-2 py-1 text-xs text-white backdrop-blur hover:bg-black/80"
+					onclick={() => {
+						const isHiRes = baseMapOverlay.getElement()?.src?.includes('7680');
+						baseMapOverlay.setUrl(isHiRes ? mapConfig.mapImageURL : hiResUrl);
+					}}
+				>
+					Toggle Hi-Res
+				</button>
+			{/if}
+		</div>
 	</div>
 </div>
 
