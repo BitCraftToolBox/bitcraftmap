@@ -3,10 +3,7 @@ const DAY_DURATION = 5700; // 95 minutes
 const NIGHT_DURATION = 1200; // 20 minutes
 const CYCLE_DURATION = DAY_DURATION + NIGHT_DURATION; // 6900s
 
-const TASK_EPOCH_OFFSET = 3000; // original: -10*60 + 1*60*60
-const TASK_CYCLE_DURATION = 14400; // 4 hours
-const TASK_RESET_INTERVAL = 10800; // 3 hours
-const TASK_GRACE_OFFSET = 600; // 10 minutes
+const TASK_RESET_INTERVAL = 14400; // 4 hours – resets at 0:00, 4:00, 8:00, 12:00, 16:00, 20:00 UTC
 
 let isDay = $state(true);
 let phaseRemaining = $state(0);
@@ -21,9 +18,7 @@ function tick(): void {
 	isDay = gameSeconds < DAY_DURATION;
 	phaseRemaining = isDay ? DAY_DURATION - gameSeconds : CYCLE_DURATION - gameSeconds;
 
-	const taskSeconds = ((now - TASK_EPOCH_OFFSET) % TASK_CYCLE_DURATION + TASK_CYCLE_DURATION) % TASK_CYCLE_DURATION;
-	const adjustedTaskTime = ((taskSeconds - TASK_GRACE_OFFSET) % TASK_RESET_INTERVAL + TASK_RESET_INTERVAL) % TASK_RESET_INTERVAL;
-	taskResetRemaining = TASK_RESET_INTERVAL - adjustedTaskTime;
+	taskResetRemaining = TASK_RESET_INTERVAL - (now % TASK_RESET_INTERVAL);
 }
 
 export function startGameTimer(): void {
