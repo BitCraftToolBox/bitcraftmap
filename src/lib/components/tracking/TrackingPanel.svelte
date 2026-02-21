@@ -22,7 +22,7 @@
 </script>
 
 {#if tracking.items.length > 0}
-	<div class="absolute bottom-14 left-3 right-3 sm:right-auto z-ui space-y-1 max-h-[30dvh] overflow-y-auto">
+	<div class="space-y-1">
 		{#each tracking.items as item (item.entityId ?? item.id)}
 			<TrackingItem
 				{item}
@@ -56,4 +56,6 @@
 			/>
 		{/each}
 	</div>
+{:else}
+	<p class="text-xs text-gray-500 px-2 py-3">No tracked resources or players. Use search to add items.</p>
 {/if}

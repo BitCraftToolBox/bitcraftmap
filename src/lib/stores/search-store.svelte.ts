@@ -1,4 +1,5 @@
 import type L from 'leaflet';
+import type { MapSelection } from '$lib/types/map';
 import { searchPlayers } from '$lib/services/player-service';
 import { searchResources } from '$lib/services/resource-service';
 
@@ -7,6 +8,7 @@ export interface SearchEntry {
 	latlng: L.LatLng;
 	layer: L.LayerGroup;
 	marker: L.Marker;
+	selectionData?: MapSelection;
 }
 
 export interface PlayerEntry {

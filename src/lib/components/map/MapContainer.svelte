@@ -31,10 +31,11 @@
 	import CoordinateDisplay from './CoordinateDisplay.svelte';
 	import ResetViewButton from './ResetViewButton.svelte';
 	import GameTimers from './GameTimers.svelte';
-	import LayerPanel from '$lib/components/layers/LayerPanel.svelte';
+	import { setSelection } from '$lib/stores/selection-store.svelte';
+	import { buildPopupHtml } from '$lib/map/popup-builder';
 	import SearchBar from '$lib/components/search/SearchBar.svelte';
-	import TrackingPanel from '$lib/components/tracking/TrackingPanel.svelte';
-	import RegionSelector from '$lib/components/regions/RegionSelector.svelte';
+	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
+	import DetailPanel from '$lib/components/detail/DetailPanel.svelte';
 
 
 	let mapElement: HTMLDivElement;
@@ -252,6 +253,29 @@
 			coords = coords.replace(/Zoom: -?[\d.]+/, `Zoom: ${map.getZoom().toFixed(1)}`);
 		});
 
+		// Handle action buttons inside Leaflet popups
+		map.on('popupopen', (e: L.PopupEvent) => {
+			const container = e.popup.getElement();
+			if (!container) return;
+			container.addEventListener('click', (ev) => {
+				const btn = (ev.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
+				if (!btn) return;
+				const action = btn.dataset.action;
+				if (action === 'track-resource') {
+					const id = Number(btn.dataset.resourceId);
+					const name = btn.dataset.resourceName ?? '';
+					const tier = Number(btn.dataset.resourceTier);
+					if (id) handleResourceSelect(id, name, tier);
+					map.closePopup();
+				} else if (action === 'follow-player') {
+					const entityId = btn.dataset.entityId ?? '';
+					const username = btn.dataset.username ?? '';
+					if (entityId) handlePlayerSelect(entityId, username);
+					map.closePopup();
+				}
+			});
+		});
+
 		// Map state persistence
 		map.on('moveend', () => saveMapState(map));
 
@@ -267,7 +291,8 @@
 						title: marker.options.title,
 						latlng: marker.getLatLng(),
 						layer: ruinedLayer,
-						marker
+						marker,
+						selectionData: (marker as any)._selectionData
 					}]);
 				}
 			});
@@ -283,7 +308,8 @@
 							title: marker.options.title,
 							latlng: marker.getLatLng(),
 							layer: claimLayer,
-							marker
+							marker,
+							selectionData: (marker as any)._selectionData
 						}]);
 					}
 				});
@@ -327,6 +353,7 @@
 
 			playerInfoPromise.then((results) => {
 				results.forEach((info, i) => {
+					playerUsernames.set(playerIds[i], info.username);
 					if (info.locationX !== null && info.locationZ !== null) {
 						updatePlayerMarker({
 							entity_id: playerIds[i],
@@ -397,6 +424,7 @@
 	const destinationStore = new Map<string, L.Polyline>();
 	const playerWebSockets = new Map<string, WebSocket>();
 	const trackedPlayerIds = new Set<string>();
+	const playerUsernames = new Map<string, string>();
 
 	const playerColorPalette = ['#00ff00', '#ff6b6b', '#4ecdc4', '#ffe66d', '#a78bfa', '#f97316', '#06b6d4', '#ec4899'];
 	let playerColorIndex = 0;
@@ -404,6 +432,7 @@
 	async function handlePlayerSelect(entityId: string, username: string): Promise<void> {
 		if (trackedPlayerIds.has(entityId)) return;
 		trackedPlayerIds.add(entityId);
+		playerUsernames.set(entityId, username);
 		updatePlayerIdParam(trackedPlayerIds);
 
 		const color = playerColorPalette[playerColorIndex % playerColorPalette.length];
@@ -478,7 +507,21 @@
 				icon,
 				pane: 'markerOnTop'
 			}).addTo(liveLayer);
-			marker.bindPopup('PlayerId: ' + playerId);
+			const username = playerUsernames.get(playerId) ?? playerId;
+			const selectionData = {
+				type: 'player' as const,
+				name: username,
+				entityId: playerId,
+				username,
+				signedIn: true,
+				latlng: { lat: playerLatLng.lat, lng: playerLatLng.lng },
+				color
+			};
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup', pane: 'popupOnTop' });
+			marker.on('click', () => {
+				selectionData.latlng = { lat: marker.getLatLng().lat, lng: marker.getLatLng().lng };
+				setSelection(selectionData);
+			});
 
 			const trail = new L.Polyline(directionLine, {
 				color: '#ff0000ff',
@@ -704,6 +747,7 @@
 		if (dest) liveLayer.removeLayer(dest);
 		playerStore.delete(entityId);
 		destinationStore.delete(entityId);
+		playerUsernames.delete(entityId);
 
 		// Close WebSocket
 		const ws = playerWebSockets.get(entityId);
@@ -754,11 +798,14 @@
 		return activeLayers.has(name);
 	}
 
-	function handleSearchSelect(entry: { latlng: L.LatLng; layer: L.LayerGroup }): void {
+	function handleSearchSelect(entry: { latlng: L.LatLng; layer: L.LayerGroup; selectionData?: import('$lib/types/map').MapSelection }): void {
 		if (!map.hasLayer(entry.layer)) {
 			map.addLayer(entry.layer);
 		}
 		map.flyTo(entry.latlng, map.getZoom());
+		if (entry.selectionData) {
+			setSelection(entry.selectionData);
+		}
 	}
 
 	setContext('map', {
@@ -776,16 +823,25 @@
 
 	{#if mapReady}
 		<SearchBar onSelect={handleSearchSelect} onPlayerSelect={handlePlayerSelect} onResourceSelect={handleResourceSelect} />
-		<RegionSelector onRegionsChange={handleRegionsChange} />
-		<LayerPanel
+		<Sidebar
 			{genericToggle}
 			isActive={isLayerActive}
-			onToggle={handleToggleLayer}
+			onToggleLayer={handleToggleLayer}
+			onToggleResource={handleToggleResourceLayer}
+			onTogglePlayer={handleTogglePlayerVisibility}
+			onRemoveResource={handleRemoveResource}
+			onRemovePlayer={handleRemovePlayer}
+			onColorChangeResource={handleColorChangeResource}
+			onColorChangePlayer={handleColorChangePlayer}
+			onRegionsChange={handleRegionsChange}
 		/>
-		<TrackingPanel onToggleResource={handleToggleResourceLayer} onTogglePlayer={handleTogglePlayerVisibility} onRemoveResource={handleRemoveResource} onRemovePlayer={handleRemovePlayer} onColorChangeResource={handleColorChangeResource} onColorChangePlayer={handleColorChangePlayer} />
+		<DetailPanel
+			onTrackResource={handleResourceSelect}
+			onFollowPlayer={handlePlayerSelect}
+		/>
 	{/if}
 
-	<div class="absolute bottom-3 left-3 z-ui flex flex-col items-start gap-2">
+	<div class="absolute bottom-14 sm:bottom-3 left-3 z-ui flex flex-col items-start gap-2">
 		<GameTimers />
 		<div class="flex items-center gap-2">
 			<CoordinateDisplay {coords} />

@@ -3,6 +3,8 @@ import { createIcon } from './create-icon';
 import { readableCoordinates } from './coordinate-utils';
 import { validateGeoJson } from './geojson-validator';
 import { paintGeoJson, type PaintContext } from './geojson-painter';
+import { setSelection } from '$lib/stores/selection-store.svelte';
+import { buildPopupHtml } from './popup-builder';
 
 // Static icons - created once
 let caveIcons: L.Icon[];
@@ -26,10 +28,15 @@ export async function loadTreesGeoJson(treesLayer: L.LayerGroup): Promise<void> 
 	const geojsonData = await file.json();
 	L.geoJSON(geojsonData, {
 		pointToLayer(feature, latlng) {
-			const coords = readableCoordinates(latlng);
-			const name = feature.properties.name + '<br>';
-			const loc = 'N ' + coords[0] + ' E ' + coords[1];
-			return L.marker(latlng, { icon: treeIcon }).bindPopup(name + loc).addTo(treesLayer);
+			const selectionData = {
+				type: 'wonder' as const,
+				name: feature.properties.name,
+				latlng: { lat: latlng.lat, lng: latlng.lng }
+			};
+			const marker = L.marker(latlng, { icon: treeIcon }).addTo(treesLayer);
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
+			marker.on('click', () => setSelection(selectionData));
+			return marker;
 		}
 	});
 }
@@ -39,10 +46,15 @@ export async function loadTemplesGeoJson(templesLayer: L.LayerGroup): Promise<vo
 	const geojsonData = await file.json();
 	L.geoJSON(geojsonData, {
 		pointToLayer(feature, latlng) {
-			const coords = readableCoordinates(latlng);
-			const name = feature.properties.name + '<br>';
-			const loc = 'N ' + coords[0] + ' E ' + coords[1];
-			return L.marker(latlng, { icon: templeIcon }).bindPopup(name + loc).addTo(templesLayer);
+			const selectionData = {
+				type: 'temple' as const,
+				name: feature.properties.name,
+				latlng: { lat: latlng.lat, lng: latlng.lng }
+			};
+			const marker = L.marker(latlng, { icon: templeIcon }).addTo(templesLayer);
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
+			marker.on('click', () => setSelection(selectionData));
+			return marker;
 		}
 	});
 }
@@ -53,14 +65,19 @@ export async function loadRuinedGeoJson(ruinedLayer: L.LayerGroup): Promise<void
 	L.geoJSON(geojsonData, {
 		pointToLayer(feature, latlng) {
 			const coords = readableCoordinates(latlng);
-			const name = feature.properties.name + '<br>';
-			const loc = 'N ' + coords[0] + ' E ' + coords[1];
-			return L.marker(latlng, {
+			const selectionData = {
+				type: 'ruined-city' as const,
+				name: feature.properties.name,
+				latlng: { lat: latlng.lat, lng: latlng.lng }
+			};
+			const marker = L.marker(latlng, {
 				title: feature.properties.name + ' N ' + coords[0] + ' E ' + coords[1],
 				icon: ruinedIcon
-			})
-				.bindPopup(name + loc)
-				.addTo(ruinedLayer);
+			}).addTo(ruinedLayer);
+			(marker as any)._selectionData = selectionData;
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
+			marker.on('click', () => setSelection(selectionData));
+			return marker;
 		}
 	});
 }
@@ -76,25 +93,24 @@ export async function loadClaimsGeoJson(
 	L.geoJSON(geojsonData, {
 		pointToLayer(feature, latlng) {
 			const coords = readableCoordinates(latlng);
-			const name =
-				'<a href="https://bitjita.com/claims/' +
-				feature.properties.entityId +
-				'" target="_blank">' +
-				feature.properties.name +
-				'</a>';
-			const tier = ' (T' + feature.properties.tier + ')<br>';
-			const loc = 'N ' + coords[0] + ' E ' + coords[1] + '<br>';
-			const has_bank = 'Bank : ' + (feature.properties.has_bank ? 'Yes' : 'No') + '<br>';
-			const has_market = 'Market : ' + (feature.properties.has_market ? 'Yes' : 'No') + '<br>';
-			const has_waystone = 'Waystone : ' + (feature.properties.has_waystone ? 'Yes' : 'No');
-			const popupText = name + tier + loc + has_bank + has_market + has_waystone;
-
+			const selectionData = {
+				type: 'claim' as const,
+				name: feature.properties.name,
+				entityId: feature.properties.entityId,
+				tier: feature.properties.tier,
+				latlng: { lat: latlng.lat, lng: latlng.lng },
+				hasBank: !!feature.properties.has_bank,
+				hasMarket: !!feature.properties.has_market,
+				hasWaystone: !!feature.properties.has_waystone
+			};
 			const marker = L.marker(latlng, {
 				title: feature.properties.name + ' N ' + coords[0] + ' E ' + coords[1],
 				icon: claimIcons[feature.properties.tier]
 			});
+			(marker as any)._selectionData = selectionData;
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
+			marker.on('click', () => setSelection(selectionData));
 
-			marker.bindPopup(popupText);
 			marker.addTo(claimLayers[feature.properties.tier]);
 
 			if (feature.properties.has_bank) marker.addTo(banksLayer);
@@ -111,12 +127,17 @@ export async function loadCavesGeoJson(caveLayers: L.LayerGroup[]): Promise<void
 	const geojsonData = await file.json();
 	L.geoJSON(geojsonData, {
 		pointToLayer(feature, latlng) {
-			const coords = readableCoordinates(latlng);
-			const name = feature.properties.name + '<br>';
-			const loc = 'N ' + coords[0] + ' E ' + coords[1];
-			return L.marker(latlng, { icon: caveIcons[feature.properties.tier - 1] })
-				.bindPopup(name + loc)
+			const selectionData = {
+				type: 'cave' as const,
+				name: feature.properties.name,
+				latlng: { lat: latlng.lat, lng: latlng.lng },
+				tier: feature.properties.tier
+			};
+			const marker = L.marker(latlng, { icon: caveIcons[feature.properties.tier - 1] })
 				.addTo(caveLayers[feature.properties.tier - 1]);
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
+			marker.on('click', () => setSelection(selectionData));
+			return marker;
 		}
 	});
 }

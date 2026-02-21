@@ -9,6 +9,9 @@
 @utility z-search {
 	z-index: 1002;
 }
+@utility z-detail {
+	z-index: 1005;
+}
 @utility z-overlay {
 	z-index: 1010;
 }
@@ -81,4 +84,240 @@ body {
 		height: 28px;
 		opacity: 0;
 	}
+}
+
+/* Dark-themed Leaflet popups */
+.leaflet-popup {
+	margin-bottom: 14px !important;
+}
+
+.leaflet-popup-content-wrapper {
+	background: #1a1f2e !important;
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	border-radius: 10px !important;
+	color: #e5e7eb !important;
+	box-shadow:
+		0 0 0 1px rgba(0, 0, 0, 0.3),
+		0 8px 32px rgba(0, 0, 0, 0.5),
+		0 2px 8px rgba(0, 0, 0, 0.3) !important;
+	padding: 0 !important;
+}
+
+.leaflet-popup-tip-container {
+	margin-top: -1px;
+}
+
+.leaflet-popup-tip {
+	background: #1a1f2e !important;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+	border: none !important;
+}
+
+.leaflet-popup-close-button {
+	color: #6b7280 !important;
+	font-size: 18px !important;
+	width: 24px !important;
+	height: 24px !important;
+	top: 8px !important;
+	right: 8px !important;
+	z-index: 1;
+}
+
+.leaflet-popup-close-button:hover {
+	color: #d1d5db !important;
+	background: none !important;
+}
+
+.leaflet-popup-content {
+	margin: 0 !important;
+	line-height: 1.5 !important;
+}
+
+/* Hide Leaflet popups on mobile (use bottom sheet instead) */
+@media (max-width: 639px) {
+	.leaflet-popup-pane {
+		display: none;
+	}
+}
+
+/* ---- Popup inner content ---- */
+.bcm-popup {
+	min-width: 200px;
+	max-width: 260px;
+	font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Type label (Claim, Cave, etc.) */
+.bcm-popup-type {
+	display: block;
+	padding: 10px 14px 0;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: #6b7280;
+}
+
+/* Title row */
+.bcm-popup-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 14px 0;
+}
+
+.bcm-popup-name {
+	font-size: 14px;
+	font-weight: 600;
+	color: #f3f4f6;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.bcm-popup-tier {
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-size: 11px;
+	font-weight: 600;
+	background: rgba(59, 130, 246, 0.15);
+	color: #60a5fa;
+	flex-shrink: 0;
+	line-height: 1;
+}
+
+/* Coordinates */
+.bcm-popup-coords {
+	padding: 4px 14px 0;
+	font-size: 11px;
+	color: #6b7280;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Divider line */
+.bcm-popup-divider {
+	height: 1px;
+	background: rgba(255, 255, 255, 0.06);
+	margin: 10px 14px;
+}
+
+/* Properties table (Bank/Market/Waystone) */
+.bcm-popup-props {
+	padding: 0 14px;
+}
+
+.bcm-popup-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 4px 0;
+	font-size: 12px;
+}
+
+.bcm-popup-row + .bcm-popup-row {
+	border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.bcm-popup-row-label {
+	color: #9ca3af;
+}
+
+.bcm-popup-row-val {
+	color: #6b7280;
+	font-weight: 500;
+}
+
+.bcm-popup-row-val--yes {
+	color: #34d399;
+}
+
+/* External link */
+.bcm-popup-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin: 0 14px;
+	font-size: 11px;
+	color: #60a5fa;
+	text-decoration: none;
+}
+
+.bcm-popup-link:hover {
+	text-decoration: underline;
+}
+
+.bcm-popup-link::after {
+	content: '\2197';
+	font-size: 10px;
+}
+
+/* Color swatch (resource) */
+.bcm-popup-swatch {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 3px;
+	flex-shrink: 0;
+	box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Player online dot */
+.bcm-popup-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	flex-shrink: 0;
+	box-shadow: 0 0 4px currentColor;
+}
+
+.bcm-popup-status {
+	font-size: 11px;
+	color: #6b7280;
+	margin-left: auto;
+}
+
+/* Action button (Track / Follow) */
+.bcm-popup-footer {
+	padding: 8px 14px 12px;
+}
+
+.bcm-popup-action {
+	display: block;
+	width: 100%;
+	padding: 7px 12px;
+	border-radius: 6px;
+	border: none;
+	font-size: 12px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.15s, transform 0.1s;
+	text-align: center;
+}
+
+.bcm-popup-action:active {
+	transform: scale(0.98);
+}
+
+.bcm-popup-action--blue {
+	background: rgba(59, 130, 246, 0.15);
+	color: #60a5fa;
+}
+
+.bcm-popup-action--blue:hover {
+	background: rgba(59, 130, 246, 0.25);
+}
+
+.bcm-popup-action--green {
+	background: rgba(16, 185, 129, 0.15);
+	color: #34d399;
+}
+
+.bcm-popup-action--green:hover {
+	background: rgba(16, 185, 129, 0.25);
+}
+
+/* Bottom padding for popups without footer */
+.bcm-popup-body {
+	padding-bottom: 12px;
 }
