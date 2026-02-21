@@ -771,7 +771,7 @@
 	});
 </script>
 
-<div class="relative h-screen w-screen overflow-hidden bg-[#1E2742]">
+<div class="relative h-viewport w-screen overflow-hidden bg-[#1E2742]">
 	<div bind:this={mapElement} class="absolute inset-0 z-map"></div>
 
 	{#if mapReady}

@@ -12,6 +12,10 @@
 @utility z-overlay {
 	z-index: 1010;
 }
+@utility h-viewport {
+	height: 100vh;
+	height: 100dvh;
+}
 
 html,
 body {
