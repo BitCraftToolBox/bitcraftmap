@@ -1,4 +1,4 @@
-# What is this ?
+# What is this?
 
 This is the source repository for [BitCraft Map 🗺️](https://bitcraftmap.com)
 
