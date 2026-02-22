@@ -1,6 +1,7 @@
-data/
-/.vs
 .env
 .env.local
-/scripts/littledaimon/workspace
-/scripts/littledaimon/__pycache__
+.vs/
+logs/
+workspace/
+venv/
+__pycache__/

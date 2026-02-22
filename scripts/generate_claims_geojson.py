@@ -1,114 +1,180 @@
-import requests
+import os
 import json
 import math
-import time
-import os
 
-start_time = time.time()
+from dotenv import load_dotenv
 
-limit = 100
-all_claims = []
-all_claims_with_buildings = []
-current_page = 1
-sleep_time = 0.5
-claims_url = 'https://bitjita.com/api/claims/'
-user_agent = {'User-agent': 'LittleDaimon For bitcraftmap.com'}
-raw_claims_file = 'assets/data/claims.json' # This file will be too big we need to gitignore it
-geojson_claims_file = 'assets/markers/claims.geojson'
-
-# Requesting the first page of the claim list
-full_url = claims_url + '?limit=' + str(limit) + '&page=' + str(current_page)
-print('Requesting ' + full_url)
-data = requests.get(full_url, user_agent).json()
-total_claims = int(data['count'])
-total_pages = math.ceil(total_claims / limit)
-
-print('There are ' + data['count'] + ' claims to request in a total of ' + str(total_pages) + ' pages')
-
-# Collecting list of claim entityId from bitjita
-for page in range(total_pages):
-    time.sleep(sleep_time)
-    full_url = claims_url + '?limit=' + str(limit) + '&page=' + str(page+1)
-    print('Requesting ' + full_url)
-    data = requests.get(full_url, user_agent).json()
-    all_claims.extend(data['claims'])
+import stdb_lib
 
 
-print(all_claims)
-print(str(total_claims))
-print(str(len(all_claims)))
-
-# Checking if we got the right number of claims
-if total_claims - len(all_claims) > 0:
-    print('Total claims from initial count and requested count is not the same, terminating')
-    exit(1)
-
-# For each entityId, requesting the list of buildings
-
-counter = total_claims
-for claim in all_claims:
-    time.sleep(sleep_time)
-    counter -= 1
-    buildings_endpoint = claims_url + str(claim['entityId']) + '/buildings'
-    print('Requesting ' + buildings_endpoint + ' ' + str(counter) + ' left to do')
-    claim['buildings'] = requests.get(buildings_endpoint, user_agent).json()
-    all_claims_with_buildings.append(claim)
-
-print('Counted ' + str(total_claims) + ' claims and there are ' + str(len(all_claims_with_buildings)) + ' total claims in the json file')
-
-# Ensure the directory exists
-os.makedirs(os.path.dirname(raw_claims_file), exist_ok=True)
-# Write the JSON data to the file
-with open(raw_claims_file, "w") as file:
-    json.dump(all_claims_with_buildings, file)
-
-
-def generate_claims_json(json_key):
-
-    has_bank = 0
-    has_market = 0
-    has_waystone = 0
-
-    for building in json_key['buildings']:
-        # 985246037 Town Bank
-        # 934683282 Town Market
-        # 205715693 Waystone
-        if building['buildingDescriptionId'] == 985246037:
-            has_bank = 1
-        if building['buildingDescriptionId'] == 934683282:
-            has_market = 1
-        if building['buildingDescriptionId'] == 205715693:
-            has_waystone = 1
-
-    return {
-        "type": "Feature",
-        "properties": {
-            "entityId": json_key['entityId'],
-            "name": json_key['name'],
-            "tier": json_key['tier'],
-            "has_bank": has_bank,
-            "has_market": has_market,
-            "has_waystone": has_waystone
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [json_key['locationX'], json_key['locationZ']]
-        }
+def claims_from_rawdata():
+    claims = {
+        "type": "FeatureCollection",
+        "features": []
     }
 
+    for region in range(1, 10):
+        print(f"Processing region {region}")
+        try:
+            with open(f"workspace/data/sats-json/dynamic-{region}/claim_state.json", "r") as f:
+                claims_state = json.load(f)
+            print(f"Loaded claim_state for region {region}")
+        except Exception as e:
+            print(f"Error loading claim_state for region {region}: {e}")
+            continue
 
-with open(raw_claims_file, 'r', encoding='utf-8') as file:
-    data = json.load(file)
+        try:
+            with open(f"workspace/data/sats-json/dynamic-{region}/claim_local_state.json", "r") as f:
+                claims_local_state = json.load(f)
+            print(f"Loaded claim_local_state for region {region}")
+        except Exception as e:
+            print(f"Error loading claim_local_state for region {region}: {e}")
+            continue
+        try:
+            with open(f"workspace/data/sats-json/dynamic-{region}/bank_list.json", "r") as f:
+                banks = json.load(f)
+            print(f"Loaded claim_local_state for region {region}")
+        except Exception as e:
+            print(f"Error loading claim_local_state for region {region}: {e}")
+            continue
 
-claims_geojson = {
-    "type": "FeatureCollection",
-    "features": [generate_claims_json(key) for key in data]
-}
+        try:
+            with open(f"workspace/data/sats-json/dynamic-{region}/market_list.json", "r") as f:
+                markets = json.load(f)
+            print(f"Loaded claim_local_state for region {region}")
+        except Exception as e:
+            print(f"Error loading claim_local_state for region {region}: {e}")
+            continue
 
-# Ensure the directory exists
-os.makedirs(os.path.dirname(geojson_claims_file), exist_ok=True)
-# Write the JSON data to the file
-with open(geojson_claims_file, 'w') as file:
-    json.dump(claims_geojson, file)
+        try:
+            with open(f"workspace/data/sats-json/dynamic-{region}/waystone_list.json", "r") as f:
+                waystones = json.load(f)
+            print(f"Loaded claim_local_state for region {region}")
+        except Exception as e:
+            print(f"Error loading claim_local_state for region {region}: {e}")
+            continue
 
-print('Finished after ' + str(time.time() - start_time) + ' seconds')
+        try:
+            with open(f"workspace/data/sats-json/dynamic-{region}/claim_tech_state.json", "r") as f:
+                researches = json.load(f)
+            print(f"Loaded claim_local_state for region {region}")
+        except Exception as e:
+            print(f"Error loading claim_local_state for region {region}: {e}")
+            continue
+
+        for claim_state in claims_state:
+            if not (claim_state.get("name") == "Watchtower" and claim_state.get("neutral", True)):
+                claim_data = {
+                    'name': claim_state.get("name"),
+                    'entity_id': claim_state.get("entity_id"),
+                    'icon': "unknown",
+                }
+
+                print(f"Processing claim: {claim_data}")
+
+                # Find matching local state
+                found_local = False
+                for claim_local_state in claims_local_state:
+                    if claim_local_state.get('entity_id') == claim_data['entity_id']:
+                        claim_data['building_description_id'] = claim_local_state.get('building_description_id')
+                        location = claim_local_state.get('location', [])
+
+                        if len(location) > 1:
+                            claim_data['x'] = location[1]['x']
+                            claim_data['z'] = location[1]['z']
+                            found_local = True
+                            claim_data['tier'] = 1
+
+                            for research in researches:
+                                if research['entity_id'] == claim_data['entity_id']:
+
+                                    # tier techs are numbered
+                                    if 200 in research['learned']:
+                                        claim_data['tier'] = 2
+                                    if 300 in research['learned']:
+                                        claim_data['tier'] = 3
+                                    if 400 in research['learned']:
+                                        claim_data['tier'] = 4
+                                    if 500 in research['learned']:
+                                        claim_data['tier'] = 5
+                                    if 600 in research['learned']:
+                                        claim_data['tier'] = 6
+                                    if 700 in research['learned']:
+                                        claim_data['tier'] = 7
+                                    if 800 in research['learned']:
+                                        claim_data['tier'] = 8
+                                    if 900 in research['learned']:
+                                        claim_data['tier'] = 9
+                                    if 1000 in research['learned']:
+                                        claim_data['tier'] = 10
+
+                                    # town researches are numbered how?
+                                    # special researches are numbered how?
+
+                            if claim_data['building_description_id'] == 405:  #
+                                claim_data['bank'] = 0
+                                claim_data['market'] = 0
+                                claim_data['waystone'] = 0
+
+                                for bank in banks:
+                                    if bank['claim_entity_id'] == claim_data['entity_id']:
+                                        claim_data['bank'] = 1
+                                        break
+                                for market in markets:
+                                    if market['claim_entity_id'] == claim_data['entity_id']:
+                                        claim_data['market'] = 1
+                                        break
+                                for waystone in waystones:
+                                    if waystone['claim_entity_id'] == claim_data['entity_id']:
+                                        claim_data['waystone'] = 1
+                                        break
+
+                                geojson = {
+                                    "type": "Feature",
+                                    "properties": {
+                                        "entityId": str(claim_data['entity_id']),
+                                        "name": claim_data['name'],
+                                        "tier": claim_data['tier'],
+                                        "has_bank": claim_data['bank'],
+                                        "has_market": claim_data['market'],
+                                        "has_waystone": claim_data['waystone']
+                                    },
+                                    "geometry": {
+                                        "type": "Point",
+                                        "coordinates": [claim_data['x'], claim_data['z']]
+                                    }
+                                }
+                                # You can add more features here
+                                claims["features"].append(geojson)
+                                break
+                if not found_local:
+                    print(f"No matching local state for entity_id {claim_data['entity_id']}")
+
+    # Save claims to GEOJSON file
+    try:
+        with open('workspace/claims.geojson', 'w') as f:
+            json.dump(claims, f, indent=4)
+        print("claims.geojson file written successfully.")
+    except Exception as e:
+        print(f"Error writing claims.json: {e}")
+
+
+# usage: Run me you coward! no parameters.
+# generates a bunch of intermediate files in workspace folder, gotta get rid of those (TODO: remove later)
+# outputs claims.geojson result
+# Expecting BITCRAFT_SPACETIME_HOST and BITCRAFT_BEARER_TOKEN from .env.local
+load_dotenv('.env.local', verbose=False)
+regions = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+tables = ["claim_state", "claim_local_state"]
+stdb_lib.get_db_dynamic_data(tables, regions) # TODO: instead of saving these to disk -> pass them into next step
+tables = ["building_state"]
+# 985246037 Town Bank
+stdb_lib.get_db_dynamic_data(tables, regions, "Where building_description_id = 985246037", "bank_list")
+# 934683282 Town Market
+stdb_lib.get_db_dynamic_data(tables, regions, "Where building_description_id = 934683282", "market_list")
+# 205715693 Waystone
+stdb_lib.get_db_dynamic_data(tables, regions, "Where building_description_id = 985246037", "waystone_list")
+# researches
+tables = ["claim_tech_state"]
+stdb_lib.get_db_dynamic_data(tables, regions)
+claims_from_rawdata()
