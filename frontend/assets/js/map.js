@@ -29,7 +29,7 @@ if (turnOnHeatmap) {
     )
 }
 
-const mapBounds = [[0, 0], [mapOptions.mapWidth, mapOptions.mapHeight]]
+const mapBounds = [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]]
 map.fitBounds(mapBounds)
 
 // Overwriting the default icon parameters
@@ -125,9 +125,27 @@ const caveLayers = [
 const allCaves = L.layerGroup(caveLayers)
 
 // Roads image overlay
-const roadsBounds = [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]]
-const roadsImage = L.imageOverlay('https://exports.bitjita.com/bitcraftmap/roads/global-16k.webp', roadsBounds)
-const roadsLayer = L.layerGroup([roadsImage])
+const roadsBounds = [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]];
+const roadsTileLayer = L.tileLayer(
+  "assets/maps/roads/{z}/{x}/{y}.webp",
+  {
+      bounds: roadsBounds,
+      minZoom: -5,
+      maxZoom: 5,
+      minNativeZoom: -5,
+      maxNativeZoom: 0,
+      tileSize: 256,
+      keepBuffer: 4,
+      updateWhenZooming: false,
+      errorTileUrl: '',
+      pane: 'overlayPane'
+  }
+);
+roadsTileLayer._isValidTile = function (coords) {
+  const tileBounds = roadsTileLayer._tileCoordsToBounds(coords)
+  return L.latLngBounds(roadsBounds).overlaps(tileBounds);
+}
+const roadsLayer = L.layerGroup([roadsTileLayer]);
 
 const genericToggle = {
     "Events": eventsLayer,
