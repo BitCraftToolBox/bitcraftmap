@@ -402,117 +402,6 @@ async function loadGeoJsonFromGist() {
     map.addLayer(waypointsLayer)
 }
 
-async function loadGeoJsonFromBackend() {
-    const query = new URLSearchParams(window.location.search)
-    const regionParameter = query.get('regionId') || '2' // default to region 2
-    const resourceParameter = query.get('resourceId') || ''
-    const enemyParameter = query.get('enemyId') || ''
-    const noColors = parseInt(query.get('noColors')) || 0
-
-    if (!resourceParameter && !enemyParameter) return
-    if (!regionParameter) return
-
-    if (!/^([1-9])(,([1-9]))*$/.test(regionParameter)) return
-    // 1: split, 2: map to number, 3: make number uniques, 4: back to array
-    const regionIds = [... new Set(regionParameter.split(',').map(Number))]
-
-    let resourceIds = []
-    if (resourceParameter) {
-        if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(resourceParameter)) return
-        resourceIds = [... new Set(resourceParameter.split(',').map(Number))]
-    }
-
-    let enemyIds = []
-    if (enemyParameter) {
-        if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(enemyParameter)) return
-        enemyIds = [... new Set(enemyParameter.split(',').map(Number))]
-    }
-    const fetchPromises = []
-    const geoJsonMeta = []
-    var trackingList = []
-
-    // Create layers for each resource and enemy
-    for (const resourceId of resourceIds) {
-        resourceLayers[resourceId] = L.layerGroup()
-        map.addLayer(resourceLayers[resourceId])
-    }
-    for (const enemyId of enemyIds) {
-        resourceLayers[enemyId] = L.layerGroup()
-        map.addLayer(resourceLayers[enemyId])
-    }
-    for (const regionId of regionIds) {
-
-        for (const resourceId of resourceIds) {
-            var color =
-                resourceIndexOverride[resourceId]?.color ||
-                tierColors[resourceIndexOverride[resourceId]?.tier] ||
-                resourceIndex[resourceId]?.color ||
-                tierColors[resourceIndex[resourceId]?.tier] ||
-                "#3388ff";
-            if (noColors == 1)
-                color = "#3388ff";
-            var tier = resourceIndexOverride[resourceId]?.tier || resourceIndex[resourceId]?.tier || 0;
-
-            var resource_name = resourceIndex[resourceId]?.name || "ID " + resourceId;
-            geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId });
-            fetchPromises.push(
-                fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
-                    .then(response => response.json())
-            )
-            trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + tier, color: color, id: resourceId })
-        }
-        for (const enemyId of enemyIds) {
-            var color =
-                //creatureIndex[enemyId]?.color ||
-                //tierColors[creatureIndex[enemyId]?.tier] ||
-                creatureIndex[enemyId]?.color ||
-                tierColors[creatureIndex[enemyId]?.tier] ||
-                "#3388ff";
-            var tier = //creatureIndex[enemyId]?.tier ||
-                creatureIndex[enemyId]?.tier || 0;
-            if (noColors == 1)
-                color = "#3388ff";
-            var enemy_name = creatureIndex[enemyId]?.name || "ID " + enemyId;
-            geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
-            fetchPromises.push(
-                fetch(appOptions.backendUrl + '/region' + regionId + '/enemy/' + enemyId)
-                    .then(response => response.json())
-            )
-            trackingList.push({ text: "Tracking: " + enemy_name + ", Tier " + creatureIndex[enemyId]?.tier, color: color, id: enemyId })
-        }
-    }
-    trackingList = filterUnique(trackingList); // filter out all the duplicates
-    for (const item of trackingList) {
-        createTrackingNotice(item.text, item.color, "tracking_container", () => {
-            const layer = resourceLayers[item.id]
-            if (map.hasLayer(layer)) {
-                map.removeLayer(layer)
-            } else {
-                map.addLayer(layer)
-            }
-        });
-    }
-
-    if (fetchPromises.length === 0) return
-    const geoJsonResults = await Promise.all(fetchPromises)
-    var idx = 0;
-    geoJsonResults.forEach(geoJson => {
-        if (geoJson.features[0].geometry.coordinates.length > 0) {
-            geoJson.features[0].properties.fillColor = geoJsonMeta[idx].fillColor || "#3388ff"; // check local resource-index for color and tier
-            if (geoJson.features[0].properties?.hasOwnProperty("tier")) // if geojson from server has tier defined, use it
-                geoJson.features[0].properties.fillColor = tierColors[geoJson.features[0].properties?.tier] || tierColors[0];
-            if (geoJson.features[0].properties?.hasOwnProperty("fillColor")) // if geojson from server has color defined, use it
-                geoJson.features[0].properties.fillColor = geoJson.features[0].properties.fillColor;
-
-            const meta = geoJsonMeta[idx]
-            const layer = resourceLayers[meta.resource]
-            paintGeoJson(geoJson, layer, false)
-        }
-        idx++;
-    })
-    map.addLayer(waypointsLayer)
-}
-
 async function loadGeoJsonFromFile(fileUrl, layer) {
     const file = await fetch(fileUrl)
     const content = await file.text()
@@ -890,7 +779,6 @@ loadGeoJsonFromFile('assets/markers/events.geojson', eventsLayer)
 // Load from gist / load from hash
 loadGeoJsonFromGist()
 loadGeoJsonFromHash()
-loadGeoJsonFromBackend()
 
 // Load only when the user is requesting it
 gridsLayer.once('add', () => loadGeoJsonFromFile('assets/markers/grids.geojson', gridsLayer))
@@ -982,59 +870,6 @@ function updateMarker(state, followPlayer) {
 }
 
 
-function connectWebSocket() {
-    const query = new URLSearchParams(window.location.search);
-    const playerIdsParam = query.get('playerId');
-
-    if (!playerIdsParam) return;
-
-    // Split by comma and trim whitespace
-    const playerIds = playerIdsParam.split(',').map(id => id.trim()).filter(id => id !== '');
-
-    // Validate each playerId
-    const validPlayerIds = playerIds.filter(id => /^[0-9]{1,32}$/.test(id));
-    if (validPlayerIds.length === 0) return;
-
-    const followPlayer = ['true', '1'].includes(query.get('followPlayer')?.toString().toLowerCase());
-
-    // Create subscription channels for all valid player IDs
-    const channels = validPlayerIds.map(id => `mobile_entity_state:${id}`);
-
-    const subscribeMsg = {
-        type: "subscribe",
-        channels: channels
-    };
-
-    const bitjitaLiveURL = "wss://live.bitjita.com";
-    const webSocket = new WebSocket(bitjitaLiveURL);
-
-    webSocket.onopen = () => {
-        console.log("WebSocket connected");
-        webSocket.send(JSON.stringify(subscribeMsg));
-        // Optional: show the tracking notice for multiple players
-        createTrackingNotice("Tracking Players: " + validPlayerIds.join(', '), "#00ff00");
-    };
-
-    webSocket.onmessage = (event) => {
-        const msg = JSON.parse(event.data);
-
-        if (msg && msg.type === "event" && msg.channel) {
-            // Extract playerId from channel name
-            const channelParts = msg.channel.split(':');
-            const channelPlayerId = channelParts[1];
-
-            // Check if this message is for one of the subscribed playerIds
-            if (validPlayerIds.includes(channelPlayerId)) {
-                updateMarker(msg.data, followPlayer);
-            }
-        }
-    };
-
-    webSocket.onerror = (error) => console.error("WebSocket error:", error);
-    webSocket.onclose = () => console.log("WebSocket closed");
-}
-
-connectWebSocket()
 
 // grab default map postion and zoom
 const defaultCenter = map.getCenter();
