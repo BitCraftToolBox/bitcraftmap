@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type L from 'leaflet';
 	import { fly, fade } from 'svelte/transition';
-	import { Layers, Crosshair, Globe, XIcon } from '@lucide/svelte';
+	import { Layers, MapPinned, Crosshair, Globe, XIcon } from '@lucide/svelte';
 	import { getSidebarState, toggleSidebarTab, closeSidebar, type SidebarTab } from '$lib/stores/sidebar-store.svelte';
 	import { getTrackingState } from '$lib/stores/tracking-store.svelte';
+	import LayersPanel from '$lib/components/layers/LayersPanel.svelte';
 	import LayerPanel from '$lib/components/layers/LayerPanel.svelte';
 	import TrackingPanel from '$lib/components/tracking/TrackingPanel.svelte';
 	import RegionSelector from '$lib/components/regions/RegionSelector.svelte';
@@ -37,6 +38,7 @@
 
 	const tabs: { id: SidebarTab; label: string; icon: typeof Layers }[] = [
 		{ id: 'layers', label: 'Layers', icon: Layers },
+		{ id: 'features', label: 'Features', icon: MapPinned },
 		{ id: 'tracking', label: 'Tracking', icon: Crosshair },
 		{ id: 'regions', label: 'Regions', icon: Globe }
 	];
@@ -88,6 +90,8 @@
 			</div>
 			<div class="p-2">
 				{#if sidebar.activeTab === 'layers'}
+					<LayersPanel />
+				{:else if sidebar.activeTab === 'features'}
 					<LayerPanel {genericToggle} {isActive} onToggle={onToggleLayer} />
 				{:else if sidebar.activeTab === 'tracking'}
 					<TrackingPanel
@@ -141,6 +145,8 @@
 
 			<div class="px-3 pb-4">
 				{#if sidebar.activeTab === 'layers'}
+					<LayersPanel />
+				{:else if sidebar.activeTab === 'features'}
 					<LayerPanel {genericToggle} {isActive} onToggle={onToggleLayer} />
 				{:else if sidebar.activeTab === 'tracking'}
 					<TrackingPanel

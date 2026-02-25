@@ -1,4 +1,4 @@
-export type SidebarTab = 'layers' | 'tracking' | 'regions';
+export type SidebarTab = 'layers' | 'features' | 'tracking' | 'regions';
 
 let activeTab = $state<SidebarTab | null>(null);
 
