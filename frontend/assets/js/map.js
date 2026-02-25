@@ -4,33 +4,23 @@
 // E = X = lgt = left to right
 
 const mapOptions = createMapOptions()
-const appOptions = createAppOptions()
 const map = L.map('map', mapOptions)
-const layerRegistry = createLayerRegistry(map)
 
-layerRegistry.createLayer(
-    "mapImageLayer",
-    "imageOverlay",
-    {
-        url: mapOptions.mapImageURL,
-        bounds: [[0, 0], [mapOptions.mapHeight * mapOptions.apothem, mapOptions.mapWidth]],
-    }
-)
-
-const turnOnHeatmap = new URLSearchParams(window.location.search).get('heatmap')
-if (turnOnHeatmap) {
-    layerRegistry.createLayer(
-        "heatmapImageLayer",
-        "imageOverlay",
-        {
-            url: "assets/maps/heatmap.png",
-            bounds: [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]],
-        }
-    )
-}
-
-const mapBounds = [[0, 0], [mapOptions.mapWidth, mapOptions.mapHeight]]
+const mapBounds = [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]]
 map.fitBounds(mapBounds)
+
+const mapImageLayer = L.imageOverlay(
+    "assets/maps/map.webp",
+    mapBounds,
+    {
+        pane: 'tilePane'
+    }
+);
+mapImageLayer._isValidTile = function (coords) {
+    const tileBounds = mapImageLayer._tileCoordsToBounds(coords)
+    return L.latLngBounds(mapBounds).overlaps(tileBounds);
+}
+mapImageLayer.addTo(map);
 
 // Overwriting the default icon parameters
 delete L.Icon.Default.prototype._getIconUrl
@@ -65,46 +55,20 @@ const caveIcons = [
     createIcon('t1'), createIcon('t2'), createIcon('t3'), createIcon('t4'), createIcon('t5'),
     createIcon('t6'), createIcon('t7'), createIcon('t8'), createIcon('t9'), createIcon('t10')
 ]
-
-const claimIcons = [
-    createIcon('claimT0'), createIcon('claimT1'), createIcon('claimT2'), createIcon('claimT3'), createIcon('claimT4'), createIcon('claimT5'),
-    createIcon('claimT6'), createIcon('claimT7'), createIcon('claimT8'), createIcon('claimT9'), createIcon('claimT10')
-]
-const eventIcon = createIcon('jack-o-lantern')
 const ruinedIcon = createIcon('ruinedCity')
 const templeIcon = createIcon('temple')
 const treeIcon = createIcon('travelerTree')
+const hexEnergyIcon = createIcon('hexite-energy')
 
-const eventsLayer = L.layerGroup()
 const treesLayer = L.layerGroup()
 const ruinedLayer = L.layerGroup()
 const templesLayer = L.layerGroup()
-const banksLayer = L.layerGroup()
-const marketsLayer = L.layerGroup()
-const waystonesLayer = L.layerGroup()
 const gridsLayer = L.layerGroup()
 const dungeonsLayer = L.layerGroup()
+const towersLayer = L.layerGroup()
 const waypointsLayer = L.layerGroup()
 
-const claimT0Layer = L.layerGroup()
-const claimT1Layer = L.layerGroup()
-const claimT2Layer = L.layerGroup()
-const claimT3Layer = L.layerGroup()
-const claimT4Layer = L.layerGroup()
-const claimT5Layer = L.layerGroup()
-const claimT6Layer = L.layerGroup()
-const claimT7Layer = L.layerGroup()
-const claimT8Layer = L.layerGroup()
-const claimT9Layer = L.layerGroup()
-const claimT10Layer = L.layerGroup()
-
-const claimLayers = [
-    claimT0Layer, claimT1Layer, claimT2Layer, claimT3Layer, claimT4Layer, claimT5Layer,
-    claimT6Layer, claimT7Layer, claimT8Layer, claimT9Layer, claimT10Layer
-]
-
-const allClaims = L.layerGroup(claimLayers)
-const searchGroup = L.layerGroup(claimLayers.concat(ruinedLayer))
+const searchGroup = L.layerGroup(ruinedLayer)
 
 const caveT1Layer = L.layerGroup()
 const caveT2Layer = L.layerGroup()
@@ -124,33 +88,15 @@ const caveLayers = [
 
 const allCaves = L.layerGroup(caveLayers)
 
-// Roads image overlay
-const roadsBounds = [[0, 0], [mapOptions.mapHeight, mapOptions.mapWidth]]
-const roadsImage = L.imageOverlay('https://exports.bitjita.com/bitcraftmap/roads/global-16k.webp', roadsBounds)
-const roadsLayer = L.layerGroup([roadsImage])
 
 const genericToggle = {
-    "Events": eventsLayer,
     "Wonders": treesLayer,
     "Temples": templesLayer,
     "Ruined Cities": ruinedLayer,
-    "Banks": banksLayer,
-    "Markets": marketsLayer,
-    "Waystones": waystonesLayer,
     "Grids": gridsLayer,
     "Dungeons": dungeonsLayer,
+    "Towers": towersLayer,
     "Waypoints": waypointsLayer,
-    "Claims": allClaims,
-    "Claims T1": claimT1Layer,
-    "Claims T2": claimT2Layer,
-    "Claims T3": claimT3Layer,
-    "Claims T4": claimT4Layer,
-    "Claims T5": claimT5Layer,
-    "Claims T6": claimT6Layer,
-    "Claims T7": claimT7Layer,
-    "Claims T8": claimT8Layer,
-    "Claims T9": claimT9Layer,
-    "Claims T10": claimT10Layer,
     "Caves": allCaves,
     "Caves T1": caveT1Layer,
     "Caves T2": caveT2Layer,
@@ -159,19 +105,16 @@ const genericToggle = {
     "Caves T5": caveT5Layer,
     "Caves T6": caveT6Layer,
     "Caves T7": caveT7Layer,
-    "Caves T8": caveT8Layer,
-    "Roads": roadsLayer
+    "Caves T8": caveT8Layer
 }
 
 const resourceLayers = {}
 
 const allLayers = {
-    eventsLayer, treesLayer, templesLayer, ruinedLayer, banksLayer, marketsLayer, waystonesLayer, waypointsLayer,
-    claimT0Layer, claimT1Layer, claimT2Layer, claimT3Layer, claimT4Layer, claimT5Layer,
-    claimT6Layer, claimT7Layer, claimT8Layer, claimT9Layer, claimT10Layer,
+    treesLayer, templesLayer, ruinedLayer, waypointsLayer,
     caveT1Layer, caveT2Layer, caveT3Layer, caveT4Layer, caveT5Layer,
     caveT6Layer, caveT7Layer, caveT8Layer, caveT9Layer, caveT10Layer,
-    roadsLayer, dungeonsLayer
+    dungeonsLayer, towersLayer
 }
 
 
@@ -211,7 +154,7 @@ async function loadTreesGeoJson() {
 
             return L.marker(
                 latlng,
-                { icon: treeIcon }
+                { icon: feature.properties.type === 'tree' ? treeIcon : hexEnergyIcon }
             )
                 .bindPopup(popupText)
                 .addTo(treesLayer)
@@ -261,46 +204,7 @@ async function loadRuinedGeoJson() {
         }
     })
 }
-async function loadClaimsGeoJson() {
-    const file = await fetch('assets/markers/claims.geojson')
-    const geojsonData = await file.json()
-    L.geoJSON(geojsonData, {
-        pointToLayer: function (feature, latlng) {
 
-            const coords = readableCoordinates(latlng)
-            const name = '<a href="' + 'https://bitjita.com/claims/' + feature.properties.entityId + '" target="_blank">' + feature.properties.name + '</a>'
-            const tier = ' (T' + feature.properties.tier + ')' + '<br>'
-            const loc = 'N ' + coords[0] + ' E ' + coords[1] + '<br>'
-            const has_bank = 'Bank : ' + (feature.properties.has_bank ? 'Yes' : 'No') + '<br>'
-            const has_market = 'Market : ' + (feature.properties.has_market ? 'Yes' : 'No') + '<br>'
-            const has_Waystone = 'Waystone : ' + (feature.properties.has_waystone ? 'Yes' : 'No')
-            const popupText = name + tier + loc + has_bank + has_market + has_Waystone
-
-            const marker = L.marker(
-                latlng,
-                {
-                    title: feature.properties.name + ' N ' + coords[0] + ' E ' + coords[1],
-                    icon: claimIcons[feature.properties.tier]
-                }
-            )
-
-            marker.bindPopup(popupText)
-            marker.addTo(claimLayers[feature.properties.tier])
-
-            if (feature.properties.has_bank) {
-                marker.addTo(banksLayer)
-            }
-            if (feature.properties.has_market) {
-                marker.addTo(marketsLayer)
-            }
-            if (feature.properties.has_waystone) {
-                marker.addTo(waystonesLayer)
-            }
-
-            return marker
-        }
-    })
-}
 async function loadCavesGeoJson() {
     const file = await fetch('assets/markers/caves.geojson')
     const geojsonData = await file.json()
@@ -321,6 +225,22 @@ async function loadCavesGeoJson() {
         }
     })
 }
+
+async function loadDungeonsGeoJson() {
+    const file = await fetch('assets/markers/dungeons.geojson')
+    const geojsonData = await file.json()
+    L.geoJSON(geojsonData, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(
+                latlng,
+                { icon: createIcon(feature.properties.iconName, feature.properties.iconSize) }
+            )
+                .bindPopup(feature.properties.popupText)
+                .addTo(dungeonsLayer)
+        }
+    });
+}
+
 // -------------------------------------- //
 // This is getting replaced
 // -------------------------------------- //
@@ -345,214 +265,16 @@ function loadGeoJsonFromHash() {
     map.addLayer(waypointsLayer)
 }
 
-async function getLatestGistRaw(gistId) {
-    const baseApi = 'https://api.github.com/gists/'
-    if (!/^[a-fA-F0-9]{32}$/.test(gistId)) throw new Error('gistId is invalid')
-    let lastGistCommitVersion
-    try {
-        const gistCommits = await fetch(baseApi + gistId + '/commits')
-        const gistCommitsJson = await gistCommits.json()
-        if (!Array.isArray(gistCommitsJson) || gistCommitsJson.length === 0) {
-            throw new Error('No commits found for this gist')
-        }
-        lastGistCommitVersion = gistCommitsJson[0].version
-    } catch (error) { console.log(error) }
-    let lastGistRawUrl
-    try {
-        const gistInfo = await fetch(baseApi + gistId + '/' + lastGistCommitVersion)
-        const gistInfoJson = await gistInfo.json()
-        const filesNames = gistInfoJson.files || {}
-        if (filesNames.length === 0) {
-            throw new Error('No files found in this gist')
-        }
-        lastGistRawUrl = Object.values(filesNames)[0].raw_url
-    } catch (error) { console.log(error) }
-    let gistContent
-    try {
-        const gistContentRaw = await fetch(lastGistRawUrl)
-        gistContent = await gistContentRaw.text()
-    } catch (error) { console.log(error) }
-    return gistContent
-}
-
-async function loadGeoJsonFromGist() {
-    const gistIdFromUrl = new URLSearchParams(window.location.search).get('gistId')
-    if (!gistIdFromUrl) return
-    const gistContent = await getLatestGistRaw(gistIdFromUrl)
-    const geoJson = validateGeoJson(gistContent)
-    paintGeoJson(geoJson, waypointsLayer)
-    map.addLayer(waypointsLayer)
-}
-
-async function loadGeoJsonFromBackend() {
-    const query = new URLSearchParams(window.location.search)
-    const regionParameter = query.get('regionId') || '2' // default to region 2
-    const resourceParameter = query.get('resourceId') || ''
-    const enemyParameter = query.get('enemyId') || ''
-    const noColors = parseInt(query.get('noColors')) || 0
-
-    if (!resourceParameter && !enemyParameter) return
-    if (!regionParameter) return
-
-    if (!/^([1-9])(,([1-9]))*$/.test(regionParameter)) return
-    // 1: split, 2: map to number, 3: make number uniques, 4: back to array
-    const regionIds = [... new Set(regionParameter.split(',').map(Number))]
-
-    let resourceIds = []
-    if (resourceParameter) {
-        if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(resourceParameter)) return
-        resourceIds = [... new Set(resourceParameter.split(',').map(Number))]
-    }
-
-    let enemyIds = []
-    if (enemyParameter) {
-        if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(enemyParameter)) return
-        enemyIds = [... new Set(enemyParameter.split(',').map(Number))]
-    }
-    const fetchPromises = []
-    const geoJsonMeta = []
-    var trackingList = []
-
-    // Create layers for each resource and enemy
-    for (const resourceId of resourceIds) {
-        resourceLayers[resourceId] = L.layerGroup()
-        map.addLayer(resourceLayers[resourceId])
-    }
-    for (const enemyId of enemyIds) {
-        resourceLayers[enemyId] = L.layerGroup()
-        map.addLayer(resourceLayers[enemyId])
-    }
-    for (const regionId of regionIds) {
-
-        for (const resourceId of resourceIds) {
-            var color =
-                resourceIndexOverride[resourceId]?.color ||
-                tierColors[resourceIndexOverride[resourceId]?.tier] ||
-                resourceIndex[resourceId]?.color ||
-                tierColors[resourceIndex[resourceId]?.tier] ||
-                "#3388ff";
-            if (noColors == 1)
-                color = "#3388ff";
-            var tier = resourceIndexOverride[resourceId]?.tier || resourceIndex[resourceId]?.tier || 0;
-
-            var resource_name = resourceIndex[resourceId]?.name || "ID " + resourceId;
-            geoJsonMeta.push({ region: regionId, fillColor: color, resource: resourceId });
-            fetchPromises.push(
-                fetch('https://bcmap-api.bitjita.com/region' + regionId + '/resource/' + resourceId)
-                    .then(response => response.json())
-            )
-            trackingList.push({ text: "Tracking: " + resource_name + ", Tier " + tier, color: color, id: resourceId })
-        }
-        for (const enemyId of enemyIds) {
-            var color =
-                //creatureIndex[enemyId]?.color ||
-                //tierColors[creatureIndex[enemyId]?.tier] ||
-                creatureIndex[enemyId]?.color ||
-                tierColors[creatureIndex[enemyId]?.tier] ||
-                "#3388ff";
-            var tier = //creatureIndex[enemyId]?.tier ||
-                creatureIndex[enemyId]?.tier || 0;
-            if (noColors == 1)
-                color = "#3388ff";
-            var enemy_name = creatureIndex[enemyId]?.name || "ID " + enemyId;
-            geoJsonMeta.push({ region: regionId, fillColor: color, resource: enemyId });
-            fetchPromises.push(
-                fetch(appOptions.backendUrl + '/region' + regionId + '/enemy/' + enemyId)
-                    .then(response => response.json())
-            )
-            trackingList.push({ text: "Tracking: " + enemy_name + ", Tier " + creatureIndex[enemyId]?.tier, color: color, id: enemyId })
-        }
-    }
-    trackingList = filterUnique(trackingList); // filter out all the duplicates
-    for (const item of trackingList) {
-        createTrackingNotice(item.text, item.color, "tracking_container", () => {
-            const layer = resourceLayers[item.id]
-            if (map.hasLayer(layer)) {
-                map.removeLayer(layer)
-            } else {
-                map.addLayer(layer)
-            }
-        });
-    }
-
-    if (fetchPromises.length === 0) return
-    const geoJsonResults = await Promise.all(fetchPromises)
-    var idx = 0;
-    geoJsonResults.forEach(geoJson => {
-        if (geoJson.features[0].geometry.coordinates.length > 0) {
-            geoJson.features[0].properties.fillColor = geoJsonMeta[idx].fillColor || "#3388ff"; // check local resource-index for color and tier
-            if (geoJson.features[0].properties?.hasOwnProperty("tier")) // if geojson from server has tier defined, use it
-                geoJson.features[0].properties.fillColor = tierColors[geoJson.features[0].properties?.tier] || tierColors[0];
-            if (geoJson.features[0].properties?.hasOwnProperty("fillColor")) // if geojson from server has color defined, use it
-                geoJson.features[0].properties.fillColor = geoJson.features[0].properties.fillColor;
-
-            const meta = geoJsonMeta[idx]
-            const layer = resourceLayers[meta.resource]
-            paintGeoJson(geoJson, layer, false)
-        }
-        idx++;
-    })
-    map.addLayer(waypointsLayer)
-}
-
 async function loadGeoJsonFromFile(fileUrl, layer) {
     const file = await fetch(fileUrl)
     const content = await file.text()
     const geoJson = validateGeoJson(content)
-    paintGeoJson(geoJson, layer)
-}
-
-
-function filterUnique(array) {
-    const hash = {};
-    const result = [];
-
-    for (let item of array) {
-        // Serialize the item
-        const serialized = JSON.stringify(item);
-        if (!hash.hasOwnProperty(serialized)) {
-            hash[serialized] = true;        // Mark as seen
-            result.push(item);              // Add original item
-        }
+    if (Array.isArray(geoJson)) {
+        geoJson.map(child => paintGeoJson(child, layer))
+    } else {
+        paintGeoJson(geoJson, layer)
     }
-
-    return result;
 }
-
-function createTrackingNotice(displayText = "[Test Tracking Panel]", bgColor = "#ffffff", parentDivId = "tracking_container", toggleCallback = null) {
-    // Purspose: Create a small text panel with info about which resources are being tracked
-    // Find the parent container by ID
-    const parentDiv = document.getElementById(parentDivId);
-
-    // If the parent container doesn't exist, optionally create it or throw an error
-    if (!parentDiv) {
-        console.error(`Parent div with id "${parentDivId}" not found.`);
-        return;
-    }
-
-    // Create the new div element
-    const newDiv = document.createElement('div');
-
-    // Set its text content
-    newDiv.id = "tracking_item";
-
-    // Apply background color TODO: check all bg color and change font color if dark
-    newDiv.style.backgroundColor = bgColor;
-    if (toggleCallback) {
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = true;
-        checkbox.style.marginRight = '5px';
-        checkbox.addEventListener('change', toggleCallback);
-        newDiv.appendChild(checkbox);
-    }
-
-    newDiv.appendChild(document.createTextNode(displayText));
-
-    // Append the new div to the parent container
-    parentDiv.appendChild(newDiv);
-}
-
 
 function paintGeoJson(geoJson, layer, pan = true) {
     // Handle flyTo/zoomTo/turnLayerOn/turnLayerOff for features with null geometry (Leaflet won't process them)
@@ -714,7 +436,6 @@ function paintGeoJson(geoJson, layer, pan = true) {
 }
 
 // Default layer to show on map opening
-eventsLayer.addTo(map)
 treesLayer.addTo(map)
 templesLayer.addTo(map)
 ruinedLayer.addTo(map)
@@ -784,22 +505,30 @@ function groupLayersControl(control, groups) {
     }
 }
 
-function validateGeoJson(untrustedString) {
-
-    if (untrustedString.constructor.name !== 'String') {
-        throw new Error('untrustedString be a string')
-    }
-
-    let decodedString
-    try { decodedString = decodeURIComponent(untrustedString) }
-    catch { throw new Error('Bad URI encoding') }
-
+function validateGeoJson(untrustedString, unwrapped = false) {
     let jsonFormString
-    try { jsonFormString = JSON.parse(decodedString) }
-    catch { throw new Error('Invalid JSON') }
+    if (!unwrapped) {
+        if (untrustedString.constructor.name !== 'String') {
+            throw new Error('untrustedString be a string')
+        }
 
+        let decodedString
+        try {
+            decodedString = decodeURIComponent(untrustedString)
+        } catch {
+            throw new Error('Bad URI encoding')
+        }
+
+        try {
+            jsonFormString = JSON.parse(decodedString)
+        } catch {
+            throw new Error('Invalid JSON')
+        }
+    } else {
+        jsonFormString = untrustedString
+    }
     if (Array.isArray(jsonFormString)) {
-        throw new Error('geoJson must not be an array')
+        return jsonFormString.map((geoJson) => validateGeoJson(geoJson, true))
     }
 
     if (jsonFormString.type !== 'FeatureCollection') {
@@ -864,34 +593,19 @@ loadTreesGeoJson()
 loadTemplesGeoJson()
 loadRuinedGeoJson()
 loadCavesGeoJson()
-loadClaimsGeoJson()
+loadDungeonsGeoJson()
+loadGeoJsonFromFile('assets/markers/towers.geojson', towersLayer)
 
-loadGeoJsonFromFile('assets/markers/dungeons.geojson', dungeonsLayer)
-loadGeoJsonFromFile('assets/markers/events.geojson', eventsLayer)
-
-// Load from gist / load from hash
-loadGeoJsonFromGist()
+// load from hash
 loadGeoJsonFromHash()
-loadGeoJsonFromBackend()
 
 // Load only when the user is requesting it
 gridsLayer.once('add', () => loadGeoJsonFromFile('assets/markers/grids.geojson', gridsLayer))
 
-/* removing this for now, seems unnecessary (spread markers that are too close together)
-// Note : don't forget to add back <script src="assets/js/spider.js"></script> if you want this
-map.enableAutoSpiderfy({
-    precision: 6,
-    footSeparation: 32,
-    legLength: 1,
-    keepSpiderfied: true,
-    legOptions: { color: '#fff', weight: 0 }
-})
-*/
 
 const GROUPS = {
-    'Points of Interest': ['Events', 'Wonders', 'Temples', 'Ruined Cities', 'Banks', 'Markets', 'Waystones', 'Grids', 'Dungeons', 'Waypoints'],
-    'Claims': ['Claims T1', 'Claims T2', 'Claims T3', 'Claims T4', 'Claims T5', 'Claims T6', 'Claims T7', 'Claims T8', 'Claims T9', 'Claims T10'],
-    'Caves': ['Caves T1', 'Caves T2', 'Caves T3', 'Caves T4', 'Caves T5', 'Caves T6', 'Caves T7', 'Caves T8']
+    'Points of Interest': ['Wonders', 'Temples', 'Ruined Cities', 'Grids', 'Dungeons', 'Waypoints'],
+    'Caves': ['Caves T1', 'Caves T2', 'Caves T3', 'Caves T4', 'Caves T5', 'Caves T6', 'Caves T7', 'Caves T8'],
 }
 
 const _origUpdate = controlLayer._update.bind(controlLayer)
@@ -962,61 +676,6 @@ function updateMarker(state, followPlayer) {
         map.flyTo(playerlatLng, map.getZoom())
     }
 }
-
-
-function connectWebSocket() {
-    const query = new URLSearchParams(window.location.search);
-    const playerIdsParam = query.get('playerId');
-
-    if (!playerIdsParam) return;
-
-    // Split by comma and trim whitespace
-    const playerIds = playerIdsParam.split(',').map(id => id.trim()).filter(id => id !== '');
-
-    // Validate each playerId
-    const validPlayerIds = playerIds.filter(id => /^[0-9]{1,32}$/.test(id));
-    if (validPlayerIds.length === 0) return;
-
-    const followPlayer = ['true', '1'].includes(query.get('followPlayer')?.toString().toLowerCase());
-
-    // Create subscription channels for all valid player IDs
-    const channels = validPlayerIds.map(id => `mobile_entity_state:${id}`);
-
-    const subscribeMsg = {
-        type: "subscribe",
-        channels: channels
-    };
-
-    const bitjitaLiveURL = "wss://live.bitjita.com";
-    const webSocket = new WebSocket(bitjitaLiveURL);
-
-    webSocket.onopen = () => {
-        console.log("WebSocket connected");
-        webSocket.send(JSON.stringify(subscribeMsg));
-        // Optional: show the tracking notice for multiple players
-        createTrackingNotice("Tracking Players: " + validPlayerIds.join(', '), "#00ff00");
-    };
-
-    webSocket.onmessage = (event) => {
-        const msg = JSON.parse(event.data);
-
-        if (msg && msg.type === "event" && msg.channel) {
-            // Extract playerId from channel name
-            const channelParts = msg.channel.split(':');
-            const channelPlayerId = channelParts[1];
-
-            // Check if this message is for one of the subscribed playerIds
-            if (validPlayerIds.includes(channelPlayerId)) {
-                updateMarker(msg.data, followPlayer);
-            }
-        }
-    };
-
-    webSocket.onerror = (error) => console.error("WebSocket error:", error);
-    webSocket.onclose = () => console.log("WebSocket closed");
-}
-
-connectWebSocket()
 
 // grab default map postion and zoom
 const defaultCenter = map.getCenter();

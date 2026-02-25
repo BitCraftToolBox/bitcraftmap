@@ -4,15 +4,13 @@ function createMapOptions() {
 
     // Bitcraft specific options
     const apothem = 2 / Math.sqrt(3)
-    const mapWidth = 23040
-    const mapHeight = 23040
-    const mapImageURL = 'assets/maps/map.webp'
+    const mapWidth = 38400
+    const mapHeight = 38400
 
     return {
         apothem,
         mapWidth,
         mapHeight,
-        mapImageURL,
 
         // Rendering
         preferCanvas: true,
