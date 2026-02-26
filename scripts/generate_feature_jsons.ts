@@ -32,7 +32,7 @@ interface OutputData {
 }
 
 const categories = {
-    'Wonder': [433549604],
+    'Wonder': [433549604, 421789207],
     'Temple': [489406613, 1752479333, 1662809355, 2034914963, 1008368350],
     'Cave': [1845065396, 280863630, 696858550, 1440765680, 312420794, 1875067311, 253216585, 1477951340],
     'Dungeon': [1785852446, 846734170, 208697589, 1084069097],
@@ -197,9 +197,12 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
     const claimName = formatTemplateArgs(claimState.name);
     switch (localState.buildingDescriptionId) {
         case 433549604: // Tree of Wisdom
+        case 421789207: // Hexite Deposit
             outputs.trees.push(makeFeature({
                 name: claimName,
-                type: 'tree'
+                type: localState.buildingDescriptionId === 421789207 ? 'hexite' :
+                        localState.buildingDescriptionId === 433549604 ? 'tree'
+                        : 'unreachable'
             }, localState.location));
             break;
         // Temples
@@ -429,10 +432,10 @@ function assignTerritoryColors(territories: WatchtowerTerritory[], palette: stri
 }
 
 async function main() {
-    //let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
-    //const data = await fetchDataFromRegions(regions);
-    //fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
-    const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver);
+    let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+    const data = await fetchDataFromRegions(regions);
+    fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
+    //const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver);
 
     const localStateMap = new Map<bigint, ClaimLocalState>();
     data.claimLocalState.forEach(state => {
