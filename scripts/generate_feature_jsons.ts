@@ -1,4 +1,11 @@
-import {ClaimLocalState, ClaimState, DbConnection, EmpireChunkState, EmpireState} from './bindings/src'
+import {
+    ClaimLocalState,
+    ClaimState,
+    DbConnection,
+    EmpireChunkState,
+    EmpireState,
+    WorldRegionNameState
+} from './bindings/src'
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -10,7 +17,8 @@ interface RegionData {
     claimState: ClaimState[],
     claimLocalState: ClaimLocalState[],
     empireChunkState: EmpireChunkState[],
-    empireState: EmpireState[]
+    empireState: EmpireState[],
+    worldRegionNameState: WorldRegionNameState[]
 }
 
 interface OutputData {
@@ -19,7 +27,8 @@ interface OutputData {
     trees: any[],
     ruined: any[],
     temples: any[],
-    dungeons: any[]
+    dungeons: any[],
+    grids: any[]
 }
 
 const categories = {
@@ -62,9 +71,10 @@ const onConnect = (resolve: (_: RegionData) => void, first: boolean) =>
         const subs = [
             'SELECT * FROM claim_state',
             'SELECT * FROM claim_local_state',
+            'SELECT * FROM world_region_name_state',
             ...(first ? [
                 'SELECT * FROM empire_chunk_state',
-                'Select * FROM empire_state'
+                'SELECT * FROM empire_state',
             ] : [])
         ];
         conn.subscriptionBuilder().onApplied(() => {
@@ -72,7 +82,8 @@ const onConnect = (resolve: (_: RegionData) => void, first: boolean) =>
                 claimState: Array.from(conn.db.claimState.iter()),
                 claimLocalState: Array.from(conn.db.claimLocalState.iter()),
                 empireChunkState: Array.from(conn.db.empireChunkState.iter()),
-                empireState: Array.from(conn.db.empireState.iter())
+                empireState: Array.from(conn.db.empireState.iter()),
+                worldRegionNameState: Array.from(conn.db.worldRegionNameState.iter())
             };
             conn.disconnect();
             resolve(data);
@@ -84,7 +95,8 @@ async function fetchDataFromRegions(regions: string[]) {
         claimState: [],
         claimLocalState: [],
         empireChunkState: [],
-        empireState: []
+        empireState: [],
+        worldRegionNameState: []
     }
 
     let first = true;
@@ -107,6 +119,12 @@ async function fetchDataFromRegions(regions: string[]) {
         data.claimLocalState.push(...res.claimLocalState);
         data.empireChunkState.push(...res.empireChunkState);
         data.empireState.push(...res.empireState);
+        const nameState = res.worldRegionNameState[0];
+        data.worldRegionNameState.push({
+            id: Number(region.substring('bitcraft-live-'.length)),
+            playerFacingName: nameState.playerFacingName,
+            moduleNamePrefix: nameState.moduleNamePrefix
+        });
         first = false;
     }
 
@@ -433,7 +451,8 @@ async function main() {
         ruined: [],
         temples: [],
         dungeons: [],
-        towers: []
+        towers: [],
+        grids: []
     }
 
     // For each claim, add features
@@ -442,7 +461,84 @@ async function main() {
         addFeature(outputs, claimState, localState, territories);
     });
 
-    function write(name: string, features: any[]) {
+    // --- Grids output ---
+    // Use worldRegionNameState from the first region
+    const regionNames = (data.worldRegionNameState || []).map(r => ({ id: r.id, name: r.playerFacingName }));
+    // World/region grid parameters
+    const regionCount = 5;
+    const regionSizeChunks = 80;
+    const chunkSize = 96;
+    // Center 3x3 regions: rx, rz in 1..3 (0-based)
+    const minRegion = 1, maxRegion = 3;
+    const minChunk = minRegion * regionSizeChunks;
+    const maxChunk = (maxRegion + 1) * regionSizeChunks;
+    const gridLines: number[][][] = [];
+    // Horizontal chunk lines
+    for (let z = minChunk + 1; z < maxChunk; ++z) {
+        gridLines.push([
+            [minChunk * chunkSize, z * chunkSize],
+            [maxChunk * chunkSize, z * chunkSize]
+        ]);
+    }
+    // Vertical chunk lines
+    for (let x = minChunk + 1; x < maxChunk; ++x) {
+        gridLines.push([
+            [x * chunkSize, minChunk * chunkSize],
+            [x * chunkSize, maxChunk * chunkSize]
+        ]);
+    }
+    // Add grid lines as a MultiLineString feature
+    outputs.grids = [];
+    outputs.grids.push({
+        type: "Feature",
+        properties: { noPan: 1, color: "#737070", weight: 0.4, opacity: 1 },
+        geometry: { type: "MultiLineString", coordinates: gridLines }
+    });
+    // Add region border lines (thicker)
+    const regionBorders: number[][][] = [];
+    // Horizontal region borders
+    for (let rz = minRegion; rz <= maxRegion + 1; ++rz) {
+        const z = rz * regionSizeChunks * chunkSize;
+        regionBorders.push([
+            [minChunk * chunkSize, z],
+            [maxChunk * chunkSize, z]
+        ]);
+    }
+    // Vertical region borders
+    for (let rx = minRegion; rx <= maxRegion + 1; ++rx) {
+        const x = rx * regionSizeChunks * chunkSize;
+        regionBorders.push([
+            [x, minChunk * chunkSize],
+            [x, maxChunk * chunkSize]
+        ]);
+    }
+    outputs.grids.push({
+        type: "Feature",
+        properties: { noPan: 1, color: "#000000", weight: 2, opacity: 1 },
+        geometry: { type: "MultiLineString", coordinates: regionBorders }
+    });
+    // Add tooltips for the 9 central regions (3x3 in the center)
+    for (let rz = minRegion; rz <= maxRegion; ++rz) {
+        for (let rx = minRegion; rx <= maxRegion; ++rx) {
+            const regionIdx = rz * regionCount + rx + 1;
+            const region = regionNames.find(r => r.id === regionIdx);
+            if (region) {
+                outputs.grids.push({
+                    type: "Feature",
+                    properties: { type: "tooltip", noPan: 1, popupText: region.name },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [
+                            (rx * regionSizeChunks + regionSizeChunks / 2) * chunkSize,
+                            (rz * regionSizeChunks + regionSizeChunks / 2) * chunkSize
+                        ]
+                    }
+                });
+            }
+        }
+    }
+
+    function write(name: string, features: any) {
         fs.writeFileSync(path.join(data_dir, name + '.geojson'), JSON.stringify(features));
     }
     write('caves', outputs.caves);
@@ -451,6 +547,7 @@ async function main() {
     write('temples', outputs.temples);
     write('dungeons', outputs.dungeons);
     write('towers', outputs.towers);
+    write('grids', { type: "FeatureCollection", features: outputs.grids });
 }
 
 main().then(() => {
