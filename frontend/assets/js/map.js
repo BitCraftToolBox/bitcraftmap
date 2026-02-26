@@ -59,6 +59,7 @@ const ruinedIcon = createIcon('ruinedCity')
 const templeIcon = createIcon('temple')
 const treeIcon = createIcon('travelerTree')
 const hexEnergyIcon = createIcon('hexite-energy')
+const towerIcon = createIcon('tower', [16, 32])
 
 const treesLayer = L.layerGroup()
 const ruinedLayer = L.layerGroup()
@@ -240,6 +241,43 @@ async function loadDungeonsGeoJson() {
         }
     });
 }
+
+
+async function loadTowersGeoJson() {
+    const file = await fetch('assets/markers/towers.geojson')
+    const geojsonData = await file.json()
+    L.geoJSON(geojsonData, {
+        style: function(feature) {
+            if (feature.geometry.type === 'MultiPolygon') {
+                return {
+                    color: feature.properties.color || "#000000",
+                    weight: feature.properties.weight || 1,
+                    fillColor: feature.properties.fillColor,
+                    fillOpacity: feature.properties.fillOpacity || 0.2
+                };
+            }
+        },
+        pointToLayer: function(feature, latlng) {
+            if (feature.geometry.type === 'Point') {
+                return L.marker(latlng, { icon: towerIcon });
+            }
+            return null;
+        },
+        onEachFeature: function(feature, layer) {
+            if (feature.geometry.type === 'MultiPolygon' && feature.properties.pointCoords && feature.properties.popupText) {
+                layer.on('click', function(e) {
+                    const popup = L.popup().setContent(feature.properties.popupText);
+                    popup.setLatLng(feature.properties.pointCoords);
+                    layer._map.openPopup(popup);
+                });
+            } else if (feature.properties.popupText) {
+                layer.bindPopup(feature.properties.popupText);
+            }
+        }
+    }).addTo(towersLayer);
+}
+
+
 
 // -------------------------------------- //
 // This is getting replaced
@@ -594,7 +632,7 @@ loadTemplesGeoJson()
 loadRuinedGeoJson()
 loadCavesGeoJson()
 loadDungeonsGeoJson()
-loadGeoJsonFromFile('assets/markers/towers.geojson', towersLayer)
+loadTowersGeoJson()
 
 // load from hash
 loadGeoJsonFromHash()
@@ -700,7 +738,8 @@ const savedZoom = localStorage.getItem('mapZoom');
 
 if (savedCenter && savedZoom && !hasHashWithFlyToOrZoom) { // set the state
     const centerCoords = JSON.parse(savedCenter);
-    const zoomLevel = parseFloat(savedZoom, 10);
+    const zoomLevel = parseFloat(savedZoom);
+    console.log("Restoring map view on load:", centerCoords, zoomLevel);
     map.setView(centerCoords, zoomLevel);
 }
 

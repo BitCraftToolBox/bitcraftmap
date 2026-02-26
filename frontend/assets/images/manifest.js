@@ -50,5 +50,6 @@ const iconsManifest = {
     "iconSmithing": "assets/images/wiki/iconSmithing.svg",
     "iconTailor": "assets/images/wiki/iconTailor.svg",
     "jack-o-lantern": "assets/images/other/jack-o-lantern.png",
-    "hexite-energy": "assets/images/other/hexite_gem.png"
+    "hexite-energy": "assets/images/other/hexite_gem.png",
+    "tower": "assets/images/other/tower.webp"
 };

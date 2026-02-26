@@ -1,4 +1,4 @@
-import {ClaimLocalState, ClaimState, DbConnection, EmpireChunkState} from './bindings/src'
+import {ClaimLocalState, ClaimState, DbConnection, EmpireChunkState, EmpireState} from './bindings/src'
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -9,7 +9,8 @@ const data_dir = process.env.DATA_DIR || "../frontend/assets/markers/";
 interface RegionData {
     claimState: ClaimState[],
     claimLocalState: ClaimLocalState[],
-    empireChunkState: EmpireChunkState[]
+    empireChunkState: EmpireChunkState[],
+    empireState: EmpireState[]
 }
 
 interface OutputData {
@@ -33,9 +34,13 @@ const categories = {
 
 // Color palette: visually distinct colors
 const COLOR_PALETTE = [
-    '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6',
-    '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3',
-    '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000',
+    "#0000ff",
+    "#ff0000",
+    "#00ff00",
+    "#c71585",
+    "#00ffff",
+    "#808000",
+    "#1e90ff"
 ];
 
 function formatTemplateArgs(value: string) {
@@ -52,18 +57,22 @@ function formatTemplateArgs(value: string) {
     });
 }
 
-const onConnect = (resolve: (_: RegionData) => void) =>
+const onConnect = (resolve: (_: RegionData) => void, first: boolean) =>
     (conn: DbConnection) => {
         const subs = [
             'SELECT * FROM claim_state',
             'SELECT * FROM claim_local_state',
-            'SELECT * FROM empire_chunk_state'
+            ...(first ? [
+                'SELECT * FROM empire_chunk_state',
+                'Select * FROM empire_state'
+            ] : [])
         ];
         conn.subscriptionBuilder().onApplied(() => {
             const data: RegionData = {
                 claimState: Array.from(conn.db.claimState.iter()),
                 claimLocalState: Array.from(conn.db.claimLocalState.iter()),
-                empireChunkState: Array.from(conn.db.empireChunkState.iter())
+                empireChunkState: Array.from(conn.db.empireChunkState.iter()),
+                empireState: Array.from(conn.db.empireState.iter())
             };
             conn.disconnect();
             resolve(data);
@@ -74,16 +83,18 @@ async function fetchDataFromRegions(regions: string[]) {
     const data: RegionData = {
         claimState: [],
         claimLocalState: [],
-        empireChunkState: []
+        empireChunkState: [],
+        empireState: []
     }
 
+    let first = true;
     for (const region of regions) {
         const res = await new Promise<RegionData>((resolve, reject) => {
             DbConnection.builder()
                 .withUri('wss://' + process.env.BITCRAFT_SPACETIME_HOST)
                 .withModuleName(region)
                 .withToken(process.env.BITCRAFT_BEARER_TOKEN)
-                .onConnect(onConnect(resolve))
+                .onConnect(onConnect(resolve, first))
                 .onConnectError((_, err) => {
                     if (!err['wasClean']) {
                         reject(err);
@@ -95,6 +106,8 @@ async function fetchDataFromRegions(regions: string[]) {
         data.claimState.push(...res.claimState);
         data.claimLocalState.push(...res.claimLocalState);
         data.empireChunkState.push(...res.empireChunkState);
+        data.empireState.push(...res.empireState);
+        first = false;
     }
 
     return data;
@@ -111,11 +124,16 @@ function makeFeature(props: any, loc: { x: number, z: number }) {
     }
 }
 
-function makeTower(claimState: ClaimState, localState: ClaimLocalState, chunkIndices: bigint[], watchtowerGroups, groupColorMap) {
+function makeTower(claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[]) {
+    // Find the territory for this watchtower
+    const territory = territories.find(t => t.entityId === claimState.ownerBuildingEntityId);
     const props = {
-        popupText: formatTemplateArgs(claimState.name),
+        popupText: formatTemplateArgs(claimState.name)
+            + '<br>' + (territory ? `Chunks: ${territory.totalChunks}` : '')
+            + '<br>' + (territory ? `Owner: ${territory.ownerName}` : ''),
+        chunkCount: territory?.totalChunks,
     };
-    if (!chunkIndices || chunkIndices.length === 0) {
+    if (!territory || !territory.chunkIndices || territory.chunkIndices.length === 0) {
         return {
             type: "FeatureCollection",
             features: [
@@ -123,21 +141,11 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, chunkInd
             ]
         };
     }
-    // decompose chunk indices into chunk coordinates
-    const chunkCoords = chunkIndices.map(idx => {
-        const n = BigInt(idx);
-        const base = n - BigInt(1);
-        const chunk_z = Number(base / BigInt(1000));
-        const chunk_x = Number(base % BigInt(1000));
-        return {chunk_x, chunk_z};
-    });
     // For each chunk, create a rectangle polygon in tile coordinates
-    const polygons: number[][][] = chunkCoords.map(({chunk_x, chunk_z}) => {
-        const x0 = chunk_x * 96;
-        const x1 = (chunk_x + 1) * 96;
-        const z0 = chunk_z * 96;
-        const z1 = (chunk_z + 1) * 96;
-        // Rectangle corners, closed
+    const polygons: number[][][] = territory.chunkIndices.map(idx => {
+        const { chunk_x, chunk_z } = chunkIndexToXZ(idx);
+        const { x: x0, z: z0 } = chunkXZToTileCoords(chunk_x, chunk_z);
+        const { x: x1, z: z1 } = chunkXZToTileCoords(chunk_x + 1, chunk_z + 1);
         return [
             [x0, z0],
             [x1, z0],
@@ -146,17 +154,6 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, chunkInd
             [x0, z0]
         ];
     });
-    // Find the group for this tower
-    let fillColor = COLOR_PALETTE[0];
-    if (watchtowerGroups && groupColorMap) {
-        // Find the group(s) for this tower
-        for (const g of watchtowerGroups) {
-            if (g.entityId === claimState.ownerBuildingEntityId) {
-                fillColor = groupColorMap.get(g) || fillColor;
-                break;
-            }
-        }
-    }
     return {
         type: "FeatureCollection",
         features: [
@@ -164,7 +161,9 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, chunkInd
                 type: "Feature",
                 properties: {
                     fillOpacity: 0.2,
-                    fillColor
+                    fillColor: territory.color,
+                    pointCoords: [localState.location.z, localState.location.x],
+                    popupText: props.popupText
                 },
                 geometry: {
                     type: "MultiPolygon",
@@ -176,7 +175,7 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, chunkInd
     };
 }
 
-function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, watchtowerChunks: Map<bigint, bigint[]>, watchtowerGroups, groupColorMap) {
+function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[]) {
     const claimName = formatTemplateArgs(claimState.name);
     switch (localState.buildingDescriptionId) {
         case 433549604: // Tree of Wisdom
@@ -231,59 +230,202 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             break;
         // watchtower
         case 90000:
-            outputs.towers.push(makeTower(claimState, localState, watchtowerChunks.get(claimState.ownerBuildingEntityId), watchtowerGroups, groupColorMap));
+            outputs.towers.push(makeTower(claimState, localState, territories));
             break;
     }
 }
 
-async function main() {
-    let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+function bigIntReplacer(key: string, value: any): any {
+    if (typeof value === "bigint") {
+        return value.toString() + 'n';
+    }
+    return value;
+}
 
-    const data = await fetchDataFromRegions(regions);
+function bigIntReviver(key: string, value: any): any {
+    if (typeof value === 'string' && /^\d+n$/.test(value)) {
+        return BigInt(value.slice(0, -1));
+    }
+    return value;
+}
+
+// --- Watchtower Territory Types and Helpers ---
+
+// A single contiguous group of chunks
+export interface ChunkGroup {
+    chunks: { chunk_x: number, chunk_z: number, chunk_index: bigint }[];
+}
+
+// A watchtower territory: a watchtower and all its chunks (possibly split into contiguous groups)
+export interface WatchtowerTerritory {
+    entityId: bigint;
+    location: { x: number, z: number };
+    name: string;
+    chunkIndices: bigint[];
+    chunkGroups: ChunkGroup[];
+    totalChunks: number;
+    ownerId: bigint;
+    ownerName: string;
+    color?: string; // Assigned color from palette
+}
+
+// Convert a chunk index to chunk_x, chunk_z
+export function chunkIndexToXZ(chunk_index: bigint): { chunk_x: number, chunk_z: number } {
+    const n = BigInt(chunk_index);
+    const base = n - BigInt(1);
+    const chunk_z = Number(base / BigInt(1000));
+    const chunk_x = Number(base % BigInt(1000));
+    return { chunk_x, chunk_z };
+}
+
+// Convert chunk_x, chunk_z to tile coordinates (bottom-left corner)
+export function chunkXZToTileCoords(chunk_x: number, chunk_z: number): { x: number, z: number } {
+    return { x: chunk_x * 96, z: chunk_z * 96 };
+}
+
+// Group a list of chunk indices into contiguous groups
+export function groupContiguousChunkIndices(chunkIndices: bigint[]): ChunkGroup[] {
+    const coords = chunkIndices.map(idx => ({ ...chunkIndexToXZ(idx), chunk_index: idx }));
+    const visited = new Set<string>();
+    const chunkSet = new Set(coords.map(c => `${c.chunk_x},${c.chunk_z}`));
+    const groups: ChunkGroup[] = [];
+    function visit(x: number, z: number, group: ChunkGroup) {
+        const key = `${x},${z}`;
+        if (visited.has(key) || !chunkSet.has(key)) return;
+        visited.add(key);
+        const chunk = coords.find(c => c.chunk_x === x && c.chunk_z === z);
+        if (chunk) group.chunks.push(chunk);
+        [[x - 1, z], [x + 1, z], [x, z - 1], [x, z + 1]].forEach(([nx, nz]) => visit(nx, nz, group));
+    }
+    for (const c of coords) {
+        const key = `${c.chunk_x},${c.chunk_z}`;
+        if (visited.has(key)) continue;
+        const group: ChunkGroup = { chunks: [] };
+        visit(c.chunk_x, c.chunk_z, group);
+        if (group.chunks.length > 0) groups.push(group);
+    }
+    return groups;
+}
+
+// --- Build Watchtower Territories ---
+function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Map<bigint, ClaimLocalState>, empireChunkStates: EmpireChunkState[], empireState: EmpireState[]): WatchtowerTerritory[] {
+    // Map from watchtower entityId to all its chunk indices
+    const watchtowerChunks = new Map<bigint, bigint[]>();
+    const watchtowerEmpires = new Map<bigint, EmpireState>();
+    empireChunkStates.forEach(state => {
+        if (!watchtowerChunks.has(state.watchtowerEntityId)) {
+            watchtowerChunks.set(state.watchtowerEntityId, []);
+        }
+        watchtowerChunks.get(state.watchtowerEntityId).push(state.chunkIndex);
+        if (!watchtowerEmpires.has(state.watchtowerEntityId)) {
+            const empire = empireState.find(e => e.entityId === state.empireEntityId);
+            if (empire) watchtowerEmpires.set(state.watchtowerEntityId, empire);
+        }
+    });
+    const territories: WatchtowerTerritory[] = [];
+    claimStates.forEach(claimState => {
+        const localState = localStateMap.get(claimState.entityId);
+        if (localState && localState.buildingDescriptionId === 90000) {
+            const chunkIndices = watchtowerChunks.get(claimState.ownerBuildingEntityId) || [];
+            const chunkGroups = groupContiguousChunkIndices(chunkIndices);
+            const empire = watchtowerEmpires.get(claimState.ownerBuildingEntityId);
+            territories.push({
+                entityId: claimState.ownerBuildingEntityId,
+                location: localState.location,
+                name: formatTemplateArgs(claimState.name),
+                ownerId: empire ? empire.entityId : BigInt(0),
+                ownerName: empire ? empire.name : 'Unknown',
+                chunkIndices,
+                chunkGroups,
+                totalChunks: chunkIndices.length
+            });
+        }
+    });
+    return territories;
+}
+
+// Returns true if any chunk in territoryA is adjacent to any chunk in territoryB
+function areTerritoriesAdjacent(territoryA: WatchtowerTerritory, territoryB: WatchtowerTerritory): boolean {
+    const chunkSetA = new Set(territoryA.chunkGroups.flatMap(g => g.chunks.map(c => `${c.chunk_x},${c.chunk_z}`)));
+    for (const groupB of territoryB.chunkGroups) {
+        for (const chunkB of groupB.chunks) {
+            for (const [dx, dz] of [[1,0], [-1,0], [0,1], [0,-1]]) {
+                const neighborKey = `${chunkB.chunk_x+dx},${chunkB.chunk_z+dz}`;
+                if (chunkSetA.has(neighborKey)) return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Returns true if the watchtower location of A is within distance (in chunks) of any chunk in B
+function areTerritoriesNearby(territoryA: WatchtowerTerritory, territoryB: WatchtowerTerritory, distanceChunks = 15): boolean {
+    const distSq = distanceChunks * distanceChunks;
+    // Convert watchtower location to chunk coordinates
+    const chunkA = {
+        chunk_x: Math.floor(territoryA.location.x / 96),
+        chunk_z: Math.floor(territoryA.location.z / 96)
+    };
+    for (const groupB of territoryB.chunkGroups) {
+        for (const chunkB of groupB.chunks) {
+            const dx = chunkA.chunk_x - chunkB.chunk_x;
+            const dz = chunkA.chunk_z - chunkB.chunk_z;
+            if (dx*dx + dz*dz <= distSq) return true;
+        }
+    }
+    return false;
+}
+
+// Assign colors to territories so that adjacent/nearby territories have unique colors
+function assignTerritoryColors(territories: WatchtowerTerritory[], palette: string[], nearbyDistance = 10) {
+    // Build adjacency graph
+    const n = territories.length;
+    const adj = Array.from({length: n}, () => new Set<number>());
+    for (let i = 0; i < n; ++i) {
+        for (let j = i+1; j < n; ++j) {
+            if (areTerritoriesAdjacent(territories[i], territories[j]) ||
+                areTerritoriesNearby(territories[i], territories[j], nearbyDistance) ||
+                areTerritoriesNearby(territories[j], territories[i], nearbyDistance)) {
+                adj[i].add(j);
+                adj[j].add(i);
+            }
+        }
+    }
+    // Greedy coloring
+    const colors = Array(n).fill(-1);
+    for (let i = 0; i < n; ++i) {
+        const used = new Set(Array.from(adj[i]).map(j => colors[j]));
+        for (let c = 0; c < palette.length; ++c) {
+            if (!used.has(c)) {
+                colors[i] = c;
+                break;
+            }
+        }
+        if (colors[i] === -1) {
+            // fallback
+            console.log(`Warning: not enough colors for territory ${territories[i].name}, assigning default color`);
+            colors[i] = 0;
+        }
+        territories[i].color = palette[colors[i]];
+    }
+}
+
+async function main() {
+    //let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+    //const data = await fetchDataFromRegions(regions);
+    //fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
+    const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver);
 
     const localStateMap = new Map<bigint, ClaimLocalState>();
     data.claimLocalState.forEach(state => {
         localStateMap.set(state.entityId, state);
     });
 
-    // Build all watchtower groups for coloring
-    const watchtowerGroups = [];
-    const watchtowerChunks = new Map<bigint, bigint[]>();
-    data.empireChunkState.forEach(state => {
-        if (!watchtowerChunks.has(state.watchtowerEntityId)) {
-            watchtowerChunks.set(state.watchtowerEntityId, []);
-        }
-        watchtowerChunks.get(state.watchtowerEntityId).push(state.chunkIndex);
-    });
-    data.claimState.forEach(claimState => {
-        const localState = localStateMap.get(claimState.entityId);
-        if (localState && localState.buildingDescriptionId === 90000) {
-            // decompose chunk indices into chunk coordinates
-            const chunkIndices = watchtowerChunks.get(claimState.ownerBuildingEntityId);
-            if (chunkIndices && chunkIndices.length > 0) {
-                const chunkCoords = chunkIndices.map(idx => {
-                    const n = BigInt(idx);
-                    const base = n - BigInt(1);
-                    const chunk_z = Number(base / BigInt(1000));
-                    const chunk_x = Number(base % BigInt(1000));
-                    return {chunk_x, chunk_z};
-                });
-                // Group contiguous chunks
-                const groups = groupContiguousChunks(chunkCoords);
-                groups.forEach(group => {
-                    watchtowerGroups.push({entityId: claimState.ownerBuildingEntityId, group});
-                });
-            }
-        }
-    });
-    // Assign colors
-    const groupColors = assignWatchtowerColors(watchtowerGroups);
+    // Build all watchtower territories
+    const territories = buildWatchtowerTerritories(data.claimState, localStateMap, data.empireChunkState, data.empireState);
 
-    // Map from group index to color
-    const groupColorMap = new Map();
-    watchtowerGroups.forEach((g, i) => {
-        groupColorMap.set(g, COLOR_PALETTE[groupColors[i] % COLOR_PALETTE.length]);
-    });
+    // Assign colors to territories
+    assignTerritoryColors(territories, COLOR_PALETTE);
 
     const outputs: OutputData = {
         caves: [],
@@ -297,7 +439,7 @@ async function main() {
     // For each claim, add features
     data.claimState.map(claimState => {
         const localState = localStateMap.get(claimState.entityId);
-        addFeature(outputs, claimState, localState, watchtowerChunks, watchtowerGroups, groupColorMap);
+        addFeature(outputs, claimState, localState, territories);
     });
 
     function write(name: string, features: any[]) {
@@ -321,74 +463,3 @@ main().then(() => {
     process.exit(1);
 });
 
-// Helper: get all chunk keys for a group
-function chunkGroupKeys(group) {
-    return new Set(group.map(c => `${c.chunk_x},${c.chunk_z}`));
-}
-
-// Helper: check if two groups are neighbors (share an edge)
-function areGroupsNeighbors(groupA, groupB) {
-    const setA = chunkGroupKeys(groupA);
-    for (const {chunk_x, chunk_z} of groupB) {
-        for (const [dx, dz] of [[1,0], [-1,0], [0,1], [0,-1]]) {
-            if (setA.has(`${chunk_x+dx},${chunk_z+dz}`)) return true;
-        }
-    }
-    return false;
-}
-
-// Group contiguous chunks
-function groupContiguousChunks(chunkCoords: {chunk_x: number, chunk_z: number}[]): {chunk_x: number, chunk_z: number}[][] {
-    const groups: {chunk_x: number, chunk_z: number}[][] = [];
-    const visited = new Set<string>();
-    const chunkSet = new Set(chunkCoords.map(c => `${c.chunk_x},${c.chunk_z}`));
-
-    function visit(x: number, z: number, group: {chunk_x: number, chunk_z: number}[]) {
-        const key = `${x},${z}`;
-        if (visited.has(key) || !chunkSet.has(key)) return;
-        visited.add(key);
-        group.push({chunk_x: x, chunk_z: z});
-        [[x - 1, z], [x + 1, z], [x, z - 1], [x, z + 1]].forEach(([nx, nz]) => {
-            visit(nx, nz, group);
-        });
-    }
-
-    for (const coord of chunkCoords) {
-        const key = `${coord.chunk_x},${coord.chunk_z}`;
-        if (visited.has(key)) continue;
-        const newGroup: {chunk_x: number, chunk_z: number}[] = [];
-        visit(coord.chunk_x, coord.chunk_z, newGroup);
-        if (newGroup.length > 0) {
-            groups.push(newGroup);
-        }
-    }
-    return groups;
-}
-
-// Assign colors to all watchtower groups so that neighbors have different colors
-function assignWatchtowerColors(watchtowerGroups) {
-    // Build adjacency list
-    const n = watchtowerGroups.length;
-    const adj: Set<number>[] = Array.from({length: n}, () => new Set<number>());
-    for (let i = 0; i < n; ++i) {
-        for (let j = i+1; j < n; ++j) {
-            if (areGroupsNeighbors(watchtowerGroups[i].group, watchtowerGroups[j].group)) {
-                adj[i].add(j);
-                adj[j].add(i);
-            }
-        }
-    }
-    // Greedy coloring
-    const colors = Array(n).fill(-1);
-    for (let i = 0; i < n; ++i) {
-        const used = new Set(Array.from(adj[i]).map((j: number) => colors[j]));
-        for (let c = 0; c < COLOR_PALETTE.length; ++c) {
-            if (!used.has(c)) {
-                colors[i] = c;
-                break;
-            }
-        }
-        if (colors[i] === -1) colors[i] = 0; // fallback
-    }
-    return colors;
-}
