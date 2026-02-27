@@ -1,1 +1,545 @@
-[{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 3401, E: 3834)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[11502,10203]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 3699, E: 3512)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[10537,11097]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 4060, E: 3774)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[11322,12180]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 4120, E: 3445)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[10335,12361]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 3321, E: 3085)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[9256,9964]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 3357, E: 4861)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[14584,10070]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 4452, E: 2902)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[8706,13355]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 2879, E: 3828)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[11485,8637]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 4013, E: 4353)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[13061,12040]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 3787, E: 3002)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[9008,11360]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 3633, E: 6573)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[19720,10900]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 4107, E: 6644)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[19934,12321]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 4221, E: 6318)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[18955,12664]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 3690, E: 6144)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[18433,11071]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 4279, E: 5340)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[16023,12838]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 3058, E: 5613)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[16839,9173]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 3111, E: 6441)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[19323,9332]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 4835, E: 6529)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[19588,14504]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 4580, E: 6005)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[18016,13740]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 3999, E: 5681)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[17043,11997]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 3651, E: 9264)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[27793,10954]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 3879, E: 9232)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[27696,11636]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 3847, E: 8910)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[26731,11541]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 4172, E: 9010)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[27028,12515]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 4779, E: 9824)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[29475,14338]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 4087, E: 9967)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[29902,12260]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 3158, E: 9060)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[27181,9475]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 4684, E: 9086)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[27258,14053]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 3359, E: 8779)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[26337,10077]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 4541, E: 9726)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[29179,13624]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6510, E: 3250)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[9751,19530]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6193, E: 3506)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[10521,18580]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6606, E: 3665)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[10993,19817]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6637, E: 3950)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[11852,19911]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 7418, E: 2967)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[8901,22254]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 7357, E: 4100)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[12300,22070]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 6455, E: 2867)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[8602,19365]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 5588, E: 3039)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[9118,16764]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 7097, E: 4728)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[14187,21292]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 7120, E: 3386)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[10159,21360]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6411, E: 8857)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[26572,19232]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6631, E: 8376)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[25129,19892]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6403, E: 8341)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[25024,19210]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 6869, E: 8746)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[26239,20607]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 7324, E: 8031)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[24094,21972]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 5861, E: 8720)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[26161,17583]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 5753, E: 9413)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[28242,17260]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 7390, E: 9017)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[27050,22171]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 6517, E: 9435)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[28306,19550]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 6707, E: 9199)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[27598,20122]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 8359, E: 2740)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[8221,25078]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 8891, E: 4571)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[13713,26673]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 8194, E: 4685)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[14054,24582]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8979, E: 4142)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[12427,26938]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8649, E: 4110)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[12330,25946]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8684, E: 3785)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[11356,26053]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 9532, E: 3485)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[10454,28596]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8814, E: 3049)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[9145,26441]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 9409, E: 4299)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[12900,28228]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 9286, E: 3763)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[11288,27859]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8700, E: 6892)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[20676,26099]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8539, E: 6733)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[20200,25617]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8585, E: 6261)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[18784,25756]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 9039, E: 6353)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[19062,27118]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 9469, E: 5350)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[16050,28407]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 9933, E: 6324)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[18974,29800]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 8827, E: 5627)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[16883,26481]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 8002, E: 6642)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[19927,24007]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 9379, E: 7283)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[21851,28137]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 9536, E: 6534)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[19602,28607]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8535, E: 8722)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[26169,25606]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 8761, E: 8976)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[26928,26283]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 9358, E: 8782)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[26345,28073]}},{"type":"Feature","properties":{"popupText":"Giant Skitch Dungeon (N: 9144, E: 8429)","iconName":"dungeon","iconSize":[35,35],"type":1785852446},"geometry":{"type":"Point","coordinates":[25287,27432]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 9393, E: 8010)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[24032,28180]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 8062, E: 8757)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[26269,24185]}},{"type":"Feature","properties":{"popupText":"Sentinel Dungeon (N: 9615, E: 9026)","iconName":"dungeon","iconSize":[35,35],"type":208697589},"geometry":{"type":"Point","coordinates":[27080,28844]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 9809, E: 9204)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[27614,29428]}},{"type":"Feature","properties":{"popupText":"Araknir Dungeon (N: 8747, E: 9599)","iconName":"dungeon","iconSize":[35,35],"type":1084069097},"geometry":{"type":"Point","coordinates":[28798,26241]}},{"type":"Feature","properties":{"popupText":"Alpha Jakyl Dungeon (N: 8956, E: 9464)","iconName":"dungeon","iconSize":[25,25],"type":846734170},"geometry":{"type":"Point","coordinates":[28393,26868]}}]
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "id": 504403158281132600,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Araknir Dungeon|~3321|~3085",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    9256,
+                    9964
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281132783,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Araknir Dungeon|~3357|~4861",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    14584,
+                    10070
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281057782,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~3401|~3834",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11502,
+                    10203
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281057926,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~3699|~3512",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10537,
+                    11097
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281058070,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~4060|~3774",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11322,
+                    12180
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281058214,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~4120|~3445",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10335,
+                    12361
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281147423,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~2879|~3828",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    11485,
+                    8637
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281157246,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~4013|~4353",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    13061,
+                    12040
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 504403158281135618,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~4452|~2902",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8706,
+                    13355
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317255330,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Araknir Dungeon|~3058|~5613",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    16839,
+                    9173
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317255147,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Araknir Dungeon|~4279|~5340",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    16023,
+                    12838
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317179850,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~3633|~6573",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    19720,
+                    10900
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317179674,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~3690|~6144",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18433,
+                    11071
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317179996,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~4107|~6644",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    19934,
+                    12321
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317180140,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~4221|~6318",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18955,
+                    12664
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317258450,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~3111|~6441",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    19323,
+                    9332
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317278520,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~4580|~6005",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    18016,
+                    13740
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 576460752317268312,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~4835|~6529",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    19588,
+                    14504
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353972924,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Araknir Dungeon|~4087|~9967",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    29902,
+                    12260
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353972741,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Araknir Dungeon|~4779|~9824",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1084069097
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    29475,
+                    14338
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353899495,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~3651|~9264",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    27793,
+                    10954
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353899785,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~3847|~8910",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    26731,
+                    11541
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353899641,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~3879|~9232",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    27696,
+                    11636
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353899929,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Giant Skitch Dungeon|~4172|~9010",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 1785852446
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    27028,
+                    12515
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353975721,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~3158|~9060",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    27181,
+                    9475
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353995545,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~3359|~8779",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    26337,
+                    10077
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "id": 648518346353985552,
+            "properties": {
+                "popupText": "{0} (N: {1}, E: {2})|~Sentinel Dungeon|~4684|~9086",
+                "iconName": "dungeon",
+                "iconSize": [
+                    35,
+                    35
+                ],
+                "type": 208697589
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    27258,
+                    14053
+                ]
+            }
+        }
+    ]
+}
