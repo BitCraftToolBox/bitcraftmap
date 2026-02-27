@@ -5,6 +5,7 @@ import { validateGeoJson } from "./geojson-validator";
 import { paintGeoJson, type PaintContext } from "./geojson-painter";
 import { setSelection } from "$lib/stores/selection-store.svelte";
 import { buildPopupHtml } from "./popup-builder";
+import { createAppConfig } from "$lib/config/api";
 
 // Static icons - created once
 let caveIcons: L.Icon[];
@@ -113,7 +114,10 @@ export async function loadClaimsGeoJson(
   marketsLayer: L.LayerGroup,
   waystonesLayer: L.LayerGroup,
 ): Promise<void> {
-  const file = await fetch("/markers/claims.geojson");
+  const { exportsCdn } = createAppConfig();
+  const file = await fetch(
+    `${exportsCdn}/bitcraftmap/claims.geojson`,
+  );
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
