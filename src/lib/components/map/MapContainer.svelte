@@ -742,7 +742,7 @@
     updateResourceIdParam(trackedResourceIds);
 
     const color = tierColors[tier] || "#3388ff";
-    const canvasLayer = new ResourceCanvasLayer({ color });
+    const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: resourceId });
     resourceLayers[resourceId] = canvasLayer;
     canvasLayer.addTo(map);
 
@@ -824,7 +824,9 @@
         tierColors[resourceIndex[id]?.tier] ||
         "#3388ff";
       if (noColors) color = "#3388ff";
-      resourceLayers[id] = new ResourceCanvasLayer({ color });
+      const tier = resourceIndexOverride[id]?.tier || resourceIndex[id]?.tier || 0;
+      const name = resourceIndex[id]?.name || "ID " + id;
+      resourceLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
       resourceLayers[id].addTo(map);
     }
     for (const id of enemyIds) {
@@ -833,7 +835,9 @@
         tierColors[creatureIndex[id]?.tier] ||
         "#3388ff";
       if (noColors) color = "#3388ff";
-      resourceLayers[id] = new ResourceCanvasLayer({ color });
+      const tier = creatureIndex[id]?.tier || 0;
+      const name = creatureIndex[id]?.name || "ID " + id;
+      resourceLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
       resourceLayers[id].addTo(map);
     }
 

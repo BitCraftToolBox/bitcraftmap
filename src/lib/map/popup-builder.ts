@@ -75,9 +75,7 @@ export function buildPopupHtml(item: MapSelection): string {
 					<span class="bcm-popup-tier">T${item.tier}</span>
 				</div>
 				${coords}
-				<div class="bcm-popup-footer">
-					<button class="bcm-popup-action bcm-popup-action--blue" data-action="track-resource" data-resource-id="${item.id}" data-resource-name="${item.name}" data-resource-tier="${item.tier}">Track Resource</button>
-				</div>
+				<div class="bcm-popup-body"></div>
 			</div>`;
 
 		case 'player':

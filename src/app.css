@@ -150,7 +150,7 @@ body {
 /* Type label (Claim, Cave, etc.) */
 .bcm-popup-type {
 	display: block;
-	padding: 10px 14px 0;
+	padding: 10px 34px 0 14px;
 	font-size: 10px;
 	font-weight: 600;
 	letter-spacing: 0.05em;
@@ -163,7 +163,7 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	padding: 4px 14px 0;
+	padding: 4px 34px 0 14px;
 }
 
 .bcm-popup-name {

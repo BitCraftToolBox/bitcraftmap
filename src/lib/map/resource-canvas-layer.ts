@@ -1,8 +1,13 @@
 import L from 'leaflet';
+import { buildPopupHtml } from './popup-builder';
+import { setSelection } from '$lib/stores/selection-store.svelte';
 
 export interface ResourceCanvasLayerOptions extends L.LayerOptions {
 	color: string;
 	radius?: number;
+	name?: string;
+	tier?: number;
+	id?: number;
 }
 
 interface RegionPoints {
@@ -17,6 +22,9 @@ export class ResourceCanvasLayer extends L.Layer {
 	private _pointsByRegion = new Map<number, RegionPoints>();
 	private _color: string;
 	private _radius: number;
+	private _name: string;
+	private _tier: number;
+	private _id: number;
 	private _dirty = false;
 	private _drawnScreenPoints: Float64Array | null = null;
 	private _drawnGameCoords: Float64Array | null = null;
@@ -25,6 +33,9 @@ export class ResourceCanvasLayer extends L.Layer {
 		super(options);
 		this._color = options.color;
 		this._radius = options.radius ?? 4;
+		this._name = options.name ?? 'Resource';
+		this._tier = options.tier ?? 0;
+		this._id = options.id ?? 0;
 		this._buildSprite();
 	}
 
@@ -225,12 +236,20 @@ export class ResourceCanvasLayer extends L.Layer {
 			const lat = this._drawnGameCoords[hitIdx];
 			const lng = this._drawnGameCoords[hitIdx + 1];
 			const latlng = L.latLng(lat, lng);
-			const n = Math.round(lat / 3);
-			const eCoord = Math.round(lng / 3);
 
-			L.popup({ pane: 'popupOnTop' })
+			const selectionData = {
+				type: 'resource' as const,
+				name: this._name,
+				id: this._id,
+				tier: this._tier,
+				color: this._color,
+				latlng: { lat, lng }
+			};
+			setSelection(selectionData);
+
+			L.popup({ pane: 'popupOnTop', minWidth: 200, className: 'bcm-leaflet-popup' })
 				.setLatLng(latlng)
-				.setContent(`N ${n} E ${eCoord}`)
+				.setContent(buildPopupHtml(selectionData))
 				.openOn(this._map);
 		}
 	}
