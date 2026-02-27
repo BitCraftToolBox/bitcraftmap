@@ -1,7 +1,10 @@
 import { SvelteSet } from 'svelte/reactivity';
 
-/** Current maximum region count. Change to 25 when game expands. */
-export const ALL_REGIONS: number[] = Array.from({ length: 9 }, (_, i) => i + 1);
+/** All 25 regions in the 5×5 grid (1 = bottom-left, 25 = top-right). */
+export const ALL_REGIONS: number[] = Array.from({ length: 25 }, (_, i) => i + 1);
+
+/** Only the center 3×3 regions are currently playable. */
+export const AVAILABLE_REGIONS: number[] = [7, 8, 9, 12, 13, 14, 17, 18, 19];
 
 const STORAGE_KEY = 'selectedRegions';
 
@@ -10,7 +13,7 @@ function loadFromStorage(): number[] {
 		const stored = localStorage.getItem(STORAGE_KEY);
 		if (stored) {
 			const parsed: number[] = JSON.parse(stored);
-			return parsed.filter((n) => ALL_REGIONS.includes(n));
+			return parsed.filter((n) => AVAILABLE_REGIONS.includes(n));
 		}
 	} catch {
 		/* ignore */
@@ -35,7 +38,7 @@ export function getRegionState() {
 		},
 		get effectiveRegions(): number[] {
 			return selectedRegions.size === 0
-				? ALL_REGIONS
+				? AVAILABLE_REGIONS
 				: [...selectedRegions].sort((a, b) => a - b);
 		},
 		get isAllSelected(): boolean {
@@ -45,6 +48,7 @@ export function getRegionState() {
 }
 
 export function toggleRegion(regionId: number): void {
+	if (!AVAILABLE_REGIONS.includes(regionId)) return;
 	if (selectedRegions.has(regionId)) {
 		selectedRegions.delete(regionId);
 	} else {
@@ -59,10 +63,10 @@ export function selectAllRegions(): void {
 }
 
 export function setRegions(regions: Iterable<number>): void {
-	const incoming = new Set(regions);
+	const incoming = new Set([...regions].filter((r) => AVAILABLE_REGIONS.includes(r)));
 	selectedRegions.clear();
-	// If every region is selected, keep the set empty (empty = all)
-	if (incoming.size < ALL_REGIONS.length || !ALL_REGIONS.every((r) => incoming.has(r))) {
+	// If every available region is selected, keep the set empty (empty = all)
+	if (incoming.size < AVAILABLE_REGIONS.length || !AVAILABLE_REGIONS.every((r) => incoming.has(r))) {
 		for (const r of incoming) {
 			selectedRegions.add(r);
 		}
