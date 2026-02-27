@@ -5,7 +5,7 @@
   import "leaflet/dist/leaflet.css";
   import { createMapConfig } from "$lib/config/map";
   import { createAppConfig } from "$lib/config/api";
-  import { PUBLIC_CDN_MAP } from "$env/static/public";
+  import { env } from "$env/dynamic/public";
   import { setupDefaultIcon, createIcon } from "$lib/map/create-icon";
   import {
     initIcons,
@@ -189,7 +189,7 @@
       [0, 0],
       [mapConfig.mapHeight, mapConfig.mapWidth],
     ];
-    const useCdnMap = PUBLIC_CDN_MAP === 'true';
+    const useCdnMap = env.PUBLIC_CDN_MAP === 'true';
     initialMapUrl = useCdnMap
       ? `${appConfig.exportsCdn}/bitcraftmap/maps/global-2560.webp`
       : "/assets/maps/map.webp";
