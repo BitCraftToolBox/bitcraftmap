@@ -14,6 +14,10 @@ export interface BitcraftFeatureProperties {
 	radius?: number;
 	type?: 'tooltip' | string;
 
+	// Tower territory properties
+	pointCoords?: [number, number];
+	chunkCount?: number;
+
 	// Navigation properties
 	flyTo?: [number, number];
 	zoomTo?: number;

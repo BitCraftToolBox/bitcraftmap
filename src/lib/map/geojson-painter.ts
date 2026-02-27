@@ -34,9 +34,16 @@ export function paintGeoJson(
 			const props = feature.properties as BitcraftFeatureProperties;
 
 			if (props?.type === 'tooltip') {
-				return new L.Popup({ autoPan: false, autoClose: false })
-					.setLatLng(latlng)
-					.setContent(props.popupText as string);
+				const marker = L.marker(latlng, {
+					icon: L.divIcon({ className: 'region-tooltip-anchor', iconSize: [0, 0] }),
+					interactive: false
+				});
+				marker.bindTooltip(props.popupText as string, {
+					permanent: true,
+					direction: 'center',
+					className: 'region-tooltip'
+				});
+				return marker;
 			}
 
 			if (props?.makeCanvas) {

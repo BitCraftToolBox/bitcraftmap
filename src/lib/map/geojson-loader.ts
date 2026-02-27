@@ -13,6 +13,8 @@ let eventIcon: L.Icon;
 let ruinedIcon: L.Icon;
 let templeIcon: L.Icon;
 let treeIcon: L.Icon;
+let towerIcon: L.Icon;
+let hexiteIcon: L.Icon;
 
 export function initIcons(): void {
 	caveIcons = Array.from({ length: 10 }, (_, i) => createIcon(`t${i + 1}`));
@@ -21,19 +23,26 @@ export function initIcons(): void {
 	ruinedIcon = createIcon('ruinedCity');
 	templeIcon = createIcon('temple');
 	treeIcon = createIcon('travelerTree');
+	towerIcon = createIcon('tower', [16, 32]);
+	hexiteIcon = createIcon('hexite-energy');
 }
 
-export async function loadTreesGeoJson(treesLayer: L.LayerGroup): Promise<void> {
+export async function loadTreesGeoJson(treesLayer: L.LayerGroup, hexiteLayer: L.LayerGroup): Promise<void> {
 	const file = await fetch('/markers/trees.geojson');
 	const geojsonData = await file.json();
 	L.geoJSON(geojsonData, {
 		pointToLayer(feature, latlng) {
+			const isHexite = feature.properties.type === 'hexite';
+			const targetLayer = isHexite ? hexiteLayer : treesLayer;
+			const icon = isHexite ? hexiteIcon : treeIcon;
+			const selectionType = isHexite ? 'hexite' as const : 'wonder' as const;
+
 			const selectionData = {
-				type: 'wonder' as const,
+				type: selectionType,
 				name: feature.properties.name,
 				latlng: { lat: latlng.lat, lng: latlng.lng }
 			};
-			const marker = L.marker(latlng, { icon: treeIcon }).addTo(treesLayer);
+			const marker = L.marker(latlng, { icon }).addTo(targetLayer);
 			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
 			marker.on('click', () => setSelection(selectionData));
 			return marker;
@@ -149,11 +158,25 @@ export async function loadEventsGeoJson(eventsLayer: L.LayerGroup, ctx: PaintCon
 	paintGeoJson(geoJson, eventsLayer, ctx);
 }
 
-export async function loadDungeonsGeoJson(dungeonsLayer: L.LayerGroup, ctx: PaintContext): Promise<void> {
+export async function loadDungeonsGeoJson(dungeonsLayer: L.LayerGroup): Promise<void> {
 	const file = await fetch('/markers/dungeons.geojson');
-	const content = await file.text();
-	const geoJson = validateGeoJson(content);
-	paintGeoJson(geoJson, dungeonsLayer, ctx);
+	const geojsonData = await file.json();
+	L.geoJSON(geojsonData, {
+		pointToLayer(feature, latlng) {
+			const icon = feature.properties.iconName
+				? createIcon(feature.properties.iconName, feature.properties.iconSize)
+				: createIcon('dungeon', [35, 35]);
+			const selectionData = {
+				type: 'dungeon' as const,
+				name: feature.properties.popupText ?? 'Dungeon',
+				latlng: { lat: latlng.lat, lng: latlng.lng }
+			};
+			const marker = L.marker(latlng, { icon }).addTo(dungeonsLayer);
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
+			marker.on('click', () => setSelection(selectionData));
+			return marker;
+		}
+	});
 }
 
 export async function loadGridsGeoJson(gridsLayer: L.LayerGroup, ctx: PaintContext): Promise<void> {
@@ -161,6 +184,50 @@ export async function loadGridsGeoJson(gridsLayer: L.LayerGroup, ctx: PaintConte
 	const content = await file.text();
 	const geoJson = validateGeoJson(content);
 	paintGeoJson(geoJson, gridsLayer, ctx);
+}
+
+export async function loadTowersGeoJson(towersLayer: L.LayerGroup, map: L.Map): Promise<void> {
+	const file = await fetch('/markers/towers.geojson');
+	const geojsonData = await file.json();
+	L.geoJSON(geojsonData, {
+		style(feature) {
+			if (feature?.geometry.type === 'MultiPolygon') {
+				return {
+					color: feature.properties.color ?? '#000000',
+					weight: feature.properties.weight ?? 1,
+					fillColor: feature.properties.fillColor,
+					fillOpacity: feature.properties.fillOpacity ?? 0.2
+				};
+			}
+			return {};
+		},
+		pointToLayer(feature, latlng) {
+			const selectionData = {
+				type: 'watchtower' as const,
+				name: feature.properties.popupText ?? 'Watchtower',
+				latlng: { lat: latlng.lat, lng: latlng.lng },
+				chunkCount: feature.properties.chunkCount,
+				fillColor: feature.properties.fillColor
+			};
+			const marker = L.marker(latlng, { icon: towerIcon });
+			marker.bindPopup(buildPopupHtml(selectionData), { className: 'bcm-leaflet-popup' });
+			marker.on('click', () => setSelection(selectionData));
+			return marker;
+		},
+		onEachFeature(feature, featureLayer) {
+			if (feature.geometry.type === 'MultiPolygon' && feature.properties.popupText) {
+				featureLayer.on('click', () => {
+					const coords = feature.properties.pointCoords;
+					if (coords) {
+						L.popup()
+							.setLatLng(coords)
+							.setContent(feature.properties.popupText)
+							.openOn(map);
+					}
+				});
+			}
+		}
+	}).addTo(towersLayer);
 }
 
 export function loadGeoJsonFromHash(waypointsLayer: L.LayerGroup, ctx: PaintContext, map: L.Map): void {

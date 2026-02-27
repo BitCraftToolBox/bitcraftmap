@@ -3,8 +3,8 @@ import L from "leaflet";
 
 export function createMapConfig(): MapConfig {
   const apothem = 2 / Math.sqrt(3);
-  const mapWidth = 23040;
-  const mapHeight = 23040;
+  const mapWidth = 38400;
+  const mapHeight = 38400;
   const mapImageURL = "/maps/map_2560.webp";
 
   return {

@@ -16,6 +16,9 @@ function typeLabel(type: string): string {
 		case 'wonder': return 'Wonder';
 		case 'temple': return 'Temple';
 		case 'ruined-city': return 'Ruined City';
+		case 'watchtower': return 'Watchtower';
+		case 'hexite': return 'Hexite Deposit';
+		case 'dungeon': return 'Dungeon';
 		default: return 'Location';
 	}
 }
@@ -89,6 +92,18 @@ export function buildPopupHtml(item: MapSelection): string {
 				<div class="bcm-popup-footer">
 					<button class="bcm-popup-action bcm-popup-action--green" data-action="follow-player" data-entity-id="${item.entityId}" data-username="${item.username}">Follow Player</button>
 				</div>
+			</div>`;
+
+		case 'watchtower':
+			return `<div class="bcm-popup">
+				${type}
+				<div class="bcm-popup-title">
+					<span class="bcm-popup-swatch" style="background-color:${item.fillColor ?? '#3388ff'}"></span>
+					<span class="bcm-popup-name">${item.name}</span>
+				</div>
+				${coords}
+				${item.chunkCount ? `<div class="bcm-popup-coords" style="padding-top:2px">${item.chunkCount} chunks</div>` : ''}
+				<div class="bcm-popup-body"></div>
 			</div>`;
 
 		default:

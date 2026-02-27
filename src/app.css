@@ -321,3 +321,26 @@ body {
 .bcm-popup-body {
 	padding-bottom: 12px;
 }
+
+/* Region name tooltips on grid overlay */
+.region-tooltip-anchor {
+	background: none !important;
+	border: none !important;
+}
+
+.region-tooltip {
+	background: none !important;
+	border: none !important;
+	box-shadow: none !important;
+	color: rgba(255, 255, 255, 0.7) !important;
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.05em;
+	text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), 0 0 2px rgba(0, 0, 0, 0.6);
+	white-space: nowrap;
+	pointer-events: none;
+}
+
+.region-tooltip::before {
+	display: none !important;
+}

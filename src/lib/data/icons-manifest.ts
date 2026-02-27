@@ -49,5 +49,7 @@ export const iconsManifest: Record<string, string> = {
 	iconScholar: '/images/wiki/iconScholar.svg',
 	iconSmithing: '/images/wiki/iconSmithing.svg',
 	iconTailor: '/images/wiki/iconTailor.svg',
-	'jack-o-lantern': '/images/other/jack-o-lantern.png'
+	'jack-o-lantern': '/images/other/jack-o-lantern.png',
+	'hexite-energy': '/images/other/hexite_gem.png',
+	tower: '/images/other/tower.webp'
 };

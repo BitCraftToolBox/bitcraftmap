@@ -25,7 +25,7 @@ export interface AppConfig {
 
 // --- Map Selection Types ---
 
-export type SelectionType = 'claim' | 'cave' | 'resource' | 'player' | 'wonder' | 'temple' | 'ruined-city';
+export type SelectionType = 'claim' | 'cave' | 'resource' | 'player' | 'wonder' | 'temple' | 'ruined-city' | 'watchtower' | 'hexite' | 'dungeon';
 
 export interface SelectionLatLng {
 	lat: number;
@@ -70,9 +70,17 @@ export interface PlayerSelection {
 }
 
 export interface GenericPOISelection {
-	type: 'wonder' | 'temple' | 'ruined-city';
+	type: 'wonder' | 'temple' | 'ruined-city' | 'hexite' | 'dungeon';
 	name: string;
 	latlng: SelectionLatLng;
+}
+
+export interface WatchtowerSelection {
+	type: 'watchtower';
+	name: string;
+	latlng: SelectionLatLng;
+	chunkCount?: number;
+	fillColor?: string;
 }
 
 export type MapSelection =
@@ -80,4 +88,5 @@ export type MapSelection =
 	| CaveSelection
 	| ResourceSelection
 	| PlayerSelection
-	| GenericPOISelection;
+	| GenericPOISelection
+	| WatchtowerSelection;

@@ -43,6 +43,9 @@
 			case 'wonder': return 'Wonder';
 			case 'temple': return 'Temple';
 			case 'ruined-city': return 'Ruined City';
+			case 'watchtower': return 'Watchtower';
+			case 'hexite': return 'Hexite Deposit';
+			case 'dungeon': return 'Dungeon';
 			default: return 'Location';
 		}
 	}
@@ -163,6 +166,15 @@
 							>
 								Follow Player
 							</button>
+
+						{:else if item.type === 'watchtower'}
+							<div class="flex items-center gap-2">
+								<span class="w-3 h-3 rounded-sm shrink-0" style:background-color={item.fillColor ?? '#3388ff'}></span>
+								{#if item.chunkCount}
+									<span class="text-xs text-gray-400">{item.chunkCount} chunks</span>
+								{/if}
+							</div>
+							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
 
 						{:else}
 							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>

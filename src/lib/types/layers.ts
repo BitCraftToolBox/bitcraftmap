@@ -1,6 +1,7 @@
 export type LayerName =
 	| 'eventsLayer'
 	| 'treesLayer'
+	| 'hexiteLayer'
 	| 'templesLayer'
 	| 'ruinedLayer'
 	| 'banksLayer'
@@ -8,6 +9,7 @@ export type LayerName =
 	| 'waystonesLayer'
 	| 'gridsLayer'
 	| 'dungeonsLayer'
+	| 'towersLayer'
 	| 'waypointsLayer'
 	| 'roadsLayer'
 	| `claimT${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10}Layer`
@@ -25,6 +27,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 		layers: [
 			'Events',
 			'Wonders',
+			'Hexite Deposits',
 			'Temples',
 			'Ruined Cities',
 			'Banks',
@@ -32,6 +35,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 			'Waystones',
 			'Grids',
 			'Dungeons',
+			'Watchtowers',
 			'Waypoints'
 		]
 	},
@@ -61,7 +65,9 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 			'Caves T5',
 			'Caves T6',
 			'Caves T7',
-			'Caves T8'
+			'Caves T8',
+			'Caves T9',
+			'Caves T10'
 		],
 		defaultCollapsed: true
 	}
