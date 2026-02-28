@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'leaflet.markercluster/dist/MarkerCluster.css';
 
 @utility z-map {
 	z-index: 0;
@@ -345,7 +346,7 @@ body {
 	display: none !important;
 }
 
-/* Cave marker cluster icon — reset defaults from leaflet.markercluster */
+/* Marker cluster — reset defaults */
 .marker-cluster {
 	background: none;
 	border-radius: 0;

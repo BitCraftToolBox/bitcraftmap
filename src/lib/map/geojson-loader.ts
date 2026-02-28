@@ -1,6 +1,5 @@
 import L from "leaflet";
 import "leaflet.markercluster";
-import "leaflet.markercluster/dist/MarkerCluster.css";
 import { createIcon } from "./create-icon";
 import { readableCoordinates } from "./coordinate-utils";
 import { validateGeoJson } from "./geojson-validator";
