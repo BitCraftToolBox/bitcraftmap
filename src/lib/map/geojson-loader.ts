@@ -137,15 +137,30 @@ export async function loadClaimsGeoJson(
       const marker = L.marker(latlng, {
         title: feature.properties.name + " N " + coords[0] + " E " + coords[1],
         icon: claimIcons[feature.properties.tier],
+        zIndexOffset: feature.properties.tier * 100,
       });
       (marker as any)._selectionData = selectionData;
       bindLazyPopup(marker, selectionData);
 
       marker.addTo(claimLayers[feature.properties.tier]);
 
-      if (feature.properties.has_bank) marker.addTo(banksLayer);
-      if (feature.properties.has_market) marker.addTo(marketsLayer);
-      if (feature.properties.has_waystone) marker.addTo(waystonesLayer);
+      // Create independent markers for POI layers so toggling them
+      // doesn't remove the shared marker from the claims layer.
+      if (feature.properties.has_bank) {
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        bindLazyPopup(m, selectionData);
+        m.addTo(banksLayer);
+      }
+      if (feature.properties.has_market) {
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        bindLazyPopup(m, selectionData);
+        m.addTo(marketsLayer);
+      }
+      if (feature.properties.has_waystone) {
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        bindLazyPopup(m, selectionData);
+        m.addTo(waystonesLayer);
+      }
 
       return marker;
     },
