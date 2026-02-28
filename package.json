@@ -26,6 +26,8 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.564.0",
-		"leaflet": "^1.9.4"
+		"@types/leaflet.markercluster": "^1.5.6",
+		"leaflet": "^1.9.4",
+		"leaflet.markercluster": "^1.5.3"
 	}
 }

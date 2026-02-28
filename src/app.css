@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'leaflet.markercluster/dist/MarkerCluster.css';
 
 @utility z-map {
 	z-index: 0;
@@ -343,4 +344,37 @@ body {
 
 .region-tooltip::before {
 	display: none !important;
+}
+
+/* Marker cluster — reset defaults */
+.marker-cluster {
+	background: none;
+	border-radius: 0;
+}
+.marker-cluster div {
+	width: auto;
+	height: auto;
+	margin: 0;
+	background: none;
+	border-radius: 0;
+}
+.cave-cluster-icon {
+	position: relative;
+}
+.cave-cluster-icon img {
+	display: block;
+	width: 32px;
+	height: 32px;
+}
+.cave-cluster-icon .cluster-count {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	text-shadow: 0 0 3px #000, 0 0 6px #000;
+	pointer-events: none;
 }

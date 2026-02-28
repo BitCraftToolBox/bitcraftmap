@@ -3,6 +3,7 @@
   import { onMount, setContext } from "svelte";
   import L from "leaflet";
   import "leaflet/dist/leaflet.css";
+  import "leaflet.markercluster";
   import { createMapConfig } from "$lib/config/map";
   import { createAppConfig } from "$lib/config/api";
   import { env } from "$env/dynamic/public";
@@ -215,6 +216,7 @@
     setMap(map);
 
     // Create all layer groups
+    // Only use MarkerClusterGroup for caves (1642 markers) — other layers are small enough (<100) for plain LayerGroups
     eventsLayer = L.layerGroup();
     treesLayer = L.layerGroup();
     ruinedLayer = L.layerGroup();
@@ -229,7 +231,25 @@
     waypointsLayer = L.layerGroup();
 
     claimLayers = Array.from({ length: 11 }, () => L.layerGroup());
-    caveLayers = Array.from({ length: 10 }, () => L.layerGroup());
+    caveLayers = Array.from({ length: 10 }, (_, i) => {
+      const iconUrl = `/images/ore/t${i + 1}.webp`;
+      return L.markerClusterGroup({
+        maxClusterRadius: 50,
+        disableClusteringAtZoom: 2,
+        chunkedLoading: true,
+        chunkInterval: 100,
+        animate: false,
+        iconCreateFunction(cluster) {
+          const count = cluster.getChildCount();
+          return L.divIcon({
+            html: `<img src="${iconUrl}" /><span class="cluster-count">${count}</span>`,
+            className: "cave-cluster-icon",
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+          });
+        },
+      });
+    });
     allClaims = L.layerGroup(claimLayers);
     allCaves = L.layerGroup(caveLayers);
 
@@ -352,10 +372,16 @@
       }
     }
 
-    // Coordinate display
+    // Coordinate display (throttled to ~10fps via rAF to avoid unnecessary work)
     let hasTouch = false;
+    let mouseMoveRaf = false;
     map.on("mousemove", (e: L.LeafletMouseEvent) => {
-      coords = `${formatCoordinates(e.latlng)} Zoom: ${map.getZoom().toFixed(1)}`;
+      if (mouseMoveRaf) return;
+      mouseMoveRaf = true;
+      requestAnimationFrame(() => {
+        mouseMoveRaf = false;
+        coords = `${formatCoordinates(e.latlng)} Zoom: ${map.getZoom().toFixed(1)}`;
+      });
     });
     map.getContainer().addEventListener(
       "touchstart",
@@ -1093,8 +1119,18 @@
   }): void {
     if (!map.hasLayer(entry.layer)) {
       map.addLayer(entry.layer);
+      // Sync activeLayers so the sidebar checkbox reflects the change
+      for (const [name, layer] of Object.entries(genericToggle)) {
+        if (layer === entry.layer) {
+          activeLayers.add(name);
+          break;
+        }
+      }
+      saveActiveLayers();
     }
-    map.flyTo(entry.latlng, map.getZoom());
+    // Zoom in to at least 1 so the selected marker is identifiable
+    const targetZoom = Math.max(map.getZoom(), 1);
+    map.flyTo(entry.latlng, targetZoom);
     if (entry.selectionData) {
       setSelection(entry.selectionData);
     }

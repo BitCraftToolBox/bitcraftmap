@@ -1,4 +1,5 @@
 import L from "leaflet";
+import "leaflet.markercluster";
 import { createIcon } from "./create-icon";
 import { readableCoordinates } from "./coordinate-utils";
 import { validateGeoJson } from "./geojson-validator";
@@ -6,6 +7,7 @@ import { paintGeoJson, type PaintContext } from "./geojson-painter";
 import { setSelection } from "$lib/stores/selection-store.svelte";
 import { buildPopupHtml } from "./popup-builder";
 import { createAppConfig } from "$lib/config/api";
+import type { MapSelection } from "$lib/types/map";
 
 // Static icons - created once
 let caveIcons: L.Icon[];
@@ -26,6 +28,14 @@ export function initIcons(): void {
   treeIcon = createIcon("travelerTree");
   towerIcon = createIcon("tower", [16, 32]);
   hexiteIcon = createIcon("hexite-energy");
+}
+
+/** Bind a lazy popup — the content function is only called when the popup opens. */
+function bindLazyPopup(marker: L.Marker, selectionData: MapSelection): void {
+  marker.bindPopup(() => buildPopupHtml(selectionData), {
+    className: "bcm-leaflet-popup",
+  });
+  marker.on("click", () => setSelection(selectionData));
 }
 
 export async function loadTreesGeoJson(
@@ -49,10 +59,7 @@ export async function loadTreesGeoJson(
         latlng: { lat: latlng.lat, lng: latlng.lng },
       };
       const marker = L.marker(latlng, { icon }).addTo(targetLayer);
-      marker.bindPopup(buildPopupHtml(selectionData), {
-        className: "bcm-leaflet-popup",
-      });
-      marker.on("click", () => setSelection(selectionData));
+      bindLazyPopup(marker, selectionData);
       return marker;
     },
   });
@@ -71,10 +78,7 @@ export async function loadTemplesGeoJson(
         latlng: { lat: latlng.lat, lng: latlng.lng },
       };
       const marker = L.marker(latlng, { icon: templeIcon }).addTo(templesLayer);
-      marker.bindPopup(buildPopupHtml(selectionData), {
-        className: "bcm-leaflet-popup",
-      });
-      marker.on("click", () => setSelection(selectionData));
+      bindLazyPopup(marker, selectionData);
       return marker;
     },
   });
@@ -99,10 +103,7 @@ export async function loadRuinedGeoJson(
         icon: ruinedIcon,
       }).addTo(ruinedLayer);
       (marker as any)._selectionData = selectionData;
-      marker.bindPopup(buildPopupHtml(selectionData), {
-        className: "bcm-leaflet-popup",
-      });
-      marker.on("click", () => setSelection(selectionData));
+      bindLazyPopup(marker, selectionData);
       return marker;
     },
   });
@@ -135,18 +136,30 @@ export async function loadClaimsGeoJson(
       const marker = L.marker(latlng, {
         title: feature.properties.name + " N " + coords[0] + " E " + coords[1],
         icon: claimIcons[feature.properties.tier],
+        zIndexOffset: feature.properties.tier * 100,
       });
       (marker as any)._selectionData = selectionData;
-      marker.bindPopup(buildPopupHtml(selectionData), {
-        className: "bcm-leaflet-popup",
-      });
-      marker.on("click", () => setSelection(selectionData));
+      bindLazyPopup(marker, selectionData);
 
       marker.addTo(claimLayers[feature.properties.tier]);
 
-      if (feature.properties.has_bank) marker.addTo(banksLayer);
-      if (feature.properties.has_market) marker.addTo(marketsLayer);
-      if (feature.properties.has_waystone) marker.addTo(waystonesLayer);
+      // Create independent markers for POI layers so toggling them
+      // doesn't remove the shared marker from the claims layer.
+      if (feature.properties.has_bank) {
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        bindLazyPopup(m, selectionData);
+        m.addTo(banksLayer);
+      }
+      if (feature.properties.has_market) {
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        bindLazyPopup(m, selectionData);
+        m.addTo(marketsLayer);
+      }
+      if (feature.properties.has_waystone) {
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        bindLazyPopup(m, selectionData);
+        m.addTo(waystonesLayer);
+      }
 
       return marker;
     },
@@ -169,10 +182,7 @@ export async function loadCavesGeoJson(
       const marker = L.marker(latlng, {
         icon: caveIcons[feature.properties.tier - 1],
       }).addTo(caveLayers[feature.properties.tier - 1]);
-      marker.bindPopup(buildPopupHtml(selectionData), {
-        className: "bcm-leaflet-popup",
-      });
-      marker.on("click", () => setSelection(selectionData));
+      bindLazyPopup(marker, selectionData);
       return marker;
     },
   });
@@ -204,10 +214,7 @@ export async function loadDungeonsGeoJson(
         latlng: { lat: latlng.lat, lng: latlng.lng },
       };
       const marker = L.marker(latlng, { icon }).addTo(dungeonsLayer);
-      marker.bindPopup(buildPopupHtml(selectionData), {
-        className: "bcm-leaflet-popup",
-      });
-      marker.on("click", () => setSelection(selectionData));
+      bindLazyPopup(marker, selectionData);
       return marker;
     },
   });
@@ -250,10 +257,7 @@ export async function loadTowersGeoJson(
         fillColor: feature.properties.fillColor,
       };
       const marker = L.marker(latlng, { icon: towerIcon });
-      marker.bindPopup(buildPopupHtml(selectionData), {
-        className: "bcm-leaflet-popup",
-      });
-      marker.on("click", () => setSelection(selectionData));
+      bindLazyPopup(marker, selectionData);
       return marker;
     },
     onEachFeature(feature, featureLayer) {

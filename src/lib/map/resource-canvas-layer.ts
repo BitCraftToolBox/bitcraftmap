@@ -28,6 +28,9 @@ export class ResourceCanvasLayer extends L.Layer {
 	private _dirty = false;
 	private _drawnScreenPoints: Float64Array | null = null;
 	private _drawnGameCoords: Float64Array | null = null;
+	private _screenBuf: number[] = [];
+	private _coordBuf: number[] = [];
+	private _lastBoundsKey = '';
 
 	constructor(options: ResourceCanvasLayerOptions) {
 		super(options);
@@ -144,6 +147,12 @@ export class ResourceCanvasLayer extends L.Layer {
 		this._canvas.width = size.x;
 		this._canvas.height = size.y;
 
+		// Skip redraw if the visible bounds haven't meaningfully changed
+		const bounds = this._map.getBounds();
+		const key = `${size.x},${size.y},${bounds.getSouth().toFixed(1)},${bounds.getNorth().toFixed(1)},${bounds.getWest().toFixed(1)},${bounds.getEast().toFixed(1)}`;
+		if (key === this._lastBoundsKey) return;
+		this._lastBoundsKey = key;
+
 		this._redraw();
 	}
 
@@ -184,8 +193,11 @@ export class ResourceCanvasLayer extends L.Layer {
 		// Threshold for fast integer comparison (Knuth multiplicative hash)
 		const lodThreshold = (showRatio * 4294967296) >>> 0;
 
-		const screenPoints: number[] = [];
-		const gameCoords: number[] = [];
+		// Reuse buffers to reduce GC pressure
+		const screenPoints = this._screenBuf;
+		const gameCoords = this._coordBuf;
+		screenPoints.length = 0;
+		gameCoords.length = 0;
 
 		for (const data of this._pointsByRegion.values()) {
 			const { lats, lngs } = data;
