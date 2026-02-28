@@ -29,25 +29,27 @@
 		} else if (e.key === 'Enter') {
 			e.preventDefault();
 			const result = search.results[Math.max(search.selectedIndex, 0)];
-			if (result) handleSelect(result);
+			if (result) handleSelect(result, e);
 		} else if (e.key === 'Escape') {
 			clearSearch();
 			inputEl?.blur();
 		}
 	}
 
-	function handleSelect(entry: SearchResult): void {
+	function handleSelect(entry: SearchResult, event?: MouseEvent | KeyboardEvent): void {
+		const keepOpen = event?.shiftKey ?? false;
+
 		if (entry.type === 'player') {
 			onPlayerSelect(entry.entityId, entry.username);
 		} else if (entry.type === 'resource') {
 			onResourceSelect(entry.id, entry.name, entry.tier);
-			clearSearch();
+			if (!keepOpen) clearSearch();
 		} else if (entry.type === 'creature') {
 			onCreatureSelect(entry.id, entry.name, entry.tier);
-			clearSearch();
+			if (!keepOpen) clearSearch();
 		} else {
 			onSelect(entry);
-			clearSearch();
+			if (!keepOpen) clearSearch();
 		}
 	}
 </script>

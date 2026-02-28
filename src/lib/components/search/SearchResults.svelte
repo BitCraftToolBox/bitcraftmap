@@ -17,7 +17,7 @@
 		playerResults: PlayerEntry[];
 		selectedIndex: number;
 		isLoadingRemote: boolean;
-		handleSelect: (entry: SearchResult) => void;
+		handleSelect: (entry: SearchResult, event?: MouseEvent) => void;
 	} = $props();
 </script>
 
@@ -29,7 +29,7 @@
 		{#each locationResults as result, i}
 			<button
 				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {i === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={() => handleSelect(result)}
+				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(result, e); }}
 				onmouseenter={() => selectedIndex = i}
 			>
 				<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +49,7 @@
 			{@const globalIndex = locationResults.length + j}
 			<button
 				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={() => handleSelect(creature)}
+				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(creature, e); }}
 				onmouseenter={() => selectedIndex = globalIndex}
 			>
 				<span
@@ -73,7 +73,7 @@
 			{@const globalIndex = locationResults.length + creatureResults.length + j}
 			<button
 				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={() => handleSelect(resource)}
+				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(resource, e); }}
 				onmouseenter={() => selectedIndex = globalIndex}
 			>
 				<span
@@ -94,7 +94,7 @@
 			{@const globalIndex = locationResults.length + creatureResults.length + resourceResults.length + j}
 			<button
 				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={() => handleSelect(player)}
+				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(player, e); }}
 				onmouseenter={() => selectedIndex = globalIndex}
 			>
 				<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
