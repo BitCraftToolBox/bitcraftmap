@@ -7,11 +7,13 @@
 	let {
 		onSelect,
 		onPlayerSelect,
-		onResourceSelect
+		onResourceSelect,
+		onCreatureSelect
 	}: {
 		onSelect: (entry: { latlng: L.LatLng; layer: L.LayerGroup }) => void;
 		onPlayerSelect: (entityId: string, username: string) => void;
 		onResourceSelect: (id: number, name: string, tier: number) => void;
+		onCreatureSelect: (id: number, name: string, tier: number) => void;
 	} = $props();
 
 	const search = getSearchState();
@@ -40,6 +42,9 @@
 		} else if (entry.type === 'resource') {
 			onResourceSelect(entry.id, entry.name, entry.tier);
 			clearSearch();
+		} else if (entry.type === 'creature') {
+			onCreatureSelect(entry.id, entry.name, entry.tier);
+			clearSearch();
 		} else {
 			onSelect(entry);
 			clearSearch();
@@ -53,7 +58,7 @@
 		<input
 			bind:this={inputEl}
 			type="text"
-			placeholder="Search claims, cities, resources, players..."
+			placeholder="Search claims, cities, creatures, resources, players..."
 			bind:value={search.query}
 			onfocus={() => search.isOpen = true}
 			onblur={() => setTimeout(() => search.isOpen = false, 200)}
@@ -71,9 +76,10 @@
 		{/if}
 	</div>
 
-	{#if search.isOpen && (search.locationResults.length > 0 || search.resourceResults.length > 0 || search.playerResults.length > 0 || search.isLoadingRemote)}
+	{#if search.isOpen && (search.locationResults.length > 0 || search.creatureResults.length > 0 || search.resourceResults.length > 0 || search.playerResults.length > 0 || search.isLoadingRemote)}
 		<SearchResults
 			locationResults={search.locationResults}
+			creatureResults={search.creatureResults}
 			resourceResults={search.resourceResults}
 			playerResults={search.playerResults}
 			bind:selectedIndex={search.selectedIndex}

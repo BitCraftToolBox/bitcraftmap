@@ -2,6 +2,7 @@ import type L from 'leaflet';
 import type { MapSelection } from '$lib/types/map';
 import { searchPlayers } from '$lib/services/player-service';
 import { searchResources } from '$lib/services/resource-service';
+import { creatureIndex } from '$lib/data/resource-index';
 
 export interface SearchEntry {
 	title: string;
@@ -26,10 +27,19 @@ export interface ResourceEntry {
 	tag: string;
 }
 
+export interface CreatureSearchEntry {
+	type: 'creature';
+	id: number;
+	name: string;
+	tier: number;
+	tag: string;
+}
+
 export type SearchResult =
 	| (SearchEntry & { type: 'location' })
 	| PlayerEntry
-	| ResourceEntry;
+	| ResourceEntry
+	| CreatureSearchEntry;
 
 let entries = $state<SearchEntry[]>([]);
 let query = $state('');
@@ -110,8 +120,23 @@ export function getSearchState() {
 			return resourceResults;
 		},
 
+		get creatureResults(): CreatureSearchEntry[] {
+			if (!query.trim()) return [];
+			const lower = query.toLowerCase();
+			return Object.entries(creatureIndex)
+				.filter(([, c]) => c.name.toLowerCase().includes(lower))
+				.slice(0, 50)
+				.map(([id, c]) => ({
+					type: 'creature' as const,
+					id: Number(id),
+					name: c.name,
+					tier: c.tier,
+					tag: c.tag,
+				}));
+		},
+
 		get results(): SearchResult[] {
-			return [...this.locationResults, ...this.resourceResults, ...this.playerResults];
+			return [...this.locationResults, ...this.creatureResults, ...this.resourceResults, ...this.playerResults];
 		}
 	};
 }

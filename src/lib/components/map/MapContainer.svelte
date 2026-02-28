@@ -34,6 +34,7 @@
     parseUrlParams,
     updatePlayerIdParam,
     updateResourceIdParam,
+    updateEnemyIdParam,
     updateRegionIdParam,
   } from "$lib/utils/url-params";
   import { getRegionState, setRegions } from "$lib/stores/region-store.svelte";
@@ -563,6 +564,7 @@
 
   // Resource tracking state
   const trackedResourceIds = new Set<number>();
+  const trackedEnemyIds = new Set<number>();
 
   const resourceUpdateCtx: ResourceUpdateContext = {
     get resourceLayers() {
@@ -776,6 +778,53 @@
       subscribeResource(resourceId);
     } catch (err) {
       console.error(`Failed to load resource ${resourceId}:`, err);
+    }
+  }
+
+  async function handleCreatureSelect(
+    enemyId: number,
+    name: string,
+    tier: number,
+  ): Promise<void> {
+    if (resourceLayers[enemyId]) return; // already loaded
+
+    trackedEnemyIds.add(enemyId);
+    updateEnemyIdParam(trackedEnemyIds);
+
+    const color =
+      creatureIndex[enemyId]?.color || tierColors[tier] || "#3388ff";
+    const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: enemyId });
+    resourceLayers[enemyId] = canvasLayer;
+    canvasLayer.addTo(map);
+
+    addTrackingItem({
+      id: enemyId,
+      type: "resource",
+      text: `Tracking: ${name}, Tier ${tier}`,
+      color,
+      visible: true,
+    });
+
+    try {
+      const regions = regionState.effectiveRegions;
+      const results = await Promise.all(
+        regions.map((rId) => fetchEnemy(rId, enemyId)),
+      );
+
+      regions.forEach((rId, idx) => {
+        const geoJson = results[idx];
+        if (
+          geoJson.features[0]?.geometry &&
+          (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates
+            ?.length > 0
+        ) {
+          const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint)
+            .coordinates;
+          canvasLayer.setRegionPoints(rId, coords as [number, number][]);
+        }
+      });
+    } catch (err) {
+      console.error(`Failed to load creature ${enemyId}:`, err);
     }
   }
 
@@ -1069,6 +1118,7 @@
       onSelect={handleSearchSelect}
       onPlayerSelect={handlePlayerSelect}
       onResourceSelect={handleResourceSelect}
+      onCreatureSelect={handleCreatureSelect}
     />
     <Sidebar
       {genericToggle}

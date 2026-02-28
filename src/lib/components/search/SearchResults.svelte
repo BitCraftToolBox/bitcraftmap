@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { SearchEntry, PlayerEntry, ResourceEntry, SearchResult } from '$lib/stores/search-store.svelte';
+	import type { SearchEntry, PlayerEntry, ResourceEntry, CreatureSearchEntry, SearchResult } from '$lib/stores/search-store.svelte';
 	import { tierColors } from '$lib/config/tiers';
 
 	let {
 		locationResults,
+		creatureResults,
 		resourceResults,
 		playerResults,
 		selectedIndex = $bindable(),
@@ -11,6 +12,7 @@
 		handleSelect
 	}: {
 		locationResults: (SearchEntry & { type: 'location' })[];
+		creatureResults: CreatureSearchEntry[];
 		resourceResults: ResourceEntry[];
 		playerResults: PlayerEntry[];
 		selectedIndex: number;
@@ -39,6 +41,27 @@
 		{/each}
 	{/if}
 
+	{#if creatureResults.length > 0}
+		<div class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-white/5">
+			Creatures
+		</div>
+		{#each creatureResults as creature, j}
+			{@const globalIndex = locationResults.length + j}
+			<button
+				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
+				onmousedown={() => handleSelect(creature)}
+				onmouseenter={() => selectedIndex = globalIndex}
+			>
+				<span
+					class="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
+					style:background-color={tierColors[creature.tier] || '#3388ff'}
+				></span>
+				<span class="truncate">{creature.name}</span>
+				<span class="ml-auto text-xs text-gray-600 shrink-0">T{creature.tier}</span>
+			</button>
+		{/each}
+	{/if}
+
 	{#if resourceResults.length > 0 || isLoadingRemote}
 		<div class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-white/5">
 			Resources
@@ -47,7 +70,7 @@
 			{/if}
 		</div>
 		{#each resourceResults as resource, j}
-			{@const globalIndex = locationResults.length + j}
+			{@const globalIndex = locationResults.length + creatureResults.length + j}
 			<button
 				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
 				onmousedown={() => handleSelect(resource)}
@@ -68,7 +91,7 @@
 			Players
 		</div>
 		{#each playerResults as player, j}
-			{@const globalIndex = locationResults.length + resourceResults.length + j}
+			{@const globalIndex = locationResults.length + creatureResults.length + resourceResults.length + j}
 			<button
 				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
 				onmousedown={() => handleSelect(player)}

@@ -36,6 +36,10 @@ export function updateRegionIdParam(regionIds: Set<number>): void {
 	setParam('regionId', regionIds.size > 0 ? [...regionIds].sort((a, b) => a - b).join(',') : null);
 }
 
+export function updateEnemyIdParam(enemyIds: Set<number>): void {
+	setParam('enemyId', enemyIds.size > 0 ? [...enemyIds].join(',') : null);
+}
+
 export function updatePlayerIdParam(playerIds: Set<string>): void {
 	setParam('playerId', playerIds.size > 0 ? [...playerIds].join(',') : null);
 }
