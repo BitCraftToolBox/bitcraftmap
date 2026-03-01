@@ -3,6 +3,15 @@ import type { UrlParams } from '$lib/types/geojson';
 
 export function parseUrlParams(): UrlParams {
 	const query = new URLSearchParams(window.location.search);
+	const centerRaw = query.get('center');
+	const zoomRaw = query.get('zoom');
+	let center: [number, number] | null = null;
+	if (centerRaw) {
+		const parts = centerRaw.split(',').map(Number);
+		if (parts.length === 2 && parts.every((n) => !isNaN(n))) {
+			center = [parts[0], parts[1]];
+		}
+	}
 	return {
 		heatmap: query.has('heatmap'),
 		gistId: query.get('gistId'),
@@ -12,7 +21,9 @@ export function parseUrlParams(): UrlParams {
 		noColors: parseInt(query.get('noColors') || '0') === 1,
 		playerId: query.get('playerId') || '',
 		followPlayer: ['true', '1'].includes(query.get('followPlayer')?.toString().toLowerCase() ?? ''),
-		hash: location.hash.slice(1)
+		hash: location.hash.slice(1),
+		center,
+		zoom: zoomRaw != null ? parseFloat(zoomRaw) : null
 	};
 }
 
@@ -42,4 +53,11 @@ export function updateEnemyIdParam(enemyIds: Set<number>): void {
 
 export function updatePlayerIdParam(playerIds: Set<string>): void {
 	setParam('playerId', playerIds.size > 0 ? [...playerIds].join(',') : null);
+}
+
+export function buildViewUrl(gameN: number, gameE: number, zoom: number): string {
+	const url = new URL(window.location.href);
+	url.searchParams.set('center', `${gameN},${gameE}`);
+	url.searchParams.set('zoom', zoom.toFixed(1));
+	return url.toString().replaceAll('%2C', ',');
 }

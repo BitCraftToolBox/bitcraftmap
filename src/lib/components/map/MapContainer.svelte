@@ -567,7 +567,10 @@
     }
 
     // Restore map state
-    if (!hashHasFlyToOrZoom()) {
+    if (urlParams.center) {
+      const [n, e] = urlParams.center;
+      map.flyTo([n * 3, e * 3], urlParams.zoom ?? map.getZoom());
+    } else if (!hashHasFlyToOrZoom()) {
       restoreMapState(map);
     }
 
