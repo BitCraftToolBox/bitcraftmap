@@ -83,4 +83,6 @@ export interface UrlParams {
 	playerId: string;
 	followPlayer: boolean;
 	hash: string;
+	center: [number, number] | null;
+	zoom: number | null;
 }
