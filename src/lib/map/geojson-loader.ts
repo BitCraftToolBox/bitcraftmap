@@ -18,6 +18,7 @@ let templeIcon: L.Icon;
 let treeIcon: L.Icon;
 let towerIcon: L.Icon;
 let hexiteIcon: L.Icon;
+let hexiteDepletedIcon: L.Icon;
 
 export function initIcons(): void {
   caveIcons = Array.from({ length: 10 }, (_, i) => createIcon(`t${i + 1}`));
@@ -28,6 +29,7 @@ export function initIcons(): void {
   treeIcon = createIcon("travelerTree");
   towerIcon = createIcon("tower", [16, 32]);
   hexiteIcon = createIcon("hexite-energy");
+  hexiteDepletedIcon = createIcon("hexite-energy", [32, 32], { className: "grayscale-icon" });
 }
 
 /** Bind a lazy popup — the content function is only called when the popup opens. */
@@ -48,7 +50,11 @@ export async function loadTreesGeoJson(
     pointToLayer(feature, latlng) {
       const isHexite = feature.properties.type === "hexite";
       const targetLayer = isHexite ? hexiteLayer : treesLayer;
-      const icon = isHexite ? hexiteIcon : treeIcon;
+      const icon = isHexite ?
+              !feature.properties.timer || new Date(feature.properties.timer).getTime() <= Date.now()
+                  ? hexiteIcon
+                  : hexiteDepletedIcon
+              : treeIcon;
       const selectionType = isHexite
         ? ("hexite" as const)
         : ("wonder" as const);
@@ -57,6 +63,7 @@ export async function loadTreesGeoJson(
         type: selectionType,
         name: feature.properties.name,
         latlng: { lat: latlng.lat, lng: latlng.lng },
+        timer: feature.properties.timer
       };
       const marker = L.marker(latlng, { icon }).addTo(targetLayer);
       bindLazyPopup(marker, selectionData);
@@ -136,7 +143,7 @@ export async function loadClaimsGeoJson(
       const marker = L.marker(latlng, {
         title: feature.properties.name + " N " + coords[0] + " E " + coords[1],
         icon: claimIcons[feature.properties.tier],
-        zIndexOffset: feature.properties.tier * 100,
+        zIndexOffset: feature.properties.tier * 10,
       });
       (marker as any)._selectionData = selectionData;
       bindLazyPopup(marker, selectionData);
@@ -146,17 +153,17 @@ export async function loadClaimsGeoJson(
       // Create independent markers for POI layers so toggling them
       // doesn't remove the shared marker from the claims layer.
       if (feature.properties.has_bank) {
-        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 10 });
         bindLazyPopup(m, selectionData);
         m.addTo(banksLayer);
       }
       if (feature.properties.has_market) {
-        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 10 });
         bindLazyPopup(m, selectionData);
         m.addTo(marketsLayer);
       }
       if (feature.properties.has_waystone) {
-        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 100 });
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 10 });
         bindLazyPopup(m, selectionData);
         m.addTo(waystonesLayer);
       }

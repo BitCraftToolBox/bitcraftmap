@@ -70,7 +70,7 @@ export interface PlayerSelection {
 }
 
 export interface GenericPOISelection {
-	type: 'wonder' | 'temple' | 'ruined-city' | 'hexite' | 'dungeon';
+	type: 'wonder' | 'temple' | 'ruined-city' | 'dungeon';
 	name: string;
 	latlng: SelectionLatLng;
 }
@@ -83,10 +83,18 @@ export interface WatchtowerSelection {
 	fillColor?: string;
 }
 
+export interface HexiteDepositSelection {
+	type: 'hexite';
+	name: string;
+	latlng: SelectionLatLng;
+	timer: string | undefined;
+}
+
 export type MapSelection =
 	| ClaimSelection
 	| CaveSelection
 	| ResourceSelection
 	| PlayerSelection
 	| GenericPOISelection
-	| WatchtowerSelection;
+	| WatchtowerSelection
+	| HexiteDepositSelection;

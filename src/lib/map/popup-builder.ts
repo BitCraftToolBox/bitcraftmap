@@ -104,6 +104,28 @@ export function buildPopupHtml(item: MapSelection): string {
 				<div class="bcm-popup-body"></div>
 			</div>`;
 
+		case 'hexite':
+			const timer = item.timer ? new Date(item.timer) : undefined;
+			const ready = !timer || timer.getTime() <= Date.now();
+			return `<div class="bcm-popup">
+				${type}
+				<div class="bcm-popup-title">
+					<span class="bcm-popup-swatch" style="background-color:${ready ? '#22c55e' : '#6b7280'}"></span>
+					<span class="bcm-popup-name">${item.name}</span>
+				</div>
+				${coords}
+				<div class="bcm-popup-body">
+					<div class="bcm-popup-props">
+						<div class="bcm-popup-row">
+							<span class="bcm-popup-row-label">Available</span>
+							<span class="bcm-popup-row-val ${ready ? 'bcm-popup-row-val--yes' : ''}">
+								${ready ? 'Now' : timer.toLocaleString()}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>`;
+
 		default:
 			return `<div class="bcm-popup">
 				${type}

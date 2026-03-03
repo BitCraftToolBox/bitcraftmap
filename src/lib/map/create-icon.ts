@@ -1,7 +1,11 @@
 import L from 'leaflet';
 import { iconsManifest } from '$lib/data/icons-manifest';
 
-export function createIcon(iconName: string = 'Hex_Logo', iconSize: [number, number] = [32, 32]): L.Icon {
+export function createIcon(
+	iconName: string = 'Hex_Logo',
+	iconSize: [number, number] = [32, 32],
+	additionalOptions?: Partial<L.IconOptions>
+): L.Icon {
 	const width = iconSize[0] ?? 32;
 	const height = iconSize[1] ?? 32;
 	return L.icon({
@@ -11,7 +15,8 @@ export function createIcon(iconName: string = 'Hex_Logo', iconSize: [number, num
 		popupAnchor: [0, -height / 2],
 		shadowUrl: undefined,
 		shadowSize: undefined,
-		shadowAnchor: undefined
+		shadowAnchor: undefined,
+		...additionalOptions,
 	});
 }
 

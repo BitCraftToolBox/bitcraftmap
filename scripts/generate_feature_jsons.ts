@@ -3,22 +3,29 @@ import {
     ClaimState,
     DbConnection,
     EmpireChunkState,
-    EmpireState,
+    EmpireState, RemoteTables,
     WorldRegionNameState
 } from './bindings/src'
 import * as fs from "node:fs";
 import * as path from "node:path";
 
 fs.existsSync('.env.local') && require('dotenv').config({path: '.env.local'});
-const data_dir = process.env.DATA_DIR || "../frontend/assets/markers/";
+const data_dir = process.env.DATA_DIR || "../static/markers/";
 !fs.existsSync(data_dir) && fs.mkdirSync(data_dir, {recursive: true});
+
+interface HexitDepositTimer {
+    entityId: bigint;
+    location: { x: number, z: number };
+    endTimestamp: Date;
+}
 
 interface RegionData {
     claimState: ClaimState[],
     claimLocalState: ClaimLocalState[],
     empireChunkState: EmpireChunkState[],
     empireState: EmpireState[],
-    worldRegionNameState: WorldRegionNameState[]
+    worldRegionNameState: WorldRegionNameState[],
+    hexiteTimers: HexitDepositTimer[]
 }
 
 interface OutputData {
@@ -66,12 +73,34 @@ function formatTemplateArgs(value: string) {
     });
 }
 
+function collateHexite(db: RemoteTables): HexitDepositTimer[] {
+    const timers: HexitDepositTimer[] = [];
+    for (const growth of db.growthState.iter()) {
+        if (growth.growthRecipeId !== 1577969715) {
+            continue;
+        }
+        const locRow = db.locationState.entityId.find(growth.entityId);
+        if (locRow) {
+            timers.push({
+                entityId: growth.entityId,
+                location: {x: locRow.x, z: locRow.z},
+                endTimestamp: growth.endTimestamp.toDate()
+            });
+        }
+    }
+    return timers;
+}
+
 const onConnect = (resolve: (_: RegionData) => void, first: boolean) =>
     (conn: DbConnection) => {
         const subs = [
             'SELECT * FROM claim_state',
             'SELECT * FROM claim_local_state',
             'SELECT * FROM world_region_name_state',
+            // hexite deposit regeneration - growth state has the entity id -> end timestamp, location state has entity_id -> location
+            'SELECT * FROM growth_state WHERE growth_recipe_id = 1577969715',
+            'SELECT loc.* FROM location_state loc JOIN growth_state gs ON gs.entity_id = loc.entity_id WHERE gs.growth_recipe_id = 1577969715;',
+            // these are synced from global, so only need to pull them once
             ...(first ? [
                 'SELECT * FROM empire_chunk_state',
                 'SELECT * FROM empire_state',
@@ -83,7 +112,8 @@ const onConnect = (resolve: (_: RegionData) => void, first: boolean) =>
                 claimLocalState: Array.from(conn.db.claimLocalState.iter()),
                 empireChunkState: Array.from(conn.db.empireChunkState.iter()),
                 empireState: Array.from(conn.db.empireState.iter()),
-                worldRegionNameState: Array.from(conn.db.worldRegionNameState.iter())
+                worldRegionNameState: Array.from(conn.db.worldRegionNameState.iter()),
+                hexiteTimers: collateHexite(conn.db)
             };
             conn.disconnect();
             resolve(data);
@@ -96,7 +126,8 @@ async function fetchDataFromRegions(regions: string[]) {
         claimLocalState: [],
         empireChunkState: [],
         empireState: [],
-        worldRegionNameState: []
+        worldRegionNameState: [],
+        hexiteTimers: []
     }
 
     let first = true;
@@ -108,6 +139,7 @@ async function fetchDataFromRegions(regions: string[]) {
                 .withToken(process.env.BITCRAFT_BEARER_TOKEN)
                 .onConnect(onConnect(resolve, first))
                 .onConnectError((_, err) => {
+                    // @ts-ignore
                     if (!err['wasClean']) {
                         reject(err);
                     }
@@ -125,6 +157,7 @@ async function fetchDataFromRegions(regions: string[]) {
             playerFacingName: nameState.playerFacingName,
             moduleNamePrefix: nameState.moduleNamePrefix
         });
+        data.hexiteTimers.push(...res.hexiteTimers);
         first = false;
     }
 
@@ -143,7 +176,6 @@ function makeFeature(props: any, loc: { x: number, z: number }) {
 }
 
 function makeTower(claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[]) {
-    // Find the territory for this watchtower
     const territory = territories.find(t => t.entityId === claimState.ownerBuildingEntityId);
     const props = {
         popupText: formatTemplateArgs(claimState.name)
@@ -155,7 +187,7 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
         return {
             type: "FeatureCollection",
             features: [
-                makeFeature(props, localState.location)
+                makeFeature(props, localState.location!)
             ]
         };
     }
@@ -180,7 +212,7 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
                 properties: {
                     fillOpacity: 0.2,
                     fillColor: territory.color,
-                    pointCoords: [localState.location.z, localState.location.x],
+                    pointCoords: [localState.location!.z, localState.location!.x],
                     popupText: props.popupText
                 },
                 geometry: {
@@ -188,23 +220,29 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
                     coordinates: polygons.map(p => [p])
                 }
             },
-            makeFeature(props, localState.location)
+            makeFeature(props, localState.location!)
         ]
     };
 }
 
-function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[]) {
+function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[], hexiteTimers: HexitDepositTimer[]) {
     const claimName = formatTemplateArgs(claimState.name);
     switch (localState.buildingDescriptionId) {
         case 433549604: // Tree of Wisdom
-        case 421789207: // Hexite Deposit
+        case 421789207: { // Hexite Deposit
+            let timer: Date | undefined;
+            if (localState.buildingDescriptionId === 421789207) {
+                timer = hexiteTimers.find(t => t.location.x === localState.location!.x && t.location.z === localState.location!.z)?.endTimestamp;
+            }
             outputs.trees.push(makeFeature({
                 name: claimName,
                 type: localState.buildingDescriptionId === 421789207 ? 'hexite' :
                         localState.buildingDescriptionId === 433549604 ? 'tree'
-                        : 'unreachable'
-            }, localState.location));
+                        : 'unreachable',
+                timer: timer
+            }, localState.location!));
             break;
+        }
         // Temples
         case 489406613:
         case 1752479333:
@@ -213,13 +251,13 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
         case 1008368350:
             outputs.temples.push(makeFeature({
                 name: claimName
-            }, localState.location));
+            }, localState.location!));
             break;
         // Ruined Town
         case 292245080:
             outputs.ruined.push(makeFeature({
                 name: claimName
-            }, localState.location));
+            }, localState.location!));
             break;
         // caves
         case 280863630:
@@ -235,7 +273,7 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
                 size: claimName.startsWith('Large ') ? 2 : 1, // always the case
                 // TODO grab building_desc and use function level to determine cave tier
                 tier: categories.Cave.indexOf(localState.buildingDescriptionId) + 1
-            }, localState.location));
+            }, localState.location!));
             break;
         // dungeons
         case 1785852446:
@@ -247,7 +285,7 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
                 iconName: "dungeon",
                 iconSize: localState.buildingDescriptionId == 846734170 ? [25, 25] : [35, 35],
                 type: localState.buildingDescriptionId
-            }, localState.location));
+            }, localState.location!));
             break;
         // watchtower
         case 90000:
@@ -337,7 +375,8 @@ function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Ma
         if (!watchtowerChunks.has(state.watchtowerEntityId)) {
             watchtowerChunks.set(state.watchtowerEntityId, []);
         }
-        watchtowerChunks.get(state.watchtowerEntityId).push(state.chunkIndex);
+        const arr = watchtowerChunks.get(state.watchtowerEntityId);
+        if (arr) arr.push(state.chunkIndex);
         if (!watchtowerEmpires.has(state.watchtowerEntityId)) {
             const empire = empireState.find(e => e.entityId === state.empireEntityId);
             if (empire) watchtowerEmpires.set(state.watchtowerEntityId, empire);
@@ -352,7 +391,7 @@ function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Ma
             const empire = watchtowerEmpires.get(claimState.ownerBuildingEntityId);
             territories.push({
                 entityId: claimState.ownerBuildingEntityId,
-                location: localState.location,
+                location: localState.location!,
                 name: formatTemplateArgs(claimState.name),
                 ownerId: empire ? empire.entityId : BigInt(0),
                 ownerName: empire ? empire.name : 'Unknown',
@@ -432,10 +471,13 @@ function assignTerritoryColors(territories: WatchtowerTerritory[], palette: stri
 }
 
 async function main() {
-    let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
-    const data = await fetchDataFromRegions(regions);
-    fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
-    //const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver);
+    // read live data
+    //let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+    //const data = await fetchDataFromRegions(regions);
+    //fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
+
+    // or read from file for faster dev without hitting servers
+    const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver) as RegionData;
 
     const localStateMap = new Map<bigint, ClaimLocalState>();
     data.claimLocalState.forEach(state => {
@@ -459,9 +501,10 @@ async function main() {
     }
 
     // For each claim, add features
-    data.claimState.map(claimState => {
+    data.claimState.forEach(claimState => {
         const localState = localStateMap.get(claimState.entityId);
-        addFeature(outputs, claimState, localState, territories);
+        if (!localState) return;
+        addFeature(outputs, claimState, localState, territories, data.hexiteTimers);
     });
 
     // --- Grids output ---
