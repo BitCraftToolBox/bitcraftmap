@@ -1,7 +1,0 @@
-matplotlib
-numpy
-requests
-json
-opencv
-pillow
-pandas
