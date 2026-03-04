@@ -1,13 +1,14 @@
 <script lang="ts">
 	import type L from 'leaflet';
 	import { fly, fade } from 'svelte/transition';
-	import { Layers, MapPinned, Crosshair, Globe, XIcon } from '@lucide/svelte';
+	import { Layers, MapPinned, Crosshair, Globe, XIcon, Settings } from '@lucide/svelte';
 	import { getSidebarState, toggleSidebarTab, closeSidebar, type SidebarTab } from '$lib/stores/sidebar-store.svelte';
 	import { getTrackingState } from '$lib/stores/tracking-store.svelte';
 	import LayersPanel from '$lib/components/layers/LayersPanel.svelte';
 	import LayerPanel from '$lib/components/layers/LayerPanel.svelte';
 	import TrackingPanel from '$lib/components/tracking/TrackingPanel.svelte';
 	import RegionSelector from '$lib/components/regions/RegionSelector.svelte';
+	import SettingsPanel from '$lib/components/settings/SettingsPanel.svelte';
 
 	let {
 		genericToggle,
@@ -40,7 +41,8 @@
 		{ id: 'layers', label: 'Layers', icon: Layers },
 		{ id: 'features', label: 'Features', icon: MapPinned },
 		{ id: 'tracking', label: 'Tracking', icon: Crosshair },
-		{ id: 'regions', label: 'Regions', icon: Globe }
+		{ id: 'regions', label: 'Regions', icon: Globe },
+		{ id: 'settings', label: 'Settings', icon: Settings }
 	];
 
 	function tabLabel(id: SidebarTab): string {
@@ -74,7 +76,8 @@
 	{#if sidebar.isExpanded}
 		<div
 			transition:fly={{ x: -20, duration: 200 }}
-			class="ml-1 w-64 min-w-64 max-w-64 shrink-0 max-h-[calc(100dvh-8rem)] overflow-y-auto overflow-x-hidden rounded-lg bg-[#1e2433]/95 border border-white/10 backdrop-blur-sm shadow-lg"
+			class="ml-1 shrink-0 max-h-[calc(100dvh-8rem)] overflow-y-auto overflow-x-hidden rounded-lg bg-[#1e2433]/95 border border-white/10 backdrop-blur-sm shadow-lg transition-[width] duration-200
+				{sidebar.activeTab === 'settings' ? 'w-80 min-w-80 max-w-80' : 'w-64 min-w-64 max-w-64'}"
 		>
 			<div class="flex items-center justify-between px-3 py-2 border-b border-white/10">
 				<h2 class="text-xs font-semibold text-gray-200 uppercase tracking-wider">
@@ -104,6 +107,8 @@
 					/>
 				{:else if sidebar.activeTab === 'regions'}
 					<RegionSelector {onRegionsChange} />
+				{:else if sidebar.activeTab === 'settings'}
+					<SettingsPanel />
 				{/if}
 			</div>
 		</div>
@@ -159,6 +164,8 @@
 					/>
 				{:else if sidebar.activeTab === 'regions'}
 					<RegionSelector {onRegionsChange} />
+				{:else if sidebar.activeTab === 'settings'}
+					<SettingsPanel />
 				{/if}
 			</div>
 		</div>

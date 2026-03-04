@@ -46,6 +46,7 @@
   import {
     addTrackingItem,
     toggleTrackingItem,
+    loadColorPreference,
   } from "$lib/stores/tracking-store.svelte";
   import { getLatestGistRaw } from "$lib/services/gist-service";
   import { fetchResource, fetchEnemy } from "$lib/services/api-service";
@@ -547,12 +548,13 @@
         () => {
           playerInfoPromise.then((results) => {
             playerIds.forEach((id, i) => {
+              const savedColor = loadColorPreference('player', id);
               addTrackingItem({
                 id: -1,
                 entityId: id,
                 type: "player",
                 text: `Player: ${results[i].username}`,
-                color: "#00ff00",
+                color: savedColor || "#00ff00",
                 visible: true,
               });
             });
@@ -662,7 +664,7 @@
           entityId,
           type: "player",
           text: `Player: ${playerInfo.username}`,
-          color,
+          color: loadColorPreference('player', entityId) || color,
           visible: true,
         });
       },
@@ -773,7 +775,7 @@
     trackedResourceIds.add(resourceId);
     updateResourceIdParam(trackedResourceIds);
 
-    const color = tierColors[tier] || "#3388ff";
+    const color = loadColorPreference('resource', resourceId) || tierColors[tier] || "#3388ff";
     const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: resourceId });
     resourceLayers[resourceId] = canvasLayer;
     canvasLayer.addTo(map);
@@ -821,7 +823,7 @@
     trackedEnemyIds.add(enemyId);
     updateEnemyIdParam(trackedEnemyIds);
 
-    const color =
+    const color = loadColorPreference('resource', enemyId) ||
       creatureIndex[enemyId]?.color || tierColors[tier] || "#3388ff";
     const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: enemyId });
     resourceLayers[enemyId] = canvasLayer;
@@ -896,7 +898,7 @@
     let trackingList: { text: string; color: string; id: number }[] = [];
 
     for (const id of resourceIds) {
-      let color =
+      let color = loadColorPreference('resource', id) ||
         resourceIndexOverride[id]?.color ||
         tierColors[resourceIndexOverride[id]?.tier] ||
         resourceIndex[id]?.color ||
@@ -909,7 +911,7 @@
       resourceLayers[id].addTo(map);
     }
     for (const id of enemyIds) {
-      let color =
+      let color = loadColorPreference('resource', id) ||
         creatureIndex[id]?.color ||
         tierColors[creatureIndex[id]?.tier] ||
         "#3388ff";
@@ -922,7 +924,7 @@
 
     for (const rId of regionIds) {
       for (const resId of resourceIds) {
-        let color =
+        let color = loadColorPreference('resource', resId) ||
           resourceIndexOverride[resId]?.color ||
           tierColors[resourceIndexOverride[resId]?.tier] ||
           resourceIndex[resId]?.color ||
@@ -941,7 +943,7 @@
         });
       }
       for (const eId of enemyIds) {
-        let color =
+        let color = loadColorPreference('resource', eId) ||
           creatureIndex[eId]?.color ||
           tierColors[creatureIndex[eId]?.tier] ||
           "#3388ff";
@@ -964,7 +966,7 @@
         id: item.id,
         type: "resource",
         text: item.text,
-        color: item.color,
+        color: noColors ? '#3388ff' : (loadColorPreference('resource', item.id) || item.color),
         visible: true,
       });
     }
