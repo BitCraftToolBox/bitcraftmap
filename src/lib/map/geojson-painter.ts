@@ -80,7 +80,10 @@ export function paintGeoJson(
 				} else {
 					finalPopupText = props.popupText;
 				}
-				featureLayer.bindPopup(finalPopupText, { pane: 'popupOnTop' });
+				featureLayer.bindPopup(
+					`<div class="bcm-popup"><div class="bcm-popup-text">${finalPopupText}</div></div>`,
+					{ pane: 'popupOnTop', className: 'bcm-leaflet-popup' }
+				);
 			}
 
 			handleLayerToggle(props, map, allLayers);
