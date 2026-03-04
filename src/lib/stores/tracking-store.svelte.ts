@@ -1,12 +1,31 @@
 import type { TrackingItem } from '$lib/types/geojson';
 
 const STORAGE_KEY = 'trackingColors';
+let cachedStore: Record<string, string> | null = null;
+
+if (typeof window !== 'undefined') {
+	window.addEventListener('storage', (e) => {
+		if (e.key === STORAGE_KEY) {
+			cachedStore = null;
+		}
+	});
+}
+
+const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+
+function isValidColor(color: string): boolean {
+	return HEX_COLOR_RE.test(color);
+}
 
 function getColorStore(): Record<string, string> {
+	if (cachedStore !== null) return cachedStore;
 	try {
-		return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+		const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+		cachedStore = parsed;
+		return parsed;
 	} catch {
-		return {};
+		cachedStore = {};
+		return cachedStore;
 	}
 }
 
@@ -17,27 +36,44 @@ function colorKey(type: 'resource' | 'enemy' | 'player' | undefined, id: number 
 }
 
 export function saveColorPreference(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string, color: string): void {
+	if (!isValidColor(color)) return;
 	const store = getColorStore();
 	store[colorKey(type, id)] = color;
-	localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+	try {
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+	} catch (e) { console.warn('Failed to save color preference:', e); }
+	cachedStore = store;
 }
 
 export function loadColorPreference(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string): string | undefined {
-	return getColorStore()[colorKey(type, id)];
+	const color = getColorStore()[colorKey(type, id)];
+	if (color !== undefined && !isValidColor(color)) return undefined;
+	return color;
 }
 
 export function removeColorPreference(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string): void {
 	const store = getColorStore();
 	delete store[colorKey(type, id)];
-	localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+	try {
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+	} catch (e) { console.warn('Failed to remove color preference:', e); }
+	cachedStore = store;
 }
 
 export function getAllColorPreferences(): Record<string, string> {
-	return getColorStore();
+	const store = getColorStore();
+	const filtered: Record<string, string> = {};
+	for (const [key, color] of Object.entries(store)) {
+		if (isValidColor(color)) filtered[key] = color;
+	}
+	return filtered;
 }
 
 export function clearAllColorPreferences(): void {
-	localStorage.removeItem(STORAGE_KEY);
+	try {
+		localStorage.removeItem(STORAGE_KEY);
+	} catch (e) { console.warn('Failed to clear color preferences:', e); }
+	cachedStore = null;
 }
 
 let items = $state<TrackingItem[]>([]);
@@ -77,12 +113,14 @@ export function removeTrackingItemByEntityId(entityId: string): void {
 }
 
 export function updateTrackingItemColor(id: number, color: string): void {
+	if (!isValidColor(color)) return;
 	const item = items.find((i) => i.id === id);
 	if (item) saveColorPreference(item.type, id, color);
 	items = items.map((i) => (i.id === id ? { ...i, color } : i));
 }
 
 export function updateTrackingItemColorByEntityId(entityId: string, color: string): void {
+	if (!isValidColor(color)) return;
 	saveColorPreference('player', entityId, color);
 	items = items.map((i) => (i.entityId === entityId ? { ...i, color } : i));
 }
