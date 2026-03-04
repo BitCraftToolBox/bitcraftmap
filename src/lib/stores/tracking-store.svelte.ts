@@ -1,6 +1,7 @@
 import type { TrackingItem } from '$lib/types/geojson';
 
 const STORAGE_KEY = 'trackingColors';
+const NAMES_KEY = 'trackingNames';
 let cachedStore: Record<string, string> | null = null;
 
 if (typeof window !== 'undefined') {
@@ -72,8 +73,41 @@ export function getAllColorPreferences(): Record<string, string> {
 export function clearAllColorPreferences(): void {
 	try {
 		localStorage.removeItem(STORAGE_KEY);
+		localStorage.removeItem(NAMES_KEY);
 	} catch (e) { console.warn('Failed to clear color preferences:', e); }
 	cachedStore = null;
+}
+
+function getNameStore(): Record<string, string> {
+	try {
+		return JSON.parse(localStorage.getItem(NAMES_KEY) || '{}');
+	} catch {
+		return {};
+	}
+}
+
+export function saveDisplayName(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string, name: string): void {
+	const store = getNameStore();
+	store[colorKey(type, id)] = name;
+	try {
+		localStorage.setItem(NAMES_KEY, JSON.stringify(store));
+	} catch { /* ignore */ }
+}
+
+export function loadDisplayName(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string): string | undefined {
+	return getNameStore()[colorKey(type, id)];
+}
+
+export function getAllDisplayNames(): Record<string, string> {
+	return getNameStore();
+}
+
+type ColorSyncHandler = (type: 'resource' | 'enemy' | 'player', id: number | string, color: string) => void;
+let colorSyncHandler: ColorSyncHandler | null = null;
+
+export function registerColorSyncHandler(handler: ColorSyncHandler): () => void {
+	colorSyncHandler = handler;
+	return () => { colorSyncHandler = null; };
 }
 
 let items = $state<TrackingItem[]>([]);
@@ -88,10 +122,12 @@ export function addTrackingItem(item: TrackingItem): void {
 	if (item.type === 'player' && item.entityId) {
 		if (!items.some((i) => i.entityId === item.entityId)) {
 			items = [...items, item];
+			saveDisplayName(item.type, item.entityId, item.text);
 		}
 	} else {
 		if (!items.some((i) => i.id === item.id)) {
 			items = [...items, item];
+			if (item.type) saveDisplayName(item.type, item.id, item.text);
 		}
 	}
 }
@@ -117,12 +153,14 @@ export function updateTrackingItemColor(id: number, color: string): void {
 	const item = items.find((i) => i.id === id);
 	if (item) saveColorPreference(item.type, id, color);
 	items = items.map((i) => (i.id === id ? { ...i, color } : i));
+	if (item?.type) colorSyncHandler?.(item.type, id, color);
 }
 
 export function updateTrackingItemColorByEntityId(entityId: string, color: string): void {
 	if (!isValidColor(color)) return;
 	saveColorPreference('player', entityId, color);
 	items = items.map((i) => (i.entityId === entityId ? { ...i, color } : i));
+	colorSyncHandler?.('player', entityId, color);
 }
 
 export function clearTracking(): void {

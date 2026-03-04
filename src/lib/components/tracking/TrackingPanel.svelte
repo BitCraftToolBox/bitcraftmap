@@ -7,15 +7,11 @@
 		onTogglePlayer,
 		onRemoveResource,
 		onRemovePlayer,
-		onColorChangeResource,
-		onColorChangePlayer
 	}: {
 		onToggleResource: (id: number) => void;
 		onTogglePlayer: (entityId: string) => void;
 		onRemoveResource: (id: number) => void;
 		onRemovePlayer: (entityId: string) => void;
-		onColorChangeResource: (id: number, color: string) => void;
-		onColorChangePlayer: (entityId: string, color: string) => void;
 	} = $props();
 
 	const tracking = getTrackingState();
@@ -47,10 +43,8 @@
 				onColorChange={(color) => {
 					if (item.type === 'player' && item.entityId) {
 						updateTrackingItemColorByEntityId(item.entityId, color);
-						onColorChangePlayer(item.entityId, color);
 					} else {
 						updateTrackingItemColor(item.id, color);
-						onColorChangeResource(item.id, color);
 					}
 				}}
 			/>
