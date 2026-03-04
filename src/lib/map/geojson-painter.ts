@@ -81,7 +81,7 @@ export function paintGeoJson(
 					finalPopupText = props.popupText;
 				}
 				featureLayer.bindPopup(
-					`<div class="bcm-popup"><div class="bcm-popup-body">${finalPopupText}</div></div>`,
+					`<div class="bcm-popup"><div class="bcm-popup-text">${finalPopupText}</div></div>`,
 					{ pane: 'popupOnTop', className: 'bcm-leaflet-popup' }
 				);
 			}

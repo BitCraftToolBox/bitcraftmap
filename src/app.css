@@ -328,6 +328,14 @@ body {
 	padding-bottom: 12px;
 }
 
+/* Simple text content (raw popupText, no structured fields) */
+.bcm-popup-text {
+	padding: 10px 34px 12px 14px;
+	font-size: 13px;
+	color: #e5e7eb;
+	line-height: 1.5;
+}
+
 /* Region name tooltips on grid overlay */
 .region-tooltip-anchor {
 	background: none !important;
