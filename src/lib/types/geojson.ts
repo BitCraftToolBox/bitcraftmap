@@ -38,7 +38,7 @@ export interface BitcraftFeatureProperties {
 export interface TrackingItem {
 	id: number;
 	entityId?: string;
-	type?: 'resource' | 'player';
+	type?: 'resource' | 'enemy' | 'player';
 	text: string;
 	color: string;
 	visible: boolean;

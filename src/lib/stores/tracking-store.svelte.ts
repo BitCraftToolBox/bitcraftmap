@@ -10,21 +10,23 @@ function getColorStore(): Record<string, string> {
 	}
 }
 
-function colorKey(type: 'resource' | 'player' | undefined, id: number | string): string {
-	return type === 'player' ? `player:${id}` : `resource:${id}`;
+function colorKey(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string): string {
+	if (type === 'player') return `player:${id}`;
+	if (type === 'enemy') return `enemy:${id}`;
+	return `resource:${id}`;
 }
 
-export function saveColorPreference(type: 'resource' | 'player' | undefined, id: number | string, color: string): void {
+export function saveColorPreference(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string, color: string): void {
 	const store = getColorStore();
 	store[colorKey(type, id)] = color;
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
 }
 
-export function loadColorPreference(type: 'resource' | 'player' | undefined, id: number | string): string | undefined {
+export function loadColorPreference(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string): string | undefined {
 	return getColorStore()[colorKey(type, id)];
 }
 
-export function removeColorPreference(type: 'resource' | 'player' | undefined, id: number | string): void {
+export function removeColorPreference(type: 'resource' | 'enemy' | 'player' | undefined, id: number | string): void {
 	const store = getColorStore();
 	delete store[colorKey(type, id)];
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(store));

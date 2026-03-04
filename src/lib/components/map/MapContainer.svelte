@@ -823,7 +823,7 @@
     trackedEnemyIds.add(enemyId);
     updateEnemyIdParam(trackedEnemyIds);
 
-    const color = loadColorPreference('resource', enemyId) ||
+    const color = loadColorPreference('enemy', enemyId) ||
       creatureIndex[enemyId]?.color || tierColors[tier] || "#3388ff";
     const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: enemyId });
     resourceLayers[enemyId] = canvasLayer;
@@ -831,7 +831,7 @@
 
     addTrackingItem({
       id: enemyId,
-      type: "resource",
+      type: "enemy",
       text: `Tracking: ${name}, Tier ${tier}`,
       color,
       visible: true,
@@ -895,7 +895,7 @@
       fillColor: string;
       resource: number;
     }[] = [];
-    let trackingList: { text: string; color: string; id: number }[] = [];
+    let trackingList: { text: string; color: string; id: number; type: 'resource' | 'enemy' }[] = [];
 
     for (const id of resourceIds) {
       let color = loadColorPreference('resource', id) ||
@@ -911,7 +911,7 @@
       resourceLayers[id].addTo(map);
     }
     for (const id of enemyIds) {
-      let color = loadColorPreference('resource', id) ||
+      let color = loadColorPreference('enemy', id) ||
         creatureIndex[id]?.color ||
         tierColors[creatureIndex[id]?.tier] ||
         "#3388ff";
@@ -940,10 +940,11 @@
           text: "Tracking: " + name + ", Tier " + tier,
           color,
           id: resId,
+          type: 'resource',
         });
       }
       for (const eId of enemyIds) {
-        let color = loadColorPreference('resource', eId) ||
+        let color = loadColorPreference('enemy', eId) ||
           creatureIndex[eId]?.color ||
           tierColors[creatureIndex[eId]?.tier] ||
           "#3388ff";
@@ -956,6 +957,7 @@
           text: "Tracking: " + name + ", Tier " + tier,
           color,
           id: eId,
+          type: 'enemy',
         });
       }
     }
@@ -964,9 +966,9 @@
     for (const item of trackingList) {
       addTrackingItem({
         id: item.id,
-        type: "resource",
+        type: item.type,
         text: item.text,
-        color: noColors ? '#3388ff' : (loadColorPreference('resource', item.id) || item.color),
+        color: noColors ? '#3388ff' : (loadColorPreference(item.type, item.id) || item.color),
         visible: true,
       });
     }

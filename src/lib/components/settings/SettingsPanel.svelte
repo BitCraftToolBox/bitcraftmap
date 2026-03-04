@@ -10,10 +10,14 @@
 	function loadEntries() {
 		const store = getAllColorPreferences();
 		return Object.entries(store).map(([key, color]) => {
-			const [type, id] = key.split(':') as ['resource' | 'player', string];
-			let name = `${type === 'player' ? 'Player' : 'Resource'} ${id}`;
-			if (type === 'resource') {
-				name = resourceIndexOverride[id]?.name || resourceIndex[id]?.name || creatureIndex[id]?.name || name;
+			const [type, id] = key.split(':') as ['resource' | 'enemy' | 'player', string];
+			let name: string;
+			if (type === 'enemy') {
+				name = creatureIndex[id]?.name || `Enemy ${id}`;
+			} else if (type === 'resource') {
+				name = resourceIndexOverride[id]?.name || resourceIndex[id]?.name || `Resource ${id}`;
+			} else {
+				name = `Player ${id}`;
 			}
 			return { key, type, id, name, color };
 		});
@@ -23,12 +27,12 @@
 		colorEntries = loadEntries();
 	}
 
-	function handleColorChange(type: 'resource' | 'player', id: string, color: string) {
+	function handleColorChange(type: 'resource' | 'enemy' | 'player', id: string, color: string) {
 		saveColorPreference(type, id, color);
 		refresh();
 	}
 
-	function handleRemove(type: 'resource' | 'player', id: string) {
+	function handleRemove(type: 'resource' | 'enemy' | 'player', id: string) {
 		removeColorPreference(type, id);
 		refresh();
 	}
