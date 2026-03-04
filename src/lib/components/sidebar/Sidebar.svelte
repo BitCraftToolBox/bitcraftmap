@@ -18,8 +18,6 @@
 		onTogglePlayer,
 		onRemoveResource,
 		onRemovePlayer,
-		onColorChangeResource,
-		onColorChangePlayer,
 		onRegionsChange
 	}: {
 		genericToggle: Record<string, L.LayerGroup>;
@@ -29,8 +27,6 @@
 		onTogglePlayer: (entityId: string) => void;
 		onRemoveResource: (id: number) => void;
 		onRemovePlayer: (entityId: string) => void;
-		onColorChangeResource: (id: number, color: string) => void;
-		onColorChangePlayer: (entityId: string, color: string) => void;
 		onRegionsChange: () => void;
 	} = $props();
 
@@ -102,8 +98,6 @@
 						{onTogglePlayer}
 						{onRemoveResource}
 						{onRemovePlayer}
-						{onColorChangeResource}
-						{onColorChangePlayer}
 					/>
 				{:else if sidebar.activeTab === 'regions'}
 					<RegionSelector {onRegionsChange} />
@@ -159,8 +153,6 @@
 						{onTogglePlayer}
 						{onRemoveResource}
 						{onRemovePlayer}
-						{onColorChangeResource}
-						{onColorChangePlayer}
 					/>
 				{:else if sidebar.activeTab === 'regions'}
 					<RegionSelector {onRegionsChange} />

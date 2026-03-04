@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Palette, RotateCcw, X } from '@lucide/svelte';
-	import { getAllColorPreferences, saveColorPreference, removeColorPreference, clearAllColorPreferences, clearTracking } from '$lib/stores/tracking-store.svelte';
+	import { getAllColorPreferences, getAllDisplayNames, removeColorPreference, clearAllColorPreferences, clearTracking, updateTrackingItemColor, updateTrackingItemColorByEntityId } from '$lib/stores/tracking-store.svelte';
 	import { selectAllRegions } from '$lib/stores/region-store.svelte';
 	import { resetView } from '$lib/stores/map-store';
 	import { resourceIndex, resourceIndexOverride, creatureIndex } from '$lib/data/resource-index';
@@ -9,10 +9,14 @@
 
 	function loadEntries() {
 		const store = getAllColorPreferences();
+		const names = getAllDisplayNames();
 		return Object.entries(store).map(([key, color]) => {
 			const [type, id] = key.split(':') as ['resource' | 'enemy' | 'player', string];
+			const savedName = names[key];
 			let name: string;
-			if (type === 'enemy') {
+			if (savedName) {
+				name = savedName;
+			} else if (type === 'enemy') {
 				name = creatureIndex[id]?.name || `Enemy ${id}`;
 			} else if (type === 'resource') {
 				name = resourceIndexOverride[id]?.name || resourceIndex[id]?.name || `Resource ${id}`;
@@ -28,7 +32,11 @@
 	}
 
 	function handleColorChange(type: 'resource' | 'enemy' | 'player', id: string, color: string) {
-		saveColorPreference(type, id, color);
+		if (type === 'player') {
+			updateTrackingItemColorByEntityId(id, color);
+		} else {
+			updateTrackingItemColor(Number(id), color);
+		}
 		refresh();
 	}
 
@@ -51,7 +59,6 @@
 		location.reload();
 	}
 
-	let colorInputs: Record<string, HTMLInputElement> = {};
 	let confirmingReset = $state(false);
 </script>
 
@@ -79,20 +86,17 @@
 						class="group flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs border border-white/5 hover:border-white/10 transition-colors"
 						style:background-color={entry.color + '18'}
 					>
-						<button
-							type="button"
+						<label
 							class="w-4 h-4 rounded-full cursor-pointer ring-1 ring-white/20 hover:ring-white/50 hover:scale-110 transition-all shrink-0 shadow-sm"
 							style:background-color={entry.color}
-							onclick={() => colorInputs[entry.key]?.click()}
-							aria-label="Change color"
-						></button>
-						<input
-							bind:this={colorInputs[entry.key]}
-							type="color"
-							value={entry.color}
-							class="sr-only"
-							oninput={(e) => handleColorChange(entry.type, entry.id, e.currentTarget.value)}
-						/>
+						>
+							<input
+								type="color"
+								value={entry.color}
+								class="sr-only"
+								oninput={(e) => handleColorChange(entry.type, entry.id, e.currentTarget.value)}
+							/>
+						</label>
 						<div class="flex-1 min-w-0">
 							<span class="text-gray-200 block truncate">{entry.name}</span>
 						</div>

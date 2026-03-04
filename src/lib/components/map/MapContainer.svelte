@@ -47,6 +47,7 @@
     addTrackingItem,
     toggleTrackingItem,
     loadColorPreference,
+    registerColorSyncHandler,
   } from "$lib/stores/tracking-store.svelte";
   import { getLatestGistRaw } from "$lib/services/gist-service";
   import { fetchResource, fetchEnemy } from "$lib/services/api-service";
@@ -535,6 +536,7 @@
                 destination_z: info.locationZ,
               },
               urlParams.followPlayer,
+              loadColorPreference('player', playerIds[i]) || "#00ff00",
             );
           }
         });
@@ -543,7 +545,7 @@
       const ws = connectWebSocket(
         playerIds,
         (state: PlayerState) => {
-          updatePlayerMarker(state, urlParams.followPlayer);
+          updatePlayerMarker(state, urlParams.followPlayer, loadColorPreference('player', state.entity_id) || "#00ff00");
         },
         () => {
           playerInfoPromise.then((results) => {
@@ -584,7 +586,26 @@
       handleResourceEvent(event, resourceUpdateCtx);
     });
 
+    const unregisterColorSync = registerColorSyncHandler((type, id, color) => {
+      if (type === 'player') {
+        const marker = playerStore.get(id as string);
+        if (marker) {
+          const el = marker.getElement();
+          if (el) {
+            const dot = el.querySelector(".player-dot") as HTMLElement;
+            const pulse = el.querySelector(".player-pulse") as HTMLElement;
+            if (dot) dot.style.backgroundColor = color;
+            if (pulse) pulse.style.borderColor = color;
+          }
+        }
+      } else {
+        const layer = resourceLayers[id as number];
+        if (layer) layer.setColor(color);
+      }
+    });
+
     return () => {
+      unregisterColorSync();
       for (const ws of playerWebSockets.values()) {
         ws.close();
       }
@@ -633,9 +654,10 @@
     playerUsernames.set(entityId, username);
     updatePlayerIdParam(trackedPlayerIds);
 
-    const color =
+    const paletteColor =
       playerColorPalette[playerColorIndex % playerColorPalette.length];
     playerColorIndex++;
+    const color = loadColorPreference('player', entityId) || paletteColor;
 
     // Fetch initial location from API
     const playerInfo = await lookupPlayer(entityId);
@@ -656,7 +678,7 @@
     const ws = connectWebSocket(
       [entityId],
       (state: PlayerState) => {
-        updatePlayerMarker(state, false, color);
+        updatePlayerMarker(state, false, loadColorPreference('player', entityId) || color);
       },
       () => {
         addTrackingItem({
@@ -664,7 +686,7 @@
           entityId,
           type: "player",
           text: `Player: ${playerInfo.username}`,
-          color: loadColorPreference('player', entityId) || color,
+          color,
           visible: true,
         });
       },
@@ -1036,26 +1058,6 @@
     unsubscribeResource(id);
   }
 
-  function handleColorChangeResource(id: number, color: string): void {
-    const layer = resourceLayers[id];
-    if (layer) {
-      layer.setColor(color);
-    }
-  }
-
-  function handleColorChangePlayer(entityId: string, color: string): void {
-    const marker = playerStore.get(entityId);
-    if (marker) {
-      const el = marker.getElement();
-      if (el) {
-        const dot = el.querySelector(".player-dot") as HTMLElement;
-        const pulse = el.querySelector(".player-pulse") as HTMLElement;
-        if (dot) dot.style.backgroundColor = color;
-        if (pulse) pulse.style.borderColor = color;
-      }
-    }
-  }
-
   function handleRemovePlayer(entityId: string): void {
     // Remove markers
     const marker = playerStore.get(entityId);
@@ -1172,8 +1174,6 @@
       onTogglePlayer={handleTogglePlayerVisibility}
       onRemoveResource={handleRemoveResource}
       onRemovePlayer={handleRemovePlayer}
-      onColorChangeResource={handleColorChangeResource}
-      onColorChangePlayer={handleColorChangePlayer}
       onRegionsChange={handleRegionsChange}
     />
     <DetailPanel
