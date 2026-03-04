@@ -275,9 +275,9 @@ export async function loadTowersGeoJson(
         featureLayer.on("click", () => {
           const coords = feature.properties.pointCoords;
           if (coords) {
-            L.popup()
+            L.popup({ className: "bcm-leaflet-popup", pane: "popupOnTop" })
               .setLatLng(coords)
-              .setContent(feature.properties.popupText)
+              .setContent(`<div class="bcm-popup"><div class="bcm-popup-body">${feature.properties.popupText}</div></div>`)
               .openOn(map);
           }
         });
