@@ -117,14 +117,9 @@
   let allCaves: L.LayerGroup;
   let resourceLayers: Record<number, ResourceCanvasLayer> = {};
   let liveLayer: L.FeatureGroup;
-  let baseMapOverlay: L.ImageOverlay;
-  let hiResLoaded = $state(false);
-  let hiResUrl = "";
-  let initialMapUrl = "";
   const isMobile =
     typeof window !== "undefined" &&
     window.matchMedia("(max-width: 768px)").matches;
-  const showHiResToggle = isMobile || import.meta.env.DEV;
 
   // Toggle mapping for layer panel
   let genericToggle = $state<Record<string, L.LayerGroup>>({});
@@ -197,33 +192,39 @@
     map.createPane("popupOnTop");
     map.getPane("popupOnTop")!.style.zIndex = "990";
 
-    // Base map image — placed in baseMapPane (below tilePane) so road tiles render on top
-    const mapBounds: L.LatLngBoundsExpression = [
+    // Base terrain tile layer — placed in baseMapPane (below tilePane) so road tiles render on top
+    const terrainBounds: L.LatLngBoundsExpression = [
       [0, 0],
       [mapConfig.mapHeight, mapConfig.mapWidth],
     ];
-    const useCdnMap = env.PUBLIC_CDN_MAP === 'true';
-    initialMapUrl = useCdnMap
-      ? `${appConfig.exportsCdn}/bitcraftmap/maps/global-2560.webp`
-      : "/assets/maps/map.webp";
-    baseMapOverlay = L.imageOverlay(initialMapUrl, mapBounds, {
-      pane: "baseMapPane",
-    }).addTo(map);
+    const terrainTileLayer = L.tileLayer(
+      `${appConfig.exportsCdn}/bitcraftmap/maps/tiles/{z}/{x}/{y}.webp`,
+      {
+        bounds: terrainBounds,
+        minZoom: -5,
+        maxZoom: 5,
+        minNativeZoom: -5,
+        maxNativeZoom: 0,
+        tileSize: 256,
+        keepBuffer: 4,
+        updateWhenZooming: false,
+        errorTileUrl: "",
+        pane: "baseMapPane",
+      },
+    );
+    (terrainTileLayer as any)._isValidTile = function (coords: {
+      x: number;
+      y: number;
+      z: number;
+    }) {
+      const tileBounds = (this as any)._tileCoordsToBounds(coords);
+      return L.latLngBounds(terrainBounds).overlaps(tileBounds);
+    };
+    terrainTileLayer.addTo(map);
     map.fitBounds([
       [0, 0],
       [mapConfig.mapWidth, mapConfig.mapHeight],
     ]);
-
-    // Preload hi-res map in background from CDN (only when CDN is enabled)
-    hiResUrl = `${appConfig.exportsCdn}/bitcraftmap/maps/global-12800.webp`;
-    if (useCdnMap) {
-      const hiRes = new Image();
-      hiRes.onload = () => {
-        hiResLoaded = true;
-        if (!showHiResToggle) baseMapOverlay.setUrl(hiResUrl);
-      };
-      hiRes.src = hiResUrl;
-    }
     setMap(map);
 
     // Create all layer groups
@@ -1202,17 +1203,6 @@
     <div class="flex items-center gap-2">
       <CoordinateDisplay {coords} />
       <ResetViewButton onReset={resetView} />
-      {#if showHiResToggle && hiResLoaded}
-        <button
-          class="rounded bg-black/60 px-2 py-1 text-xs text-white backdrop-blur hover:bg-black/80"
-          onclick={() => {
-            const isHiRes = baseMapOverlay.getElement()?.src?.includes("12800");
-            baseMapOverlay.setUrl(isHiRes ? initialMapUrl : hiResUrl);
-          }}
-        >
-          Toggle Hi-Res
-        </button>
-      {/if}
     </div>
   </div>
 </div>
