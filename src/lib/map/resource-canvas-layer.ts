@@ -25,6 +25,7 @@ export class ResourceCanvasLayer extends L.Layer {
 	private _name: string;
 	private _tier: number;
 	private _id: number;
+	private _lodEnabled = false;
 	private _dirty = false;
 	private _drawnScreenPoints: Float64Array | null = null;
 	private _drawnGameCoords: Float64Array | null = null;
@@ -109,6 +110,11 @@ export class ResourceCanvasLayer extends L.Layer {
 		this._scheduleRedraw();
 	}
 
+	setLodEnabled(enabled: boolean): void {
+		this._lodEnabled = enabled;
+		this._scheduleRedraw();
+	}
+
 	setColor(color: string): void {
 		this._color = color;
 		this._buildSprite();
@@ -190,9 +196,9 @@ export class ResourceCanvasLayer extends L.Layer {
 		// LOD: show fewer points when zoomed out, all when zoomed in
 		const zoom = map.getZoom();
 		const minZoom = map.getMinZoom();
-		const LOD_FULL_ZOOM = 0; // Show 100% at zoom 0 and above
+		const LOD_FULL_ZOOM = -3; // Show 100% at zoom -3 and above
 
-		const useLod = zoom < LOD_FULL_ZOOM && this.getPointCount() > 500;
+		const useLod = this._lodEnabled && zoom < LOD_FULL_ZOOM && this.getPointCount() > 500;
 		const showRatio = useLod
 			? 0.08 + 0.92 * Math.pow((zoom - minZoom) / (LOD_FULL_ZOOM - minZoom), 2)
 			: 1;

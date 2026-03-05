@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Palette, RotateCcw, X } from '@lucide/svelte';
+	import { getLodEnabled, setLodEnabled } from '$lib/stores/settings-store.svelte';
 	import { getAllColorPreferences, getAllDisplayNames, removeColorPreference, clearAllColorPreferences, clearTracking, updateTrackingItemColor, updateTrackingItemColorByEntityId } from '$lib/stores/tracking-store.svelte';
 	import { selectAllRegions } from '$lib/stores/region-store.svelte';
 	import { resetView } from '$lib/stores/map-store';
@@ -117,6 +118,32 @@
 				<p class="text-xs">No saved colors</p>
 			</div>
 		{/if}
+	</section>
+
+	<!-- Divider -->
+	<div class="border-t border-white/5"></div>
+
+	<!-- Display Settings -->
+	<section>
+		<div class="flex items-center gap-2 px-1 mb-2.5">
+			<h3 class="text-[11px] font-semibold text-gray-300 uppercase tracking-wider flex-1">Display</h3>
+		</div>
+		<label class="flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 border border-white/5 hover:border-white/10 transition-colors cursor-pointer">
+			<div>
+				<span class="text-xs text-gray-200 block">Resource LOD</span>
+				<span class="text-[10px] text-gray-500">Thins dots beyond zoom -3</span>
+			</div>
+			<button
+				type="button"
+				role="switch"
+				aria-checked={getLodEnabled()}
+				aria-label="Toggle level of detail"
+				onclick={() => setLodEnabled(!getLodEnabled())}
+				class="relative shrink-0 w-8 h-4 rounded-full transition-colors cursor-pointer {getLodEnabled() ? 'bg-blue-500' : 'bg-white/10'}"
+			>
+				<span class="absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-transform {getLodEnabled() ? 'translate-x-4' : 'translate-x-0'}"></span>
+			</button>
+		</label>
 	</section>
 
 	<!-- Divider -->
