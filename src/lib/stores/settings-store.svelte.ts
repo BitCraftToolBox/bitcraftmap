@@ -1,4 +1,4 @@
-const LOD_KEY = 'settings:lodEnabled';
+const LOD_KEY = 'lodEnabled';
 
 function loadLodEnabled(): boolean {
 	try {
