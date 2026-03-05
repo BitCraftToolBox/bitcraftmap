@@ -25,6 +25,7 @@ export class ResourceCanvasLayer extends L.Layer {
 	private _name: string;
 	private _tier: number;
 	private _id: number;
+	private _lodEnabled = false;
 	private _dirty = false;
 	private _drawnScreenPoints: Float64Array | null = null;
 	private _drawnGameCoords: Float64Array | null = null;
@@ -109,6 +110,11 @@ export class ResourceCanvasLayer extends L.Layer {
 		this._scheduleRedraw();
 	}
 
+	setLodEnabled(enabled: boolean): void {
+		this._lodEnabled = enabled;
+		this._scheduleRedraw();
+	}
+
 	setColor(color: string): void {
 		this._color = color;
 		this._buildSprite();
@@ -144,14 +150,18 @@ export class ResourceCanvasLayer extends L.Layer {
 		const topLeft = this._map.containerPointToLayerPoint([0, 0]);
 
 		L.DomUtil.setPosition(this._canvas, topLeft);
-		this._canvas.width = size.x;
-		this._canvas.height = size.y;
 
-		// Skip redraw if the visible bounds haven't meaningfully changed
-		const bounds = this._map.getBounds();
-		const key = `${size.x},${size.y},${bounds.getSouth().toFixed(1)},${bounds.getNorth().toFixed(1)},${bounds.getWest().toFixed(1)},${bounds.getEast().toFixed(1)}`;
+		// Check cache BEFORE clearing — canvas.width = x clears even if unchanged
+		const p0 = this._map.latLngToContainerPoint([0, 0]);
+		const key = `${Math.round(p0.x)},${Math.round(p0.y)},${size.x},${size.y}`;
 		if (key === this._lastBoundsKey) return;
 		this._lastBoundsKey = key;
+
+		// Only resize when the container size changes; _redraw() handles clearing
+		if (this._canvas.width !== size.x || this._canvas.height !== size.y) {
+			this._canvas.width = size.x;
+			this._canvas.height = size.y;
+		}
 
 		this._redraw();
 	}
@@ -186,10 +196,12 @@ export class ResourceCanvasLayer extends L.Layer {
 		// LOD: show fewer points when zoomed out, all when zoomed in
 		const zoom = map.getZoom();
 		const minZoom = map.getMinZoom();
-		const maxZoom = map.getMaxZoom();
-		const t = Math.max(0, Math.min(1, (zoom - minZoom) / (maxZoom - minZoom)));
-		const showRatio = 0.08 + 0.92 * (1 - (1 - t) * (1 - t));
-		const useLod = showRatio < 1 && this.getPointCount() > 500;
+		const LOD_FULL_ZOOM = -3; // Show 100% at zoom -3 and above
+
+		const useLod = this._lodEnabled && zoom < LOD_FULL_ZOOM && this.getPointCount() > 500;
+		const showRatio = useLod
+			? 0.08 + 0.92 * Math.pow((zoom - minZoom) / (LOD_FULL_ZOOM - minZoom), 2)
+			: 1;
 		// Threshold for fast integer comparison (Knuth multiplicative hash)
 		const lodThreshold = (showRatio * 4294967296) >>> 0;
 
@@ -207,8 +219,10 @@ export class ResourceCanvasLayer extends L.Layer {
 
 				if (lat < south || lat > north || lng < west || lng > east) continue;
 
-				// Deterministic LOD sampling — same points stay visible at each zoom
-				if (useLod && ((i * 2654435761) >>> 0) > lodThreshold) continue;
+				// Deterministic LOD sampling — coordinate-based so same geographic points
+				// stay visible regardless of API response ordering
+				const coordHash = ((Math.round(lat) * 2654435761) ^ (Math.round(lng) * 1013904223)) >>> 0;
+				if (useLod && coordHash > lodThreshold) continue;
 
 				const x = lng * sX + oX;
 				const y = lat * sY + oY;
