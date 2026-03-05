@@ -24,6 +24,7 @@
   import { validateGeoJson } from "$lib/map/geojson-validator";
   import { paintGeoJson, type PaintContext } from "$lib/map/geojson-painter";
   import { ResourceCanvasLayer } from "$lib/map/resource-canvas-layer";
+  import { getLodEnabled } from "$lib/stores/settings-store.svelte";
   import {
     setMap,
     saveMapState,
@@ -155,6 +156,14 @@
       /* ignore */
     }
   }
+
+  // Propagate LOD setting to all resource layers whenever it changes
+  $effect(() => {
+    const enabled = getLodEnabled();
+    for (const layer of Object.values(resourceLayers)) {
+      layer.setLodEnabled(enabled);
+    }
+  });
 
   // Context for child components
   let paintCtx: PaintContext;
@@ -801,6 +810,7 @@
     const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: resourceId });
     resourceLayers[resourceId] = canvasLayer;
     canvasLayer.addTo(map);
+    canvasLayer.setLodEnabled(getLodEnabled());
 
     addTrackingItem({
       id: resourceId,
@@ -850,6 +860,7 @@
     const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: enemyId });
     resourceLayers[enemyId] = canvasLayer;
     canvasLayer.addTo(map);
+    canvasLayer.setLodEnabled(getLodEnabled());
 
     addTrackingItem({
       id: enemyId,
@@ -931,6 +942,7 @@
       const name = resourceIndex[id]?.name || "ID " + id;
       resourceLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
       resourceLayers[id].addTo(map);
+      resourceLayers[id].setLodEnabled(getLodEnabled());
     }
     for (const id of enemyIds) {
       let color = loadColorPreference('enemy', id) ||
@@ -942,6 +954,7 @@
       const name = creatureIndex[id]?.name || "ID " + id;
       resourceLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
       resourceLayers[id].addTo(map);
+      resourceLayers[id].setLodEnabled(getLodEnabled());
     }
 
     for (const rId of regionIds) {
