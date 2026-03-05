@@ -472,12 +472,12 @@ function assignTerritoryColors(territories: WatchtowerTerritory[], palette: stri
 
 async function main() {
     // read live data
-    //let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
-    //const data = await fetchDataFromRegions(regions);
-    //fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
+    let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+    const data = await fetchDataFromRegions(regions);
+    fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
 
     // or read from file for faster dev without hitting servers
-    const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver) as RegionData;
+    //const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver) as RegionData;
 
     const localStateMap = new Map<bigint, ClaimLocalState>();
     data.claimLocalState.forEach(state => {
