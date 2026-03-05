@@ -4,7 +4,6 @@ export interface MapConfig {
 	apothem: number;
 	mapWidth: number;
 	mapHeight: number;
-	mapImageURL: string;
 	preferCanvas: boolean;
 	zoomAnimation: boolean;
 	attributionControl: boolean;
