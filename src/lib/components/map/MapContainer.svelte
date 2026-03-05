@@ -192,35 +192,41 @@
     map.createPane("popupOnTop");
     map.getPane("popupOnTop")!.style.zIndex = "990";
 
-    // Base terrain tile layer — placed in baseMapPane (below tilePane) so road tiles render on top
+    // Base terrain layer — placed in baseMapPane (below tilePane) so road tiles render on top
     const terrainBounds: L.LatLngBoundsExpression = [
       [0, 0],
       [mapConfig.mapHeight, mapConfig.mapWidth],
     ];
-    const terrainTileLayer = L.tileLayer(
-      `${appConfig.exportsCdn}/bitcraftmap/maps/tiles/{z}/{x}/{y}.webp`,
-      {
-        bounds: terrainBounds,
-        minZoom: -5,
-        maxZoom: 5,
-        minNativeZoom: -5,
-        maxNativeZoom: 0,
-        tileSize: 256,
-        keepBuffer: 4,
-        updateWhenZooming: false,
-        errorTileUrl: "",
-        pane: "baseMapPane",
-      },
-    );
-    (terrainTileLayer as any)._isValidTile = function (coords: {
-      x: number;
-      y: number;
-      z: number;
-    }) {
-      const tileBounds = (this as any)._tileCoordsToBounds(coords);
-      return L.latLngBounds(terrainBounds).overlaps(tileBounds);
-    };
-    terrainTileLayer.addTo(map);
+    if (env.PUBLIC_CDN_MAP === 'true') {
+      const terrainTileLayer = L.tileLayer(
+        `${appConfig.exportsCdn}/bitcraftmap/maps/tiles/{z}/{x}/{y}.webp`,
+        {
+          bounds: terrainBounds,
+          minZoom: -5,
+          maxZoom: 5,
+          minNativeZoom: -5,
+          maxNativeZoom: 0,
+          tileSize: 256,
+          keepBuffer: 4,
+          updateWhenZooming: false,
+          errorTileUrl: "",
+          pane: "baseMapPane",
+        },
+      );
+      (terrainTileLayer as any)._isValidTile = function (coords: {
+        x: number;
+        y: number;
+        z: number;
+      }) {
+        const tileBounds = (this as any)._tileCoordsToBounds(coords);
+        return L.latLngBounds(terrainBounds).overlaps(tileBounds);
+      };
+      terrainTileLayer.addTo(map);
+    } else {
+      L.imageOverlay('/assets/maps/map.webp', terrainBounds, {
+        pane: 'baseMapPane',
+      }).addTo(map);
+    }
     map.fitBounds([
       [0, 0],
       [mapConfig.mapWidth, mapConfig.mapHeight],
