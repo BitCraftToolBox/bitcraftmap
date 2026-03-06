@@ -8,6 +8,14 @@ import { setSelection } from "$lib/stores/selection-store.svelte";
 import { buildPopupHtml } from "./popup-builder";
 import { createAppConfig } from "$lib/config/api";
 import type { MapSelection } from "$lib/types/map";
+import { env } from "$env/dynamic/public";
+
+function geojsonUrl(filename: string): string {
+  const { exportsCdn } = createAppConfig();
+  return env.PUBLIC_CDN_MAP === "true"
+    ? `${exportsCdn}/bitcraftmap/${filename}`
+    : `/markers/${filename}`;
+}
 
 // Static icons - created once
 let caveIcons: L.Icon[];
@@ -44,7 +52,7 @@ export async function loadTreesGeoJson(
   treesLayer: L.LayerGroup,
   hexiteLayer: L.LayerGroup,
 ): Promise<void> {
-  const file = await fetch("/markers/trees.geojson");
+  const file = await fetch(geojsonUrl("trees.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
@@ -75,7 +83,7 @@ export async function loadTreesGeoJson(
 export async function loadTemplesGeoJson(
   templesLayer: L.LayerGroup,
 ): Promise<void> {
-  const file = await fetch("/markers/temples.geojson");
+  const file = await fetch(geojsonUrl("temples.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
@@ -94,7 +102,7 @@ export async function loadTemplesGeoJson(
 export async function loadRuinedGeoJson(
   ruinedLayer: L.LayerGroup,
 ): Promise<void> {
-  const file = await fetch("/markers/ruined.geojson");
+  const file = await fetch(geojsonUrl("ruined.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
@@ -122,10 +130,7 @@ export async function loadClaimsGeoJson(
   marketsLayer: L.LayerGroup,
   waystonesLayer: L.LayerGroup,
 ): Promise<void> {
-  const { exportsCdn } = createAppConfig();
-  const file = await fetch(
-    `${exportsCdn}/bitcraftmap/claims.geojson`,
-  );
+  const file = await fetch(geojsonUrl("claims.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
@@ -176,7 +181,7 @@ export async function loadClaimsGeoJson(
 export async function loadCavesGeoJson(
   caveLayers: L.LayerGroup[],
 ): Promise<void> {
-  const file = await fetch("/markers/caves.geojson");
+  const file = await fetch(geojsonUrl("caves.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
@@ -208,7 +213,7 @@ export async function loadEventsGeoJson(
 export async function loadDungeonsGeoJson(
   dungeonsLayer: L.LayerGroup,
 ): Promise<void> {
-  const file = await fetch("/markers/dungeons.geojson");
+  const file = await fetch(geojsonUrl("dungeons.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
@@ -231,7 +236,7 @@ export async function loadGridsGeoJson(
   gridsLayer: L.LayerGroup,
   ctx: PaintContext,
 ): Promise<void> {
-  const file = await fetch("/markers/grids.geojson");
+  const file = await fetch(geojsonUrl("grids.geojson"));
   const content = await file.text();
   const geoJson = validateGeoJson(content);
   paintGeoJson(geoJson, gridsLayer, ctx);
@@ -241,7 +246,7 @@ export async function loadTowersGeoJson(
   towersLayer: L.LayerGroup,
   map: L.Map,
 ): Promise<void> {
-  const file = await fetch("/markers/towers.geojson");
+  const file = await fetch(geojsonUrl("towers.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     style(feature) {
