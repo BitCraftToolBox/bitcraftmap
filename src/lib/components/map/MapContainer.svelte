@@ -515,15 +515,6 @@
     // Backend resource/enemy loading
     loadBackendData(urlParams, map).catch(console.error);
 
-    // Heatmap
-    if (urlParams.heatmap) {
-      const heatmapBounds: L.LatLngBoundsExpression = [
-        [0, 0],
-        [mapConfig.mapHeight, mapConfig.mapWidth],
-      ];
-      L.imageOverlay("/maps/heatmap.png", heatmapBounds).addTo(map);
-    }
-
     // WebSocket player tracking from URL params
     if (urlParams.playerId) {
       const playerIds = urlParams.playerId
