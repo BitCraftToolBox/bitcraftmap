@@ -41,7 +41,7 @@ interface OutputData {
 const categories = {
     'Wonder': [433549604, 421789207],
     'Temple': [489406613, 1752479333, 1662809355, 2034914963, 1008368350],
-    'Cave': [1845065396, 280863630, 696858550, 1440765680, 312420794, 1875067311, 253216585, 1477951340],
+    'Cave': [790011334, 1845065396, 280863630, 696858550, 1440765680, 312420794, 1875067311, 253216585, 1477951340],
     'Dungeon': [1785852446, 846734170, 208697589, 1084069097],
     'RuinedTown': [292245080],
     'Ruins': [1441436391, 1842388176], // we don't use these right now. usually people just track the resource nodes instead
@@ -260,6 +260,7 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             }, localState.location!));
             break;
         // caves
+        case 790011334:
         case 280863630:
         case 1875067311:
         case 1845065396:
@@ -270,9 +271,9 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
         case 1440765680:
             outputs.caves.push(makeFeature({
                 name: claimName,
-                size: claimName.startsWith('Large ') ? 2 : 1, // always the case
+                size: claimName.startsWith('Large ') ? 2 : 1,
                 // TODO grab building_desc and use function level to determine cave tier
-                tier: categories.Cave.indexOf(localState.buildingDescriptionId) + 1
+                tier: Math.max(1, categories.Cave.indexOf(localState.buildingDescriptionId))
             }, localState.location!));
             break;
         // dungeons
