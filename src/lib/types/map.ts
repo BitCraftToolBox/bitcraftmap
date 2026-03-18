@@ -75,11 +75,13 @@ export interface GenericPOISelection {
 }
 
 export interface WatchtowerSelection {
+	owner: string;
 	type: 'watchtower';
 	name: string;
 	latlng: SelectionLatLng;
 	chunkCount?: number;
 	fillColor?: string;
+	outlineColor?: string;
 }
 
 export interface HexiteDepositSelection {
