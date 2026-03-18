@@ -105,6 +105,7 @@ export function buildPopupHtml(item: MapSelection): string {
 				${divider}
 				${coords}
 				${item.chunkCount ? `<div class="bcm-popup-coords">${item.chunkCount} chunks</div>` : ''}
+				${item.ownerId ? `<a class="bcm-popup-link" href="https://bitjita.com/empires/${item.ownerId}" target="_blank" rel="noopener noreferrer">View empire on bitjita.com</a>` : ''}
 				<div class="bcm-popup-body"></div>
 			</div>`;
 

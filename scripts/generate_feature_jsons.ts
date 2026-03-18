@@ -206,7 +206,8 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
     const territory = territories.find(t => t.entityId === claimState.ownerBuildingEntityId);
     const props = {
         name: formatTemplateArgs(claimState.name),
-        owner: territory ? territory.ownerName : 'Unknown',
+        owner: territory ? territory.ownerName : null,
+        ownerId: territory? String(territory.ownerId) : null,
         chunkCount: territory?.totalChunks,
         fillColor: territory?.color,
         outlineColor: territory?.outlineColor
