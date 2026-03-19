@@ -263,10 +263,13 @@ export async function loadTowersGeoJson(
     pointToLayer(feature, latlng) {
       const selectionData = {
         type: "watchtower" as const,
-        name: feature.properties.popupText ?? "Watchtower",
+        name: feature.properties.name ?? "Watchtower",
+        owner: feature.properties.owner ?? "Unknown",
+        ownerId: feature.properties.ownerId,
         latlng: { lat: latlng.lat, lng: latlng.lng },
         chunkCount: feature.properties.chunkCount,
         fillColor: feature.properties.fillColor,
+        outlineColor: feature.properties.outlineColor,
       };
       const marker = L.marker(latlng, { icon: towerIcon });
       bindLazyPopup(marker, selectionData);
@@ -275,14 +278,24 @@ export async function loadTowersGeoJson(
     onEachFeature(feature, featureLayer) {
       if (
         feature.geometry.type === "MultiPolygon" &&
-        feature.properties.popupText
+        feature.properties.pointCoords
       ) {
         featureLayer.on("click", () => {
           const coords = feature.properties.pointCoords;
           if (coords) {
+            const selectionData = {
+              type: "watchtower" as const,
+              name: feature.properties.name ?? "Watchtower",
+              owner: feature.properties.owner ?? "Unknown",
+              ownerId: feature.properties.ownerId,
+              latlng: { lat: coords[0], lng: coords[1] },
+              chunkCount: feature.properties.chunkCount,
+              fillColor: feature.properties.fillColor,
+              outlineColor: feature.properties.outlineColor,
+            };
             L.popup({ className: "bcm-leaflet-popup", pane: "popupOnTop" })
               .setLatLng(coords)
-              .setContent(`<div class="bcm-popup"><div class="bcm-popup-text">${feature.properties.popupText}</div></div>`)
+              .setContent(buildPopupHtml(selectionData))
               .openOn(map);
           }
         });

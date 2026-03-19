@@ -77,9 +77,12 @@ export interface GenericPOISelection {
 export interface WatchtowerSelection {
 	type: 'watchtower';
 	name: string;
+	owner: string;
+	ownerId: bigint;
 	latlng: SelectionLatLng;
 	chunkCount?: number;
 	fillColor?: string;
+	outlineColor?: string;
 }
 
 export interface HexiteDepositSelection {

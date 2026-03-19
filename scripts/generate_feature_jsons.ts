@@ -2,10 +2,16 @@ import {
     ClaimLocalState,
     ClaimState,
     DbConnection,
-    EmpireChunkState,
-    EmpireState, RemoteTables,
+    RemoteTables,
     WorldRegionNameState
 } from './bindings/src'
+import {
+    DbConnection as DbConnectionGlobal,
+    EmpireChunkState,
+    EmpireColorDesc,
+    EmpireEmblemState,
+    EmpireState
+} from './bindings_global/src'
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -19,11 +25,16 @@ interface HexitDepositTimer {
     endTimestamp: Date;
 }
 
+interface GlobalData {
+    empireState: EmpireState[],
+    empireChunkState: EmpireChunkState[],
+    empireColorDesc: EmpireColorDesc[],
+    empireEmblemState: EmpireEmblemState[]
+}
+
 interface RegionData {
     claimState: ClaimState[],
     claimLocalState: ClaimLocalState[],
-    empireChunkState: EmpireChunkState[],
-    empireState: EmpireState[],
     worldRegionNameState: WorldRegionNameState[],
     hexiteTimers: HexitDepositTimer[]
 }
@@ -47,17 +58,6 @@ const categories = {
     'Ruins': [1441436391, 1842388176], // we don't use these right now. usually people just track the resource nodes instead
     'Watchtower': [90000]
 }
-
-// Color palette: visually distinct colors
-const COLOR_PALETTE = [
-    "#0000ff",
-    "#ff0000",
-    "#00ff00",
-    "#c71585",
-    "#00ffff",
-    "#808000",
-    "#1e90ff"
-];
 
 function formatTemplateArgs(value: string) {
     if (!value.includes('|~')) {
@@ -91,7 +91,7 @@ function collateHexite(db: RemoteTables): HexitDepositTimer[] {
     return timers;
 }
 
-const onConnect = (resolve: (_: RegionData) => void, first: boolean) =>
+const onConnect = (resolve: (_: RegionData) => void) =>
     (conn: DbConnection) => {
         const subs = [
             'SELECT * FROM claim_state',
@@ -99,19 +99,12 @@ const onConnect = (resolve: (_: RegionData) => void, first: boolean) =>
             'SELECT * FROM world_region_name_state',
             // hexite deposit regeneration - growth state has the entity id -> end timestamp, location state has entity_id -> location
             'SELECT * FROM growth_state WHERE growth_recipe_id = 1577969715',
-            'SELECT loc.* FROM location_state loc JOIN growth_state gs ON gs.entity_id = loc.entity_id WHERE gs.growth_recipe_id = 1577969715;',
-            // these are synced from global, so only need to pull them once
-            ...(first ? [
-                'SELECT * FROM empire_chunk_state',
-                'SELECT * FROM empire_state',
-            ] : [])
+            'SELECT loc.* FROM location_state loc JOIN growth_state gs ON gs.entity_id = loc.entity_id WHERE gs.growth_recipe_id = 1577969715;'
         ];
         conn.subscriptionBuilder().onApplied(() => {
             const data: RegionData = {
                 claimState: Array.from(conn.db.claimState.iter()),
                 claimLocalState: Array.from(conn.db.claimLocalState.iter()),
-                empireChunkState: Array.from(conn.db.empireChunkState.iter()),
-                empireState: Array.from(conn.db.empireState.iter()),
                 worldRegionNameState: Array.from(conn.db.worldRegionNameState.iter()),
                 hexiteTimers: collateHexite(conn.db)
             };
@@ -124,33 +117,29 @@ async function fetchDataFromRegions(regions: string[]) {
     const data: RegionData = {
         claimState: [],
         claimLocalState: [],
-        empireChunkState: [],
-        empireState: [],
         worldRegionNameState: [],
         hexiteTimers: []
     }
 
-    let first = true;
     for (const region of regions) {
         const res = await new Promise<RegionData>((resolve, reject) => {
             DbConnection.builder()
                 .withUri('wss://' + process.env.BITCRAFT_SPACETIME_HOST)
                 .withModuleName(region)
                 .withToken(process.env.BITCRAFT_BEARER_TOKEN)
-                .onConnect(onConnect(resolve, first))
+                .onConnect(onConnect(resolve))
                 .onConnectError((_, err) => {
                     // @ts-ignore
                     if (!err['wasClean']) {
                         reject(err);
                     }
                 })
-                .onDisconnect(() => {})
+                .onDisconnect(() => {
+                })
                 .build()
         });
         data.claimState.push(...res.claimState);
         data.claimLocalState.push(...res.claimLocalState);
-        data.empireChunkState.push(...res.empireChunkState);
-        data.empireState.push(...res.empireState);
         const nameState = res.worldRegionNameState[0];
         data.worldRegionNameState.push({
             id: Number(region.substring('bitcraft-live-'.length)),
@@ -158,10 +147,48 @@ async function fetchDataFromRegions(regions: string[]) {
             moduleNamePrefix: nameState.moduleNamePrefix
         });
         data.hexiteTimers.push(...res.hexiteTimers);
-        first = false;
     }
 
     return data;
+}
+
+const onConnectGlobal = (resolve: (_: GlobalData) => void) =>
+    (conn: DbConnectionGlobal) => {
+        const subs = [
+            'SELECT * FROM empire_state',
+            'SELECT * FROM empire_chunk_state',
+            'SELECT * FROM empire_color_desc',
+            'SELECT * FROM empire_emblem_state'
+        ];
+        conn.subscriptionBuilder().onApplied(() => {
+            const data: GlobalData = {
+                empireState: Array.from(conn.db.empireState.iter()),
+                empireChunkState: Array.from(conn.db.empireChunkState.iter()),
+                empireColorDesc: Array.from(conn.db.empireColorDesc.iter()),
+                empireEmblemState: Array.from(conn.db.empireEmblemState.iter())
+            };
+            conn.disconnect();
+            resolve(data);
+        }).subscribe(subs);
+    };
+
+async function fetchGlobalData(): Promise<GlobalData> {
+    return new Promise<GlobalData>((resolve, reject) => {
+        DbConnectionGlobal.builder()
+            .withUri('wss://' + process.env.BITCRAFT_SPACETIME_HOST)
+            .withModuleName('bitcraft-live-global')
+            .withToken(process.env.BITCRAFT_BEARER_TOKEN)
+            .onConnect(onConnectGlobal(resolve))
+            .onConnectError((_, err) => {
+                // @ts-ignore
+                if (!err['wasClean']) {
+                    reject(err);
+                }
+            })
+            .onDisconnect(() => {
+            })
+            .build()
+    });
 }
 
 function makeFeature(props: any, loc: { x: number, z: number }) {
@@ -178,10 +205,12 @@ function makeFeature(props: any, loc: { x: number, z: number }) {
 function makeTower(claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[]) {
     const territory = territories.find(t => t.entityId === claimState.ownerBuildingEntityId);
     const props = {
-        popupText: formatTemplateArgs(claimState.name)
-            + '<br>' + (territory ? `Chunks: ${territory.totalChunks}` : '')
-            + '<br>' + (territory ? `Owner: ${territory.ownerName}` : ''),
+        name: formatTemplateArgs(claimState.name),
+        owner: territory ? territory.ownerName : null,
+        ownerId: territory? String(territory.ownerId) : null,
         chunkCount: territory?.totalChunks,
+        fillColor: territory?.color,
+        outlineColor: territory?.outlineColor
     };
     if (!territory || !territory.chunkIndices || territory.chunkIndices.length === 0) {
         return {
@@ -193,9 +222,9 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
     }
     // For each chunk, create a rectangle polygon in tile coordinates
     const polygons: number[][][] = territory.chunkIndices.map(idx => {
-        const { chunk_x, chunk_z } = chunkIndexToXZ(idx);
-        const { x: x0, z: z0 } = chunkXZToTileCoords(chunk_x, chunk_z);
-        const { x: x1, z: z1 } = chunkXZToTileCoords(chunk_x + 1, chunk_z + 1);
+        const {chunk_x, chunk_z} = chunkIndexToXZ(idx);
+        const {x: x0, z: z0} = chunkXZToTileCoords(chunk_x, chunk_z);
+        const {x: x1, z: z1} = chunkXZToTileCoords(chunk_x + 1, chunk_z + 1);
         return [
             [x0, z0],
             [x1, z0],
@@ -204,22 +233,45 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
             [x0, z0]
         ];
     });
+
+    // Create outline polygons for each chunk group (each may have holes)
+    const groupOutlines: number[][][][] = territory.chunkGroups
+        .map(group => createChunkGroupOutline(group))
+        .filter(outline => outline.length > 0);
+
     return {
         type: "FeatureCollection",
         features: [
+            // base chunk grid
             {
                 type: "Feature",
                 properties: {
-                    fillOpacity: 0.2,
+                    fillOpacity: 0.0,
                     fillColor: territory.color,
-                    pointCoords: [localState.location!.z, localState.location!.x],
-                    popupText: props.popupText
+                    color: "#7f7f7f",
+                    weight: 0.5,
                 },
                 geometry: {
                     type: "MultiPolygon",
                     coordinates: polygons.map(p => [p])
                 }
             },
+            // outline of each contiguous group
+            {
+                type: "Feature",
+                properties: {
+                    fillOpacity: 0.6,
+                    color: territory.outlineColor || "#000000",
+                    weight: 1,
+                    pointCoords: [localState.location!.z, localState.location!.x],
+                    ...props
+                },
+                geometry: {
+                    type: "MultiPolygon",
+                    coordinates: groupOutlines
+                }
+            },
+            // watchtower icon
             makeFeature(props, localState.location!)
         ]
     };
@@ -237,7 +289,7 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             outputs.trees.push(makeFeature({
                 name: claimName,
                 type: localState.buildingDescriptionId === 421789207 ? 'hexite' :
-                        localState.buildingDescriptionId === 433549604 ? 'tree'
+                    localState.buildingDescriptionId === 433549604 ? 'tree'
                         : 'unreachable',
                 timer: timer
             }, localState.location!));
@@ -309,6 +361,16 @@ function bigIntReviver(key: string, value: any): any {
     return value;
 }
 
+// Convert ARGB number to hex color string (e.g., #RRGGBB)
+function argbToHex(argb: bigint | number): string {
+    // ARGB format: 0xAARRGGBB
+    const num = typeof argb === 'bigint' ? Number(argb) : argb;
+    const r = (num >> 16) & 0xFF;
+    const g = (num >> 8) & 0xFF;
+    const b = num & 0xFF;
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
+
 // --- Watchtower Territory Types and Helpers ---
 
 // A single contiguous group of chunks
@@ -326,7 +388,8 @@ export interface WatchtowerTerritory {
     totalChunks: number;
     ownerId: bigint;
     ownerName: string;
-    color?: string; // Assigned color from palette
+    color?: string; // Fill color (color2)
+    outlineColor?: string; // Outline color (color1)
 }
 
 // Convert a chunk index to chunk_x, chunk_z
@@ -335,20 +398,146 @@ export function chunkIndexToXZ(chunk_index: bigint): { chunk_x: number, chunk_z:
     const base = n - BigInt(1);
     const chunk_z = Number(base / BigInt(1000));
     const chunk_x = Number(base % BigInt(1000));
-    return { chunk_x, chunk_z };
+    return {chunk_x, chunk_z};
 }
 
 // Convert chunk_x, chunk_z to tile coordinates (bottom-left corner)
 export function chunkXZToTileCoords(chunk_x: number, chunk_z: number): { x: number, z: number } {
-    return { x: chunk_x * 96, z: chunk_z * 96 };
+    return {x: chunk_x * 96, z: chunk_z * 96};
+}
+
+// Create an outline polygon for a chunk group by tracing its outer boundary and holes
+// Returns an array of rings: [outerBoundary, hole1, hole2, ...] in GeoJSON Polygon format
+function createChunkGroupOutline(chunkGroup: ChunkGroup): number[][][] {
+    if (chunkGroup.chunks.length === 0) return [];
+
+    // Create a set of all chunks for quick lookup
+    const chunkSet = new Set(chunkGroup.chunks.map(c => `${c.chunk_x},${c.chunk_z}`));
+
+    // Find all edge segments (segments on the boundary of the group)
+    const edges = new Map<string, { x0: number, z0: number, x1: number, z1: number }>();
+
+    for (const chunk of chunkGroup.chunks) {
+        const {x: x0, z: z0} = chunkXZToTileCoords(chunk.chunk_x, chunk.chunk_z);
+        const {x: x1, z: z1} = chunkXZToTileCoords(chunk.chunk_x + 1, chunk.chunk_z + 1);
+
+        // Check each of the 4 edges of this chunk
+        // Top edge
+        if (!chunkSet.has(`${chunk.chunk_x},${chunk.chunk_z + 1}`)) {
+            const key = `${x0},${z1}-${x1},${z1}`;
+            edges.set(key, {x0, z0: z1, x1, z1});
+        }
+        // Bottom edge
+        if (!chunkSet.has(`${chunk.chunk_x},${chunk.chunk_z - 1}`)) {
+            const key = `${x0},${z0}-${x1},${z0}`;
+            edges.set(key, {x0, z0, x1, z1: z0});
+        }
+        // Right edge
+        if (!chunkSet.has(`${chunk.chunk_x + 1},${chunk.chunk_z}`)) {
+            const key = `${x1},${z0}-${x1},${z1}`;
+            edges.set(key, {x0: x1, z0, x1, z1});
+        }
+        // Left edge
+        if (!chunkSet.has(`${chunk.chunk_x - 1},${chunk.chunk_z}`)) {
+            const key = `${x0},${z0}-${x0},${z1}`;
+            edges.set(key, {x0, z0, x1: x0, z1});
+        }
+    }
+
+    const edgeList = Array.from(edges.values());
+    if (edgeList.length === 0) return [];
+
+    // Trace all loops (there may be multiple if there are holes)
+    const loops: number[][][] = [];
+    const used = new Set<number>();
+
+    while (used.size < edgeList.length) {
+        // Find an unused edge to start a new loop
+        let startIdx = -1;
+        for (let i = 0; i < edgeList.length; i++) {
+            if (!used.has(i)) {
+                startIdx = i;
+                break;
+            }
+        }
+        if (startIdx === -1) break;
+
+        const loop: number[][] = [];
+        let current = edgeList[startIdx];
+        used.add(startIdx);
+        loop.push([current.x0, current.z0]);
+        loop.push([current.x1, current.z1]);
+
+        // Trace this loop until we return to the start
+        let maxIterations = edgeList.length;
+        while (maxIterations-- > 0) {
+            const lastPoint = loop[loop.length - 1];
+            let found = false;
+
+            for (let i = 0; i < edgeList.length; i++) {
+                if (used.has(i)) continue;
+                const edge = edgeList[i];
+
+                // Check if this edge connects to the last point
+                if (edge.x0 === lastPoint[0] && edge.z0 === lastPoint[1]) {
+                    loop.push([edge.x1, edge.z1]);
+                    used.add(i);
+                    found = true;
+                    break;
+                } else if (edge.x1 === lastPoint[0] && edge.z1 === lastPoint[1]) {
+                    loop.push([edge.x0, edge.z0]);
+                    used.add(i);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) break;
+        }
+
+        // Close the loop
+        if (loop.length > 0) {
+            loop.push([loop[0][0], loop[0][1]]);
+            loops.push(loop);
+        }
+    }
+
+    if (loops.length === 0) return [];
+    if (loops.length === 1) return loops;
+
+    // Find the outer boundary (largest perimeter) and separate from holes
+    let outerIdx = 0;
+    let largestPerimeter = 0;
+    for (let i = 0; i < loops.length; i++) {
+        let perimeter = 0;
+        for (let j = 0; j < loops[i].length - 1; j++) {
+            const dx = loops[i][j + 1][0] - loops[i][j][0];
+            const dz = loops[i][j + 1][1] - loops[i][j][1];
+            perimeter += Math.sqrt(dx * dx + dz * dz);
+        }
+        if (perimeter > largestPerimeter) {
+            largestPerimeter = perimeter;
+            outerIdx = i;
+        }
+    }
+
+    // Return [outerBoundary, ...holes] - GeoJSON Polygon format
+    const result = [loops[outerIdx]];
+    for (let i = 0; i < loops.length; i++) {
+        if (i !== outerIdx) {
+            result.push(loops[i]);
+        }
+    }
+    return result;
 }
 
 // Group a list of chunk indices into contiguous groups
 export function groupContiguousChunkIndices(chunkIndices: bigint[]): ChunkGroup[] {
-    const coords = chunkIndices.map(idx => ({ ...chunkIndexToXZ(idx), chunk_index: idx }));
+    const coords = chunkIndices.map(idx => ({...chunkIndexToXZ(idx), chunk_index: idx}));
     const visited = new Set<string>();
     const chunkSet = new Set(coords.map(c => `${c.chunk_x},${c.chunk_z}`));
     const groups: ChunkGroup[] = [];
+
     function visit(x: number, z: number, group: ChunkGroup) {
         const key = `${x},${z}`;
         if (visited.has(key) || !chunkSet.has(key)) return;
@@ -357,10 +546,11 @@ export function groupContiguousChunkIndices(chunkIndices: bigint[]): ChunkGroup[
         if (chunk) group.chunks.push(chunk);
         [[x - 1, z], [x + 1, z], [x, z - 1], [x, z + 1]].forEach(([nx, nz]) => visit(nx, nz, group));
     }
+
     for (const c of coords) {
         const key = `${c.chunk_x},${c.chunk_z}`;
         if (visited.has(key)) continue;
-        const group: ChunkGroup = { chunks: [] };
+        const group: ChunkGroup = {chunks: []};
         visit(c.chunk_x, c.chunk_z, group);
         if (group.chunks.length > 0) groups.push(group);
     }
@@ -368,18 +558,18 @@ export function groupContiguousChunkIndices(chunkIndices: bigint[]): ChunkGroup[
 }
 
 // --- Build Watchtower Territories ---
-function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Map<bigint, ClaimLocalState>, empireChunkStates: EmpireChunkState[], empireState: EmpireState[]): WatchtowerTerritory[] {
+function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Map<bigint, ClaimLocalState>, globalData: GlobalData): WatchtowerTerritory[] {
     // Map from watchtower entityId to all its chunk indices
     const watchtowerChunks = new Map<bigint, bigint[]>();
     const watchtowerEmpires = new Map<bigint, EmpireState>();
-    empireChunkStates.forEach(state => {
+    globalData.empireChunkState.forEach(state => {
         if (!watchtowerChunks.has(state.watchtowerEntityId)) {
             watchtowerChunks.set(state.watchtowerEntityId, []);
         }
         const arr = watchtowerChunks.get(state.watchtowerEntityId);
         if (arr) arr.push(state.chunkIndex);
         if (!watchtowerEmpires.has(state.watchtowerEntityId)) {
-            const empire = empireState.find(e => e.entityId === state.empireEntityId);
+            const empire = globalData.empireState.find(e => e.entityId === state.empireEntityId);
             if (empire) watchtowerEmpires.set(state.watchtowerEntityId, empire);
         }
     });
@@ -390,6 +580,26 @@ function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Ma
             const chunkIndices = watchtowerChunks.get(claimState.ownerBuildingEntityId) || [];
             const chunkGroups = groupContiguousChunkIndices(chunkIndices);
             const empire = watchtowerEmpires.get(claimState.ownerBuildingEntityId);
+
+            // Get empire colors from globalData
+            let fillColor: string | undefined;
+            let outlineColor: string | undefined;
+            if (empire) {
+                const emblem = globalData.empireEmblemState.find(e => e.entityId === empire.entityId);
+                if (emblem) {
+                    // color2 for fill
+                    const colorDesc2 = globalData.empireColorDesc.find(c => c.id === emblem.color2Id);
+                    if (colorDesc2) {
+                        fillColor = argbToHex(colorDesc2.colorArgb);
+                    }
+                    // color1 for outline
+                    const colorDesc1 = globalData.empireColorDesc.find(c => c.id === emblem.color1Id);
+                    if (colorDesc1) {
+                        outlineColor = argbToHex(colorDesc1.colorArgb);
+                    }
+                }
+            }
+
             territories.push({
                 entityId: claimState.ownerBuildingEntityId,
                 location: localState.location!,
@@ -398,87 +608,30 @@ function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Ma
                 ownerName: empire ? empire.name : 'Unknown',
                 chunkIndices,
                 chunkGroups,
-                totalChunks: chunkIndices.length
+                totalChunks: chunkIndices.length,
+                color: fillColor || '#808080', // fallback to gray if no color found
+                outlineColor: outlineColor || '#000000' // fallback to black if no color found
             });
         }
     });
     return territories;
 }
 
-// Returns true if any chunk in territoryA is adjacent to any chunk in territoryB
-function areTerritoriesAdjacent(territoryA: WatchtowerTerritory, territoryB: WatchtowerTerritory): boolean {
-    const chunkSetA = new Set(territoryA.chunkGroups.flatMap(g => g.chunks.map(c => `${c.chunk_x},${c.chunk_z}`)));
-    for (const groupB of territoryB.chunkGroups) {
-        for (const chunkB of groupB.chunks) {
-            for (const [dx, dz] of [[1,0], [-1,0], [0,1], [0,-1]]) {
-                const neighborKey = `${chunkB.chunk_x+dx},${chunkB.chunk_z+dz}`;
-                if (chunkSetA.has(neighborKey)) return true;
-            }
-        }
-    }
-    return false;
-}
-
-// Returns true if the watchtower location of A is within distance (in chunks) of any chunk in B
-function areTerritoriesNearby(territoryA: WatchtowerTerritory, territoryB: WatchtowerTerritory, distanceChunks = 15): boolean {
-    const distSq = distanceChunks * distanceChunks;
-    // Convert watchtower location to chunk coordinates
-    const chunkA = {
-        chunk_x: Math.floor(territoryA.location.x / 96),
-        chunk_z: Math.floor(territoryA.location.z / 96)
-    };
-    for (const groupB of territoryB.chunkGroups) {
-        for (const chunkB of groupB.chunks) {
-            const dx = chunkA.chunk_x - chunkB.chunk_x;
-            const dz = chunkA.chunk_z - chunkB.chunk_z;
-            if (dx*dx + dz*dz <= distSq) return true;
-        }
-    }
-    return false;
-}
-
-// Assign colors to territories so that adjacent/nearby territories have unique colors
-function assignTerritoryColors(territories: WatchtowerTerritory[], palette: string[], nearbyDistance = 10) {
-    // Build adjacency graph
-    const n = territories.length;
-    const adj = Array.from({length: n}, () => new Set<number>());
-    for (let i = 0; i < n; ++i) {
-        for (let j = i+1; j < n; ++j) {
-            if (areTerritoriesAdjacent(territories[i], territories[j]) ||
-                areTerritoriesNearby(territories[i], territories[j], nearbyDistance) ||
-                areTerritoriesNearby(territories[j], territories[i], nearbyDistance)) {
-                adj[i].add(j);
-                adj[j].add(i);
-            }
-        }
-    }
-    // Greedy coloring
-    const colors = Array(n).fill(-1);
-    for (let i = 0; i < n; ++i) {
-        const used = new Set(Array.from(adj[i]).map(j => colors[j]));
-        for (let c = 0; c < palette.length; ++c) {
-            if (!used.has(c)) {
-                colors[i] = c;
-                break;
-            }
-        }
-        if (colors[i] === -1) {
-            // fallback
-            console.log(`Warning: not enough colors for territory ${territories[i].name}, assigning default color`);
-            colors[i] = 0;
-        }
-        territories[i].color = palette[colors[i]];
-    }
-}
-
 async function main() {
-    // read live data
-    let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
-    const data = await fetchDataFromRegions(regions);
-    fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
-
-    // or read from file for faster dev without hitting servers
-    //const data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver) as RegionData;
+    const LIVE = false;
+    let data, globalData;
+    if (LIVE) {
+        // read live data
+        let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+        data = await fetchDataFromRegions(regions);
+        globalData = await fetchGlobalData();
+        fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
+        fs.writeFileSync(path.join('global-data.json'), JSON.stringify(globalData, bigIntReplacer, 2));
+    } else {
+        // or read from file for faster dev without hitting servers
+        data = JSON.parse(fs.readFileSync(path.join('data.json'), 'utf-8'), bigIntReviver) as RegionData;
+        globalData = JSON.parse(fs.readFileSync(path.join('global-data.json'), 'utf-8'), bigIntReviver) as GlobalData;
+    }
 
     const localStateMap = new Map<bigint, ClaimLocalState>();
     data.claimLocalState.forEach(state => {
@@ -486,10 +639,7 @@ async function main() {
     });
 
     // Build all watchtower territories
-    const territories = buildWatchtowerTerritories(data.claimState, localStateMap, data.empireChunkState, data.empireState);
-
-    // Assign colors to territories
-    assignTerritoryColors(territories, COLOR_PALETTE);
+    const territories = buildWatchtowerTerritories(data.claimState, localStateMap, globalData);
 
     const outputs: OutputData = {
         caves: [],
@@ -510,7 +660,7 @@ async function main() {
 
     // --- Grids output ---
     // Use worldRegionNameState from the first region
-    const regionNames = (data.worldRegionNameState || []).map(r => ({ id: r.id, name: r.playerFacingName }));
+    const regionNames = (data.worldRegionNameState || []).map(r => ({id: r.id, name: r.playerFacingName}));
     // World/region grid parameters
     const regionCount = 5;
     const regionSizeChunks = 80;
@@ -538,8 +688,8 @@ async function main() {
     outputs.grids = [];
     outputs.grids.push({
         type: "Feature",
-        properties: { noPan: 1, color: "#737070", weight: 0.4, opacity: 1 },
-        geometry: { type: "MultiLineString", coordinates: gridLines }
+        properties: {noPan: 1, color: "#737070", weight: 0.4, opacity: 1},
+        geometry: {type: "MultiLineString", coordinates: gridLines}
     });
     // Add region border lines (thicker)
     const regionBorders: number[][][] = [];
@@ -561,8 +711,8 @@ async function main() {
     }
     outputs.grids.push({
         type: "Feature",
-        properties: { noPan: 1, color: "#000000", weight: 2, opacity: 1 },
-        geometry: { type: "MultiLineString", coordinates: regionBorders }
+        properties: {noPan: 1, color: "#000000", weight: 2, opacity: 1},
+        geometry: {type: "MultiLineString", coordinates: regionBorders}
     });
     // Add tooltips for the 9 central regions (3x3 in the center)
     for (let rz = minRegion; rz <= maxRegion; ++rz) {
@@ -572,7 +722,7 @@ async function main() {
             if (region) {
                 outputs.grids.push({
                     type: "Feature",
-                    properties: { type: "tooltip", noPan: 1, popupText: region.name },
+                    properties: {type: "tooltip", noPan: 1, popupText: region.name},
                     geometry: {
                         type: "Point",
                         coordinates: [
@@ -588,13 +738,14 @@ async function main() {
     function write(name: string, features: any) {
         fs.writeFileSync(path.join(data_dir, name + '.geojson'), JSON.stringify(features));
     }
+
     write('caves', outputs.caves);
     write('trees', outputs.trees);
     write('ruined', outputs.ruined);
     write('temples', outputs.temples);
     write('dungeons', outputs.dungeons);
     write('towers', outputs.towers);
-    write('grids', { type: "FeatureCollection", features: outputs.grids });
+    write('grids', {type: "FeatureCollection", features: outputs.grids});
 }
 
 main().then(() => {

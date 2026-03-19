@@ -96,11 +96,16 @@ export function buildPopupHtml(item: MapSelection): string {
 			return `<div class="bcm-popup">
 				${type}
 				<div class="bcm-popup-title">
-					<span class="bcm-popup-swatch" style="background-color:${item.fillColor ?? '#3388ff'}"></span>
 					<span class="bcm-popup-name">${item.name}</span>
 				</div>
+				<div class="bcm-popup-title">
+				    <span class="bcm-popup-swatch" style="background-color:${item.fillColor ?? '#3388ff'};border-color:${item.outlineColor ?? '#000000'};border-width:1px;"></span>
+					<span class="bcm-popup-name">${item.owner}</span>
+				</div>
+				${divider}
 				${coords}
-				${item.chunkCount ? `<div class="bcm-popup-coords" style="padding-top:2px">${item.chunkCount} chunks</div>` : ''}
+				${item.chunkCount ? `<div class="bcm-popup-coords">${item.chunkCount} chunks</div>` : ''}
+				${item.ownerId ? `<a class="bcm-popup-link" href="https://bitjita.com/empires/${item.ownerId}" target="_blank" rel="noopener noreferrer">View empire on bitjita.com</a>` : ''}
 				<div class="bcm-popup-body"></div>
 			</div>`;
 
