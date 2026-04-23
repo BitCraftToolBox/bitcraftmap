@@ -330,9 +330,10 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             break;
         // dungeons
         case 1785852446:
-        case 846734170:
         case 208697589:
         case 1084069097:
+        case 846734170: // alpha jakyl dungeon, icon is smaller
+        case 1385919449: // ancient overgrown mine
             outputs.dungeons.push(makeFeature({
                 popupText: claimName,
                 iconName: "dungeon",
