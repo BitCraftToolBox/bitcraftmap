@@ -13,7 +13,7 @@ import { env } from "$env/dynamic/public";
 function geojsonUrl(filename: string): string {
   const { exportsCdn } = createAppConfig();
   return env.PUBLIC_CDN_MAP === "true"
-    ? `${exportsCdn}/bitcraftmap/${filename}`
+    ? `${exportsCdn}/${filename}`
     : `/markers/${filename}`;
 }
 

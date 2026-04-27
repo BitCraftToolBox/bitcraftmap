@@ -17,8 +17,10 @@
 		Object.values(LAYER_GROUPS).flatMap((g) => [...g.layers, g.title])
 	);
 
+	const OVERLAY_LAYERS = new Set(['Roads']);
+
 	function getUngroupedLayers(): string[] {
-		return Object.keys(genericToggle).filter((name) => !groupedNames.has(name));
+		return Object.keys(genericToggle).filter((name) => !groupedNames.has(name) && !OVERLAY_LAYERS.has(name));
 	}
 </script>
 
