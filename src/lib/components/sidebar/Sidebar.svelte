@@ -14,6 +14,8 @@
 		genericToggle,
 		isActive,
 		onToggleLayer,
+		getBaseLayer,
+		onSetBaseLayer,
 		onToggleResource,
 		onTogglePlayer,
 		onRemoveResource,
@@ -23,6 +25,8 @@
 		genericToggle: Record<string, L.LayerGroup>;
 		isActive: (name: string) => boolean;
 		onToggleLayer: (name: string) => void;
+		getBaseLayer: () => 'terrain' | 'game';
+		onSetBaseLayer: (layer: "terrain" | "game") => void;
 		onToggleResource: (id: number) => void;
 		onTogglePlayer: (entityId: string) => void;
 		onRemoveResource: (id: number) => void;
@@ -89,7 +93,7 @@
 			</div>
 			<div class="p-2">
 				{#if sidebar.activeTab === 'layers'}
-					<LayersPanel />
+					<LayersPanel {isActive} onToggle={onToggleLayer} {getBaseLayer} {onSetBaseLayer} />
 				{:else if sidebar.activeTab === 'features'}
 					<LayerPanel {genericToggle} {isActive} onToggle={onToggleLayer} />
 				{:else if sidebar.activeTab === 'tracking'}
@@ -144,7 +148,7 @@
 
 			<div class="px-3 pb-4">
 				{#if sidebar.activeTab === 'layers'}
-					<LayersPanel />
+					<LayersPanel {isActive} onToggle={onToggleLayer} {getBaseLayer} {onSetBaseLayer} />
 				{:else if sidebar.activeTab === 'features'}
 					<LayerPanel {genericToggle} {isActive} onToggle={onToggleLayer} />
 				{:else if sidebar.activeTab === 'tracking'}

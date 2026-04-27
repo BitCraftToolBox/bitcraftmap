@@ -6,6 +6,6 @@ export function createAppConfig(): AppConfig {
     backendUrl: env.PUBLIC_BACKEND_URL ?? "https://bcmap-api.bitjita.com",
     gistApi: "https://api.github.com/gists/",
     websocketUrl: env.PUBLIC_WEBSOCKET_URL ?? "wss://live.bitjita.com",
-    exportsCdn: env.PUBLIC_EXPORTS_CDN ?? "https://exports.bitjita.com",
+    exportsCdn: env.PUBLIC_EXPORTS_CDN ?? "https://exports.bitjita.com/bitcraftmap",
   };
 }
