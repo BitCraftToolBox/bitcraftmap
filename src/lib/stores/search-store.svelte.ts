@@ -63,23 +63,24 @@ function triggerRemoteSearch(q: string): void {
 	isLoadingRemote = true;
 	debounceTimer = setTimeout(async () => {
 		try {
-			const [players, resources] = await Promise.all([
-				searchPlayers(q),
-				searchResources(q)
-			]);
-			playerResults = players.map((p) => ({
-				type: 'player' as const,
-				entityId: p.entityId,
-				username: p.username,
-				signedIn: p.signedIn
-			}));
-			resourceResults = resources.map((r) => ({
-				type: 'resource' as const,
-				id: r.id,
-				name: r.name,
-				tier: r.tier,
-				tag: r.tag
-			}));
+			const playerPromise = searchPlayers(q).then(players => {
+				playerResults = players.map((p) => ({
+					type: 'player' as const,
+					entityId: p.entityId,
+					username: p.username,
+					signedIn: p.signedIn
+				}));
+			});
+			const resourcePromise = searchResources(q).then(resources => {
+				resourceResults = resources.map((r) => ({
+					type: 'resource' as const,
+					id: r.id,
+					name: r.name,
+					tier: r.tier,
+					tag: r.tag
+				}));
+			});
+			await Promise.allSettled([playerPromise, resourcePromise]);
 		} catch (err) {
 			console.error('Search failed:', err);
 		} finally {
