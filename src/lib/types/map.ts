@@ -66,6 +66,7 @@ export interface PlayerSelection {
 	username: string;
 	signedIn: boolean;
 	color: string;
+	isFollowing: boolean;
 }
 
 export interface GenericPOISelection {

@@ -12,10 +12,13 @@ export async function lookupPlayer(entityId: string): Promise<PlayerLookupResult
 		if (!response.ok) return { username: entityId, locationX: null, locationZ: null };
 		const data = await response.json();
 		const player = data.player;
+		// TODO initial bitjita fetch returns small hex tile coords, but mobile entity state uses float hex tile * 1000
+		const locationX = player?.locationX ? player.locationX * 1000 : null;
+		const locationZ = player?.locationZ ? player.locationZ * 1000 : null;
 		return {
 			username: player?.username || entityId,
-			locationX: player?.locationX ?? null,
-			locationZ: player?.locationZ ?? null
+			locationX: locationX,
+			locationZ: locationZ
 		};
 	} catch {
 		return { username: entityId, locationX: null, locationZ: null };
