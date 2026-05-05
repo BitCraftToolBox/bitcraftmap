@@ -1073,22 +1073,22 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1110000": {
         tier: 1,
-        name: "Moonlit Crawdads",
+        name: "Briny Guppi",
         tag: "Baitfish"
     },
     "1110001": {
         tier: 1,
-        name: "School Of Breezy Fin Darters ",
+        name: "School Of Briny Argus",
         tag: "Lake Fish School"
     },
     "1110002": {
         tier: 1,
-        name: "School Of Oceancrest Marlins",
+        name: "School Of Briny Linus",
         tag: "Ocean Fish School"
     },
     "1110003": {
         tier: 1,
-        name: "Frenzied School Of Oceancrest Marlins",
+        name: "Frenzied School Of Briny Linus",
         tag: "Chummed Ocean Fish School"
     },
     "1110004": {
@@ -1133,22 +1133,22 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "2110000": {
         tier: 2,
-        name: "Driftwood Crayfish",
+        name: "Muddy Guppi",
         tag: "Baitfish"
     },
     "2110001": {
         tier: 2,
-        name: "School Of Emberfin Shiners",
+        name: "School Of Muddy Auratus",
         tag: "Lake Fish School"
     },
     "2110002": {
         tier: 2,
-        name: "School Of Serpentfish",
+        name: "School Of Muddy Oncor",
         tag: "Ocean Fish School"
     },
     "2110003": {
         tier: 2,
-        name: "Frenzied School Of Serpentfish",
+        name: "Frenzied School Of Muddy Oncor",
         tag: "Chummed Ocean Fish School"
     },
     "2110004": {
@@ -1163,7 +1163,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "2390533": {
         tier: 8,
-        name: "School Of Mysterious Anglerfish",
+        name: "School Of Mysterious Murky Oxy",
         tag: "Ocean Fish School"
     },
     "3010008": {
@@ -1238,22 +1238,22 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "3110000": {
         tier: 3,
-        name: "Hunchback Prawns",
+        name: "Greenhorn Guppi",
         tag: "Baitfish"
     },
     "3110001": {
         tier: 3,
-        name: "School Of Coralcrest Darter",
+        name: "School Of Greenhorn Dolo",
         tag: "Lake Fish School"
     },
     "3110002": {
         tier: 3,
-        name: "School Of Wavecrest Eels",
+        name: "School Of Greenhorn Gorbu",
         tag: "Ocean Fish School"
     },
     "3110003": {
         tier: 3,
-        name: "Frenzied School Of Wavecrest Eels",
+        name: "Frenzied School Of Greenhorn Gorbu",
         tag: "Chummed Ocean Fish School"
     },
     "3110004": {
@@ -1318,22 +1318,22 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "4110000": {
         tier: 4,
-        name: "Pygmy Lobsters",
+        name: "Azure Minni",
         tag: "Baitfish"
     },
     "4110001": {
         tier: 4,
-        name: "School Of Mossfin Chub",
+        name: "School Of Azure Sphyra",
         tag: "Lake Fish School"
     },
     "4110002": {
         tier: 4,
-        name: "School Of Seastorm Tuna",
+        name: "School Of Azure Centro",
         tag: "Ocean Fish School"
     },
     "4110003": {
         tier: 4,
-        name: "Frenzied School Of Seastorm Tuna",
+        name: "Frenzied School Of Azure Centro",
         tag: "Chummed Ocean Fish School"
     },
     "4110004": {
@@ -1343,7 +1343,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "5045122": {
         tier: 7,
-        name: "School Of Tidebreaker Barracuda",
+        name: "School Of Mossy Amia",
         tag: "Ocean Fish School"
     },
     "5050000": {
@@ -1363,22 +1363,22 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "5110000": {
         tier: 5,
-        name: "Golden Crawfish",
+        name: "Rocky Minni",
         tag: "Baitfish"
     },
     "5110001": {
         tier: 5,
-        name: "School Of Emberscale Sturgeon",
+        name: "School Of Rocky Doimaach",
         tag: "Lake Fish School"
     },
     "5110002": {
         tier: 5,
-        name: "School Of Azure Sharks",
+        name: "School Of Rocky Aulono",
         tag: "Ocean Fish School"
     },
     "5110003": {
         tier: 5,
-        name: "Frenzied School Of Azure Sharks",
+        name: "Frenzied School Of Rocky Aulono",
         tag: "Chummed Ocean Fish School"
     },
     "5110004": {
@@ -1388,22 +1388,22 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "6110000": {
         tier: 6,
-        name: "Sunrise Shrimp",
+        name: "Vibrant Nano",
         tag: "Baitfish"
     },
     "6110001": {
         tier: 6,
-        name: "School Of Hexfin Perch",
+        name: "School Of Vibrant Carangi",
         tag: "Lake Fish School"
     },
     "6110002": {
         tier: 6,
-        name: "School Of Abyssal Swordfish",
+        name: "School Of Vibrant Janus",
         tag: "Ocean Fish School"
     },
     "6110003": {
         tier: 6,
-        name: "Frenzied School Of Abyssal Swordfish",
+        name: "Frenzied School Of Vibrant Janus",
         tag: "Chummed Ocean Fish School"
     },
     "6110004": {
@@ -1471,6 +1471,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Aurumite Vein",
         tag: "Ore Vein"
     },
+    "139670438": {
+        tier: -1,
+        name: "Ruin Archway",
+        tag: "Profession Dungeon Resource"
+    },
     "152428426": {
         tier: 1,
         name: "Medium Ferralith Vein Interior Depleted",
@@ -1531,6 +1536,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 9 Flower",
         tag: "Flower"
     },
+    "296306290": {
+        tier: -1,
+        name: "Overgrown Ancient Brick Pile",
+        tag: "Ruin Resource"
+    },
+    "312574297": {
+        tier: -1,
+        name: "Windswept Flower",
+        tag: "Flower"
+    },
     "322711580": {
         tier: 1,
         name: "Faint Hexite Energy Font",
@@ -1540,6 +1555,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Magnificent Hieroglyphs",
         tag: "Research"
+    },
+    "332302887": {
+        tier: -1,
+        name: "Hexite Fragment",
+        tag: "Hexite"
+    },
+    "348497955": {
+        tier: -1,
+        name: "Hexite Deposit",
+        tag: "Hexite"
     },
     "368570220": {
         tier: 6,
@@ -1553,7 +1578,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "374159821": {
         tier: 10,
-        name: "School Of Flawless Lakefish",
+        name: "School Of Divine Serra",
         tag: "Lake Fish School"
     },
     "379219978": {
@@ -1571,6 +1596,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 7 Tree",
         tag: "Tree"
     },
+    "405891180": {
+        tier: -1,
+        name: "Calmed Beehive",
+        tag: "Taming"
+    },
     "411376268": {
         tier: 7,
         name: "Aurumite Vein Interior Depleted",
@@ -1583,13 +1613,18 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "424796674": {
         tier: 10,
-        name: "School Of Flawless Ocean Fish",
+        name: "School Of Divine Selachii",
         tag: "Ocean Fish School"
     },
     "427032893": {
         tier: -1,
         name: "Disturbed Alpha Puppy Den",
         tag: "Monster Den"
+    },
+    "451150522": {
+        tier: -1,
+        name: "Beehive",
+        tag: "Taming"
     },
     "457752715": {
         tier: 8,
@@ -1621,6 +1656,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ancient Armor Rack",
         tag: "Dungeon Resource"
     },
+    "499397253": {
+        tier: -1,
+        name: "Auric Ore",
+        tag: "Ore Vein"
+    },
     "505488132": {
         tier: 8,
         name: "Pristine Clay",
@@ -1628,13 +1668,18 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "509854054": {
         tier: 8,
-        name: "Frenzied School Of Mysterious Anglerfish",
+        name: "Frenzied School Of Murky Oxy",
         tag: "Chummed Ocean Fish School"
     },
     "517819121": {
         tier: -1,
         name: "Berserker Mushroom",
         tag: "Rare Mushroom"
+    },
+    "531704057": {
+        tier: -1,
+        name: "Rimefruit",
+        tag: "Taming Resource"
     },
     "532077242": {
         tier: 4,
@@ -1706,6 +1751,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Pyrelite Vein Interior",
         tag: "Ore Vein"
     },
+    "701320247": {
+        tier: -1,
+        name: "Lusul Burrow",
+        tag: "Den"
+    },
     "702104027": {
         tier: 6,
         name: "Clay Termite Mound",
@@ -1718,7 +1768,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "722506673": {
         tier: 8,
-        name: "School Of Rainbowscaled Tilapia",
+        name: "School Of Murky Nemato",
         tag: "Lake Fish School"
     },
     "723013812": {
@@ -1743,7 +1793,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "756579517": {
         tier: 9,
-        name: "Magnificent Baitfish",
+        name: "Abyssal Rasbi",
         tag: "Baitfish"
     },
     "762731569": {
@@ -1788,7 +1838,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "826362353": {
         tier: 7,
-        name: "Frenzied School Of Tidebreaker Barracuda",
+        name: "Frenzied School Of Mossy Amia",
         tag: "Chummed Ocean Fish School"
     },
     "834195042": {
@@ -1801,10 +1851,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Alpha Jakyl Puppy Den",
         tag: "Monster Den"
     },
+    "854132798": {
+        tier: -1,
+        name: "Depleted Hexite Deposit",
+        tag: "Hexite"
+    },
+    "868500054": {
+        tier: -1,
+        name: "Collapsed Ruin Archway",
+        tag: "Profession Dungeon Resource"
+    },
     "875245395": {
         tier: 6,
         name: "Mistberry Bush",
         tag: "Berry"
+    },
+    "876954498": {
+        tier: -1,
+        name: "Enraged Drone Nest",
+        tag: "Taming"
     },
     "887736443": {
         tier: 5,
@@ -1813,7 +1878,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "904022325": {
         tier: 7,
-        name: "School Of Speedy Glowfin",
+        name: "School Of Mossy Synan",
         tag: "Lake Fish School"
     },
     "916586661": {
@@ -1863,7 +1928,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1006230316": {
         tier: 10,
-        name: "Frenzied School Of Flawless Ocean Fish",
+        name: "Frenzied School Of Divine Selachii",
         tag: "Chummed Ocean Fish School"
     },
     "1023127595": {
@@ -1906,6 +1971,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Elenvar Vein Interior",
         tag: "Ore Vein"
     },
+    "1078671453": {
+        tier: -1,
+        name: "Injured Cervus",
+        tag: "Injured Animal"
+    },
     "1091832489": {
         tier: -1,
         name: "Docile Alpha Puppy Den",
@@ -1943,7 +2013,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1141184831": {
         tier: 9,
-        name: "Frenzied School Of Magnificent Ocean Fish",
+        name: "Frenzied School Of Abyssal Gladius",
         tag: "Chummed Ocean Fish School"
     },
     "1146338010": {
@@ -1951,10 +2021,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tough Pine Bark Pile",
         tag: "Quest Resource"
     },
+    "1154155891": {
+        tier: -1,
+        name: "Sawmill",
+        tag: "Profession Dungeon Resource"
+    },
     "1157887989": {
         tier: 9,
-        name: "School Of Magnificent Lake Fish",
+        name: "School Of Abyssal Nobilis",
         tag: "Lake Fish School"
+    },
+    "1158906419": {
+        tier: -1,
+        name: "Owl Feathers",
+        tag: "Taming Resource"
     },
     "1159270109": {
         tier: 10,
@@ -1976,10 +2056,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Crystalized Sand",
         tag: "Sand"
     },
+    "1219773404": {
+        tier: -1,
+        name: "Depleted Roots",
+        tag: "Profession Dungeon Resource"
+    },
     "1220773790": {
         tier: -1,
         name: "Damaged Ancient Cargo Hold",
         tag: "Quest Resource"
+    },
+    "1223085684": {
+        tier: -1,
+        name: "Ancient Brick Pile",
+        tag: "Ruin Resource"
     },
     "1235656080": {
         tier: -1,
@@ -2003,7 +2093,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1262898141": {
         tier: 7,
-        name: "Misty Crustacean",
+        name: "Mossy Nano",
         tag: "Baitfish"
     },
     "1264935363": {
@@ -2018,13 +2108,18 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1283711960": {
         tier: 10,
-        name: "Flawless Baitfish",
+        name: "Divine Tetra",
         tag: "Baitfish"
     },
     "1293969473": {
         tier: -1,
         name: "Lost Treasure",
         tag: "Sailing Cargo"
+    },
+    "1299321579": {
+        tier: 1,
+        name: "Blossom Tree",
+        tag: "Blossom Tree"
     },
     "1303955933": {
         tier: 1,
@@ -2066,6 +2161,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Luminite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1373224735": {
+        tier: -1,
+        name: "Windstream",
+        tag: "Quest Resource"
+    },
     "1384946093": {
         tier: 9,
         name: "Medium Umbracite Vein Interior",
@@ -2075,6 +2175,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Umbracite Vein",
         tag: "Ore Vein"
+    },
+    "1396949488": {
+        tier: -1,
+        name: "Beehive",
+        tag: "Taming"
+    },
+    "1423043113": {
+        tier: 3,
+        name: "Peach Tree",
+        tag: "Fruit Tree"
     },
     "1423928615": {
         tier: 8,
@@ -2126,6 +2236,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Lost Wreckage",
         tag: "Sailing Cargo"
     },
+    "1483091354": {
+        tier: -1,
+        name: "Hexite Whirlpool",
+        tag: "Quest Resource"
+    },
     "1489491467": {
         tier: 10,
         name: "Tier 10 Fibers",
@@ -2148,7 +2263,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1558728865": {
         tier: 8,
-        name: "Sparkling Prawn",
+        name: "Murky Chub",
         tag: "Baitfish"
     },
     "1565420196": {
@@ -2221,6 +2336,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ancient Debris",
         tag: "Rare Research"
     },
+    "1672706925": {
+        tier: -1,
+        name: "Hidden 3 Tiles Resource",
+        tag: "Hidden Resource"
+    },
     "1673056013": {
         tier: 2,
         name: "Terrified Adventurer's Note",
@@ -2276,9 +2396,14 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Aurumite Vein Interior",
         tag: "Ore Vein"
     },
+    "1805090430": {
+        tier: -1,
+        name: "Ruin Bridge",
+        tag: "Profession Dungeon Resource"
+    },
     "1812221896": {
         tier: 9,
-        name: "School Of Magnificent Ocean Fish",
+        name: "School Of Abyssal Gladius",
         tag: "Ocean Fish School"
     },
     "1821415333": {
@@ -2326,6 +2451,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ferralith Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1922244008": {
+        tier: -1,
+        name: "Collapsed Ruin Bridge",
+        tag: "Profession Dungeon Resource"
+    },
     "1954847232": {
         tier: 9,
         name: "Black Fig Bush",
@@ -2340,6 +2470,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Tier 7 Fibers",
         tag: "Fiber Plant"
+    },
+    "1985720909": {
+        tier: -1,
+        name: "Miregrub Nest",
+        tag: "Taming Resource"
     },
     "1986100626": {
         tier: 10,
@@ -2411,6 +2546,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Flawless Berry Bush",
         tag: "Berry"
     },
+    "2124433785": {
+        tier: -1,
+        name: "Hexite Infused Roots",
+        tag: "Profession Dungeon Resource"
+    },
     "2124845482": {
         tier: 7,
         name: "Ornate Hieroglyphs",
@@ -2420,6 +2560,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "King Jakyl Puppy Nose Imprints",
         tag: "Prospecting Clue"
+    },
+    "2138772580": {
+        tier: -1,
+        name: "Mine Cart",
+        tag: "Profession Dungeon Resource"
     },
     "2140754992": {
         tier: 8,
@@ -2435,8 +2580,8 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Jakyl Den",
         tag: "Monster Den"
-    }
-}
+    },
+};
 
 export const creatureIndex: CreatureIndex = { // Generated array
     "18": {
@@ -2619,6 +2764,11 @@ export const creatureIndex: CreatureIndex = { // Generated array
         name: "Swamp Terratoad",
         tag: "Monster"
     },
+    "42": {
+        tier: 3,
+        name: "Swift Cervus",
+        tag: "Huntable Animal"
+    },
     "23": {
         tier: 1,
         name: "Terratoad",
@@ -2638,5 +2788,5 @@ export const creatureIndex: CreatureIndex = { // Generated array
         tier: 6,
         name: "Yagi",
         tag: "Huntable Animal"
-    }
-}
+    },
+};
