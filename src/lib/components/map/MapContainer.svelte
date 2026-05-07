@@ -434,29 +434,40 @@
       );
     });
 
+    function handlePopupClick(ev: MouseEvent) {
+      const btn = (ev.target as HTMLElement).closest(
+              "[data-action]",
+      ) as HTMLElement | null;
+      if (!btn) return;
+      const action = btn.dataset.action;
+      if (action === "track-resource") {
+        const id = Number(btn.dataset.resourceId);
+        const name = btn.dataset.resourceName ?? "";
+        const tier = Number(btn.dataset.resourceTier);
+        if (id) handleResourceSelect(id, name, tier);
+        map.closePopup();
+      } else if (action === "follow-player") {
+        const entityId = btn.dataset.entityId ?? "";
+        if (entityId) {
+          if (followingPlayerId == entityId) {
+            followingPlayerId = null;
+          } else {
+            followingPlayerId = entityId;
+            const existing = playerStore.get(entityId);
+            if (existing) { // should always be true if we just clicked follow on their marker
+              map.flyTo(existing.getLatLng(), map.getZoom());
+            }
+          }
+        }
+        map.closePopup();
+      }
+    }
+
     // Handle action buttons inside Leaflet popups
     map.on("popupopen", (e: L.PopupEvent) => {
       const container = e.popup.getElement();
       if (!container) return;
-      container.addEventListener("click", (ev) => {
-        const btn = (ev.target as HTMLElement).closest(
-          "[data-action]",
-        ) as HTMLElement | null;
-        if (!btn) return;
-        const action = btn.dataset.action;
-        if (action === "track-resource") {
-          const id = Number(btn.dataset.resourceId);
-          const name = btn.dataset.resourceName ?? "";
-          const tier = Number(btn.dataset.resourceTier);
-          if (id) handleResourceSelect(id, name, tier);
-          map.closePopup();
-        } else if (action === "follow-player") {
-          const entityId = btn.dataset.entityId ?? "";
-          const username = btn.dataset.username ?? "";
-          if (entityId) handlePlayerSelect(entityId, username);
-          map.closePopup();
-        }
-      });
+      container.addEventListener("click", handlePopupClick);
     });
 
     // Map state persistence
@@ -536,7 +547,12 @@
         .split(",")
         .map((id) => id.trim())
         .filter(Boolean);
+      let first = true;
       for (const id of playerIds) {
+        if (first && urlParams.followPlayer) {
+          first = false;
+          followingPlayerId = id;
+        }
         trackedPlayerIds.add(id);
       }
 
@@ -557,7 +573,7 @@
                 destination_x: info.locationX,
                 destination_z: info.locationZ,
               },
-              urlParams.followPlayer,
+              followingPlayerId === playerIds[i],
               loadColorPreference('player', playerIds[i]) || "#00ff00",
             );
           }
@@ -567,7 +583,7 @@
       const ws = connectWebSocket(
         playerIds,
         (state: PlayerState) => {
-          updatePlayerMarker(state, urlParams.followPlayer, loadColorPreference('player', state.entity_id) || "#00ff00");
+          updatePlayerMarker(state, followingPlayerId === state.entity_id, loadColorPreference('player', state.entity_id) || "#00ff00");
         },
         () => {
           playerInfoPromise.then((results) => {
@@ -653,6 +669,7 @@
   const destinationStore = new Map<string, L.Polyline>();
   const playerWebSockets = new Map<string, WebSocket>();
   const trackedPlayerIds = new Set<string>();
+  let followingPlayerId = $state<string | null>(null);
   const playerUsernames = new Map<string, string>();
 
   const playerColorPalette = [
@@ -692,7 +709,7 @@
           destination_x: playerInfo.locationX,
           destination_z: playerInfo.locationZ,
         },
-        false,
+        followingPlayerId == entityId,
         color,
       );
     }
@@ -700,7 +717,7 @@
     const ws = connectWebSocket(
       [entityId],
       (state: PlayerState) => {
-        updatePlayerMarker(state, false, loadColorPreference('player', entityId) || color);
+        updatePlayerMarker(state, followingPlayerId == state.entity_id, loadColorPreference('player', entityId) || color);
       },
       () => {
         addTrackingItem({
@@ -777,6 +794,7 @@
         signedIn: true,
         latlng: { lat: playerLatLng.lat, lng: playerLatLng.lng },
         color,
+        isFollowing: followingPlayerId == playerId,
       };
       marker.bindPopup(buildPopupHtml(selectionData), {
         className: "bcm-leaflet-popup",
@@ -787,7 +805,9 @@
           lat: marker.getLatLng().lat,
           lng: marker.getLatLng().lng,
         };
+        selectionData.isFollowing = followingPlayerId == playerId;
         setSelection(selectionData);
+        marker.setPopupContent(buildPopupHtml(selectionData));
       });
 
       const trail = new L.Polyline(directionLine, {
@@ -805,7 +825,8 @@
     }
 
     if (followPlayer) {
-      map.flyTo(playerLatLng, map.getZoom());
+      // use setView here instead of flyTo to workaround https://github.com/Leaflet/Leaflet/issues/9438
+      map.setView(playerLatLng, map.getZoom());
     }
   }
 

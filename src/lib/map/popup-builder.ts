@@ -88,7 +88,9 @@ export function buildPopupHtml(item: MapSelection): string {
 				</div>
 				${coords}
 				<div class="bcm-popup-footer">
-					<button class="bcm-popup-action bcm-popup-action--green" data-action="follow-player" data-entity-id="${item.entityId}" data-username="${item.username}">Follow Player</button>
+					<button class="bcm-popup-action bcm-popup-action--green" data-action="follow-player" data-entity-id="${item.entityId}" data-username="${item.username}">
+						${item.isFollowing ? "Stop Following" : "Follow Player"}
+					</button>
 				</div>
 			</div>`;
 
