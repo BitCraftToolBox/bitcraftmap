@@ -5,7 +5,7 @@ export function createAppConfig(): AppConfig {
   return {
     gistApi: "https://api.github.com/gists/",
     exportsCdn: env.PUBLIC_EXPORTS_CDN ?? "https://exports.bitjita.com/bitcraftmap",
-    relayHost: env.PUBLIC_RELAY_HOST ?? "http://localhost:3000", // STDB SDK converts this to ws/wss for us
+    relayHost: env.PUBLIC_RELAY_HOST ?? "https://maincloud.spacetimedb.com", // STDB SDK converts this to ws/wss for us
     relayModule: env.PUBLIC_RELAY_MODULE ?? "prism-relay",
   };
 }
