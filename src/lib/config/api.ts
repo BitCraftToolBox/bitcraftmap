@@ -3,9 +3,9 @@ import { env } from "$env/dynamic/public";
 
 export function createAppConfig(): AppConfig {
   return {
-    backendUrl: env.PUBLIC_BACKEND_URL ?? "https://bcmap-api.bitjita.com",
     gistApi: "https://api.github.com/gists/",
-    websocketUrl: env.PUBLIC_WEBSOCKET_URL ?? "wss://live.bitjita.com",
     exportsCdn: env.PUBLIC_EXPORTS_CDN ?? "https://exports.bitjita.com/bitcraftmap",
+    relayHost: env.PUBLIC_RELAY_HOST ?? "http://localhost:3000", // STDB SDK converts this to ws/wss for us
+    relayModule: env.PUBLIC_RELAY_MODULE ?? "prism-relay",
   };
 }

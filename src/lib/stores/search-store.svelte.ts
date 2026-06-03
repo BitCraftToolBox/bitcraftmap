@@ -1,8 +1,7 @@
 import type L from 'leaflet';
 import type { MapSelection } from '$lib/types/map';
 import { searchPlayers } from '$lib/services/player-service';
-import { searchResources } from '$lib/services/resource-service';
-import { creatureIndex } from '$lib/data/resource-index';
+import {creatureIndex, resourceIndex} from '$lib/data/resource-index';
 
 export interface SearchEntry {
 	title: string;
@@ -46,7 +45,6 @@ let query = $state('');
 let selectedIndex = $state(-1);
 let isOpen = $state(false);
 let playerResults = $state<PlayerEntry[]>([]);
-let resourceResults = $state<ResourceEntry[]>([]);
 let isLoadingRemote = $state(false);
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -55,7 +53,6 @@ function triggerRemoteSearch(q: string): void {
 
 	if (!q || q.trim().length < 2) {
 		playerResults = [];
-		resourceResults = [];
 		isLoadingRemote = false;
 		return;
 	}
@@ -71,16 +68,7 @@ function triggerRemoteSearch(q: string): void {
 					signedIn: p.signedIn
 				}));
 			});
-			const resourcePromise = searchResources(q).then(resources => {
-				resourceResults = resources.map((r) => ({
-					type: 'resource' as const,
-					id: r.id,
-					name: r.name,
-					tier: r.tier,
-					tag: r.tag
-				}));
-			});
-			await Promise.allSettled([playerPromise, resourcePromise]);
+			await Promise.allSettled([playerPromise]);
 		} catch (err) {
 			console.error('Search failed:', err);
 		} finally {
@@ -118,7 +106,18 @@ export function getSearchState() {
 		},
 
 		get resourceResults(): ResourceEntry[] {
-			return resourceResults;
+			if (!query.trim()) return [];
+			const lower = query.toLowerCase();
+			return Object.entries(resourceIndex)
+				.filter(([, r]) => r.name.toLowerCase().includes(lower))
+				.slice(0, 50)
+				.map(([id, r]) => ({
+					type: 'resource' as const,
+					id: Number(id),
+					name: r.name,
+					tier: r.tier,
+					tag: r.tag ?? "",
+				}));
 		},
 
 		get creatureResults(): CreatureSearchEntry[] {
@@ -151,7 +150,6 @@ export function clearSearch(): void {
 	selectedIndex = -1;
 	isOpen = false;
 	playerResults = [];
-	resourceResults = [];
 	isLoadingRemote = false;
 	if (debounceTimer) clearTimeout(debounceTimer);
 }

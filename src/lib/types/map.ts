@@ -16,10 +16,10 @@ export interface MapConfig {
 }
 
 export interface AppConfig {
-	backendUrl: string;
 	gistApi: string;
-	websocketUrl: string;
 	exportsCdn: string;
+	relayHost: string;
+	relayModule: string;
 }
 
 // --- Map Selection Types ---

@@ -71,7 +71,7 @@ export class ResourceCanvasLayer extends L.Layer {
 		map.on('moveend', this._onMoveEnd, this);
 		map.on('click', this._onClick, this);
 
-		this._reset();
+		this._reset(true);
 		return this;
 	}
 
@@ -143,7 +143,7 @@ export class ResourceCanvasLayer extends L.Layer {
 		this._reset();
 	}
 
-	private _reset(): void {
+	private _reset(force: boolean = false): void {
 		if (!this._map) return;
 
 		const size = this._map.getSize();
@@ -154,7 +154,7 @@ export class ResourceCanvasLayer extends L.Layer {
 		// Check cache BEFORE clearing — canvas.width = x clears even if unchanged
 		const p0 = this._map.latLngToContainerPoint([0, 0]);
 		const key = `${Math.round(p0.x)},${Math.round(p0.y)},${size.x},${size.y}`;
-		if (key === this._lastBoundsKey) return;
+		if (!force && key === this._lastBoundsKey) return;
 		this._lastBoundsKey = key;
 
 		// Only resize when the container size changes; _redraw() handles clearing
