@@ -1,0 +1,27 @@
+name: Update data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Run script
+      working-directory: scripts
+      run: |
+        npx tsx update-resource-index.ts
+    - name: Push changes
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add -A
+        
+        if ! git diff --cached --quiet; then
+          git commit -m "chore: update resource and enemy index"
+          git push origin
+        fi
