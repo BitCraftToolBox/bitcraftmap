@@ -14,7 +14,7 @@ function geojsonUrl(filename: string): string {
   const { exportsCdn } = createAppConfig();
   return env.PUBLIC_CDN_MAP === "true"
     ? `${exportsCdn}/${filename}`
-    : `/markers/${filename}`;
+    : `/assets/${filename}`;
 }
 
 // Static icons - created once
@@ -204,7 +204,7 @@ export async function loadEventsGeoJson(
   eventsLayer: L.LayerGroup,
   ctx: PaintContext,
 ): Promise<void> {
-  const file = await fetch("/markers/events.geojson");
+  const file = await fetch(geojsonUrl("events.geojson"));
   const content = await file.text();
   const geoJson = validateGeoJson(content);
   paintGeoJson(geoJson, eventsLayer, ctx);

@@ -16,7 +16,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 fs.existsSync('.env.local') && require('dotenv').config({path: '.env.local'});
-const data_dir = process.env.DATA_DIR || "../static/markers/";
+const data_dir = process.env.DATA_DIR || "../static/assets/";
 !fs.existsSync(data_dir) && fs.mkdirSync(data_dir, {recursive: true});
 
 interface HexitDepositTimer {
@@ -75,6 +75,7 @@ function formatTemplateArgs(value: string) {
 
 function collateHexite(db: RemoteTables): HexitDepositTimer[] {
     const timers: HexitDepositTimer[] = [];
+    // @ts-ignore
     for (const growth of db.growthState.iter()) {
         if (growth.growthRecipeId !== 1577969715) {
             continue;
@@ -619,11 +620,11 @@ function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Ma
 }
 
 async function main() {
-    const LIVE = false;
+    const LIVE = true;
     let data, globalData;
     if (LIVE) {
         // read live data
-        let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+        let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => !([1, 2, 4, 5, 6, 10, 16, 20, 21, 22, 24, 25].includes(i))).map(i => 'bitcraft-live-' + i);
         data = await fetchDataFromRegions(regions);
         globalData = await fetchGlobalData();
         fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));

@@ -3,8 +3,8 @@ import { SvelteSet } from 'svelte/reactivity';
 /** All 25 regions in the 5×5 grid (1 = bottom-left, 25 = top-right). */
 export const ALL_REGIONS: number[] = Array.from({ length: 25 }, (_, i) => i + 1);
 
-/** Only the center 3×3 regions are currently playable. */
-export const AVAILABLE_REGIONS: number[] = [7, 8, 9, 12, 13, 14, 17, 18, 19];
+/** Only the center 3×3 regions are currently playable. *//*  seasonal rgs  v------------v*/
+export const AVAILABLE_REGIONS: number[] = [7, 8, 9, 12, 13, 14, 17, 18, 19, 3, 11, 15, 23];
 
 const STORAGE_KEY = 'selectedRegions';
 

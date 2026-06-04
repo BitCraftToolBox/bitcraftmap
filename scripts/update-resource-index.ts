@@ -7,8 +7,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const RESOURCE_URL = 'https://raw.githubusercontent.com/BitCraftToolBox/BitCraft_GameData/refs/heads/cereal/cs/static/resource_desc.json';
-const ENEMY_URL = 'https://raw.githubusercontent.com/BitCraftToolBox/BitCraft_GameData/refs/heads/cereal/cs/static/enemy_desc.json';
+const RESOURCE_URL = 'https://raw.githubusercontent.com/BitCraftToolBox/BitCraft_GameData/refs/heads/uncharted/cereal/cs/static/resource_desc.json';
+const ENEMY_URL = 'https://raw.githubusercontent.com/BitCraftToolBox/BitCraft_GameData/refs/heads/uncharted/cereal/cs/static/enemy_desc.json';
 
 const TARGET_FILE = path.resolve(__dirname, '../src/lib/data/resource-index.ts');
 

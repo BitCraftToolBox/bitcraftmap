@@ -1446,6 +1446,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Celestium Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "74824355": {
+        tier: 4,
+        name: "Tropical Tree",
+        tag: "Tree"
+    },
     "92565503": {
         tier: 3,
         name: "Ancient Rubble",
@@ -1731,6 +1736,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Hexite Meteor",
         tag: "Hexite Meteor"
     },
+    "598609123": {
+        tier: 3,
+        name: "School of Boot Fish",
+        tag: "Boot Fish School"
+    },
     "623041128": {
         tier: 2,
         name: "Sunflower",
@@ -1745,6 +1755,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Medium Celestium Vein Interior Depleted",
         tag: "Ore Vein"
+    },
+    "652425087": {
+        tier: 4,
+        name: "Volcanic Rock",
+        tag: "Stone"
     },
     "699727318": {
         tier: 2,
@@ -1886,6 +1901,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "School Of Mossy Synan",
         tag: "Lake Fish School"
     },
+    "906346149": {
+        tier: 5,
+        name: "Sparkstone Ore",
+        tag: "Hardened Ore Node"
+    },
     "916586661": {
         tier: 6,
         name: "Rathium Outcrop Interior",
@@ -1905,6 +1925,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Gigantic Sapwood Tree",
         tag: "Tree"
+    },
+    "943104429": {
+        tier: 5,
+        name: "Active Sparkstone Ore",
+        tag: "Weakened Ore"
     },
     "949468358": {
         tier: -1,
@@ -2091,6 +2116,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Umbracite Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "1250777859": {
+        tier: -1,
+        name: "Lava Pool",
+        tag: "Lava"
+    },
     "1260515599": {
         tier: 3,
         name: "Large Ancient Rubble",
@@ -2105,6 +2135,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Tier 8 Flower",
         tag: "Flower"
+    },
+    "1265327797": {
+        tier: 1,
+        name: "Tropical Grains",
+        tag: "Wild Grain"
     },
     "1283632905": {
         tier: 1,
@@ -2525,6 +2560,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Aurumite Vein Interior",
         tag: "Ore Vein"
+    },
+    "2058007491": {
+        tier: 2,
+        name: "Beach Sand",
+        tag: "Sand"
     },
     "2066552867": {
         tier: 4,
