@@ -668,7 +668,7 @@ async function main() {
     const regionSizeChunks = 80;
     const chunkSize = 96;
     // Center 3x3 regions: rx, rz in 1..3 (0-based)
-    const minRegion = 1, maxRegion = 3;
+    const minRegion = 0, maxRegion = 4;
     const minChunk = minRegion * regionSizeChunks;
     const maxChunk = (maxRegion + 1) * regionSizeChunks;
     const gridLines: number[][][] = [];

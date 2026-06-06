@@ -3,15 +3,18 @@ import type { ResourceIndex, CreatureIndex } from "$lib/types/resources";
 export const resourceIndexOverride: ResourceIndex = { // manual override of tiers names and colors for specific items
     "1477126404": {
         tier: 1,
-        name: "Lost Wreckage"
+        name: "Lost Wreckage",
+        color: "#868D98"
     },
     "1043012047": {
         tier: 2,
-        name: "Lost Shipment"
+        name: "Lost Shipment",
+        color: "#AF8162"
     },
     "1293969473": {
         tier: 5,
-        name: "Lost Treasure"
+        name: "Lost Treasure",
+        color: "#AB7BB2"
     },
     "182331452": {
         tier: 1,
