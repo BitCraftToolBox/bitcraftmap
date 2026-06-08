@@ -476,9 +476,8 @@
     loadEventsGeoJson(eventsLayer, paintCtx);
     loadDungeonsGeoJson(dungeonsLayer);
 
-    // Lazy-load grids and towers
-    gridsLayer.once("add", () => loadGridsGeoJson(gridsLayer, paintCtx));
-    towersLayer.once("add", () => loadTowersGeoJson(towersLayer, map));
+    loadGridsGeoJson(gridsLayer, paintCtx);
+    loadTowersGeoJson(towersLayer, map);
 
     // Load from hash / gist / backend
     loadGeoJsonFromHash(waypointsLayer, paintCtx, map);
