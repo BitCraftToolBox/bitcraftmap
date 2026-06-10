@@ -242,40 +242,125 @@ export async function loadGridsGeoJson(
   paintGeoJson(geoJson, gridsLayer, ctx);
 }
 
+function buildWatchtowerSelection(
+  properties: Record<string, any>,
+  latlng: { lat: number; lng: number },
+) {
+  return {
+    type: "watchtower" as const,
+    towerEntityId: properties.towerEntityId,
+    name: properties.name ?? "Watchtower",
+    owner: properties.owner ?? "Unknown",
+    ownerId: properties.ownerId,
+    latlng,
+    chunkCount: properties.chunkCount,
+    fillColor: properties.fillColor,
+    outlineColor: properties.outlineColor,
+  };
+}
+
+function buildTowerPolygonStyle(
+  feature: GeoJSON.Feature,
+  highlighted: boolean,
+): L.PathOptions {
+  const props = (feature.properties ?? {}) as Record<string, any>;
+  const featureKind = props.featureKind;
+  const baseWeight = props.weight ?? 1;
+  const baseFillOpacity = props.fillOpacity ?? 0.2;
+
+  if (featureKind === "tower-chunks") {
+    return {
+      color: props.color ?? "#7f7f7f",
+      weight: highlighted ? Math.max(baseWeight, 1) : baseWeight,
+      opacity: highlighted ? 0.9 : 0.25,
+      fillColor: props.fillColor,
+      fillOpacity: highlighted ? 0.28 : baseFillOpacity,
+    };
+  }
+
+  if (featureKind === "tower-outline") {
+    return {
+      color: props.color ?? "#000000",
+      weight: highlighted ? Math.max(baseWeight, 2) : baseWeight,
+      opacity: highlighted ? 1 : 0.85,
+      fillColor: props.fillColor,
+      fillOpacity: highlighted ? 0.78 : baseFillOpacity,
+    };
+  }
+
+  return {
+    color: props.color ?? "#000000",
+    weight: baseWeight,
+    fillColor: props.fillColor,
+    fillOpacity: baseFillOpacity,
+  };
+}
+
 export async function loadTowersGeoJson(
   towersLayer: L.LayerGroup,
+  territoriesLayer: L.LayerGroup,
   map: L.Map,
 ): Promise<void> {
   const file = await fetch(geojsonUrl("towers.geojson"));
   const geojsonData = await file.json();
-  L.geoJSON(geojsonData, {
+  const allFeatures = Array.isArray(geojsonData?.features) ? geojsonData.features : [];
+  const markerFeatures = allFeatures.filter(
+    (feature: GeoJSON.Feature) => feature?.geometry?.type === "Point",
+  );
+  const polygonFeatures = allFeatures.filter(
+    (feature: GeoJSON.Feature) => feature?.geometry?.type === "MultiPolygon",
+  );
+
+  const markerFeatureCollection: GeoJSON.FeatureCollection = {
+    type: "FeatureCollection",
+    features: markerFeatures,
+  };
+
+  const polygonFeatureCollection: GeoJSON.FeatureCollection = {
+    type: "FeatureCollection",
+    features: polygonFeatures,
+  };
+
+  const towerPolygonsByEntityId = new Map<string, L.Path[]>();
+  let highlightedTowerEntityId: string | null = null;
+
+  function registerTowerPolygon(feature: GeoJSON.Feature, layer: L.Layer): void {
+    if (feature.geometry.type !== "MultiPolygon") return;
+    const towerEntityId = String((feature.properties as any)?.towerEntityId ?? "");
+    if (!towerEntityId || !(layer instanceof L.Path)) return;
+    if (!towerPolygonsByEntityId.has(towerEntityId)) {
+      towerPolygonsByEntityId.set(towerEntityId, []);
+    }
+    towerPolygonsByEntityId.get(towerEntityId)!.push(layer);
+  }
+
+  function highlightTowerTerritories(towerEntityId: string | null): void {
+    highlightedTowerEntityId = towerEntityId;
+    for (const [entityId, layers] of towerPolygonsByEntityId.entries()) {
+      const shouldHighlight = !!towerEntityId && entityId === towerEntityId;
+      for (const layer of layers) {
+        const feature = (layer as any).feature as GeoJSON.Feature | undefined;
+        if (!feature) continue;
+        layer.setStyle(buildTowerPolygonStyle(feature, shouldHighlight));
+        if (shouldHighlight) {
+          layer.bringToFront();
+        }
+      }
+    }
+  }
+
+  L.geoJSON(polygonFeatureCollection, {
     style(feature) {
       if (feature?.geometry.type === "MultiPolygon") {
-        return {
-          color: feature.properties.color ?? "#000000",
-          weight: feature.properties.weight ?? 1,
-          fillColor: feature.properties.fillColor,
-          fillOpacity: feature.properties.fillOpacity ?? 0.2,
-        };
+        const towerEntityId = String(feature.properties?.towerEntityId ?? "");
+        const isHighlighted =
+          !!highlightedTowerEntityId && towerEntityId === highlightedTowerEntityId;
+        return buildTowerPolygonStyle(feature, isHighlighted);
       }
       return {};
     },
-    pointToLayer(feature, latlng) {
-      const selectionData = {
-        type: "watchtower" as const,
-        name: feature.properties.name ?? "Watchtower",
-        owner: feature.properties.owner ?? "Unknown",
-        ownerId: feature.properties.ownerId,
-        latlng: { lat: latlng.lat, lng: latlng.lng },
-        chunkCount: feature.properties.chunkCount,
-        fillColor: feature.properties.fillColor,
-        outlineColor: feature.properties.outlineColor,
-      };
-      const marker = L.marker(latlng, { icon: towerIcon });
-      bindLazyPopup(marker, selectionData);
-      return marker;
-    },
     onEachFeature(feature, featureLayer) {
+      registerTowerPolygon(feature, featureLayer);
       if (
         feature.geometry.type === "MultiPolygon" &&
         feature.properties.pointCoords
@@ -283,23 +368,38 @@ export async function loadTowersGeoJson(
         featureLayer.on("click", () => {
           const coords = feature.properties.pointCoords;
           if (coords) {
-            const selectionData = {
-              type: "watchtower" as const,
-              name: feature.properties.name ?? "Watchtower",
-              owner: feature.properties.owner ?? "Unknown",
-              ownerId: feature.properties.ownerId,
-              latlng: { lat: coords[0], lng: coords[1] },
-              chunkCount: feature.properties.chunkCount,
-              fillColor: feature.properties.fillColor,
-              outlineColor: feature.properties.outlineColor,
-            };
-            L.popup({ className: "bcm-leaflet-popup", pane: "popupOnTop" })
-              .setLatLng(coords)
-              .setContent(buildPopupHtml(selectionData))
-              .openOn(map);
+            const selectionData = buildWatchtowerSelection(feature.properties, {
+              lat: coords[0],
+              lng: coords[1],
+            });
+            if (highlightedTowerEntityId === selectionData.towerEntityId) {
+              highlightTowerTerritories(null);
+            } else {
+              setSelection(selectionData);
+              highlightTowerTerritories(selectionData.towerEntityId);
+              L.popup({className: "bcm-leaflet-popup", pane: "popupOnTop"})
+                  .setLatLng(coords)
+                  .setContent(buildPopupHtml(selectionData))
+                  .openOn(map);
+            }
           }
         });
       }
+    },
+  }).addTo(territoriesLayer);
+
+  L.geoJSON(markerFeatureCollection, {
+    pointToLayer(feature, latlng) {
+      const selectionData = buildWatchtowerSelection(feature.properties, {
+        lat: latlng.lat,
+        lng: latlng.lng,
+      });
+      const marker = L.marker(latlng, { icon: towerIcon });
+      bindLazyPopup(marker, selectionData);
+      marker.on("click", () => {
+        highlightTowerTerritories(selectionData.towerEntityId);
+      });
+      return marker;
     },
   }).addTo(towersLayer);
 }

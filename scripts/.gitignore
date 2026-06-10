@@ -1,0 +1,13 @@
+
+# bindings are technically needed to run the feature-gen, but it's a dev only script and i don't want extra submodules since this is handled by prism in prod
+bindings/
+bindings_global
+
+# again, only used for local testing
+data.json
+global-data.json
+
+# should be covered by root gitignore but doesn't hurt
+node_modules
+.env.local
+.env

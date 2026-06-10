@@ -250,7 +250,9 @@ function makeFeature(props: any, loc: { x: number, z: number }) {
 
 function makeTower(claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[]) {
     const territory = territories.find(t => t.entityId === claimState.ownerBuildingEntityId);
+    const towerEntityId = String(claimState.ownerBuildingEntityId);
     const props = {
+        towerEntityId,
         name: formatTemplateArgs(claimState.name),
         owner: territory ? territory.ownerName : null,
         ownerId: territory? String(territory.ownerId) : null,
@@ -292,10 +294,13 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
             {
                 type: "Feature",
                 properties: {
+                    ...props,
+                    featureKind: "tower-chunks",
                     fillOpacity: 0.0,
                     fillColor: territory.color,
                     color: "#7f7f7f",
                     weight: 0.5,
+                    pointCoords: [localState.location!.z, localState.location!.x],
                 },
                 geometry: {
                     type: "MultiPolygon",
@@ -306,6 +311,7 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
             {
                 type: "Feature",
                 properties: {
+                    featureKind: "tower-outline",
                     fillOpacity: 0.6,
                     color: territory.outlineColor || "#000000",
                     weight: 1,
@@ -318,7 +324,7 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
                 }
             },
             // watchtower icon
-            makeFeature(props, localState.location!)
+            makeFeature({...props, featureKind: "tower-marker"}, localState.location!)
         ]
     };
 }
@@ -389,7 +395,7 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             break;
         // watchtower
         case 90000:
-            outputs.towers.push(makeTower(claimState, localState, territories));
+            outputs.towers.push(...makeTower(claimState, localState, territories).features);
             break;
         // player claim totem
         case 405: {
@@ -816,7 +822,7 @@ async function main() {
     write('ruined', outputs.ruined);
     write('temples', outputs.temples);
     write('dungeons', outputs.dungeons);
-    write('towers', outputs.towers);
+    write('towers', {type: "FeatureCollection", features: outputs.towers});
     write('grids', {type: "FeatureCollection", features: outputs.grids});
     write('claims', {type: "FeatureCollection", features: outputs.claims});
 }

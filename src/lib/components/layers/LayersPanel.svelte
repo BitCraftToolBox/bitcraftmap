@@ -1,5 +1,6 @@
 <script lang="ts">
 	import {onMount} from "svelte";
+	import {OVERLAY_LAYERS} from "$lib/types/layers";
 
 	let {
 		isActive,
@@ -46,15 +47,17 @@
 	<div class="px-2">
 		<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Overlays</h3>
 		<div class="space-y-1">
-			<label class="flex items-center gap-2 px-2 py-2 sm:py-1 rounded hover:bg-white/5 active:bg-white/5 cursor-pointer text-sm text-gray-300">
-				<input
-					type="checkbox"
-					checked={isActive('Roads')}
-					onchange={() => onToggle('Roads')}
-					class="accent-blue-500"
-				/>
-				Roads
-			</label>
+			{#each OVERLAY_LAYERS as opt (opt)}
+				<label class="flex items-center gap-2 px-2 py-2 sm:py-1 rounded hover:bg-white/5 active:bg-white/5 cursor-pointer text-sm text-gray-300">
+					<input
+						type="checkbox"
+						checked={isActive(opt)}
+						onchange={() => onToggle(opt)}
+						class="accent-blue-500"
+					/>
+					{opt}
+				</label>
+			{/each}
 		</div>
 	</div>
 </div>

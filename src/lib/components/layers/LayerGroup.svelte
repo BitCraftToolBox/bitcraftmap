@@ -13,6 +13,8 @@
 		onToggle: (name: string) => void;
 	} = $props();
 
+	// svelte-ignore state_referenced_locally
+	// this is intended to only capture the initial state - the default doesn't matter after the first render
 	let open = $state(!defaultCollapsed);
 
 	let masterChecked = $derived(layers.every((l) => isActive(l)));
