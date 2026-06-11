@@ -1264,6 +1264,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Pearlback Snail",
         tag: "Mollusks"
     },
+    "3992354": {
+        tier: 4,
+        name: "Moderately Chummed Inactive Paranensis Pod",
+        tag: "Paranensis"
+    },
     "4010011": {
         tier: 1,
         name: "Planted Cypress Sapling",
@@ -1428,6 +1433,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Luminite Outcrop Interior Depleted",
         tag: "Ore Vein"
+    },
+    "54674321": {
+        tier: -1,
+        name: "Inactive Hexite Sealed Vault",
+        tag: "World Event"
     },
     "61557407": {
         tier: 7,
@@ -1604,6 +1614,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 7 Tree",
         tag: "Tree"
     },
+    "405049260": {
+        tier: 4,
+        name: "Extremely Chummed Paranensis Pod",
+        tag: "Paranensis"
+    },
     "405891180": {
         tier: -1,
         name: "Calmed Beehive",
@@ -1613,6 +1628,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Aurumite Vein Interior Depleted",
         tag: "Ore Vein"
+    },
+    "416217644": {
+        tier: 4,
+        name: "Well-Chummed Paranensis Pod",
+        tag: "Paranensis"
     },
     "419920080": {
         tier: -1,
@@ -1658,6 +1678,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Tier 8 Boulder",
         tag: "Rock Boulder"
+    },
+    "481074416": {
+        tier: 4,
+        name: "Well-Chummed Inactive Paranensis Pod",
+        tag: "Paranensis"
     },
     "487003651": {
         tier: 3,
@@ -1764,6 +1789,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Volcanic Rock",
         tag: "Stone"
     },
+    "673344019": {
+        tier: 4,
+        name: "Moderately Chummed Paranensis Pod",
+        tag: "Paranensis"
+    },
     "699727318": {
         tier: 2,
         name: "Medium Pyrelite Vein Interior",
@@ -1778,6 +1808,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 6,
         name: "Clay Termite Mound",
         tag: "Clay"
+    },
+    "708600421": {
+        tier: -1,
+        name: "Open Hexite Sealed Vault (Two Lock Broken)",
+        tag: "World Event"
     },
     "715451185": {
         tier: 4,
@@ -1949,6 +1984,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Emarium Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "991140984": {
+        tier: -1,
+        name: "Open Hexite Sealed Vault (Three Lock Broken)",
+        tag: "World Event"
+    },
     "999376882": {
         tier: 6,
         name: "Desert Sand",
@@ -2029,6 +2069,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 9 Outcrop",
         tag: "Rock Outcrop"
     },
+    "1117235188": {
+        tier: -1,
+        name: "Open Hexite Sealed Vault (Four Lock Broken)",
+        tag: "World Event"
+    },
     "1125409070": {
         tier: 8,
         name: "Tier 8 Fibers",
@@ -2048,6 +2093,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Frenzied School Of Abyssal Gladius",
         tag: "Chummed Ocean Fish School"
+    },
+    "1143598381": {
+        tier: -1,
+        name: "Hexite Sealed Vault",
+        tag: "World Event"
     },
     "1146338010": {
         tier: -1,
@@ -2189,6 +2239,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Flawless Sand",
         tag: "Sand"
     },
+    "1349960760": {
+        tier: 5,
+        name: "Dormant Sparkstone Ore",
+        tag: "Hardened Ore Node"
+    },
     "1352550205": {
         tier: -1,
         name: "Lake Point of Interest",
@@ -2208,6 +2263,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Windstream",
         tag: "Quest Resource"
+    },
+    "1384187835": {
+        tier: -1,
+        name: "Hexite Sealed Vault (Four Locks Broken)",
+        tag: "World Event"
     },
     "1384946093": {
         tier: 9,
@@ -2233,6 +2293,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Tier 8 Outcrop",
         tag: "Rock Outcrop"
+    },
+    "1424086219": {
+        tier: -1,
+        name: "Maker's Tree",
+        tag: "Wonder Resource"
     },
     "1424784087": {
         tier: 2,
@@ -2289,6 +2354,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 10 Fibers",
         tag: "Fiber Plant"
     },
+    "1502935362": {
+        tier: -1,
+        name: "Hexite Sealed Vault (Two Locks Broken)",
+        tag: "World Event"
+    },
     "1526038154": {
         tier: 9,
         name: "Magnificent Clay",
@@ -2298,6 +2368,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Astralite Outcrop Interior Depleted",
         tag: "Ore Vein"
+    },
+    "1544633219": {
+        tier: -1,
+        name: "Hexite Sealed Vault (One Lock Broken)",
+        tag: "World Event"
     },
     "1551712725": {
         tier: 2,
@@ -2399,6 +2474,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Coral Sand",
         tag: "Sand"
     },
+    "1697992551": {
+        tier: 4,
+        name: "Extremely Chummed Inactive Paranensis Pod",
+        tag: "Paranensis"
+    },
     "1702339460": {
         tier: 4,
         name: "Brico's Buried Cache",
@@ -2413,6 +2493,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Coconut Pile",
         tag: "Coconut"
+    },
+    "1720367743": {
+        tier: -1,
+        name: "Open Hexite Sealed Vault (All Locks Broken)",
+        tag: "World Event"
     },
     "1731709368": {
         tier: 8,
@@ -2438,6 +2523,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Ancient Chest",
         tag: "Ancient Loot"
+    },
+    "1778039517": {
+        tier: 4,
+        name: "Inactive Paranensis Pod",
+        tag: "Paranensis"
     },
     "1800013378": {
         tier: 7,
@@ -2519,10 +2609,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ferralith Vein Interior",
         tag: "Ore Vein"
     },
+    "1963829566": {
+        tier: -1,
+        name: "Open Hexite Sealed Vault (One Lock Broken)",
+        tag: "World Event"
+    },
+    "1978029892": {
+        tier: -1,
+        name: "Fruitless Maker's Tree",
+        tag: "Wonder Resource"
+    },
     "1981854097": {
         tier: 7,
         name: "Tier 7 Fibers",
         tag: "Fiber Plant"
+    },
+    "1982835399": {
+        tier: 4,
+        name: "Lightly Chummed Paranensis Pod",
+        tag: "Paranensis"
     },
     "1985720909": {
         tier: -1,
@@ -2538,6 +2643,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Tier 10 Outcrop",
         tag: "Rock Outcrop"
+    },
+    "1996878923": {
+        tier: 4,
+        name: "Unreasonably Chummed Paranensis Pod",
+        tag: "Paranensis"
+    },
+    "2018876609": {
+        tier: 4,
+        name: "Lightly Chummed Inactive Paranensis Pod",
+        tag: "Paranensis"
     },
     "2022104490": {
         tier: 3,
@@ -2613,6 +2728,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Ornate Hieroglyphs",
         tag: "Research"
+    },
+    "2131562939": {
+        tier: -1,
+        name: "Hexite Sealed Vault (Three Locks Broken)",
+        tag: "World Event"
     },
     "2137589174": {
         tier: -1,
@@ -2846,5 +2966,10 @@ export const creatureIndex: CreatureIndex = { // Generated array
         tier: 3,
         name: "Swift Cervus",
         tag: "Huntable Animal"
+    },
+    "43": {
+        tier: 1,
+        name: "Giant Hexite Skitch",
+        tag: "Monster"
     },
 };
