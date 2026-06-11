@@ -24,7 +24,9 @@ export interface AppConfig {
 
 // --- Map Selection Types ---
 
-export type SelectionType = 'claim' | 'cave' | 'resource' | 'player' | 'wonder' | 'temple' | 'ruined-city' | 'watchtower' | 'hexite' | 'dungeon';
+export type SelectionType = 'claim' | 'cave' | 'resource' | 'player'
+	| 'wonder' | 'temple' | 'ruined-city' | 'traveler-camp' | 'watchtower'
+	| 'empire-resource' | 'event' | 'dungeon' | 'other';
 
 export interface SelectionLatLng {
 	lat: number;
@@ -70,7 +72,7 @@ export interface PlayerSelection {
 }
 
 export interface GenericPOISelection {
-	type: 'wonder' | 'temple' | 'ruined-city' | 'dungeon';
+	type: 'wonder' | 'temple' | 'ruined-city' | 'traveler-camp' | 'dungeon' | 'other';
 	name: string;
 	latlng: SelectionLatLng;
 }
@@ -87,8 +89,16 @@ export interface WatchtowerSelection {
 	outlineColor?: string;
 }
 
-export interface HexiteDepositSelection {
-	type: 'hexite';
+export interface EmpireResourceSelection {
+	type: 'empire-resource';
+	name: string;
+	latlng: SelectionLatLng;
+	timer: string | undefined;
+	resourceType?: string;
+}
+
+export interface EventSelection {
+	type: 'event';
 	name: string;
 	latlng: SelectionLatLng;
 	timer: string | undefined;
@@ -101,4 +111,5 @@ export type MapSelection =
 	| PlayerSelection
 	| GenericPOISelection
 	| WatchtowerSelection
-	| HexiteDepositSelection;
+	| EmpireResourceSelection
+	| EventSelection;

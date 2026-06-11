@@ -21,23 +21,35 @@ function geojsonUrl(filename: string): string {
 let caveIcons: L.Icon[];
 let claimIcons: L.Icon[];
 let eventIcon: L.Icon;
+let eventDepletedIcon: L.Icon;
 let ruinedIcon: L.Icon;
 let templeIcon: L.Icon;
 let treeIcon: L.Icon;
 let towerIcon: L.Icon;
 let hexiteIcon: L.Icon;
 let hexiteDepletedIcon: L.Icon;
+let makersTreeIcon: L.Icon;
+let makersTreeDepletedIcon: L.Icon;
+let volcanicGeyserIcon: L.Icon;
+let travelerCampIcon: L.Icon;
+let hermitCrabIcon: L.Icon;
 
 export function initIcons(): void {
   caveIcons = Array.from({ length: 10 }, (_, i) => createIcon(`t${i + 1}`));
   claimIcons = Array.from({ length: 11 }, (_, i) => createIcon(`claimT${i}`));
-  eventIcon = createIcon("jack-o-lantern");
+  eventIcon = createIcon("vault-event");
+  eventDepletedIcon = createIcon("vault-event", [32, 32], { className: "grayscale-icon" });
   ruinedIcon = createIcon("ruinedCity");
   templeIcon = createIcon("temple");
   treeIcon = createIcon("travelerTree");
   towerIcon = createIcon("tower", [16, 32]);
   hexiteIcon = createIcon("hexite-energy");
   hexiteDepletedIcon = createIcon("hexite-energy", [32, 32], { className: "grayscale-icon" });
+  makersTreeIcon = createIcon("makers-tree");
+  makersTreeDepletedIcon = createIcon("makers-tree", [32, 32], { className: "grayscale-icon" });
+  volcanicGeyserIcon = createIcon("volcanic-geyser");
+  travelerCampIcon = createIcon("traveler-camp");
+  hermitCrabIcon = createIcon("hermit-crab", [25, 25]);
 }
 
 /** Bind a lazy popup — the content function is only called when the popup opens. */
@@ -50,28 +62,46 @@ function bindLazyPopup(marker: L.Marker, selectionData: MapSelection): void {
 
 export async function loadTreesGeoJson(
   treesLayer: L.LayerGroup,
-  hexiteLayer: L.LayerGroup,
 ): Promise<void> {
   const file = await fetch(geojsonUrl("trees.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
-      const isHexite = feature.properties.type === "hexite";
-      const targetLayer = isHexite ? hexiteLayer : treesLayer;
-      const icon = isHexite ?
-              !feature.properties.timer || new Date(feature.properties.timer).getTime() <= Date.now()
-                  ? hexiteIcon
-                  : hexiteDepletedIcon
-              : treeIcon;
-      const selectionType = isHexite
-        ? ("hexite" as const)
-        : ("wonder" as const);
-
       const selectionData = {
-        type: selectionType,
+        type: "wonder" as const,
         name: feature.properties.name,
         latlng: { lat: latlng.lat, lng: latlng.lng },
-        timer: feature.properties.timer
+      };
+      const marker = L.marker(latlng, { icon: treeIcon }).addTo(treesLayer);
+      bindLazyPopup(marker, selectionData);
+      return marker;
+    },
+  });
+}
+
+export async function loadEmpireResourcesGeoJson(
+  hexiteLayer: L.LayerGroup,
+  makersTreeLayer: L.LayerGroup,
+): Promise<void> {
+  const file = await fetch(geojsonUrl("empireResources.geojson"));
+  const geojsonData = await file.json();
+  L.geoJSON(geojsonData, {
+    pointToLayer(feature, latlng) {
+      const isHexite = feature.properties.type === "hexite";
+      const targetLayer = isHexite ? hexiteLayer : makersTreeLayer;
+      const ready =
+        !feature.properties.timer ||
+        new Date(feature.properties.timer).getTime() <= Date.now();
+      const icon = isHexite
+        ? (ready ? hexiteIcon : hexiteDepletedIcon)
+        : (ready ? makersTreeIcon : makersTreeDepletedIcon);
+
+      const selectionData = {
+        type: "empire-resource" as const,
+        name: feature.properties.name,
+        latlng: { lat: latlng.lat, lng: latlng.lng },
+        timer: feature.properties.timer,
+        resourceType: feature.properties.type,
       };
       const marker = L.marker(latlng, { icon }).addTo(targetLayer);
       bindLazyPopup(marker, selectionData);
@@ -99,24 +129,26 @@ export async function loadTemplesGeoJson(
   });
 }
 
-export async function loadRuinedGeoJson(
+export async function loadNpcsGeoJson(
   ruinedLayer: L.LayerGroup,
+  travelerCampLayer: L.LayerGroup,
 ): Promise<void> {
-  const file = await fetch(geojsonUrl("ruined.geojson"));
+  const file = await fetch(geojsonUrl("npcs.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
       const coords = readableCoordinates(latlng);
       const name = feature.properties.name;
+      const isTravelerCamp = feature.properties.type === "traveler-camp";
       const selectionData = {
-        type: "ruined-city" as const,
+        type: isTravelerCamp ? ("traveler-camp" as const) : ("ruined-city" as const),
         name,
         latlng: { lat: latlng.lat, lng: latlng.lng },
       };
       const marker = L.marker(latlng, {
         title: name + " N " + coords[0] + " E " + coords[1],
-        icon: ruinedIcon,
-      }).addTo(ruinedLayer);
+        icon: isTravelerCamp ? travelerCampIcon : ruinedIcon,
+      }).addTo(isTravelerCamp ? travelerCampLayer : ruinedLayer);
       (marker as any)._selectionData = selectionData;
       bindLazyPopup(marker, selectionData);
       return marker;
@@ -202,12 +234,56 @@ export async function loadCavesGeoJson(
 
 export async function loadEventsGeoJson(
   eventsLayer: L.LayerGroup,
-  ctx: PaintContext,
 ): Promise<void> {
   const file = await fetch(geojsonUrl("events.geojson"));
-  const content = await file.text();
-  const geoJson = validateGeoJson(content);
-  paintGeoJson(geoJson, eventsLayer, ctx);
+  const geojsonData = await file.json();
+  L.geoJSON(geojsonData, {
+    pointToLayer(feature, latlng) {
+      const selectionData = {
+        type: "event" as const,
+        name: feature.properties.name,
+        latlng: { lat: latlng.lat, lng: latlng.lng },
+        timer: feature.properties.timer,
+      };
+      const ready =
+          feature.properties.timer &&
+          new Date(feature.properties.timer).getTime() <= Date.now();
+      const marker = L.marker(latlng, { icon: ready ? eventIcon : eventDepletedIcon }).addTo(eventsLayer);
+      bindLazyPopup(marker, selectionData);
+      return marker;
+    },
+  });
+}
+
+export async function loadUnchartedGeoJson(
+  geysersLayer: L.LayerGroup,
+  hermitCrabDensLayer: L.LayerGroup,
+): Promise<void> {
+  const file = await fetch(geojsonUrl("uncharted.geojson"));
+  const geojsonData = await file.json();
+  L.geoJSON(geojsonData, {
+    pointToLayer(feature, latlng) {
+      const iconName = feature.properties.iconName;
+      let targetLayer = geysersLayer;
+      let icon = volcanicGeyserIcon;
+      if (iconName === "volcanic-geyser") {
+        targetLayer = geysersLayer;
+        icon = volcanicGeyserIcon;
+      } else if (iconName === "hermit-crab") {
+        targetLayer = hermitCrabDensLayer;
+        icon = hermitCrabIcon;
+      }
+
+      const selectionData = {
+        type: "other" as const,
+        name: feature.properties.popupText || feature.properties.name || "Uncharted",
+        latlng: { lat: latlng.lat, lng: latlng.lng },
+      };
+      const marker = L.marker(latlng, { icon }).addTo(targetLayer);
+      bindLazyPopup(marker, selectionData);
+      return marker;
+    },
+  });
 }
 
 export async function loadDungeonsGeoJson(

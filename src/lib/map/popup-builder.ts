@@ -16,8 +16,10 @@ function typeLabel(type: string): string {
 		case 'wonder': return 'Wonder';
 		case 'temple': return 'Temple';
 		case 'ruined-city': return 'Ruined City';
+		case 'traveler-camp': return 'Traveler Camp';
 		case 'watchtower': return 'Watchtower';
-		case 'hexite': return 'Hexite Deposit';
+		case 'empire-resource': return 'Empire Resource';
+		case 'event': return 'Event';
 		case 'dungeon': return 'Dungeon';
 		default: return 'Location';
 	}
@@ -111,9 +113,13 @@ export function buildPopupHtml(item: MapSelection): string {
 				<div class="bcm-popup-body"></div>
 			</div>`;
 
-		case 'hexite':
+		case 'empire-resource':
+		case 'event':
 			const timer = item.timer ? new Date(item.timer) : undefined;
-			const ready = !timer || timer.getTime() <= Date.now();
+			const isEvent = item.type === 'event';
+			const ready = timer ? timer.getTime() <= Date.now() : !isEvent;
+			const timerLabel = item.type === 'event' ? 'Starts' : 'Available';
+			const timerString = timer?.toLocaleString() ?? (isEvent ? "Unknown" : "Now");
 			return `<div class="bcm-popup">
 				${type}
 				<div class="bcm-popup-title">
@@ -124,9 +130,9 @@ export function buildPopupHtml(item: MapSelection): string {
 				<div class="bcm-popup-body">
 					<div class="bcm-popup-props">
 						<div class="bcm-popup-row">
-							<span class="bcm-popup-row-label">Available</span>
+							<span class="bcm-popup-row-label">${timerLabel}</span>
 							<span class="bcm-popup-row-val ${ready ? 'bcm-popup-row-val--yes' : ''}">
-								${ready ? 'Now' : timer.toLocaleString()}
+								${timerString}
 							</span>
 						</div>
 					</div>
@@ -141,6 +147,7 @@ export function buildPopupHtml(item: MapSelection): string {
 				</div>
 				${coords}
 				<div class="bcm-popup-body"></div>
+				${item.type === "traveler-camp" ? `<div class="bcm-popup-footer">Provides lost item recovery</div>` : ""}
 			</div>`;
 	}
 }

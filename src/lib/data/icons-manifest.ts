@@ -51,5 +51,10 @@ export const iconsManifest: Record<string, string> = {
 	iconTailor: '/images/wiki/iconTailor.svg',
 	'jack-o-lantern': '/images/other/jack-o-lantern.png',
 	'hexite-energy': '/images/other/hexite_gem.png',
-	tower: '/images/other/tower.webp'
+	tower: '/images/other/tower.webp',
+	'makers-tree': '/images/other/makers-tree.webp',
+	'volcanic-geyser': '/images/other/volcanic-geyser.webp',
+	'traveler-camp': '/images/other/traveler-camp.webp',
+	'hermit-crab': '/images/other/hermit-crab.webp',
+	'vault-event': '/images/other/vault-event.webp'
 };

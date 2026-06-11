@@ -43,8 +43,10 @@
 			case 'wonder': return 'Wonder';
 			case 'temple': return 'Temple';
 			case 'ruined-city': return 'Ruined City';
+			case 'traveler-camp': return 'Traveler Camp';
 			case 'watchtower': return 'Watchtower';
-			case 'hexite': return 'Hexite Deposit';
+			case 'empire-resource': return 'Empire Resource';
+			case 'event': return 'Event';
 			case 'dungeon': return 'Dungeon';
 			default: return 'Location';
 		}

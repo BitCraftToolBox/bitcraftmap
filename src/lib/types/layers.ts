@@ -2,6 +2,10 @@ export type LayerName =
 	| 'eventsLayer'
 	| 'treesLayer'
 	| 'hexiteLayer'
+	| 'makersTreeLayer'
+	| 'geysersLayer'
+	| 'hermitCrabDensLayer'
+	| 'travelerCampLayer'
 	| 'templesLayer'
 	| 'ruinedLayer'
 	| 'banksLayer'
@@ -36,6 +40,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 			'Wonders',
 			'Temples',
 			'Ruined Cities',
+			'Traveler Camps',
 			'Dungeons',
 			'Custom Waypoints'
 		]
@@ -43,9 +48,19 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 	empires: {
 		title: 'Empires',
 		layers: [
-			'Hexite Deposits',
 			'Watchtowers',
-			"Territories"
+			'Territories',
+			'Hexite Deposits',
+			"Maker's Trees",
+		],
+		defaultCollapsed: true
+	},
+	uncharted: {
+		title: 'Uncharted',
+		layers: [
+			'Events',
+			'Volcanic Geysers',
+			'Hermit Crab Dens'
 		],
 		defaultCollapsed: true
 	},

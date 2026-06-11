@@ -1,8 +1,1 @@
-{
-  "type": "FeatureCollection",
-  "features": [
-    {
-      
-    }
-  ]
-}
+[{"type":"Feature","properties":{"name":"Hexite Vault","type":"vault-event","timer":"2026-06-12T13:38:49.479Z","iconName":"vault-event"},"geometry":{"type":"Point","coordinates":[19492,4134]}},{"type":"Feature","properties":{"name":"Hexite Vault","type":"vault-event","timer":"2026-06-11T20:54:57.166Z","iconName":"vault-event"},"geometry":{"type":"Point","coordinates":[4441,18932]}},{"type":"Feature","properties":{"name":"Hexite Vault","type":"vault-event","timer":"2026-06-12T02:32:03.016Z","iconName":"vault-event"},"geometry":{"type":"Point","coordinates":[33676,18876]}},{"type":"Feature","properties":{"name":"Hexite Vault","type":"vault-event","iconName":"vault-event"},"geometry":{"type":"Point","coordinates":[18782,34221]}}]
