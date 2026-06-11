@@ -28,3 +28,8 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# local cdn for testing
+static/assets/maps/game/
+static/assets/maps/terrain
+static/assets/roads

@@ -1,8 +1,70 @@
+import {creatureIndex, resourceIndex} from '$lib/data/resource-index';
+import {searchPlayers} from '$lib/services/player-service';
+import type {MapSelection} from '$lib/types/map';
 import type L from 'leaflet';
-import type { MapSelection } from '$lib/types/map';
-import { searchPlayers } from '$lib/services/player-service';
-import { searchResources } from '$lib/services/resource-service';
-import { creatureIndex } from '$lib/data/resource-index';
+
+interface TierTagSearchItem {
+	name: string;
+	tier: number;
+	tag?: string | null;
+}
+
+interface ParsedTierTagQuery {
+	tiers: Set<number>;
+	terms: string[];
+}
+
+function parseTierTagQuery(searchTerm: string): ParsedTierTagQuery | null {
+	const trimmed = searchTerm.trim().toLowerCase();
+	if (!trimmed) return null;
+
+	const tierMatches = [...trimmed.matchAll(/\bt(\d{1,2})\b/g)];
+	const tiers = new Set(tierMatches.map((match) => Number(match[1])));
+	const terms = trimmed
+		.replace(/\bt\d{1,2}\b/g, ' ')
+		.split(/\s+/)
+		.filter(Boolean);
+
+	return {tiers, terms};
+}
+
+function matchesTierTagQuery(item: TierTagSearchItem, query: ParsedTierTagQuery): boolean {
+	if (query.tiers.size > 0 && !query.tiers.has(item.tier)) {
+		return false;
+	}
+
+	if (query.terms.length === 0) {
+		return true;
+	}
+
+	const name = item.name.toLowerCase();
+	const tag = (item.tag ?? '').toLowerCase();
+	return query.terms.every((term) => name.includes(term) || tag.includes(term));
+}
+
+function searchByNameTierAndTag<TItem extends TierTagSearchItem, TResult>(
+	searchTerm: string,
+	items: Record<string, TItem>,
+	mapResult: (id: number, item: TItem) => TResult,
+	limit = 50
+): TResult[] {
+	const parsedQuery = parseTierTagQuery(searchTerm);
+	if (!parsedQuery) return [];
+
+	const results: TResult[] = [];
+	for (const [id, item] of Object.entries(items)) {
+		if (!matchesTierTagQuery(item, parsedQuery)) {
+			continue;
+		}
+
+		results.push(mapResult(Number(id), item));
+		if (results.length >= limit) {
+			break;
+		}
+	}
+
+	return results;
+}
 
 export interface SearchEntry {
 	title: string;
@@ -46,7 +108,6 @@ let query = $state('');
 let selectedIndex = $state(-1);
 let isOpen = $state(false);
 let playerResults = $state<PlayerEntry[]>([]);
-let resourceResults = $state<ResourceEntry[]>([]);
 let isLoadingRemote = $state(false);
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -55,7 +116,6 @@ function triggerRemoteSearch(q: string): void {
 
 	if (!q || q.trim().length < 2) {
 		playerResults = [];
-		resourceResults = [];
 		isLoadingRemote = false;
 		return;
 	}
@@ -71,16 +131,7 @@ function triggerRemoteSearch(q: string): void {
 					signedIn: p.signedIn
 				}));
 			});
-			const resourcePromise = searchResources(q).then(resources => {
-				resourceResults = resources.map((r) => ({
-					type: 'resource' as const,
-					id: r.id,
-					name: r.name,
-					tier: r.tier,
-					tag: r.tag
-				}));
-			});
-			await Promise.allSettled([playerPromise, resourcePromise]);
+			await Promise.allSettled([playerPromise]);
 		} catch (err) {
 			console.error('Search failed:', err);
 		} finally {
@@ -110,7 +161,7 @@ export function getSearchState() {
 			return entries
 				.filter((e) => e.title.toLowerCase().includes(lower))
 				.slice(0, 50)
-				.map((e) => ({ ...e, type: 'location' as const }));
+				.map((e) => ({...e, type: 'location' as const}));
 		},
 
 		get playerResults(): PlayerEntry[] {
@@ -118,22 +169,23 @@ export function getSearchState() {
 		},
 
 		get resourceResults(): ResourceEntry[] {
-			return resourceResults;
+			return searchByNameTierAndTag(query, resourceIndex, (id, r) => ({
+				type: 'resource' as const,
+				id,
+				name: r.name,
+				tier: r.tier,
+				tag: r.tag ?? '',
+			}));
 		},
 
 		get creatureResults(): CreatureSearchEntry[] {
-			if (!query.trim()) return [];
-			const lower = query.toLowerCase();
-			return Object.entries(creatureIndex)
-				.filter(([, c]) => c.name.toLowerCase().includes(lower))
-				.slice(0, 50)
-				.map(([id, c]) => ({
-					type: 'creature' as const,
-					id: Number(id),
-					name: c.name,
-					tier: c.tier,
-					tag: c.tag,
-				}));
+			return searchByNameTierAndTag(query, creatureIndex, (id, c) => ({
+				type: 'creature' as const,
+				id,
+				name: c.name,
+				tier: c.tier,
+				tag: c.tag ?? '',
+			}));
 		},
 
 		get results(): SearchResult[] {
@@ -151,7 +203,6 @@ export function clearSearch(): void {
 	selectedIndex = -1;
 	isOpen = false;
 	playerResults = [];
-	resourceResults = [];
 	isLoadingRemote = false;
 	if (debounceTimer) clearTimeout(debounceTimer);
 }

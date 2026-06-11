@@ -9,6 +9,7 @@ export type LayerName =
 	| 'waystonesLayer'
 	| 'gridsLayer'
 	| 'dungeonsLayer'
+	| 'territoriesLayer'
 	| 'towersLayer'
 	| 'waypointsLayer'
 	| 'roadsLayer'
@@ -21,27 +22,39 @@ export interface LayerGroupDef {
 	defaultCollapsed?: boolean;
 }
 
+export const OVERLAY_LAYERS: Set<string> = new Set([
+	"Roads",
+	"Grids",
+	"Territories"
+]);
+
 export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 	poi: {
 		title: 'Points of Interest',
 		layers: [
 			'Events',
 			'Wonders',
-			'Hexite Deposits',
 			'Temples',
 			'Ruined Cities',
-			'Banks',
-			'Markets',
-			'Waystones',
-			'Grids',
 			'Dungeons',
-			'Watchtowers',
-			'Waypoints'
+			'Custom Waypoints'
 		]
+	},
+	empires: {
+		title: 'Empires',
+		layers: [
+			'Hexite Deposits',
+			'Watchtowers',
+			"Territories"
+		],
+		defaultCollapsed: true
 	},
 	claims: {
 		title: 'Claims',
 		layers: [
+			'Banks',
+			'Markets',
+			'Waystones',
 			'Claims T1',
 			'Claims T2',
 			'Claims T3',

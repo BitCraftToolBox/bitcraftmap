@@ -36,7 +36,7 @@
 		if (type === 'player') {
 			updateTrackingItemColorByEntityId(id, color);
 		} else {
-			updateTrackingItemColor(Number(id), color);
+			updateTrackingItemColor(Number(id), type, color);
 		}
 		refresh();
 	}

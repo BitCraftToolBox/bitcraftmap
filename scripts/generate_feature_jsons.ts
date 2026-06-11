@@ -1,8 +1,12 @@
 import {
+    BankState,
     ClaimLocalState,
     ClaimState,
+    ClaimTechState,
     DbConnection,
+    MarketplaceState,
     RemoteTables,
+    WaystoneState,
     WorldRegionNameState
 } from './bindings/src'
 import {
@@ -16,7 +20,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 fs.existsSync('.env.local') && require('dotenv').config({path: '.env.local'});
-const data_dir = process.env.DATA_DIR || "../static/markers/";
+const data_dir = process.env.DATA_DIR || "../static/assets/";
 !fs.existsSync(data_dir) && fs.mkdirSync(data_dir, {recursive: true});
 
 interface HexitDepositTimer {
@@ -36,7 +40,11 @@ interface RegionData {
     claimState: ClaimState[],
     claimLocalState: ClaimLocalState[],
     worldRegionNameState: WorldRegionNameState[],
-    hexiteTimers: HexitDepositTimer[]
+    hexiteTimers: HexitDepositTimer[],
+    bankState: BankState[],
+    marketplaceState: MarketplaceState[],
+    waystoneState: WaystoneState[],
+    claimTechState: ClaimTechState[]
 }
 
 interface OutputData {
@@ -46,7 +54,8 @@ interface OutputData {
     ruined: any[],
     temples: any[],
     dungeons: any[],
-    grids: any[]
+    grids: any[],
+    claims: any[]
 }
 
 const categories = {
@@ -56,7 +65,8 @@ const categories = {
     'Dungeon': [1785852446, 846734170, 208697589, 1084069097],
     'RuinedTown': [292245080],
     'Ruins': [1441436391, 1842388176], // we don't use these right now. usually people just track the resource nodes instead
-    'Watchtower': [90000]
+    'Watchtower': [90000],
+    'Claim': [405],
 }
 
 function formatTemplateArgs(value: string) {
@@ -75,6 +85,7 @@ function formatTemplateArgs(value: string) {
 
 function collateHexite(db: RemoteTables): HexitDepositTimer[] {
     const timers: HexitDepositTimer[] = [];
+    // @ts-ignore
     for (const growth of db.growthState.iter()) {
         if (growth.growthRecipeId !== 1577969715) {
             continue;
@@ -99,14 +110,22 @@ const onConnect = (resolve: (_: RegionData) => void) =>
             'SELECT * FROM world_region_name_state',
             // hexite deposit regeneration - growth state has the entity id -> end timestamp, location state has entity_id -> location
             'SELECT * FROM growth_state WHERE growth_recipe_id = 1577969715',
-            'SELECT loc.* FROM location_state loc JOIN growth_state gs ON gs.entity_id = loc.entity_id WHERE gs.growth_recipe_id = 1577969715;'
+            'SELECT loc.* FROM location_state loc JOIN growth_state gs ON gs.entity_id = loc.entity_id WHERE gs.growth_recipe_id = 1577969715;',
+            'SELECT * FROM bank_state',
+            'SELECT * FROM marketplace_state',
+            'SELECT * FROM waystone_state',
+            'SELECT * FROM claim_tech_state',
         ];
         conn.subscriptionBuilder().onApplied(() => {
             const data: RegionData = {
                 claimState: Array.from(conn.db.claimState.iter()),
                 claimLocalState: Array.from(conn.db.claimLocalState.iter()),
                 worldRegionNameState: Array.from(conn.db.worldRegionNameState.iter()),
-                hexiteTimers: collateHexite(conn.db)
+                hexiteTimers: collateHexite(conn.db),
+                bankState: Array.from(conn.db.bankState.iter()),
+                marketplaceState: Array.from(conn.db.marketplaceState.iter()),
+                waystoneState: Array.from(conn.db.waystoneState.iter()),
+                claimTechState: Array.from(conn.db.claimTechState.iter()),
             };
             conn.disconnect();
             resolve(data);
@@ -118,7 +137,11 @@ async function fetchDataFromRegions(regions: string[]) {
         claimState: [],
         claimLocalState: [],
         worldRegionNameState: [],
-        hexiteTimers: []
+        hexiteTimers: [],
+        bankState: [],
+        marketplaceState: [],
+        waystoneState: [],
+        claimTechState: []
     }
 
     for (const region of regions) {
@@ -147,6 +170,10 @@ async function fetchDataFromRegions(regions: string[]) {
             moduleNamePrefix: nameState.moduleNamePrefix
         });
         data.hexiteTimers.push(...res.hexiteTimers);
+        data.bankState.push(...res.bankState);
+        data.marketplaceState.push(...res.marketplaceState);
+        data.waystoneState.push(...res.waystoneState);
+        data.claimTechState.push(...res.claimTechState);
     }
 
     return data;
@@ -191,6 +218,25 @@ async function fetchGlobalData(): Promise<GlobalData> {
     });
 }
 
+// Tier tech IDs: index i -> tier i+2 (e.g. 200->2, 300->3, ..., 1000->10)
+const TIER_TECH_IDS = [200, 300, 400, 500, 600, 700, 800, 900, 1000];
+
+function computeClaimTier(learned: number[]): number {
+    for (let i = TIER_TECH_IDS.length - 1; i >= 0; i--) {
+        if (learned.includes(TIER_TECH_IDS[i])) {
+            return i + 2;
+        }
+    }
+    return 1;
+}
+
+interface ClaimExtras {
+    bankClaimIds: Set<bigint>;
+    marketClaimIds: Set<bigint>;
+    waystoneClaimIds: Set<bigint>;
+    claimTechMap: Map<bigint, ClaimTechState>;
+}
+
 function makeFeature(props: any, loc: { x: number, z: number }) {
     return {
         type: "Feature",
@@ -204,7 +250,9 @@ function makeFeature(props: any, loc: { x: number, z: number }) {
 
 function makeTower(claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[]) {
     const territory = territories.find(t => t.entityId === claimState.ownerBuildingEntityId);
+    const towerEntityId = String(claimState.ownerBuildingEntityId);
     const props = {
+        towerEntityId,
         name: formatTemplateArgs(claimState.name),
         owner: territory ? territory.ownerName : null,
         ownerId: territory? String(territory.ownerId) : null,
@@ -246,10 +294,13 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
             {
                 type: "Feature",
                 properties: {
+                    ...props,
+                    featureKind: "tower-chunks",
                     fillOpacity: 0.0,
                     fillColor: territory.color,
                     color: "#7f7f7f",
                     weight: 0.5,
+                    pointCoords: [localState.location!.z, localState.location!.x],
                 },
                 geometry: {
                     type: "MultiPolygon",
@@ -260,6 +311,7 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
             {
                 type: "Feature",
                 properties: {
+                    featureKind: "tower-outline",
                     fillOpacity: 0.6,
                     color: territory.outlineColor || "#000000",
                     weight: 1,
@@ -272,12 +324,12 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
                 }
             },
             // watchtower icon
-            makeFeature(props, localState.location!)
+            makeFeature({...props, featureKind: "tower-marker"}, localState.location!)
         ]
     };
 }
 
-function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[], hexiteTimers: HexitDepositTimer[]) {
+function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[], hexiteTimers: HexitDepositTimer[], claimExtras: ClaimExtras) {
     const claimName = formatTemplateArgs(claimState.name);
     switch (localState.buildingDescriptionId) {
         case 433549604: // Tree of Wisdom
@@ -343,8 +395,24 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             break;
         // watchtower
         case 90000:
-            outputs.towers.push(makeTower(claimState, localState, territories));
+            outputs.towers.push(...makeTower(claimState, localState, territories).features);
             break;
+        // player claim totem
+        case 405: {
+            // event claims have historically been player claims that are admin-changed to neutral. we want to include them.
+            //if (claimState.neutral) break;
+            const techState = claimExtras.claimTechMap.get(claimState.entityId);
+            const tier = techState ? computeClaimTier(techState.learned) : 1;
+            outputs.claims.push(makeFeature({
+                entityId: String(claimState.entityId),
+                name: formatTemplateArgs(claimState.name),
+                tier,
+                has_bank: claimExtras.bankClaimIds.has(claimState.entityId) ? 1 : 0,
+                has_market: claimExtras.marketClaimIds.has(claimState.entityId) ? 1 : 0,
+                has_waystone: claimExtras.waystoneClaimIds.has(claimState.entityId) ? 1 : 0,
+            }, localState.location!));
+            break;
+        }
     }
 }
 
@@ -619,11 +687,11 @@ function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Ma
 }
 
 async function main() {
-    const LIVE = false;
+    const LIVE = true;
     let data, globalData;
     if (LIVE) {
         // read live data
-        let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => i > 5 && i < 20 && i % 5 != 0 && (i - 1) % 5 != 0).map(i => 'bitcraft-live-' + i);
+        let regions = Array.from({length: 25}, (_, i) => i + 1).filter(i => !([1, 2, 4, 5, 6, 10, 16, 20, 21, 22, 24, 25].includes(i))).map(i => 'bitcraft-live-' + i);
         data = await fetchDataFromRegions(regions);
         globalData = await fetchGlobalData();
         fs.writeFileSync(path.join('data.json'), JSON.stringify(data, bigIntReplacer, 2));
@@ -639,6 +707,14 @@ async function main() {
         localStateMap.set(state.entityId, state);
     });
 
+    // Build claim extras for player-made claims
+    const bankClaimIds = new Set<bigint>(data.bankState.map(b => b.claimEntityId));
+    const marketClaimIds = new Set<bigint>(data.marketplaceState.map(m => m.claimEntityId));
+    const waystoneClaimIds = new Set<bigint>(data.waystoneState.map(w => w.claimEntityId));
+    const claimTechMap = new Map<bigint, ClaimTechState>();
+    data.claimTechState.forEach(t => claimTechMap.set(t.entityId, t));
+    const claimExtras: ClaimExtras = {bankClaimIds, marketClaimIds, waystoneClaimIds, claimTechMap};
+
     // Build all watchtower territories
     const territories = buildWatchtowerTerritories(data.claimState, localStateMap, globalData);
 
@@ -649,14 +725,15 @@ async function main() {
         temples: [],
         dungeons: [],
         towers: [],
-        grids: []
+        grids: [],
+        claims: []
     }
 
     // For each claim, add features
     data.claimState.forEach(claimState => {
         const localState = localStateMap.get(claimState.entityId);
         if (!localState) return;
-        addFeature(outputs, claimState, localState, territories, data.hexiteTimers);
+        addFeature(outputs, claimState, localState, territories, data.hexiteTimers, claimExtras);
     });
 
     // --- Grids output ---
@@ -667,7 +744,7 @@ async function main() {
     const regionSizeChunks = 80;
     const chunkSize = 96;
     // Center 3x3 regions: rx, rz in 1..3 (0-based)
-    const minRegion = 1, maxRegion = 3;
+    const minRegion = 0, maxRegion = 4;
     const minChunk = minRegion * regionSizeChunks;
     const maxChunk = (maxRegion + 1) * regionSizeChunks;
     const gridLines: number[][][] = [];
@@ -745,8 +822,9 @@ async function main() {
     write('ruined', outputs.ruined);
     write('temples', outputs.temples);
     write('dungeons', outputs.dungeons);
-    write('towers', outputs.towers);
+    write('towers', {type: "FeatureCollection", features: outputs.towers});
     write('grids', {type: "FeatureCollection", features: outputs.grids});
+    write('claims', {type: "FeatureCollection", features: outputs.claims});
 }
 
 main().then(() => {

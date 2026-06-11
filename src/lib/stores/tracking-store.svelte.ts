@@ -125,34 +125,34 @@ export function addTrackingItem(item: TrackingItem): void {
 			saveDisplayName(item.type, item.entityId, item.text);
 		}
 	} else {
-		if (!items.some((i) => i.id === item.id)) {
+		if (!items.some((i) => i.id === item.id && i.type === item.type)) {
 			items = [...items, item];
 			if (item.type) saveDisplayName(item.type, item.id, item.text);
 		}
 	}
 }
 
-export function toggleTrackingItem(id: number): void {
-	items = items.map((i) => (i.id === id ? { ...i, visible: !i.visible } : i));
+export function toggleTrackingItem(id: number, type: 'enemy' | 'resource'): void {
+	items = items.map((i) => (i.id === id && i.type == type ? { ...i, visible: !i.visible } : i));
 }
 
 export function toggleTrackingItemByEntityId(entityId: string): void {
 	items = items.map((i) => (i.entityId === entityId ? { ...i, visible: !i.visible } : i));
 }
 
-export function removeTrackingItem(id: number): void {
-	items = items.filter((i) => i.id !== id);
+export function removeTrackingItem(id: number, type: 'enemy' | 'resource'): void {
+	items = items.filter((i) => !(i.id === id && i.type === type));
 }
 
 export function removeTrackingItemByEntityId(entityId: string): void {
 	items = items.filter((i) => i.entityId !== entityId);
 }
 
-export function updateTrackingItemColor(id: number, color: string): void {
+export function updateTrackingItemColor(id: number, type: 'enemy' | 'resource', color: string): void {
 	if (!isValidColor(color)) return;
-	const item = items.find((i) => i.id === id);
+	const item = items.find((i) => i.id === id && i.type === type);
 	if (item) saveColorPreference(item.type, id, color);
-	items = items.map((i) => (i.id === id ? { ...i, color } : i));
+	items = items.map((i) => (i.id === id && i.type === type ? { ...i, color } : i));
 	if (item?.type) colorSyncHandler?.(item.type, id, color);
 }
 

@@ -1,95 +1,49 @@
 <script lang="ts">
-  import { SvelteSet } from "svelte/reactivity";
-  import { onMount, setContext } from "svelte";
+  import {env} from "$env/dynamic/public";
+  import DetailPanel from "$lib/components/detail/DetailPanel.svelte";
+  import SearchBar from "$lib/components/search/SearchBar.svelte";
+  import Sidebar from "$lib/components/sidebar/Sidebar.svelte";
+  import {createAppConfig} from "$lib/config/api";
+  import {createMapConfig} from "$lib/config/map";
+  import {tierColors} from "$lib/config/tiers";
+  import {creatureIndex, resourceIndex, resourceIndexOverride,} from "$lib/data/resource-index";
+  import {formatCoordinates,} from "$lib/map/coordinate-utils";
+  import {setupDefaultIcon} from "$lib/map/create-icon";
+  import {
+    initIcons,
+    loadCavesGeoJson,
+    loadClaimsGeoJson,
+    loadDungeonsGeoJson,
+    loadEventsGeoJson,
+    loadGeoJsonFromHash,
+    loadGridsGeoJson,
+    loadRuinedGeoJson,
+    loadTemplesGeoJson,
+    loadTowersGeoJson,
+    loadTreesGeoJson,
+  } from "$lib/map/geojson-loader";
+  import {type PaintContext, paintGeoJson} from "$lib/map/geojson-painter";
+  import {validateGeoJson} from "$lib/map/geojson-validator";
+  import {buildPopupHtml} from "$lib/map/popup-builder";
+  import {ResourceCanvasLayer} from "$lib/map/resource-canvas-layer";
+  import {getLatestGistRaw} from "$lib/services/gist-service";
+  import {destroyRelayService, initRelayService, trackEntity, trackPlayer, untrackEntity, untrackPlayer, updateAllEntityRegions,} from "$lib/services/relay-service";
+  import {hashHasFlyToOrZoom, resetView, restoreMapState, saveMapState, setMap,} from "$lib/stores/map-store";
+  import {getRegionState, setRegions} from "$lib/stores/region-store.svelte";
+  import {addSearchEntries,} from "$lib/stores/search-store.svelte";
+  import {setSelection} from "$lib/stores/selection-store.svelte";
+  import {getLodEnabled} from "$lib/stores/settings-store.svelte";
+  import {addTrackingItem, loadColorPreference, registerColorSyncHandler,} from "$lib/stores/tracking-store.svelte";
+  import {filterUnique} from "$lib/utils/dedupe";
+  import {parseUrlParams, updateEnemyIdParam, updatePlayerIdParam, updateRegionIdParam, updateResourceIdParam,} from "$lib/utils/url-params";
   import L from "leaflet";
   import "leaflet/dist/leaflet.css";
   import "leaflet.markercluster";
-  import { createMapConfig } from "$lib/config/map";
-  import { createAppConfig } from "$lib/config/api";
-  import { env } from "$env/dynamic/public";
-  import { setupDefaultIcon, createIcon } from "$lib/map/create-icon";
-  import {
-    initIcons,
-    loadTreesGeoJson,
-    loadTemplesGeoJson,
-    loadRuinedGeoJson,
-    loadClaimsGeoJson,
-    loadCavesGeoJson,
-    loadEventsGeoJson,
-    loadDungeonsGeoJson,
-    loadGridsGeoJson,
-    loadTowersGeoJson,
-    loadGeoJsonFromHash,
-  } from "$lib/map/geojson-loader";
-  import { validateGeoJson } from "$lib/map/geojson-validator";
-  import { paintGeoJson, type PaintContext } from "$lib/map/geojson-painter";
-  import { ResourceCanvasLayer } from "$lib/map/resource-canvas-layer";
-  import { getLodEnabled } from "$lib/stores/settings-store.svelte";
-  import {
-    setMap,
-    saveMapState,
-    restoreMapState,
-    hashHasFlyToOrZoom,
-    resetView,
-  } from "$lib/stores/map-store";
-  import {
-    parseUrlParams,
-    updatePlayerIdParam,
-    updateResourceIdParam,
-    updateEnemyIdParam,
-    updateRegionIdParam,
-  } from "$lib/utils/url-params";
-  import { getRegionState, setRegions } from "$lib/stores/region-store.svelte";
-  import {
-    addSearchEntries,
-    type SearchEntry,
-  } from "$lib/stores/search-store.svelte";
-  import {
-    addTrackingItem,
-    toggleTrackingItem,
-    loadColorPreference,
-    registerColorSyncHandler,
-  } from "$lib/stores/tracking-store.svelte";
-  import { getLatestGistRaw } from "$lib/services/gist-service";
-  import { fetchResource, fetchEnemy } from "$lib/services/api-service";
-  import {
-    connectWebSocket,
-    type PlayerState,
-    setResourceEventCallback,
-    subscribeResource,
-    unsubscribeResource,
-    closeResourceWebSocket,
-  } from "$lib/services/websocket-service";
-  import {
-    handleResourceEvent,
-    cancelPendingRefetches,
-    cancelAllPendingRefetches,
-    type ResourceUpdateContext,
-  } from "$lib/services/resource-update-handler";
-  import { lookupPlayer } from "$lib/services/player-service";
-  import {
-    readableCoordinates,
-    formatCoordinates,
-  } from "$lib/map/coordinate-utils";
-  import {
-    resourceIndex,
-    resourceIndexOverride,
-    creatureIndex,
-  } from "$lib/data/resource-index";
-  import { tierColors } from "$lib/config/tiers";
-  import { filterUnique } from "$lib/utils/dedupe";
-
-  import MapImageLayer from "./MapImageLayer.svelte";
-  import HeatmapLayer from "./HeatmapLayer.svelte";
-  import RoadsLayer from "./RoadsLayer.svelte";
+  import {onMount, setContext} from "svelte";
+  import {SvelteSet} from "svelte/reactivity";
   import CoordinateDisplay from "./CoordinateDisplay.svelte";
-  import ResetViewButton from "./ResetViewButton.svelte";
   import GameTimers from "./GameTimers.svelte";
-  import { setSelection } from "$lib/stores/selection-store.svelte";
-  import { buildPopupHtml } from "$lib/map/popup-builder";
-  import SearchBar from "$lib/components/search/SearchBar.svelte";
-  import Sidebar from "$lib/components/sidebar/Sidebar.svelte";
-  import DetailPanel from "$lib/components/detail/DetailPanel.svelte";
+  import ResetViewButton from "./ResetViewButton.svelte";
 
   let mapElement: HTMLDivElement;
   let map = $state<L.Map>(undefined!);
@@ -111,6 +65,7 @@
   let gridsLayer: L.LayerGroup;
   let dungeonsLayer: L.LayerGroup;
   let towersLayer: L.LayerGroup;
+  let territoriesLayer: L.LayerGroup;
   let hexiteLayer: L.LayerGroup;
   let waypointsLayer: L.LayerGroup;
   let roadsLayer: L.LayerGroup;
@@ -119,6 +74,7 @@
   let allClaims: L.LayerGroup;
   let allCaves: L.LayerGroup;
   let resourceLayers: Record<number, ResourceCanvasLayer> = {};
+  let enemyLayers: Record<number, ResourceCanvasLayer> = {};
   let liveLayer: L.FeatureGroup;
   const isMobile =
     typeof window !== "undefined" &&
@@ -286,6 +242,7 @@
     gridsLayer = L.layerGroup();
     dungeonsLayer = L.layerGroup();
     towersLayer = L.layerGroup();
+    territoriesLayer = L.layerGroup();
     hexiteLayer = L.layerGroup();
     waypointsLayer = L.layerGroup();
 
@@ -329,8 +286,9 @@
       Waystones: waystonesLayer,
       Grids: gridsLayer,
       Dungeons: dungeonsLayer,
+      Territories: territoriesLayer,
       Watchtowers: towersLayer,
-      Waypoints: waypointsLayer,
+      "Custom Waypoints": waypointsLayer,
       Claims: allClaims,
       "Claims T1": claimLayers[1],
       "Claims T2": claimLayers[2],
@@ -367,6 +325,7 @@
       waystonesLayer,
       waypointsLayer,
       dungeonsLayer,
+      territoriesLayer,
       towersLayer,
       roadsLayer,
       claimT0Layer: claimLayers[0],
@@ -521,9 +480,8 @@
     loadEventsGeoJson(eventsLayer, paintCtx);
     loadDungeonsGeoJson(dungeonsLayer);
 
-    // Lazy-load grids and towers
-    gridsLayer.once("add", () => loadGridsGeoJson(gridsLayer, paintCtx));
-    towersLayer.once("add", () => loadTowersGeoJson(towersLayer, map));
+    loadGridsGeoJson(gridsLayer, paintCtx);
+    loadTowersGeoJson(towersLayer, territoriesLayer, map);
 
     // Load from hash / gist / backend
     loadGeoJsonFromHash(waypointsLayer, paintCtx, map);
@@ -538,10 +496,13 @@
         .catch(console.error);
     }
 
+    // Initialise SpacetimeDB relay connection for entity (resource/enemy) tracking
+    initRelayService(appConfig, () => resourceLayers, () => enemyLayers, [...regionState.selected]);
+
     // Backend resource/enemy loading
     loadBackendData(urlParams, map).catch(console.error);
 
-    // WebSocket player tracking from URL params
+    // Relay player tracking from URL params
     if (urlParams.playerId) {
       const playerIds = urlParams.playerId
         .split(",")
@@ -554,57 +515,8 @@
           followingPlayerId = id;
         }
         trackedPlayerIds.add(id);
-      }
-
-      // Fetch player info once for initial markers + tracking items
-      const playerInfoPromise = Promise.all(
-        playerIds.map((id) => lookupPlayer(id)),
-      );
-
-      playerInfoPromise.then((results) => {
-        results.forEach((info, i) => {
-          playerUsernames.set(playerIds[i], info.username);
-          if (info.locationX !== null && info.locationZ !== null) {
-            updatePlayerMarker(
-              {
-                entity_id: playerIds[i],
-                location_x: info.locationX,
-                location_z: info.locationZ,
-                destination_x: info.locationX,
-                destination_z: info.locationZ,
-              },
-              followingPlayerId === playerIds[i],
-              loadColorPreference('player', playerIds[i]) || "#00ff00",
-            );
-          }
-        });
-      });
-
-      const ws = connectWebSocket(
-        playerIds,
-        (state: PlayerState) => {
-          updatePlayerMarker(state, followingPlayerId === state.entity_id, loadColorPreference('player', state.entity_id) || "#00ff00");
-        },
-        () => {
-          playerInfoPromise.then((results) => {
-            playerIds.forEach((id, i) => {
-              const savedColor = loadColorPreference('player', id);
-              addTrackingItem({
-                id: -1,
-                entityId: id,
-                type: "player",
-                text: `Player: ${results[i].username}`,
-                color: savedColor || "#00ff00",
-                visible: true,
-              });
-            });
-          });
-        },
-      );
-      if (ws) {
-        for (const id of playerIds) {
-          playerWebSockets.set(id, ws);
-        }
+        const color = loadColorPreference('player', id) || "#00ff00";
+        _subscribePlayer(id, color);
       }
     }
 
@@ -618,11 +530,6 @@
     }
 
     mapReady = true;
-
-    // Wire up resource WebSocket event handler
-    setResourceEventCallback((event) => {
-      handleResourceEvent(event, resourceUpdateCtx);
-    });
 
     const unregisterColorSync = registerColorSyncHandler((type, id, color) => {
       if (type === 'player') {
@@ -644,33 +551,22 @@
 
     return () => {
       unregisterColorSync();
-      for (const ws of playerWebSockets.values()) {
-        ws.close();
-      }
-      closeResourceWebSocket();
-      cancelAllPendingRefetches();
+      destroyRelayService();
       map.remove();
     };
   });
 
-  // Resource tracking state
+  // Resource/enemy tracking state
   const trackedResourceIds = new Set<number>();
   const trackedEnemyIds = new Set<number>();
 
-  const resourceUpdateCtx: ResourceUpdateContext = {
-    get resourceLayers() {
-      return resourceLayers;
-    },
-    getActiveRegions: () => regionState.effectiveRegions,
-  };
 
   // Player tracking state
   const playerStore = new Map<string, L.Marker>();
-  const destinationStore = new Map<string, L.Polyline>();
-  const playerWebSockets = new Map<string, WebSocket>();
+  // Mutable selection data kept per player so the click handler always has current values.
+  const playerSelectionDataStore = new Map<string, any>();
   const trackedPlayerIds = new Set<string>();
   let followingPlayerId = $state<string | null>(null);
-  const playerUsernames = new Map<string, string>();
 
   const playerColorPalette = [
     "#00ff00",
@@ -690,7 +586,6 @@
   ): Promise<void> {
     if (trackedPlayerIds.has(entityId)) return;
     trackedPlayerIds.add(entityId);
-    playerUsernames.set(entityId, username);
     updatePlayerIdParam(trackedPlayerIds);
 
     const paletteColor =
@@ -698,54 +593,42 @@
     playerColorIndex++;
     const color = loadColorPreference('player', entityId) || paletteColor;
 
-    // Fetch initial location from API
-    const playerInfo = await lookupPlayer(entityId);
-    if (playerInfo.locationX !== null && playerInfo.locationZ !== null) {
-      updatePlayerMarker(
-        {
-          entity_id: entityId,
-          location_x: playerInfo.locationX,
-          location_z: playerInfo.locationZ,
-          destination_x: playerInfo.locationX,
-          destination_z: playerInfo.locationZ,
-        },
-        followingPlayerId == entityId,
-        color,
-      );
-    }
+    _subscribePlayer(entityId, color);
+  }
 
-    const ws = connectWebSocket(
-      [entityId],
-      (state: PlayerState) => {
-        updatePlayerMarker(state, followingPlayerId == state.entity_id, loadColorPreference('player', entityId) || color);
-      },
-      () => {
+  /**
+   * Subscribe a player to the relay and wire up the update callback.
+   * Adds a tracking item on first data, then calls updatePlayerMarker on
+   * every subsequent state/location change.
+   */
+  function _subscribePlayer(entityId: string, color: string): void {
+    let trackingItemAdded = false;
+
+    trackPlayer(entityId, (id, name, online, x, z) => {
+      if (!trackingItemAdded) {
+        trackingItemAdded = true;
         addTrackingItem({
           id: -1,
-          entityId,
+          entityId: id,
           type: "player",
-          text: `Player: ${playerInfo.username}`,
+          text: `Player: ${name}`,
           color,
           visible: true,
         });
-      },
-    );
-
-    if (ws) {
-      playerWebSockets.set(entityId, ws);
-    }
+      }
+      if (x !== null && z !== null) {
+        updatePlayerMarker(id, name, online, x, z, followingPlayerId === id, color);
+      }
+    });
   }
 
   function handleTogglePlayerVisibility(entityId: string): void {
     const marker = playerStore.get(entityId);
-    const dest = destinationStore.get(entityId);
     if (marker) {
       if (liveLayer.hasLayer(marker)) {
         liveLayer.removeLayer(marker);
-        if (dest) liveLayer.removeLayer(dest);
       } else {
         liveLayer.addLayer(marker);
-        if (dest) liveLayer.addLayer(dest);
       }
     }
   }
@@ -761,41 +644,34 @@
   }
 
   function updatePlayerMarker(
-    state: PlayerState,
+    entityId: string,
+    name: string,
+    online: boolean,
+    x: number,
+    z: number,
     followPlayer: boolean,
     color = "#00ff00",
   ): void {
-    const playerId = state.entity_id;
-    const playerLatLng = L.latLng(
-      state.location_z / 1000,
-      state.location_x / 1000,
-    );
-    const destLatLng = L.latLng(
-      state.destination_z / 1000,
-      state.destination_x / 1000,
-    );
-    const directionLine: L.LatLngExpression[] = [playerLatLng, destLatLng];
+    const playerLatLng = L.latLng(z, x);
+    const existingMarker = playerStore.get(entityId);
 
-    const existingMarker = playerStore.get(playerId);
-    const existingDest = destinationStore.get(playerId);
-
-    if (!existingMarker || !existingDest) {
+    if (!existingMarker) {
       const icon = createPlayerIcon(color);
       const marker = L.marker(playerLatLng, {
         icon,
         pane: "markerOnTop",
       }).addTo(liveLayer);
-      const username = playerUsernames.get(playerId) ?? playerId;
       const selectionData = {
         type: "player" as const,
-        name: username,
-        entityId: playerId,
-        username,
-        signedIn: true,
+        name,
+        entityId,
+        username: name,
+        signedIn: online,
         latlng: { lat: playerLatLng.lat, lng: playerLatLng.lng },
         color,
-        isFollowing: followingPlayerId == playerId,
+        isFollowing: followingPlayerId == entityId,
       };
+      playerSelectionDataStore.set(entityId, selectionData);
       marker.bindPopup(buildPopupHtml(selectionData), {
         className: "bcm-leaflet-popup",
         pane: "popupOnTop",
@@ -805,23 +681,21 @@
           lat: marker.getLatLng().lat,
           lng: marker.getLatLng().lng,
         };
-        selectionData.isFollowing = followingPlayerId == playerId;
+        selectionData.isFollowing = followingPlayerId == entityId;
         setSelection(selectionData);
         marker.setPopupContent(buildPopupHtml(selectionData));
       });
 
-      const trail = new L.Polyline(directionLine, {
-        color: "#ff0000ff",
-        weight: 1,
-        opacity: 1,
-        smoothFactor: 1,
-      }).addTo(liveLayer);
-
-      playerStore.set(playerId, marker);
-      destinationStore.set(playerId, trail);
+      playerStore.set(entityId, marker);
     } else {
       existingMarker.setLatLng(playerLatLng);
-      existingDest.setLatLngs(directionLine);
+      // Keep selectionData in sync for clicks after state changes
+      const selectionData = playerSelectionDataStore.get(entityId);
+      if (selectionData) {
+        selectionData.name = name;
+        selectionData.username = name;
+        selectionData.signedIn = online;
+      }
     }
 
     if (followPlayer) {
@@ -854,29 +728,8 @@
       visible: true,
     });
 
-    try {
-      const regions = regionState.effectiveRegions;
-      const results = await Promise.all(
-        regions.map((rId) => fetchResource(rId, resourceId)),
-      );
-
-      regions.forEach((rId, idx) => {
-        const geoJson = results[idx];
-        if (
-          geoJson.features[0]?.geometry &&
-          (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates
-            ?.length > 0
-        ) {
-          const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint)
-            .coordinates;
-          canvasLayer.setRegionPoints(rId, coords as [number, number][]);
-        }
-      });
-
-      subscribeResource(resourceId);
-    } catch (err) {
-      console.error(`Failed to load resource ${resourceId}:`, err);
-    }
+    // Subscribe via SpacetimeDB relay; initial data arrives via onApplied callback.
+    trackEntity(resourceId, 'resource');
   }
 
   async function handleCreatureSelect(
@@ -884,7 +737,7 @@
     name: string,
     tier: number,
   ): Promise<void> {
-    if (resourceLayers[enemyId]) return; // already loaded
+    if (enemyLayers[enemyId]) return; // already loaded
 
     trackedEnemyIds.add(enemyId);
     updateEnemyIdParam(trackedEnemyIds);
@@ -892,7 +745,7 @@
     const color = loadColorPreference('enemy', enemyId) ||
       creatureIndex[enemyId]?.color || tierColors[tier] || "#3388ff";
     const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: enemyId });
-    resourceLayers[enemyId] = canvasLayer;
+    enemyLayers[enemyId] = canvasLayer;
     canvasLayer.addTo(map);
     canvasLayer.setLodEnabled(getLodEnabled());
 
@@ -904,27 +757,8 @@
       visible: true,
     });
 
-    try {
-      const regions = regionState.effectiveRegions;
-      const results = await Promise.all(
-        regions.map((rId) => fetchEnemy(rId, enemyId)),
-      );
-
-      regions.forEach((rId, idx) => {
-        const geoJson = results[idx];
-        if (
-          geoJson.features[0]?.geometry &&
-          (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates
-            ?.length > 0
-        ) {
-          const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint)
-            .coordinates;
-          canvasLayer.setRegionPoints(rId, coords as [number, number][]);
-        }
-      });
-    } catch (err) {
-      console.error(`Failed to load creature ${enemyId}:`, err);
-    }
+    // Subscribe via SpacetimeDB relay; initial data arrives via onApplied callback.
+    trackEntity(enemyId, 'enemy');
   }
 
   async function loadBackendData(
@@ -939,8 +773,6 @@
 
     if (!resourceParam && !enemyParam) return;
 
-    const regionIds = regionState.effectiveRegions;
-
     let resourceIds: number[] = [];
     if (resourceParam) {
       if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(resourceParam)) return;
@@ -954,14 +786,11 @@
     if (enemyParam) {
       if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(enemyParam)) return;
       enemyIds = [...new Set(enemyParam.split(",").map(Number))];
+      for (const id of enemyIds) {
+        trackedEnemyIds.add(id);
+      }
     }
 
-    const fetchPromises: Promise<GeoJSON.FeatureCollection>[] = [];
-    const geoJsonMeta: {
-      region: number;
-      fillColor: string;
-      resource: number;
-    }[] = [];
     let trackingList: { text: string; color: string; id: number; type: 'resource' | 'enemy' }[] = [];
 
     for (const id of resourceIds) {
@@ -977,7 +806,14 @@
       resourceLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
       resourceLayers[id].addTo(map);
       resourceLayers[id].setLodEnabled(getLodEnabled());
+      trackingList.push({
+        text: "Tracking: " + name + ", Tier " + tier,
+        color,
+        id,
+        type: 'resource',
+      });
     }
+
     for (const id of enemyIds) {
       let color = loadColorPreference('enemy', id) ||
         creatureIndex[id]?.color ||
@@ -986,49 +822,15 @@
       if (noColors) color = "#3388ff";
       const tier = creatureIndex[id]?.tier || 0;
       const name = creatureIndex[id]?.name || "ID " + id;
-      resourceLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
-      resourceLayers[id].addTo(map);
-      resourceLayers[id].setLodEnabled(getLodEnabled());
-    }
-
-    for (const rId of regionIds) {
-      for (const resId of resourceIds) {
-        let color = loadColorPreference('resource', resId) ||
-          resourceIndexOverride[resId]?.color ||
-          tierColors[resourceIndexOverride[resId]?.tier] ||
-          resourceIndex[resId]?.color ||
-          tierColors[resourceIndex[resId]?.tier] ||
-          "#3388ff";
-        if (noColors) color = "#3388ff";
-        const tier =
-          resourceIndexOverride[resId]?.tier || resourceIndex[resId]?.tier || 0;
-        const name = resourceIndex[resId]?.name || "ID " + resId;
-        geoJsonMeta.push({ region: rId, fillColor: color, resource: resId });
-        fetchPromises.push(fetchResource(rId, resId));
-        trackingList.push({
-          text: "Tracking: " + name + ", Tier " + tier,
-          color,
-          id: resId,
-          type: 'resource',
-        });
-      }
-      for (const eId of enemyIds) {
-        let color = loadColorPreference('enemy', eId) ||
-          creatureIndex[eId]?.color ||
-          tierColors[creatureIndex[eId]?.tier] ||
-          "#3388ff";
-        if (noColors) color = "#3388ff";
-        const tier = creatureIndex[eId]?.tier || 0;
-        const name = creatureIndex[eId]?.name || "ID " + eId;
-        geoJsonMeta.push({ region: rId, fillColor: color, resource: eId });
-        fetchPromises.push(fetchEnemy(rId, eId));
-        trackingList.push({
-          text: "Tracking: " + name + ", Tier " + tier,
-          color,
-          id: eId,
-          type: 'enemy',
-        });
-      }
+      enemyLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
+      enemyLayers[id].addTo(map);
+      enemyLayers[id].setLodEnabled(getLodEnabled());
+      trackingList.push({
+        text: "Tracking: " + name + ", Tier " + tier,
+        color,
+        id,
+        type: 'enemy',
+      });
     }
 
     trackingList = filterUnique(trackingList);
@@ -1042,31 +844,13 @@
       });
     }
 
-    if (fetchPromises.length === 0) return;
-    const geoJsonResults = await Promise.all(fetchPromises);
-
-    geoJsonResults.forEach((geoJson, idx) => {
-      if (
-        geoJson.features[0]?.geometry &&
-        (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates
-          ?.length > 0
-      ) {
-        const meta = geoJsonMeta[idx];
-        const coords = (geoJson.features[0].geometry as GeoJSON.MultiPoint)
-          .coordinates;
-        const canvasLayer = resourceLayers[meta.resource];
-        if (canvasLayer) {
-          canvasLayer.setRegionPoints(
-            meta.region,
-            coords as [number, number][],
-          );
-        }
-      }
-    });
-
-    // Subscribe to resource WebSocket channels
+    // Subscribe all entities via the SpacetimeDB relay. Initial data will
+    // arrive via each subscription's onApplied callback.
     for (const id of resourceIds) {
-      subscribeResource(id);
+      trackEntity(id, 'resource');
+    }
+    for (const id of enemyIds) {
+      trackEntity(id, 'enemy');
     }
   }
 
@@ -1083,8 +867,8 @@
     saveActiveLayers();
   }
 
-  function handleToggleResourceLayer(id: number): void {
-    const layer = resourceLayers[id];
+  function handleToggleResourceLayer(id: number, type: 'enemy' | 'resource'): void {
+    const layer = type === 'resource' ? resourceLayers[id] : enemyLayers[id];
     if (!layer || !map) return;
     if (map.hasLayer(layer)) {
       map.removeLayer(layer);
@@ -1093,76 +877,41 @@
     }
   }
 
-  function handleRemoveResource(id: number): void {
-    const layer = resourceLayers[id];
+  function handleRemoveResource(id: number, type: 'enemy' | 'resource'): void {
+    const layer = type === 'resource' ? resourceLayers[id] : enemyLayers[id];
     if (layer) {
       layer.remove();
-      delete resourceLayers[id];
+      if (type === 'resource') {
+        delete resourceLayers[id];
+      } else {
+        delete enemyLayers[id];
+      }
     }
-    trackedResourceIds.delete(id);
-    updateResourceIdParam(trackedResourceIds);
-    cancelPendingRefetches(id);
-    unsubscribeResource(id);
+    if (type === 'resource' && trackedResourceIds.has(id)) {
+      trackedResourceIds.delete(id);
+      updateResourceIdParam(trackedResourceIds);
+    } else if (type === 'enemy' && trackedEnemyIds.has(id)) {
+      trackedEnemyIds.delete(id);
+      updateEnemyIdParam(trackedEnemyIds);
+    }
+    untrackEntity(id, type);
   }
 
   function handleRemovePlayer(entityId: string): void {
-    // Remove markers
     const marker = playerStore.get(entityId);
-    const dest = destinationStore.get(entityId);
     if (marker) liveLayer.removeLayer(marker);
-    if (dest) liveLayer.removeLayer(dest);
     playerStore.delete(entityId);
-    destinationStore.delete(entityId);
-    playerUsernames.delete(entityId);
-
-    // Close WebSocket
-    const ws = playerWebSockets.get(entityId);
-    if (ws) {
-      ws.close();
-      playerWebSockets.delete(entityId);
-    }
+    playerSelectionDataStore.delete(entityId);
+    untrackPlayer(entityId);
     trackedPlayerIds.delete(entityId);
     updatePlayerIdParam(trackedPlayerIds);
   }
 
   function handleRegionsChange(): void {
     updateRegionIdParam(regionState.selected);
-
-    const currentTrackedIds = [...trackedResourceIds];
-    if (currentTrackedIds.length === 0) return;
-
-    cancelAllPendingRefetches();
-
-    // Clear all region data from canvas layers
-    for (const id of currentTrackedIds) {
-      const layer = resourceLayers[id];
-      if (layer) layer.clearAllRegions();
-    }
-
-    const regions = regionState.effectiveRegions;
-    for (const resourceId of currentTrackedIds) {
-      Promise.all(regions.map((rId) => fetchResource(rId, resourceId)))
-        .then((results) => {
-          const canvasLayer = resourceLayers[resourceId];
-          if (!canvasLayer) return;
-          regions.forEach((rId, idx) => {
-            const geoJson = results[idx];
-            if (
-              geoJson.features[0]?.geometry &&
-              (geoJson.features[0].geometry as GeoJSON.MultiPoint).coordinates
-                ?.length > 0
-            ) {
-              const coords = (
-                geoJson.features[0].geometry as GeoJSON.MultiPoint
-              ).coordinates;
-              canvasLayer.setRegionPoints(rId, coords as [number, number][]);
-            }
-          });
-        })
-        .catch((err) =>
-          console.error(`Failed to reload resource ${resourceId}:`, err),
-        );
-    }
+    // Delegate to the relay service: it will create new subscriptions with the
+    // updated region filter and drop the old ones after the server delta arrives.
+    updateAllEntityRegions([...regionState.selected]);
   }
 
   function isLayerActive(name: string): boolean {

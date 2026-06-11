@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type L from 'leaflet';
 	import LayerGroup from './LayerGroup.svelte';
-	import { LAYER_GROUPS } from '$lib/types/layers';
+	import { LAYER_GROUPS, OVERLAY_LAYERS } from '$lib/types/layers';
 
 	let {
 		genericToggle,
@@ -16,8 +16,6 @@
 	const groupedNames = new Set(
 		Object.values(LAYER_GROUPS).flatMap((g) => [...g.layers, g.title])
 	);
-
-	const OVERLAY_LAYERS = new Set(['Roads']);
 
 	function getUngroupedLayers(): string[] {
 		return Object.keys(genericToggle).filter((name) => !groupedNames.has(name) && !OVERLAY_LAYERS.has(name));

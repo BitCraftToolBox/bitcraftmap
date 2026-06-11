@@ -27,9 +27,9 @@
 		onToggleLayer: (name: string) => void;
 		getBaseLayer: () => 'terrain' | 'game';
 		onSetBaseLayer: (layer: "terrain" | "game") => void;
-		onToggleResource: (id: number) => void;
+		onToggleResource: (id: number, type: 'enemy' | 'resource') => void;
 		onTogglePlayer: (entityId: string) => void;
-		onRemoveResource: (id: number) => void;
+		onRemoveResource: (id: number, type: 'enemy' | 'resource') => void;
 		onRemovePlayer: (entityId: string) => void;
 		onRegionsChange: () => void;
 	} = $props();
