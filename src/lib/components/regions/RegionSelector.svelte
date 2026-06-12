@@ -29,7 +29,8 @@
 			selectAllRegions();
 			onRegionsChange();
 		}}
-		class="w-full rounded px-2 py-2 sm:py-1 text-left text-xs transition-colors {regions.isAllSelected
+		class="w-full rounded px-2 py-2 sm:py-1 text-left text-xs
+				transition-colors border border-white/5 {regions.isAllSelected
 			? 'bg-blue-500/10 text-blue-400'
 			: 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
 	>

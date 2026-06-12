@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import { buildPopupHtml } from './popup-builder';
 import { setSelection } from '$lib/stores/selection-store.svelte';
+import { isMobile } from '$lib/utils/device';
 
 export interface ResourceCanvasLayerOptions extends L.LayerOptions {
 	color: string;
@@ -273,10 +274,12 @@ export class ResourceCanvasLayer extends L.Layer {
 			};
 			setSelection(selectionData);
 
-			L.popup({ pane: 'popupOnTop', minWidth: 200, className: 'bcm-leaflet-popup' })
-				.setLatLng(latlng)
-				.setContent(buildPopupHtml(selectionData))
-				.openOn(this._map);
+			if (!isMobile()) {
+				L.popup({ pane: 'popupOnTop', minWidth: 200, className: 'bcm-leaflet-popup' })
+					.setLatLng(latlng)
+					.setContent(buildPopupHtml(selectionData))
+					.openOn(this._map);
+			}
 		}
 	}
 }

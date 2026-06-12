@@ -8,6 +8,7 @@ import { setSelection } from "$lib/stores/selection-store.svelte";
 import { buildPopupHtml } from "./popup-builder";
 import { createAppConfig } from "$lib/config/api";
 import type { MapSelection } from "$lib/types/map";
+import { isMobile } from "$lib/utils/device";
 import { env } from "$env/dynamic/public";
 
 function geojsonUrl(filename: string): string {
@@ -453,10 +454,12 @@ export async function loadTowersGeoJson(
             } else {
               setSelection(selectionData);
               highlightTowerTerritories(selectionData.towerEntityId);
-              L.popup({className: "bcm-leaflet-popup", pane: "popupOnTop"})
-                  .setLatLng(coords)
-                  .setContent(buildPopupHtml(selectionData))
-                  .openOn(map);
+              if (!isMobile()) {
+                L.popup({className: "bcm-leaflet-popup", pane: "popupOnTop"})
+                    .setLatLng(coords)
+                    .setContent(buildPopupHtml(selectionData))
+                    .openOn(map);
+              }
             }
           }
         });

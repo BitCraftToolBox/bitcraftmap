@@ -82,9 +82,6 @@
   let resourceLayers: Record<number, ResourceCanvasLayer> = {};
   let enemyLayers: Record<number, ResourceCanvasLayer> = {};
   let liveLayer: L.FeatureGroup;
-  const isMobile =
-    typeof window !== "undefined" &&
-    window.matchMedia("(max-width: 768px)").matches;
 
   // Toggle mapping for layer panel
   let genericToggle = $state<Record<string, L.LayerGroup>>({});
@@ -1014,7 +1011,6 @@
       onRegionsChange={handleRegionsChange}
     />
     <DetailPanel
-      onTrackResource={handleResourceSelect}
       onFollowPlayer={handlePlayerSelect}
     />
   {/if}

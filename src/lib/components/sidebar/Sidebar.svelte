@@ -1,7 +1,8 @@
 <script lang="ts">
+	import {getSidebarLabelsEnabled} from "$lib/stores/settings-store.svelte";
 	import type L from 'leaflet';
 	import { fly, fade } from 'svelte/transition';
-	import { Layers, MapPinned, Crosshair, Globe, XIcon, Settings } from '@lucide/svelte';
+	import { Layers, MapPinned, Crosshair, XIcon, Settings } from '@lucide/svelte';
 	import { getSidebarState, toggleSidebarTab, closeSidebar, type SidebarTab } from '$lib/stores/sidebar-store.svelte';
 	import { getTrackingState } from '$lib/stores/tracking-store.svelte';
 	import LayersPanel from '$lib/components/layers/LayersPanel.svelte';
@@ -41,7 +42,6 @@
 		{ id: 'layers', label: 'Layers', icon: Layers },
 		{ id: 'features', label: 'Features', icon: MapPinned },
 		{ id: 'tracking', label: 'Tracking', icon: Crosshair },
-		{ id: 'regions', label: 'Regions', icon: Globe },
 		{ id: 'settings', label: 'Settings', icon: Settings }
 	];
 
@@ -57,7 +57,7 @@
 		{#each tabs as tab}
 			<button
 				onclick={() => toggleSidebarTab(tab.id)}
-				class="relative w-10 h-10 flex items-center justify-center rounded-md transition-colors
+				class="relative w-10 h-10 flex flex-col items-center justify-center rounded-md transition-colors
 					{sidebar.activeTab === tab.id
 					? 'bg-blue-500/20 text-blue-400'
 					: 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}"
@@ -65,6 +65,9 @@
 				title={tab.label}
 			>
 				<tab.icon size={18} />
+				{#if getSidebarLabelsEnabled()}
+					<span class="text-[10px]">{tab.label}</span>
+				{/if}
 				{#if tab.id === 'tracking' && tracking.items.length > 0}
 					<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-blue-400"></span>
 				{/if}
@@ -103,7 +106,6 @@
 						{onRemoveResource}
 						{onRemovePlayer}
 					/>
-				{:else if sidebar.activeTab === 'regions'}
 					<RegionSelector {onRegionsChange} />
 				{:else if sidebar.activeTab === 'settings'}
 					<SettingsPanel />
@@ -126,14 +128,9 @@
 
 		<div
 			transition:fly={{ y: 300, duration: 250 }}
-			class="fixed bottom-12 left-0 right-0 z-overlay max-h-[70dvh] overflow-y-auto rounded-t-xl bg-[#1e2433]/95 border-t border-white/10 shadow-xl backdrop-blur-sm"
+			class="fixed bottom-12 left-0 right-0 z-overlay max-h-[70dvh] rounded-t-xl bg-[#1e2433]/95 border-t border-white/10 shadow-xl backdrop-blur-sm flex flex-col overflow-hidden"
 		>
-			<!-- Drag handle -->
-			<div class="flex justify-center py-2">
-				<div class="w-10 h-1 rounded-full bg-white/20"></div>
-			</div>
-
-			<div class="flex items-center justify-between px-4 pb-2">
+			<div class="sticky top-0 z-10 flex items-center justify-between px-4 py-2 bg-[#1e2433]/95 border-b border-white/10 backdrop-blur-sm">
 				<h2 class="text-sm font-semibold text-gray-200 uppercase tracking-wider">
 					{tabLabel(sidebar.activeTab!)}
 				</h2>
@@ -146,20 +143,20 @@
 				</button>
 			</div>
 
-			<div class="px-3 pb-4">
+			<div class="flex-1 min-h-0 overflow-y-auto px-3 pb-4 pt-2">
 				{#if sidebar.activeTab === 'layers'}
 					<LayersPanel {isActive} onToggle={onToggleLayer} {getBaseLayer} {onSetBaseLayer} />
 				{:else if sidebar.activeTab === 'features'}
 					<LayerPanel {genericToggle} {isActive} onToggle={onToggleLayer} />
 				{:else if sidebar.activeTab === 'tracking'}
+					<RegionSelector {onRegionsChange} />
+					<div class="pb-3"></div>
 					<TrackingPanel
 						{onToggleResource}
 						{onTogglePlayer}
 						{onRemoveResource}
 						{onRemovePlayer}
 					/>
-				{:else if sidebar.activeTab === 'regions'}
-					<RegionSelector {onRegionsChange} />
 				{:else if sidebar.activeTab === 'settings'}
 					<SettingsPanel />
 				{/if}
@@ -179,7 +176,9 @@
 				aria-label={tab.label}
 			>
 				<tab.icon size={18} />
-				<span class="text-[10px]">{tab.label}</span>
+				{#if getSidebarLabelsEnabled()}
+					<span class="text-[10px]">{tab.label}</span>
+				{/if}
 				{#if tab.id === 'tracking' && tracking.items.length > 0}
 					<span class="absolute top-1.5 left-1/2 ml-2 w-1.5 h-1.5 rounded-full bg-blue-400"></span>
 				{/if}
