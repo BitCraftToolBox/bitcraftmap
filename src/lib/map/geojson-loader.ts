@@ -37,8 +37,8 @@ let hermitCrabIcon: L.Icon;
 export function initIcons(): void {
   caveIcons = Array.from({ length: 10 }, (_, i) => createIcon(`t${i + 1}`));
   claimIcons = Array.from({ length: 11 }, (_, i) => createIcon(`claimT${i}`));
-  eventIcon = createIcon("vault-event");
-  eventDepletedIcon = createIcon("vault-event", [32, 32], { className: "grayscale-icon" });
+  eventIcon = createIcon("vault-event", [48, 48]);
+  eventDepletedIcon = createIcon("vault-event", [48, 48], { className: "grayscale-icon" });
   ruinedIcon = createIcon("ruinedCity");
   templeIcon = createIcon("temple");
   treeIcon = createIcon("travelerTree");
@@ -247,7 +247,7 @@ export async function loadEventsGeoJson(
       };
       const ready =
           feature.properties.timer &&
-          new Date(feature.properties.timer).getTime() <= Date.now();
+          new Date(feature.properties.timer).getTime() - 15 * 60 * 1000 <= Date.now(); // highlight events within next 15 minutes
       const marker = L.marker(latlng, { icon: ready ? eventIcon : eventDepletedIcon }).addTo(eventsLayer);
       bindLazyPopup(marker, selectionData);
       return marker;
