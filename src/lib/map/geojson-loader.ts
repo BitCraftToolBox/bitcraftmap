@@ -55,7 +55,10 @@ export function initIcons(): void {
 
 /** Bind a lazy popup — the content function is only called when the popup opens. */
 function bindLazyPopup(marker: L.Marker, selectionData: MapSelection): void {
-  marker.bindPopup(() => buildPopupHtml(selectionData), {
+  marker.bindPopup(() => {
+    const zoom = (marker as unknown as { _map?: L.Map })._map?.getZoom() ?? 0;
+    return buildPopupHtml(selectionData, zoom);
+  }, {
     className: "bcm-leaflet-popup",
   });
   marker.on("click", () => setSelection(selectionData));
@@ -457,7 +460,7 @@ export async function loadTowersGeoJson(
               if (!isMobile()) {
                 L.popup({className: "bcm-leaflet-popup", pane: "popupOnTop"})
                     .setLatLng(coords)
-                    .setContent(buildPopupHtml(selectionData))
+                    .setContent(buildPopupHtml(selectionData, map.getZoom()))
                     .openOn(map);
               }
             }

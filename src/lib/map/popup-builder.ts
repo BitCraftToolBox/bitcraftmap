@@ -7,6 +7,21 @@ function coordString(latlng: { lat: number; lng: number }): string {
 	return `N: ${coords[0]}&ensp;E: ${coords[1]}`;
 }
 
+function coordValues(latlng: { lat: number; lng: number }): [number, number] {
+	return readableCoordinates(L.latLng(latlng.lat, latlng.lng));
+}
+
+function popupCoordRow(latlng: { lat: number; lng: number }, zoom: number): string {
+	const [n, e] = coordValues(latlng);
+	return `<div class="bcm-popup-coords-row">
+		<span class="bcm-popup-coords">${coordString(latlng)}</span>
+		<span class="bcm-popup-copy-actions">
+			<button class="bcm-popup-copy-btn" data-action="copy-view-coords" data-n="${n}" data-e="${e}" data-z="${zoom}" data-icon="🔗" aria-label="Copy website link to coordinates" title="Copy website link to coordinates">🔗</button>
+			<button class="bcm-popup-copy-btn" data-action="copy-chat-coords" data-n="${n}" data-e="${e}" data-icon="💬" aria-label="Copy in-game chat link to coordinates" title="Copy in-game chat link to coordinates">💬</button>
+		</span>
+	</div>`;
+}
+
 function typeLabel(type: string): string {
 	switch (type) {
 		case 'claim': return 'Claim';
@@ -32,9 +47,9 @@ function propRow(label: string, value: boolean): string {
 	</div>`;
 }
 
-export function buildPopupHtml(item: MapSelection): string {
+export function buildPopupHtml(item: MapSelection, zoom: number = 0): string {
 	const type = `<span class="bcm-popup-type">${typeLabel(item.type)}</span>`;
-	const coords = `<div class="bcm-popup-coords">${coordString(item.latlng)}</div>`;
+	const coords = popupCoordRow(item.latlng, zoom);
 	const divider = '<div class="bcm-popup-divider"></div>';
 
 	switch (item.type) {

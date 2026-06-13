@@ -37,6 +37,7 @@
   import {getLodEnabled} from "$lib/stores/settings-store.svelte";
   import {addTrackingItem, loadColorPreference, registerColorSyncHandler,} from "$lib/stores/tracking-store.svelte";
   import {filterUnique} from "$lib/utils/dedupe";
+  import {buildChatCoordinateLink, buildCoordinateViewUrl} from "$lib/utils/coordinate-links";
   import {parseUrlParams, updateEnemyIdParam, updatePlayerIdParam, updateRegionIdParam, updateResourceIdParam,} from "$lib/utils/url-params";
   import L from "leaflet";
   import "leaflet/dist/leaflet.css";
@@ -46,6 +47,21 @@
   import CoordinateDisplay from "./CoordinateDisplay.svelte";
   import GameTimers from "./GameTimers.svelte";
   import ResetViewButton from "./ResetViewButton.svelte";
+
+  function showPopupCopyFeedback(btn: HTMLElement): void {
+    const originalIcon = btn.dataset.icon ?? btn.textContent ?? "";
+    btn.classList.add("is-copied");
+    btn.textContent = "✓";
+    btn.title = "Copied!";
+    window.setTimeout(() => {
+      btn.classList.remove("is-copied");
+      btn.textContent = originalIcon;
+      const action = btn.dataset.action;
+      btn.title = action === "copy-chat-coords"
+        ? "Copy in-game chat link to coordinates"
+        : "Copy website link to coordinates";
+    }, 1200);
+  }
 
   let mapElement: HTMLDivElement;
   let map = $state<L.Map>(undefined!);
@@ -434,6 +450,21 @@
           }
         }
         map.closePopup();
+      } else if (action === "copy-view-coords") {
+        const n = Number(btn.dataset.n);
+        const e = Number(btn.dataset.e);
+        const z = Number(btn.dataset.z);
+        if (!Number.isFinite(n) || !Number.isFinite(e) || !Number.isFinite(z) || !navigator.clipboard) return;
+        navigator.clipboard
+          .writeText(buildCoordinateViewUrl({n, e, z}))
+          .then(() => showPopupCopyFeedback(btn));
+      } else if (action === "copy-chat-coords") {
+        const n = Number(btn.dataset.n);
+        const e = Number(btn.dataset.e);
+        if (!Number.isFinite(n) || !Number.isFinite(e) || !navigator.clipboard) return;
+        navigator.clipboard
+          .writeText(buildChatCoordinateLink({n, e}))
+          .then(() => showPopupCopyFeedback(btn));
       }
     }
 
@@ -694,7 +725,7 @@
         isFollowing: followingPlayerId == entityId,
       };
       playerSelectionDataStore.set(entityId, selectionData);
-      marker.bindPopup(buildPopupHtml(selectionData), {
+      marker.bindPopup(buildPopupHtml(selectionData, map.getZoom()), {
         className: "bcm-leaflet-popup",
         pane: "popupOnTop",
       });
@@ -705,7 +736,7 @@
         };
         selectionData.isFollowing = followingPlayerId == entityId;
         setSelection(selectionData);
-        marker.setPopupContent(buildPopupHtml(selectionData));
+        marker.setPopupContent(buildPopupHtml(selectionData, map.getZoom()));
       });
 
       playerStore.set(entityId, marker);

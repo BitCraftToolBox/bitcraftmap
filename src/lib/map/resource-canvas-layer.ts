@@ -277,7 +277,7 @@ export class ResourceCanvasLayer extends L.Layer {
 			if (!isMobile()) {
 				L.popup({ pane: 'popupOnTop', minWidth: 200, className: 'bcm-leaflet-popup' })
 					.setLatLng(latlng)
-					.setContent(buildPopupHtml(selectionData))
+					.setContent(buildPopupHtml(selectionData, this._map.getZoom()))
 					.openOn(this._map);
 			}
 		}

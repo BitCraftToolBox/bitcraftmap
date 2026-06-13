@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { fly, fade } from 'svelte/transition';
 	import { XIcon } from '@lucide/svelte';
+	import CoordinateCopyButtons from '$lib/components/common/CoordinateCopyButtons.svelte';
 	import { getSelectionState, clearSelection } from '$lib/stores/selection-store.svelte';
-	import {formatCoordinates} from '$lib/map/coordinate-utils';
+	import { formatCoordinates, readableCoordinates } from '$lib/map/coordinate-utils';
+	import { getMap } from '$lib/stores/map-store';
+	import type { CoordinateView } from '$lib/utils/coordinate-links';
 	import L from 'leaflet';
 
 	let {
@@ -29,6 +32,11 @@
 
 	function getCoordString(latlng: { lat: number; lng: number }): string {
 		return formatCoordinates(L.latLng(latlng.lat, latlng.lng));
+	}
+
+	function getCoordinateView(latlng: { lat: number; lng: number }): CoordinateView {
+		const [n, e] = readableCoordinates(L.latLng(latlng.lat, latlng.lng));
+		return { n, e, z: getMap()?.getZoom() ?? 0 };
 	}
 
 	function typeLabel(type: string): string {
@@ -120,7 +128,10 @@
 							<div class="flex items-center gap-2">
 								<span class="px-1.5 py-0.5 rounded text-xs font-medium bg-blue-500/20 text-blue-400">T{item.tier}</span>
 							</div>
-							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
+							<div class="text-xs text-gray-400 flex items-center justify-between gap-2">
+								<span>{getCoordString(item.latlng)}</span>
+								<CoordinateCopyButtons getCoordinateView={() => getCoordinateView(item.latlng)} iconClass="size-3.5 text-gray-400" />
+							</div>
 							<div class="space-y-1.5 text-sm text-gray-300">
 								<div class="flex justify-between"><span>Bank</span><span class="text-gray-400">{item.hasBank ? 'Yes' : 'No'}</span></div>
 								<div class="flex justify-between"><span>Market</span><span class="text-gray-400">{item.hasMarket ? 'Yes' : 'No'}</span></div>
@@ -139,14 +150,20 @@
 							<div class="flex items-center gap-2">
 								<span class="px-1.5 py-0.5 rounded text-xs font-medium bg-blue-500/20 text-blue-400">T{item.tier}</span>
 							</div>
-							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
+							<div class="text-xs text-gray-400 flex items-center justify-between gap-2">
+								<span>{getCoordString(item.latlng)}</span>
+								<CoordinateCopyButtons getCoordinateView={() => getCoordinateView(item.latlng)} iconClass="size-3.5 text-gray-400" />
+							</div>
 
 						{:else if item.type === 'resource'}
 							<div class="flex items-center gap-2">
 								<span class="w-3 h-3 rounded-sm shrink-0" style:background-color={item.color}></span>
 								<span class="px-1.5 py-0.5 rounded text-xs font-medium bg-blue-500/20 text-blue-400">T{item.tier}</span>
 							</div>
-							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
+							<div class="text-xs text-gray-400 flex items-center justify-between gap-2">
+								<span>{getCoordString(item.latlng)}</span>
+								<CoordinateCopyButtons getCoordinateView={() => getCoordinateView(item.latlng)} iconClass="size-3.5 text-gray-400" />
+							</div>
 
 						{:else if item.type === 'player'}
 							<div class="flex items-center gap-2">
@@ -156,7 +173,10 @@
 								></span>
 								<span class="text-xs text-gray-400">{item.signedIn ? 'Online' : 'Offline'}</span>
 							</div>
-							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
+							<div class="text-xs text-gray-400 flex items-center justify-between gap-2">
+								<span>{getCoordString(item.latlng)}</span>
+								<CoordinateCopyButtons getCoordinateView={() => getCoordinateView(item.latlng)} iconClass="size-3.5 text-gray-400" />
+							</div>
 							<button
 								onclick={() => onFollowPlayer?.(item.entityId, item.username)}
 								class="w-full mt-2 px-3 py-2.5 rounded bg-emerald-500/20 text-emerald-400 text-sm active:bg-emerald-500/30 transition-colors"
@@ -173,7 +193,10 @@
 							<div class="flex items-center gap-2">
 								<span class="w-3 h-3 rounded-sm shrink-0" style:background-color={ready ? '#22c55e' : '#6b7280'}></span>
 							</div>
-							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
+							<div class="text-xs text-gray-400 flex items-center justify-between gap-2">
+								<span>{getCoordString(item.latlng)}</span>
+								<CoordinateCopyButtons getCoordinateView={() => getCoordinateView(item.latlng)} iconClass="size-3.5 text-gray-400" />
+							</div>
 							<div class="space-y-1.5 text-sm text-gray-300">
 								<div class="flex justify-between">
 									<span>{timerLabel}</span>
@@ -190,7 +213,10 @@
 								></span>
 								<span class="text-sm text-gray-300 truncate">{item.owner}</span>
 							</div>
-							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
+							<div class="text-xs text-gray-400 flex items-center justify-between gap-2">
+								<span>{getCoordString(item.latlng)}</span>
+								<CoordinateCopyButtons getCoordinateView={() => getCoordinateView(item.latlng)} iconClass="size-3.5 text-gray-400" />
+							</div>
 							<div class="space-y-1.5 text-sm text-gray-300">
 								{#if item.chunkCount}
 									<div class="flex justify-between"><span>Chunks</span><span class="text-gray-400">{item.chunkCount}</span></div>
@@ -208,7 +234,10 @@
 							{/if}
 
 						{:else}
-							<div class="text-xs text-gray-400">{getCoordString(item.latlng)}</div>
+							<div class="text-xs text-gray-400 flex items-center justify-between gap-2">
+								<span>{getCoordString(item.latlng)}</span>
+								<CoordinateCopyButtons getCoordinateView={() => getCoordinateView(item.latlng)} iconClass="size-3.5 text-gray-400" />
+							</div>
 							{#if item.type === 'traveler-camp'}
 								<div class="text-xs text-gray-300">Provides lost item recovery</div>
 							{/if}
