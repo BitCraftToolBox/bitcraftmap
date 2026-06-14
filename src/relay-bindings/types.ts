@@ -19,6 +19,16 @@ export const EnemyLocation = __t.object("EnemyLocation", {
 });
 export type EnemyLocation = __Infer<typeof EnemyLocation>;
 
+export const GrowthTimer = __t.object("GrowthTimer", {
+  entityId: __t.u64(),
+  resourceId: __t.i32(),
+  x: __t.i32(),
+  z: __t.i32(),
+  regionId: __t.u8(),
+  endTimestamp: __t.timestamp(),
+});
+export type GrowthTimer = __Infer<typeof GrowthTimer>;
+
 export const PlayerLocation = __t.object("PlayerLocation", {
   entityId: __t.u64(),
   x: __t.i32(),
