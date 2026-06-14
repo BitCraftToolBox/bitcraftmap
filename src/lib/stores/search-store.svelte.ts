@@ -74,6 +74,12 @@ export interface SearchEntry {
 	selectionData?: MapSelection;
 }
 
+export interface LayerEntry {
+	type: 'layer';
+	title: string;
+	layer: L.LayerGroup;
+}
+
 export interface PlayerEntry {
 	type: 'player';
 	entityId: string;
@@ -99,11 +105,13 @@ export interface CreatureSearchEntry {
 
 export type SearchResult =
 	| (SearchEntry & { type: 'location' })
+	| LayerEntry
 	| PlayerEntry
 	| ResourceEntry
 	| CreatureSearchEntry;
 
 let entries = $state<SearchEntry[]>([]);
+let layersByName = $state<LayerEntry[]>([]);
 let query = $state('');
 let selectedIndex = $state(-1);
 let isOpen = $state(false);
@@ -159,9 +167,17 @@ export function getSearchState() {
 			if (!query.trim()) return [];
 			const lower = query.toLowerCase();
 			return entries
-				.filter((e) => e.title.toLowerCase().includes(lower))
+				.filter((e) => e.marker !== null && e.title.toLowerCase().includes(lower))
 				.slice(0, 50)
 				.map((e) => ({...e, type: 'location' as const}));
+		},
+
+		get layerResults(): LayerEntry[] {
+			if (!query.trim()) return [];
+			const lower = query.toLowerCase();
+			return layersByName
+				.filter((l) => l.title.toLowerCase().includes(lower))
+				.slice(0, 50);
 		},
 
 		get playerResults(): PlayerEntry[] {
@@ -196,6 +212,10 @@ export function getSearchState() {
 
 export function addSearchEntries(newEntries: SearchEntry[]): void {
 	entries = [...entries, ...newEntries];
+}
+
+export function addLayerEntries(newLayers: LayerEntry[]): void {
+	layersByName = [...layersByName, ...newLayers];
 }
 
 export function clearSearch(): void {

@@ -10,7 +10,7 @@
 		onResourceSelect,
 		onCreatureSelect
 	}: {
-		onSelect: (entry: { latlng: L.LatLng; layer: L.LayerGroup }) => void;
+		onSelect: (entry: { latlng?: L.LatLng; layer: L.LayerGroup }) => void;
 		onPlayerSelect: (entityId: string, username: string) => void;
 		onResourceSelect: (id: number, name: string, tier: number) => void;
 		onCreatureSelect: (id: number, name: string, tier: number) => void;
@@ -78,9 +78,10 @@
 		{/if}
 	</div>
 
-	{#if search.isOpen && (search.locationResults.length > 0 || search.creatureResults.length > 0 || search.resourceResults.length > 0 || search.playerResults.length > 0 || search.isLoadingRemote)}
+	{#if search.isOpen && (search.locationResults.length > 0 || search.layerResults.length > 0 || search.creatureResults.length > 0 || search.resourceResults.length > 0 || search.playerResults.length > 0 || search.isLoadingRemote)}
 		<SearchResults
 			locationResults={search.locationResults}
+			layerResults={search.layerResults}
 			creatureResults={search.creatureResults}
 			resourceResults={search.resourceResults}
 			playerResults={search.playerResults}

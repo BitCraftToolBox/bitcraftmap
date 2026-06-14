@@ -32,7 +32,7 @@
   import {destroyRelayService, initRelayService, trackEntity, trackPlayer, untrackEntity, untrackPlayer, updateAllEntityRegions,} from "$lib/services/relay-service";
   import {hashHasFlyToOrZoom, resetView, restoreMapState, saveMapState, setMap,} from "$lib/stores/map-store";
   import {getRegionState, setRegions} from "$lib/stores/region-store.svelte";
-  import {addSearchEntries,} from "$lib/stores/search-store.svelte";
+  import {addLayerEntries, addSearchEntries,} from "$lib/stores/search-store.svelte";
   import {setSelection} from "$lib/stores/selection-store.svelte";
   import {getLodEnabled} from "$lib/stores/settings-store.svelte";
   import {addTrackingItem, loadColorPreference, registerColorSyncHandler,} from "$lib/stores/tracking-store.svelte";
@@ -340,6 +340,8 @@
       "Caves T10": caveLayers[9],
       Roads: roadsLayer,
     };
+
+    addLayerEntries(Object.entries(genericToggle).map(([t, l]) => { return {title: t, layer: l, type: 'layer' as const};}));
 
     allLayers = {
       eventsLayer,
@@ -986,7 +988,7 @@
   }
 
   function handleSearchSelect(entry: {
-    latlng: L.LatLng;
+    latlng?: L.LatLng;
     layer: L.LayerGroup;
     selectionData?: import("$lib/types/map").MapSelection;
   }): void {
@@ -1001,9 +1003,11 @@
       }
       saveActiveLayers();
     }
-    // Zoom in to at least 1 so the selected marker is identifiable
-    const targetZoom = Math.max(map.getZoom(), 1);
-    map.flyTo(entry.latlng, targetZoom);
+    if (entry.latlng) {
+      // Zoom in to at least 1 so the selected marker is identifiable
+      const targetZoom = Math.max(map.getZoom(), 1);
+      map.flyTo(entry.latlng, targetZoom);
+    }
     if (entry.selectionData) {
       setSelection(entry.selectionData);
     }
