@@ -42,6 +42,7 @@ export interface TrackingItem {
 	text: string;
 	color: string;
 	visible: boolean;
+	favorite?: boolean;
 }
 
 export interface PlayerSearchResult {

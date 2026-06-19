@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { TrackingItem as TrackingItemType } from '$lib/types/geojson';
 
-	let { item, onToggle, onRemove, onColorChange }: { item: TrackingItemType; onToggle: () => void; onRemove: () => void; onColorChange: (color: string) => void } = $props();
+	let { item, onToggle, onRemove, onColorChange, onFavoriteToggle }: { item: TrackingItemType; onToggle: () => void; onRemove: () => void; onColorChange: (color: string) => void; onFavoriteToggle: () => void } = $props();
 
 	let colorInput: HTMLInputElement;
 </script>
@@ -30,6 +30,17 @@
 		class="sr-only"
 		oninput={(e) => onColorChange(e.currentTarget.value)}
 	/>
+	<button
+		type="button"
+		onclick={onFavoriteToggle}
+		class="cursor-pointer transition-colors {item.favorite ? 'text-yellow-300 hover:text-yellow-200' : 'text-gray-500 hover:text-yellow-300'}"
+		aria-label={item.favorite ? 'Unfavorite tracking item' : 'Favorite tracking item'}
+		title={item.favorite ? 'Unfavorite' : 'Favorite'}
+	>
+		<svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill={item.favorite ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="2">
+			<path stroke-linecap="round" stroke-linejoin="round" d="m12 3.5 2.63 5.34 5.9.86-4.27 4.16 1.01 5.87L12 17.9l-5.27 2.83 1.01-5.87-4.27-4.16 5.9-.86L12 3.5Z" />
+		</svg>
+	</button>
 	<span class="text-gray-200 flex-1">{item.text}</span>
 	<button
 		onclick={onRemove}

@@ -1,35 +1,50 @@
 <script lang="ts">
-	import { Palette, RotateCcw, X } from '@lucide/svelte';
+	import { Palette, RotateCcw, Star, X } from '@lucide/svelte';
 	import {getLodEnabled, getSidebarLabelsEnabled, setLodEnabled, setSidebarLabelsEnabled} from '$lib/stores/settings-store.svelte';
-	import { getAllColorPreferences, getAllDisplayNames, removeColorPreference, clearAllColorPreferences, clearTracking, updateTrackingItemColor, updateTrackingItemColorByEntityId } from '$lib/stores/tracking-store.svelte';
+	import { getAllColorPreferences, getAllDisplayNames, getAllFavorites, removeColorPreference, removeFavorite, clearAllColorPreferences, clearAllFavorites, clearTracking, updateTrackingItemColor, updateTrackingItemColorByEntityId } from '$lib/stores/tracking-store.svelte';
 	import { selectAllRegions } from '$lib/stores/region-store.svelte';
 	import { resetView } from '$lib/stores/map-store';
 	import { resourceIndex, resourceIndexOverride, creatureIndex } from '$lib/data/resource-index';
 
 	let colorEntries = $state(loadEntries());
+	let favoriteEntries = $state(loadFavoriteEntries());
+
+	function resolveTrackedName(type: 'resource' | 'enemy' | 'player', id: string, names: Record<string, string>): string {
+		const key = `${type}:${id}`;
+		const savedName = names[key];
+		if (savedName) return savedName;
+		if (type === 'enemy') return creatureIndex[id]?.name || `Enemy ${id}`;
+		if (type === 'resource') return resourceIndexOverride[id]?.name || resourceIndex[id]?.name || `Resource ${id}`;
+		return `Player ${id}`;
+	}
 
 	function loadEntries() {
 		const store = getAllColorPreferences();
 		const names = getAllDisplayNames();
 		return Object.entries(store).map(([key, color]) => {
 			const [type, id] = key.split(':') as ['resource' | 'enemy' | 'player', string];
-			const savedName = names[key];
-			let name: string;
-			if (savedName) {
-				name = savedName;
-			} else if (type === 'enemy') {
-				name = creatureIndex[id]?.name || `Enemy ${id}`;
-			} else if (type === 'resource') {
-				name = resourceIndexOverride[id]?.name || resourceIndex[id]?.name || `Resource ${id}`;
-			} else {
-				name = `Player ${id}`;
-			}
+			const name = resolveTrackedName(type, id, names);
 			return { key, type, id, name, color };
+		});
+	}
+
+	function loadFavoriteEntries() {
+		const names = getAllDisplayNames();
+		return getAllFavorites().map((favorite) => {
+			const id = String(favorite.id);
+			const key = `${favorite.type}:${id}`;
+			return {
+				key,
+				type: favorite.type,
+				id,
+				name: resolveTrackedName(favorite.type, id, names),
+			};
 		});
 	}
 
 	function refresh() {
 		colorEntries = loadEntries();
+		favoriteEntries = loadFavoriteEntries();
 	}
 
 	function handleColorChange(type: 'resource' | 'enemy' | 'player', id: string, color: string) {
@@ -51,8 +66,19 @@
 		refresh();
 	}
 
+	function handleClearFavorites() {
+		clearAllFavorites();
+		refresh();
+	}
+
+	function handleRemoveFavorite(type: 'resource' | 'enemy' | 'player', id: string) {
+		removeFavorite(type, id);
+		refresh();
+	}
+
 	function handleResetEverything() {
 		clearAllColorPreferences();
+		clearAllFavorites();
 		clearTracking();
 		selectAllRegions();
 		resetView();
@@ -120,6 +146,49 @@
 		{/if}
 	</section>
 
+	<!-- Favorites -->
+	<section>
+		<div class="flex items-center gap-2 px-1 mb-2.5">
+			<Star size={14} class="text-gray-400" />
+			<h3 class="text-[11px] font-semibold text-gray-300 uppercase tracking-wider flex-1">Favorites</h3>
+			{#if favoriteEntries.length > 0}
+				<button
+					type="button"
+					onclick={handleClearFavorites}
+					class="text-[10px] text-gray-500 hover:text-red-400 transition-colors cursor-pointer px-1.5 py-0.5 rounded hover:bg-white/5"
+				>
+					Clear all
+				</button>
+			{/if}
+		</div>
+
+		{#if favoriteEntries.length > 0}
+			<div class="space-y-1">
+				{#each favoriteEntries as entry (entry.key)}
+					<div class="group flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs border border-white/5 hover:border-white/10 transition-colors">
+						<Star size={13} class="text-yellow-300 shrink-0" fill="currentColor" />
+						<div class="flex-1 min-w-0">
+							<span class="text-gray-200 block truncate">{entry.name}</span>
+						</div>
+						<span class="text-[10px] text-gray-500 bg-white/5 px-1.5 py-0.5 rounded">{entry.type}</span>
+						<button
+							onclick={() => handleRemoveFavorite(entry.type, entry.id)}
+							class="cursor-pointer text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-400"
+							aria-label="Remove favorite"
+						>
+							<X size={14} />
+						</button>
+					</div>
+				{/each}
+			</div>
+		{:else}
+			<div class="flex flex-col items-center py-4 text-gray-500">
+				<Star size={20} class="mb-1.5 opacity-40" />
+				<p class="text-xs text-center">Favorite items in the Tracking panel to track them immediately on load.</p>
+			</div>
+		{/if}
+	</section>
+
 	<!-- Divider -->
 	<div class="border-t border-white/5"></div>
 
@@ -178,7 +247,7 @@
 			</button>
 		{:else}
 			<div class="rounded-lg border border-red-400/20 bg-red-400/5 px-3 py-2.5 space-y-2">
-				<p class="text-[11px] text-red-300/80 text-center">This will clear all saved colors, tracking, regions, layers and map position.</p>
+				<p class="text-[11px] text-red-300/80 text-center">This will clear all saved colors, favorites, tracking, regions, layers and map position.</p>
 				<div class="flex gap-2">
 					<button
 						type="button"

@@ -35,7 +35,7 @@
   import {addLayerEntries, addSearchEntries,} from "$lib/stores/search-store.svelte";
   import {setSelection} from "$lib/stores/selection-store.svelte";
   import {getLodEnabled} from "$lib/stores/settings-store.svelte";
-  import {addTrackingItem, loadColorPreference, registerColorSyncHandler,} from "$lib/stores/tracking-store.svelte";
+  import {addTrackingItem, loadColorPreference, loadFavorites, registerColorSyncHandler,} from "$lib/stores/tracking-store.svelte";
   import {filterUnique} from "$lib/utils/dedupe";
   import {buildChatCoordinateLink, buildCoordinateViewUrl} from "$lib/utils/coordinate-links";
   import {parseUrlParams, updateEnemyIdParam, updatePlayerIdParam, updateRegionIdParam, updateResourceIdParam,} from "$lib/utils/url-params";
@@ -554,26 +554,27 @@
     // Initialise SpacetimeDB relay connection for entity (resource/enemy) tracking
     initRelayService(appConfig, () => resourceLayers, () => enemyLayers, [...regionState.selected]);
 
-    // Backend resource/enemy loading
-    loadBackendData(urlParams, map).catch(console.error);
+    // Load URL-backed tracking first, then apply persisted favorites.
+    (async () => {
+      await loadBackendData(urlParams, map);
 
-    // Relay player tracking from URL params
-    if (urlParams.playerId) {
-      const playerIds = urlParams.playerId
-        .split(",")
-        .map((id) => id.trim())
-        .filter(Boolean);
-      let first = true;
-      for (const id of playerIds) {
-        if (first && urlParams.followPlayer) {
-          first = false;
-          followingPlayerId = id;
+      if (urlParams.playerId) {
+        const playerIds = urlParams.playerId
+          .split(",")
+          .map((id) => id.trim())
+          .filter(Boolean);
+        let first = true;
+        for (const id of playerIds) {
+          if (first && urlParams.followPlayer) {
+            first = false;
+            followingPlayerId = id;
+          }
+          addTrackedPlayer(id, loadColorPreference('player', id) || "#00ff00", false);
         }
-        trackedPlayerIds.add(id);
-        const color = loadColorPreference('player', id) || "#00ff00";
-        _subscribePlayer(id, color);
       }
-    }
+
+      await loadFavoriteTracking(urlParams.noColors);
+    })().catch(console.error);
 
     // Restore map state
     if (urlParams.center) {
@@ -635,20 +636,25 @@
   ];
   let playerColorIndex = 0;
 
+  function addTrackedPlayer(entityId: string, color: string, updateUrl: boolean): void {
+    if (trackedPlayerIds.has(entityId)) return;
+    trackedPlayerIds.add(entityId);
+    if (updateUrl) updatePlayerIdParam(trackedPlayerIds);
+    _subscribePlayer(entityId, color);
+  }
+
   async function handlePlayerSelect(
     entityId: string,
     username: string,
   ): Promise<void> {
     if (trackedPlayerIds.has(entityId)) return;
-    trackedPlayerIds.add(entityId);
-    updatePlayerIdParam(trackedPlayerIds);
 
     const paletteColor =
       playerColorPalette[playerColorIndex % playerColorPalette.length];
     playerColorIndex++;
     const color = loadColorPreference('player', entityId) || paletteColor;
 
-    _subscribePlayer(entityId, color);
+    addTrackedPlayer(entityId, color, true);
   }
 
   /**
@@ -763,11 +769,12 @@
     resourceId: number,
     name: string,
     tier: number,
+    options: { updateUrl?: boolean } = {},
   ): Promise<void> {
     if (resourceLayers[resourceId]) return; // already loaded
 
     trackedResourceIds.add(resourceId);
-    updateResourceIdParam(trackedResourceIds);
+    if (options.updateUrl !== false) updateResourceIdParam(trackedResourceIds);
 
     const color = loadColorPreference('resource', resourceId) || tierColors[tier] || "#3388ff";
     const canvasLayer = new ResourceCanvasLayer({ color, name, tier, id: resourceId });
@@ -791,11 +798,12 @@
     enemyId: number,
     name: string,
     tier: number,
+    options: { updateUrl?: boolean } = {},
   ): Promise<void> {
     if (enemyLayers[enemyId]) return; // already loaded
 
     trackedEnemyIds.add(enemyId);
-    updateEnemyIdParam(trackedEnemyIds);
+    if (options.updateUrl !== false) updateEnemyIdParam(trackedEnemyIds);
 
     const color = loadColorPreference('enemy', enemyId) ||
       creatureIndex[enemyId]?.color || tierColors[tier] || "#3388ff";
@@ -816,77 +824,89 @@
     trackEntity(enemyId, 'enemy');
   }
 
+  async function loadFavoriteTracking(noColors: boolean): Promise<void> {
+    const favorites = loadFavorites();
+    for (const favorite of favorites) {
+      if (favorite.type === 'player') {
+        const entityId = String(favorite.id);
+        addTrackedPlayer(entityId, noColors ? '#3388ff' : (loadColorPreference('player', entityId) || '#00ff00'), false);
+        continue;
+      }
+
+      const id = Number(favorite.id);
+      if (!Number.isFinite(id)) continue;
+      if (favorite.type === 'resource') {
+        const name = resourceIndex[id]?.name || `ID ${id}`;
+        const tier = resourceIndexOverride[id]?.tier || resourceIndex[id]?.tier || 0;
+        await handleResourceSelect(id, name, tier, { updateUrl: false });
+      } else {
+        const name = creatureIndex[id]?.name || `ID ${id}`;
+        const tier = creatureIndex[id]?.tier || 0;
+        await handleCreatureSelect(id, name, tier, { updateUrl: false });
+      }
+    }
+  }
+
   async function loadBackendData(
     urlParams: ReturnType<typeof parseUrlParams>,
     map: L.Map,
   ): Promise<void> {
-    const {
-      resourceId: resourceParam,
-      enemyId: enemyParam,
-      noColors,
-    } = urlParams;
+    const { resourceId: resourceParam, enemyId: enemyParam, noColors } = urlParams;
 
-    if (!resourceParam && !enemyParam) return;
+    const parseIdList = (value: string | null): number[] | null => {
+      if (!value) return [];
+      if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(value)) return null;
+      return [...new Set(value.split(',').map(Number))];
+    };
 
-    let resourceIds: number[] = [];
-    if (resourceParam) {
-      if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(resourceParam)) return;
-      resourceIds = [...new Set(resourceParam.split(",").map(Number))];
-      for (const id of resourceIds) {
-        trackedResourceIds.add(id);
+    const resourceIds = parseIdList(resourceParam);
+    const enemyIds = parseIdList(enemyParam);
+    if (resourceIds === null || enemyIds === null) return;
+    if (resourceIds.length === 0 && enemyIds.length === 0) return;
+
+    type TrackedType = 'resource' | 'enemy';
+    type TrackingDescriptor = { text: string; color: string; id: number; type: TrackedType };
+
+    const loadByType = (
+      type: TrackedType,
+      ids: number[],
+      trackedIds: Set<number>,
+      targetLayers: Record<number, ResourceCanvasLayer>,
+    ): TrackingDescriptor[] => {
+      const list: TrackingDescriptor[] = [];
+      for (const id of ids) {
+        trackedIds.add(id);
+        const tier = type === 'resource'
+          ? (resourceIndexOverride[id]?.tier || resourceIndex[id]?.tier || 0)
+          : (creatureIndex[id]?.tier || 0);
+        const name = type === 'resource'
+          ? (resourceIndex[id]?.name || `ID ${id}`)
+          : (creatureIndex[id]?.name || `ID ${id}`);
+        let color = type === 'resource'
+          ? (loadColorPreference('resource', id) ||
+            resourceIndexOverride[id]?.color ||
+            tierColors[resourceIndexOverride[id]?.tier] ||
+            resourceIndex[id]?.color ||
+            tierColors[resourceIndex[id]?.tier] ||
+            '#3388ff')
+          : (loadColorPreference('enemy', id) ||
+            creatureIndex[id]?.color ||
+            tierColors[creatureIndex[id]?.tier] ||
+            '#3388ff');
+        if (noColors) color = '#3388ff';
+
+        targetLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
+        targetLayers[id].addTo(map);
+        targetLayers[id].setLodEnabled(getLodEnabled());
+        list.push({ text: `Tracking: ${name}, Tier ${tier}`, color, id, type });
       }
-    }
+      return list;
+    };
 
-    let enemyIds: number[] = [];
-    if (enemyParam) {
-      if (!/^([0-9]\d*)(,([0-9]\d*))*$/.test(enemyParam)) return;
-      enemyIds = [...new Set(enemyParam.split(",").map(Number))];
-      for (const id of enemyIds) {
-        trackedEnemyIds.add(id);
-      }
-    }
-
-    let trackingList: { text: string; color: string; id: number; type: 'resource' | 'enemy' }[] = [];
-
-    for (const id of resourceIds) {
-      let color = loadColorPreference('resource', id) ||
-        resourceIndexOverride[id]?.color ||
-        tierColors[resourceIndexOverride[id]?.tier] ||
-        resourceIndex[id]?.color ||
-        tierColors[resourceIndex[id]?.tier] ||
-        "#3388ff";
-      if (noColors) color = "#3388ff";
-      const tier = resourceIndexOverride[id]?.tier || resourceIndex[id]?.tier || 0;
-      const name = resourceIndex[id]?.name || "ID " + id;
-      resourceLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
-      resourceLayers[id].addTo(map);
-      resourceLayers[id].setLodEnabled(getLodEnabled());
-      trackingList.push({
-        text: "Tracking: " + name + ", Tier " + tier,
-        color,
-        id,
-        type: 'resource',
-      });
-    }
-
-    for (const id of enemyIds) {
-      let color = loadColorPreference('enemy', id) ||
-        creatureIndex[id]?.color ||
-        tierColors[creatureIndex[id]?.tier] ||
-        "#3388ff";
-      if (noColors) color = "#3388ff";
-      const tier = creatureIndex[id]?.tier || 0;
-      const name = creatureIndex[id]?.name || "ID " + id;
-      enemyLayers[id] = new ResourceCanvasLayer({ color, name, tier, id });
-      enemyLayers[id].addTo(map);
-      enemyLayers[id].setLodEnabled(getLodEnabled());
-      trackingList.push({
-        text: "Tracking: " + name + ", Tier " + tier,
-        color,
-        id,
-        type: 'enemy',
-      });
-    }
+    let trackingList = [
+      ...loadByType('resource', resourceIds, trackedResourceIds, resourceLayers),
+      ...loadByType('enemy', enemyIds, trackedEnemyIds, enemyLayers),
+    ];
 
     trackingList = filterUnique(trackingList);
     for (const item of trackingList) {
@@ -899,14 +919,8 @@
       });
     }
 
-    // Subscribe all entities via the SpacetimeDB relay. Initial data will
-    // arrive via each subscription's onApplied callback.
-    for (const id of resourceIds) {
-      trackEntity(id, 'resource');
-    }
-    for (const id of enemyIds) {
-      trackEntity(id, 'enemy');
-    }
+    for (const id of resourceIds) trackEntity(id, 'resource');
+    for (const id of enemyIds) trackEntity(id, 'enemy');
   }
 
   function handleToggleLayer(name: string): void {

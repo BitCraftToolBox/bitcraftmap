@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTrackingState, toggleTrackingItem, toggleTrackingItemByEntityId, removeTrackingItem, removeTrackingItemByEntityId, updateTrackingItemColor, updateTrackingItemColorByEntityId } from '$lib/stores/tracking-store.svelte';
+	import { getTrackingState, toggleTrackingItem, toggleTrackingItemByEntityId, removeTrackingItem, removeTrackingItemByEntityId, updateTrackingItemColor, updateTrackingItemColorByEntityId, updateTrackingItemFavorite, updateTrackingItemFavoriteByEntityId } from '$lib/stores/tracking-store.svelte';
 	import TrackingItem from './TrackingItem.svelte';
 
 	let {
@@ -45,6 +45,13 @@
 						updateTrackingItemColorByEntityId(item.entityId, color);
 					} else if (item.type === 'resource' || item.type === 'enemy') {
 						updateTrackingItemColor(item.id, item.type, color);
+					}
+				}}
+				onFavoriteToggle={() => {
+					if (item.type === 'player' && item.entityId) {
+						updateTrackingItemFavoriteByEntityId(item.entityId, !item.favorite);
+					} else if (item.type === 'resource' || item.type === 'enemy') {
+						updateTrackingItemFavorite(item.id, item.type, !item.favorite);
 					}
 				}}
 			/>

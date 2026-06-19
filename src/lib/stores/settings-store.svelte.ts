@@ -1,5 +1,5 @@
 const LOD_KEY = 'lodEnabled';
-const SIDEBAR_LABELS_KEY = 'showSidebarLabels'
+const SIDEBAR_LABELS_KEY = 'showSidebarLabels';
 
 function loadBoolean(key: string, def: boolean): boolean {
 	try {
