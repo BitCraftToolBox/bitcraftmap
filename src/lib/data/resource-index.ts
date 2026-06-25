@@ -1549,6 +1549,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Rathium Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "256671959": {
+        tier: 3,
+        name: "Old Anvil",
+        tag: "Uncharted Resource"
+    },
+    "278317122": {
+        tier: -1,
+        name: "Uncharted Shipment",
+        tag: "Sailing Cargo"
+    },
     "284200468": {
         tier: 9,
         name: "Tier 9 Flower",
@@ -1658,6 +1668,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Pristine Sand",
         tag: "Sand"
+    },
+    "463864520": {
+        tier: 3,
+        name: "Beach Water Geyser",
+        tag: "Uncharted Resource"
     },
     "464034838": {
         tier: 2,
@@ -1829,6 +1844,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 7 Flower",
         tag: "Flower"
     },
+    "729444410": {
+        tier: 3,
+        name: "Old Furnace",
+        tag: "Uncharted Resource"
+    },
     "746946997": {
         tier: 2,
         name: "Hexite Energy Font",
@@ -1979,6 +1999,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Magnificent Berry Bush",
         tag: "Berry"
     },
+    "976413177": {
+        tier: -1,
+        name: "Open Uncharted Shipment",
+        tag: "Sailing Cargo"
+    },
     "986344159": {
         tier: 3,
         name: "Medium Emarium Vein Interior Depleted",
@@ -2048,6 +2073,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Injured Cervus",
         tag: "Injured Animal"
+    },
+    "1084956366": {
+        tier: -1,
+        name: "Lost Pirate's Treasure",
+        tag: "Treasure"
     },
     "1091832489": {
         tier: -1,
@@ -2304,6 +2334,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Large Gift Pile",
         tag: "Seasonal"
     },
+    "1427096797": {
+        tier: 3,
+        name: "Pirate's Footlocker",
+        tag: "Uncharted Resource"
+    },
     "1435874592": {
         tier: 1,
         name: "Traveler's Tree (Depleted)",
@@ -2433,6 +2468,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Depleted Ancient Pots",
         tag: "Depleted Resource"
+    },
+    "1626015312": {
+        tier: 3,
+        name: "Driftwood",
+        tag: "Wood"
     },
     "1637125903": {
         tier: 10,
@@ -2649,6 +2689,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Unreasonably Chummed Paranensis Pod",
         tag: "Paranensis"
     },
+    "2004989308": {
+        tier: -1,
+        name: "Shipwreck Steering Wheel",
+        tag: "Shipwreck Materials"
+    },
     "2018876609": {
         tier: 4,
         name: "Lightly Chummed Inactive Paranensis Pod",
@@ -2678,6 +2723,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Aurumite Vein Interior",
         tag: "Ore Vein"
+    },
+    "2055102471": {
+        tier: -1,
+        name: "Shipwreck Woodpile",
+        tag: "Shipwreck Materials"
     },
     "2058007491": {
         tier: 2,
@@ -2718,6 +2768,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Flawless Berry Bush",
         tag: "Berry"
+    },
+    "2111113095": {
+        tier: 3,
+        name: "Beach Whetstone",
+        tag: "Uncharted Resource"
     },
     "2124433785": {
         tier: -1,
