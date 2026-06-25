@@ -370,7 +370,13 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
                 name: claimName,
                 popupText: claimName,
                 iconName: 'hermit-crab',
-                iconSize: [25, 25]
+            }, localState.location!));
+            break;
+        case 203609893:
+            outputs.uncharted.push(makeFeature({
+                name: claimName,
+                popupText: claimName,
+                iconName: 'shipwreck',
             }, localState.location!));
             break;
         // Temples

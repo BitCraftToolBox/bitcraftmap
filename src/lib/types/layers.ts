@@ -60,7 +60,8 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 		layers: [
 			'Events',
 			'Volcanic Geysers',
-			'Hermit Crab Dens'
+			'Hermit Crab Dens',
+			'Shipwrecks'
 		],
 		defaultCollapsed: true
 	},

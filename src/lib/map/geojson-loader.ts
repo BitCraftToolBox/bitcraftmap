@@ -34,6 +34,7 @@ let makersTreeDepletedIcon: L.Icon;
 let volcanicGeyserIcon: L.Icon;
 let travelerCampIcon: L.Icon;
 let hermitCrabIcon: L.Icon;
+let shipwreckIcon: L.Icon;
 
 export function initIcons(): void {
   caveIcons = Array.from({ length: 10 }, (_, i) => createIcon(`t${i + 1}`));
@@ -50,7 +51,8 @@ export function initIcons(): void {
   makersTreeDepletedIcon = createIcon("makers-tree", [32, 32], { className: "grayscale-icon" });
   volcanicGeyserIcon = createIcon("volcanic-geyser");
   travelerCampIcon = createIcon("traveler-camp");
-  hermitCrabIcon = createIcon("hermit-crab", [25, 25]);
+  hermitCrabIcon = createIcon("hermit-crab");
+  shipwreckIcon = createIcon("shipwreck");
 }
 
 /** Bind a lazy popup — the content function is only called when the popup opens. */
@@ -262,6 +264,7 @@ export async function loadEventsGeoJson(
 export async function loadUnchartedGeoJson(
   geysersLayer: L.LayerGroup,
   hermitCrabDensLayer: L.LayerGroup,
+  shipwrecksLayer: L.LayerGroup,
 ): Promise<void> {
   const file = await fetch(geojsonUrl("uncharted.geojson"));
   const geojsonData = await file.json();
@@ -276,6 +279,9 @@ export async function loadUnchartedGeoJson(
       } else if (iconName === "hermit-crab") {
         targetLayer = hermitCrabDensLayer;
         icon = hermitCrabIcon;
+      } else if (iconName === "shipwreck") {
+        targetLayer = shipwrecksLayer;
+        icon = shipwreckIcon;
       }
 
       const selectionData = {

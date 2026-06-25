@@ -88,6 +88,7 @@
   let makersTreeLayer: L.LayerGroup;
   let geysersLayer: L.LayerGroup;
   let hermitCrabDensLayer: L.LayerGroup;
+  let shipwrecksLayer: L.LayerGroup;
   let travelerCampLayer: L.LayerGroup;
   let waypointsLayer: L.LayerGroup;
   let roadsLayer: L.LayerGroup;
@@ -266,6 +267,7 @@
     makersTreeLayer = L.layerGroup();
     geysersLayer = L.layerGroup();
     hermitCrabDensLayer = L.layerGroup();
+    shipwrecksLayer = L.layerGroup();
     travelerCampLayer = L.layerGroup();
     waypointsLayer = L.layerGroup();
 
@@ -308,6 +310,7 @@
       "Traveler Camps": travelerCampLayer,
       "Volcanic Geysers": geysersLayer,
       "Hermit Crab Dens": hermitCrabDensLayer,
+      Shipwrecks: shipwrecksLayer,
       Banks: banksLayer,
       Markets: marketsLayer,
       Waystones: waystonesLayer,
@@ -350,6 +353,7 @@
       makersTreeLayer,
       geysersLayer,
       hermitCrabDensLayer,
+      shipwrecksLayer,
       travelerCampLayer,
       templesLayer,
       ruinedLayer,
@@ -532,6 +536,7 @@
     loadUnchartedGeoJson(
       geysersLayer,
       hermitCrabDensLayer,
+      shipwrecksLayer
     );
     loadDungeonsGeoJson(dungeonsLayer);
 

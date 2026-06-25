@@ -56,5 +56,6 @@ export const iconsManifest: Record<string, string> = {
 	'volcanic-geyser': '/images/other/volcanic-geyser.webp',
 	'traveler-camp': '/images/other/traveler-camp.webp',
 	'hermit-crab': '/images/other/hermit-crab.webp',
+	'shipwreck': '/images/other/shipwreck.webp',
 	'vault-event': '/images/other/vault-event.webp'
 };
