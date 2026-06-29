@@ -182,20 +182,25 @@ export class ResourceCanvasLayer extends L.Layer {
 		const east = bounds.getEast();
 		const r = this._radius;
 
-		// Precompute the affine transform from (lat, lng) to container pixels.
-		// The CRS projection is linear, so 2 reference points give us the full transform.
-		const p0 = map.latLngToContainerPoint([0, 0]);
-		const p1 = map.latLngToContainerPoint([1000, 1000]);
-		const sX = (p1.x - p0.x) / 1000;
-		const sY = (p1.y - p0.y) / 1000;
-		const oX = p0.x;
-		const oY = p0.y;
+		// Build a non-rounded affine transform from (lat, lng) to container pixels.
+		// Using map.project avoids latLngToContainerPoint rounding drift on large coordinates.
+		const zoom = map.getZoom();
+		const pixelOrigin = map.getPixelOrigin();
+		const topLeft = map.containerPointToLayerPoint([0, 0]);
+		const base = map.project([0, 0], zoom);
+		const xAxis = map.project([0, 1000], zoom);
+		const yAxis = map.project([1000, 0], zoom);
+		const a = (xAxis.x - base.x) / 1000; // lng -> projected x
+		const b = (yAxis.x - base.x) / 1000; // lat -> projected x
+		const c = (xAxis.y - base.y) / 1000; // lng -> projected y
+		const d = (yAxis.y - base.y) / 1000; // lat -> projected y
+		const oX = base.x - pixelOrigin.x - topLeft.x;
+		const oY = base.y - pixelOrigin.y - topLeft.y;
 
 		const sprite = this._sprite;
 		const spriteOffset = r + 1;
 
 		// LOD: show fewer points when zoomed out, all when zoomed in
-		const zoom = map.getZoom();
 		const minZoom = map.getMinZoom();
 		const LOD_FULL_ZOOM = -3; // Show 100% at zoom -3 and above
 
@@ -220,13 +225,15 @@ export class ResourceCanvasLayer extends L.Layer {
 
 				if (lat < south || lat > north || lng < west || lng > east) continue;
 
-				// Deterministic LOD sampling — coordinate-based so same geographic points
-				// stay visible regardless of API response ordering
-				const coordHash = ((Math.round(lat) * 2654435761) ^ (Math.round(lng) * 1013904223)) >>> 0;
-				if (useLod && coordHash > lodThreshold) continue;
+				if (useLod) {
+					// Deterministic LOD sampling — coordinate-based so same geographic points
+					// stay visible regardless of API response ordering
+					const coordHash = ((Math.round(lat) * 2654435761) ^ (Math.round(lng) * 1013904223)) >>> 0;
+					if (coordHash > lodThreshold) continue;
+				}
 
-				const x = lng * sX + oX;
-				const y = lat * sY + oY;
+				const x = lng * a + lat * b + oX;
+				const y = lng * c + lat * d + oY;
 				ctx.drawImage(sprite, x - spriteOffset, y - spriteOffset);
 
 				screenPoints.push(x, y);
