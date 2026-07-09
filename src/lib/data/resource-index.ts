@@ -1394,6 +1394,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Armored Reef Clam",
         tag: "Mollusks"
     },
+    "6021784": {
+        tier: 2,
+        name: "Pineapple Bush",
+        tag: "Fruit Tree"
+    },
     "6110000": {
         tier: 6,
         name: "Vibrant Nano",
@@ -1499,6 +1504,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Ferralith Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "155980492": {
+        tier: 1,
+        name: "Silkmoth Swarm",
+        tag: "Uncharted Tailoring Resource"
+    },
     "158059491": {
         tier: -1,
         name: "King Jakyl Puppy Den",
@@ -1548,6 +1558,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 6,
         name: "Rathium Vein Interior Depleted",
         tag: "Ore Vein"
+    },
+    "252230092": {
+        tier: -1,
+        name: "Depleted Silk Moth",
+        tag: "Uncharted Tailoring Resource"
     },
     "256671959": {
         tier: 3,
@@ -1659,6 +1674,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Disturbed Alpha Puppy Den",
         tag: "Monster Den"
     },
+    "440044897": {
+        tier: -1,
+        name: "Fully Stocked Study Desk",
+        tag: "Uncharted Scholar"
+    },
     "451150522": {
         tier: -1,
         name: "Beehive",
@@ -1708,6 +1728,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Auric Ore",
         tag: "Ore Vein"
+    },
+    "499827637": {
+        tier: -1,
+        name: "Ice Chest",
+        tag: "Treasure"
     },
     "505488132": {
         tier: 8,
@@ -1879,6 +1904,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "TEST BirdSpawn",
         tag: "Stick"
     },
+    "770389327": {
+        tier: -1,
+        name: "Immortal's Research Storage",
+        tag: "Uncharted Scholar"
+    },
     "773149133": {
         tier: 6,
         name: "Medium Rathium Vein Interior",
@@ -1964,10 +1994,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Sparkstone Ore",
         tag: "Hardened Ore Node"
     },
+    "908226880": {
+        tier: -1,
+        name: "Uncharted Monument",
+        tag: "Uncharted Scholar"
+    },
+    "910147429": {
+        tier: -1,
+        name: "Empty Study Desk",
+        tag: "Uncharted Scholar"
+    },
     "916586661": {
         tier: 6,
         name: "Rathium Outcrop Interior",
         tag: "Ore Vein"
+    },
+    "925275042": {
+        tier: 1,
+        name: "Oyster Shell",
+        tag: "Summer Resource"
     },
     "932989637": {
         tier: 6,
@@ -2184,6 +2229,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ancient Brick Pile",
         tag: "Ruin Resource"
     },
+    "1225153871": {
+        tier: -1,
+        name: "Starseeker's Research Storage",
+        tag: "Uncharted Scholar"
+    },
     "1235656080": {
         tier: -1,
         name: "Hidden Resource",
@@ -2203,6 +2253,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Lava Pool",
         tag: "Lava"
+    },
+    "1255593240": {
+        tier: -1,
+        name: "Futuremaker's Research Storage",
+        tag: "Uncharted Scholar"
     },
     "1260515599": {
         tier: 3,
@@ -2389,6 +2444,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 10 Fibers",
         tag: "Fiber Plant"
     },
+    "1500289490": {
+        tier: -1,
+        name: "Partially Stocked Study Desk",
+        tag: "Uncharted Scholar"
+    },
     "1502935362": {
         tier: -1,
         name: "Hexite Sealed Vault (Two Locks Broken)",
@@ -2509,10 +2569,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Aurumite Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "1690549080": {
+        tier: 3,
+        name: "Overgrown Loom",
+        tag: "Uncharted Resource"
+    },
     "1691492474": {
         tier: 5,
         name: "Coral Sand",
         tag: "Sand"
+    },
+    "1693390912": {
+        tier: -1,
+        name: "Rumbagh's Spare Ink",
+        tag: "Uncharted Scholar"
     },
     "1697992551": {
         tier: 4,
@@ -2604,6 +2674,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Pyrelite Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "1831266605": {
+        tier: 4,
+        name: "Banana Tree",
+        tag: "Fruit Tree"
+    },
+    "1840475867": {
+        tier: -1,
+        name: "Rumbagh's Spare Parchment",
+        tag: "Uncharted Scholar"
+    },
     "1842369948": {
         tier: 2,
         name: "Medium Pyrelite Vein Interior Depleted",
@@ -2639,6 +2719,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Collapsed Ruin Bridge",
         tag: "Profession Dungeon Resource"
     },
+    "1939036936": {
+        tier: 1,
+        name: "Oyster Shell Open",
+        tag: "Summer Resource"
+    },
     "1954847232": {
         tier: 9,
         name: "Black Fig Bush",
@@ -2653,6 +2738,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Open Hexite Sealed Vault (One Lock Broken)",
         tag: "World Event"
+    },
+    "1977811738": {
+        tier: 1,
+        name: "Packed Ice",
+        tag: "Summer Resource"
     },
     "1978029892": {
         tier: -1,
