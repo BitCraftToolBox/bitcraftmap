@@ -61,7 +61,9 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 			'Events',
 			'Volcanic Geysers',
 			'Hermit Crab Dens',
-			'Shipwrecks'
+			'Shipwrecks',
+			'Uncharted Ruins',
+			'Silkmoth Breeding Grounds'
 		],
 		defaultCollapsed: true
 	},

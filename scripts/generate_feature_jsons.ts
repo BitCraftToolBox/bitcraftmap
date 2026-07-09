@@ -361,22 +361,31 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
         case 719999256:
             outputs.uncharted.push(makeFeature({
                 name: claimName,
-                popupText: claimName,
                 iconName: 'volcanic-geyser'
             }, localState.location!));
             break;
         case 1503293649:
             outputs.uncharted.push(makeFeature({
                 name: claimName,
-                popupText: claimName,
                 iconName: 'hermit-crab',
             }, localState.location!));
             break;
         case 203609893:
             outputs.uncharted.push(makeFeature({
                 name: claimName,
-                popupText: claimName,
                 iconName: 'shipwreck',
+            }, localState.location!));
+            break;
+        case 26020371:
+            outputs.uncharted.push(makeFeature({
+                name: claimName,
+                iconName: 'uncharted-ruin'
+            }, localState.location!));
+            break;
+        case 159732292:
+            outputs.uncharted.push(makeFeature({
+                name: claimName,
+                iconName: 'silkmoth-grounds'
             }, localState.location!));
             break;
         // Temples

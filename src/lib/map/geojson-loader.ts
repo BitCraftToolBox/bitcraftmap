@@ -35,6 +35,8 @@ let volcanicGeyserIcon: L.Icon;
 let travelerCampIcon: L.Icon;
 let hermitCrabIcon: L.Icon;
 let shipwreckIcon: L.Icon;
+let unchartedRuinsIcon: L.Icon;
+let silkmothIcon: L.Icon;
 
 export function initIcons(): void {
   caveIcons = Array.from({ length: 10 }, (_, i) => createIcon(`t${i + 1}`));
@@ -53,6 +55,8 @@ export function initIcons(): void {
   travelerCampIcon = createIcon("traveler-camp");
   hermitCrabIcon = createIcon("hermit-crab");
   shipwreckIcon = createIcon("shipwreck");
+  unchartedRuinsIcon = createIcon("uncharted-ruins", [48, 32]);
+  silkmothIcon = createIcon("silkmoth-grounds");
 }
 
 /** Bind a lazy popup — the content function is only called when the popup opens. */
@@ -265,6 +269,8 @@ export async function loadUnchartedGeoJson(
   geysersLayer: L.LayerGroup,
   hermitCrabDensLayer: L.LayerGroup,
   shipwrecksLayer: L.LayerGroup,
+  ruinsLayer: L.LayerGroup,
+  silkmothLayer: L.LayerGroup,
 ): Promise<void> {
   const file = await fetch(geojsonUrl("uncharted.geojson"));
   const geojsonData = await file.json();
@@ -282,6 +288,12 @@ export async function loadUnchartedGeoJson(
       } else if (iconName === "shipwreck") {
         targetLayer = shipwrecksLayer;
         icon = shipwreckIcon;
+      } else if (iconName === "uncharted-ruin") {
+        targetLayer = ruinsLayer;
+        icon = unchartedRuinsIcon;
+      } else if (iconName === "silkmoth-grounds") {
+        targetLayer = silkmothLayer;
+        icon = silkmothIcon;
       }
 
       const selectionData = {

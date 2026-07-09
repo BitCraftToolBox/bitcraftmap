@@ -57,5 +57,7 @@ export const iconsManifest: Record<string, string> = {
 	'traveler-camp': '/images/other/traveler-camp.webp',
 	'hermit-crab': '/images/other/hermit-crab.webp',
 	'shipwreck': '/images/other/shipwreck.webp',
+	'uncharted-ruins': '/images/other/uncharted-ruins.webp',
+	'silkmoth-grounds': '/images/other/silkmoth-grounds.webp',
 	'vault-event': '/images/other/vault-event.webp'
 };
