@@ -9,7 +9,7 @@ import { buildPopupHtml } from "./popup-builder";
 import { createAppConfig } from "$lib/config/api";
 import type { MapSelection } from "$lib/types/map";
 import { isMobile } from "$lib/utils/device";
-import { env } from "$env/dynamic/public";
+import * as env from "$env/static/public";
 
 function geojsonUrl(filename: string): string {
   const { exportsCdn } = createAppConfig();

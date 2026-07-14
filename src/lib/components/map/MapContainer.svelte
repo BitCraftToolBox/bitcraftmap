@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {env} from "$env/dynamic/public";
+  import * as env from "$env/static/public";
   import DetailPanel from "$lib/components/detail/DetailPanel.svelte";
   import SearchBar from "$lib/components/search/SearchBar.svelte";
   import Sidebar from "$lib/components/sidebar/Sidebar.svelte";

@@ -1,5 +1,5 @@
 import type { AppConfig } from "$lib/types/map";
-import { env } from "$env/dynamic/public";
+import * as env from "$env/static/public";
 
 export function createAppConfig(): AppConfig {
   return {
