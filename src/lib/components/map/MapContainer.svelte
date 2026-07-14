@@ -615,7 +615,7 @@
           }
         }
       } else {
-        const layer = resourceLayers[id as number];
+        const layer = type === 'resource' ? resourceLayers[id as number] : enemyLayers[id as number];
         if (layer) layer.setColor(color);
       }
     });
