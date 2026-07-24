@@ -1406,7 +1406,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "6110001": {
         tier: 6,
-        name: "Baited School Of Vibrant Carangi",
+        name: "Dormant School of Vibrant Carangi",
         tag: "Lake Fish School"
     },
     "6110002": {
@@ -1641,7 +1641,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "374159821": {
         tier: 10,
-        name: "Baited School Of Divine Serra",
+        name: "Dormant School of Divine Serra",
         tag: "Lake Fish School"
     },
     "376372711": {
@@ -1896,7 +1896,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "722506673": {
         tier: 8,
-        name: "Baited School Of Murky Nemato",
+        name: "Dormant School of Murky Nemato",
         tag: "Lake Fish School"
     },
     "723013812": {
@@ -1971,7 +1971,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "808355905": {
         tier: 6,
-        name: "Dormant School of Vibrant Carangi",
+        name: "Baited School Of Vibrant Carangi",
         tag: "Lake Fish School"
     },
     "814703516": {
@@ -2161,7 +2161,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1027707457": {
         tier: 10,
-        name: "Dormant School of Divine Serra",
+        name: "Baited School Of Divine Serra",
         tag: "Lake Fish School"
     },
     "1040719110": {
@@ -2891,7 +2891,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1946631068": {
         tier: 8,
-        name: "Dormant School of Murky Nemato",
+        name: "Baited School Of Murky Nemato",
         tag: "Lake Fish School"
     },
     "1954847232": {
