@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type {SearchEntry, PlayerEntry, ResourceEntry, CreatureSearchEntry, SearchResult, LayerEntry} from '$lib/stores/search-store.svelte';
 	import { tierColors } from '$lib/config/tiers';
+	import { PlusIcon } from '@lucide/svelte';
 
 	let {
 		locationResults,
@@ -19,7 +20,7 @@
 		playerResults: PlayerEntry[];
 		selectedIndex: number;
 		isLoadingRemote: boolean;
-		handleSelect: (entry: SearchResult, event?: MouseEvent) => void;
+		handleSelect: (entry: SearchResult, event?: { shiftKey?: boolean }) => void;
 	} = $props();
 </script>
 
@@ -29,17 +30,27 @@
 			Locations
 		</div>
 		{#each locationResults as result, i}
-			<button
-				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {i === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(result, e); }}
-				onmouseenter={() => selectedIndex = i}
-			>
-				<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-				</svg>
-				<span>{result.title}</span>
-			</button>
+			<div class="flex items-center {i === selectedIndex ? 'bg-blue-500/20' : 'hover:bg-white/5 active:bg-white/5'}">
+				<button
+					class="flex-1 min-w-0 text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {i === selectedIndex ? 'text-gray-200' : 'text-gray-400'}"
+					onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(result, e); }}
+					onmouseenter={() => selectedIndex = i}
+				>
+					<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+					</svg>
+					<span>{result.title}</span>
+				</button>
+				<button
+					class="shrink-0 mr-1.5 p-1.5 rounded text-gray-500 hover:text-gray-200 hover:bg-white/10 active:bg-white/10"
+					title="Select without closing"
+					aria-label="Select without closing"
+					onmousedown={(e) => { e.preventDefault(); handleSelect(result, { shiftKey: true }); }}
+				>
+					<PlusIcon size={14} />
+				</button>
+			</div>
 		{/each}
 	{/if}
 	{#if layerResults.length > 0}
@@ -48,17 +59,27 @@
 		</div>
 		{#each layerResults as result, j}
 			{@const globalIndex = locationResults.length + j}
-			<button
-				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(result, e); }}
-				onmouseenter={() => selectedIndex = globalIndex}
-			>
-				<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-				</svg>
-				<span>{result.title}</span>
-			</button>
+			<div class="flex items-center {globalIndex === selectedIndex ? 'bg-blue-500/20' : 'hover:bg-white/5 active:bg-white/5'}">
+				<button
+					class="flex-1 min-w-0 text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'text-gray-200' : 'text-gray-400'}"
+					onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(result, e); }}
+					onmouseenter={() => selectedIndex = globalIndex}
+				>
+					<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+					</svg>
+					<span>{result.title}</span>
+				</button>
+				<button
+					class="shrink-0 mr-1.5 p-1.5 rounded text-gray-500 hover:text-gray-200 hover:bg-white/10 active:bg-white/10"
+					title="Select without closing"
+					aria-label="Select without closing"
+					onmousedown={(e) => { e.preventDefault(); handleSelect(result, { shiftKey: true }); }}
+				>
+					<PlusIcon size={14} />
+				</button>
+			</div>
 		{/each}
 	{/if}
 
@@ -68,18 +89,28 @@
 		</div>
 		{#each creatureResults as creature, j}
 			{@const globalIndex = locationResults.length + layerResults.length + j}
-			<button
-				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(creature, e); }}
-				onmouseenter={() => selectedIndex = globalIndex}
-			>
-				<span
-					class="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
-					style:background-color={tierColors[creature.tier] || '#3388ff'}
-				></span>
-				<span class="truncate">{creature.name}</span>
-				<span class="ml-auto text-xs text-gray-600 shrink-0">T{creature.tier}</span>
-			</button>
+			<div class="flex items-center {globalIndex === selectedIndex ? 'bg-blue-500/20' : 'hover:bg-white/5 active:bg-white/5'}">
+				<button
+					class="flex-1 min-w-0 text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'text-gray-200' : 'text-gray-400'}"
+					onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(creature, e); }}
+					onmouseenter={() => selectedIndex = globalIndex}
+				>
+					<span
+						class="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
+						style:background-color={tierColors[creature.tier] || '#3388ff'}
+					></span>
+					<span class="truncate">{creature.name}</span>
+					<span class="ml-auto text-xs text-gray-600 shrink-0">T{creature.tier}</span>
+				</button>
+				<button
+					class="shrink-0 mr-1.5 p-1.5 rounded text-gray-500 hover:text-gray-200 hover:bg-white/10 active:bg-white/10"
+					title="Select without closing"
+					aria-label="Select without closing"
+					onmousedown={(e) => { e.preventDefault(); handleSelect(creature, { shiftKey: true }); }}
+				>
+					<PlusIcon size={14} />
+				</button>
+			</div>
 		{/each}
 	{/if}
 
@@ -92,18 +123,28 @@
 		</div>
 		{#each resourceResults as resource, j}
 			{@const globalIndex = locationResults.length + layerResults.length + creatureResults.length + j}
-			<button
-				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(resource, e); }}
-				onmouseenter={() => selectedIndex = globalIndex}
-			>
-				<span
-					class="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
-					style:background-color={tierColors[resource.tier] || '#3388ff'}
-				></span>
-				<span class="truncate">{resource.name}</span>
-				<span class="ml-auto text-xs text-gray-600 shrink-0">T{resource.tier}</span>
-			</button>
+			<div class="flex items-center {globalIndex === selectedIndex ? 'bg-blue-500/20' : 'hover:bg-white/5 active:bg-white/5'}">
+				<button
+					class="flex-1 min-w-0 text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'text-gray-200' : 'text-gray-400'}"
+					onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(resource, e); }}
+					onmouseenter={() => selectedIndex = globalIndex}
+				>
+					<span
+						class="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
+						style:background-color={tierColors[resource.tier] || '#3388ff'}
+					></span>
+					<span class="truncate">{resource.name}</span>
+					<span class="ml-auto text-xs text-gray-600 shrink-0">T{resource.tier}</span>
+				</button>
+				<button
+					class="shrink-0 mr-1.5 p-1.5 rounded text-gray-500 hover:text-gray-200 hover:bg-white/10 active:bg-white/10"
+					title="Select without closing"
+					aria-label="Select without closing"
+					onmousedown={(e) => { e.preventDefault(); handleSelect(resource, { shiftKey: true }); }}
+				>
+					<PlusIcon size={14} />
+				</button>
+			</div>
 		{/each}
 	{/if}
 
@@ -113,21 +154,31 @@
 		</div>
 		{#each playerResults as player, j}
 			{@const globalIndex = locationResults.length + layerResults.length + creatureResults.length + resourceResults.length + j}
-			<button
-				class="w-full text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'bg-blue-500/20 text-gray-200' : 'text-gray-400 hover:bg-white/5 active:bg-white/5'}"
-				onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(player, e); }}
-				onmouseenter={() => selectedIndex = globalIndex}
-			>
-				<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-				</svg>
-				<span
-					class="inline-block w-2 h-2 rounded-full shrink-0"
-					style:background-color={player.signedIn ? '#22c55e' : '#6b7280'}
-					title={player.signedIn ? 'Online' : 'Offline'}
-				></span>
-				<span>{player.username}</span>
-			</button>
+			<div class="flex items-center {globalIndex === selectedIndex ? 'bg-blue-500/20' : 'hover:bg-white/5 active:bg-white/5'}">
+				<button
+					class="flex-1 min-w-0 text-left px-3 py-2.5 sm:py-1.5 text-sm transition-colors flex items-center gap-2 {globalIndex === selectedIndex ? 'text-gray-200' : 'text-gray-400'}"
+					onmousedown={(e) => { if (e.shiftKey) e.preventDefault(); handleSelect(player, e); }}
+					onmouseenter={() => selectedIndex = globalIndex}
+				>
+					<svg class="w-3.5 h-3.5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+					</svg>
+					<span
+						class="inline-block w-2 h-2 rounded-full shrink-0"
+						style:background-color={player.signedIn ? '#22c55e' : '#6b7280'}
+						title={player.signedIn ? 'Online' : 'Offline'}
+					></span>
+					<span>{player.username}</span>
+				</button>
+				<button
+					class="shrink-0 mr-1.5 p-1.5 rounded text-gray-500 hover:text-gray-200 hover:bg-white/10 active:bg-white/10"
+					title="Select without closing"
+					aria-label="Select without closing"
+					onmousedown={(e) => { e.preventDefault(); handleSelect(player, { shiftKey: true }); }}
+				>
+					<PlusIcon size={14} />
+				</button>
+			</div>
 		{/each}
 	{/if}
 </div>

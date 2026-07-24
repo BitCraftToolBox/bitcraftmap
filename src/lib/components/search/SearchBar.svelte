@@ -36,7 +36,7 @@
 		}
 	}
 
-	function handleSelect(entry: SearchResult, event?: MouseEvent | KeyboardEvent): void {
+	function handleSelect(entry: SearchResult, event?: { shiftKey?: boolean }): void {
 		const keepOpen = event?.shiftKey ?? false;
 
 		if (entry.type === 'player') {
