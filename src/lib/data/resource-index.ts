@@ -1331,7 +1331,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "4110001": {
         tier: 4,
-        name: "Baited School Of Azure Sphyra",
+        name: "Dormant School of Azure Sphyra",
         tag: "Lake Fish School"
     },
     "4110002": {
@@ -2721,7 +2721,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "1696878184": {
         tier: 4,
-        name: "Dormant School of Azure Sphyra",
+        name: "Baited School Of Azure Sphyra",
         tag: "Lake Fish School"
     },
     "1697992551": {
