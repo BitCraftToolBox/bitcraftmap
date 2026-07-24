@@ -29,13 +29,4 @@
 			{formatCountdown(timer.phaseRemaining)}
 		</span>
 	</div>
-
-	<div class="h-3 w-px bg-white/20"></div>
-
-	<div class="flex items-center gap-1.5" title="Next task reset">
-		<Timer size={14} class="text-emerald-400" />
-		<span class="text-emerald-300">
-			{formatCountdown(timer.taskResetRemaining)}
-		</span>
-	</div>
 </div>
