@@ -5,7 +5,6 @@ import {
     ClaimTechState,
     DbConnection,
     MarketplaceState,
-    RemoteTables,
     WaystoneState,
     WorldRegionNameState
 } from './bindings/src'
@@ -40,7 +39,6 @@ interface RegionData {
     claimState: ClaimState[],
     claimLocalState: ClaimLocalState[],
     worldRegionNameState: WorldRegionNameState[],
-    growthTimers: GrowthTimer[],
     bankState: BankState[],
     marketplaceState: MarketplaceState[],
     waystoneState: WaystoneState[],
@@ -86,31 +84,12 @@ function formatTemplateArgs(value: string) {
     });
 }
 
-function collateGrowthTimers(db: RemoteTables): GrowthTimer[] {
-    const timers: GrowthTimer[] = [];
-    // @ts-ignore
-    for (const growth of db.growthState.iter()) {
-        const locRow = db.locationState.entityId.find(growth.entityId);
-        if (locRow) {
-            timers.push({
-                entityId: growth.entityId,
-                location: {x: locRow.x, z: locRow.z},
-                endTimestamp: growth.endTimestamp.toDate()
-            });
-        }
-    }
-    return timers;
-}
-
 const onConnect = (resolve: (_: RegionData) => void) =>
     (conn: DbConnection) => {
         const subs = [
             'SELECT * FROM claim_state',
             'SELECT * FROM claim_local_state',
             'SELECT * FROM world_region_name_state',
-            // Growth timers are keyed by growth entity id; joins limit location/resource rows to entities with growth state.
-            'SELECT * FROM growth_state',
-            'SELECT loc.* FROM location_state loc JOIN growth_state gs ON gs.entity_id = loc.entity_id;',
             'SELECT * FROM bank_state',
             'SELECT * FROM marketplace_state',
             'SELECT * FROM waystone_state',
@@ -121,7 +100,6 @@ const onConnect = (resolve: (_: RegionData) => void) =>
                 claimState: Array.from(conn.db.claimState.iter()),
                 claimLocalState: Array.from(conn.db.claimLocalState.iter()),
                 worldRegionNameState: Array.from(conn.db.worldRegionNameState.iter()),
-                growthTimers: collateGrowthTimers(conn.db),
                 bankState: Array.from(conn.db.bankState.iter()),
                 marketplaceState: Array.from(conn.db.marketplaceState.iter()),
                 waystoneState: Array.from(conn.db.waystoneState.iter()),
@@ -137,7 +115,6 @@ async function fetchDataFromRegions(regions: string[]) {
         claimState: [],
         claimLocalState: [],
         worldRegionNameState: [],
-        growthTimers: [],
         bankState: [],
         marketplaceState: [],
         waystoneState: [],
@@ -169,7 +146,6 @@ async function fetchDataFromRegions(regions: string[]) {
             playerFacingName: nameState.playerFacingName,
             moduleNamePrefix: nameState.moduleNamePrefix
         });
-        data.growthTimers.push(...res.growthTimers);
         data.bankState.push(...res.bankState);
         data.marketplaceState.push(...res.marketplaceState);
         data.waystoneState.push(...res.waystoneState);
@@ -329,7 +305,7 @@ function makeTower(claimState: ClaimState, localState: ClaimLocalState, territor
     };
 }
 
-function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[], growthTimers: GrowthTimer[], claimExtras: ClaimExtras) {
+function addFeature(outputs: OutputData, claimState: ClaimState, localState: ClaimLocalState, territories: WatchtowerTerritory[], claimExtras: ClaimExtras) {
     const claimName = formatTemplateArgs(claimState.name);
     switch (localState.buildingDescriptionId) {
         case 433549604: // Tree of Wisdom
@@ -340,12 +316,11 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             break;
         case 421789207: // Hexite Deposit
         case 1375306631: { // Maker's Tree
-            const timer = growthTimers.find(t => t.location.x === localState.location!.x && t.location.z === localState.location!.z)?.endTimestamp;
             const type = localState.buildingDescriptionId === 421789207 ? 'hexite' : 'makers-tree';
             outputs.empireResources.push(makeFeature({
                 name: claimName,
                 type,
-                timer
+                timer: null
             }, localState.location!));
             break;
         }
@@ -354,7 +329,7 @@ function addFeature(outputs: OutputData, claimState: ClaimState, localState: Cla
             outputs.events.push(makeFeature({
                 name: 'Hexite Vault',
                 type: 'vault-event',
-                timer: growthTimers.find(t => t.location.x === localState.location!.x && t.location.z === localState.location!.z)?.endTimestamp,
+                timer: null,
                 iconName: 'vault-event'
             }, localState.location!));
             break;
@@ -738,7 +713,7 @@ function buildWatchtowerTerritories(claimStates: ClaimState[], localStateMap: Ma
 }
 
 async function main() {
-    const LIVE = true;
+    const LIVE = false;
     let data, globalData;
     if (LIVE) {
         // read live data
@@ -787,7 +762,7 @@ async function main() {
     data.claimState.forEach(claimState => {
         const localState = localStateMap.get(claimState.entityId);
         if (!localState) return;
-        addFeature(outputs, claimState, localState, territories, data.growthTimers, claimExtras);
+        addFeature(outputs, claimState, localState, territories, claimExtras);
     });
 
     // --- Grids output ---

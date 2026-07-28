@@ -45,6 +45,15 @@ export interface TrackingItem {
 	favorite?: boolean;
 }
 
+export interface TimerEntry {
+	endTimestamp: string;
+	entityId: string;
+	regionId: number;
+	resourceId: number;
+	x: number;
+	z: number;
+}
+
 export interface PlayerSearchResult {
 	entityId: string;
 	username: string;

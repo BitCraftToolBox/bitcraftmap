@@ -8,6 +8,7 @@ import { setSelection } from "$lib/stores/selection-store.svelte";
 import { buildPopupHtml } from "./popup-builder";
 import { createAppConfig } from "$lib/config/api";
 import type { MapSelection } from "$lib/types/map";
+import type { TimerEntry } from "$lib/types/geojson";
 import { isMobile } from "$lib/utils/device";
 import * as env from "$env/static/public";
 
@@ -70,6 +71,73 @@ function bindLazyPopup(marker: L.Marker, selectionData: MapSelection): void {
   marker.on("click", () => setSelection(selectionData));
 }
 
+// --- Timer-driven markers -------------------------------------------------
+//
+// Hexite deposits, Maker's Trees and Events all carry a "ready at" timer that
+// can also be refreshed live from the timers service (see timers-service.ts).
+// We keep a lightweight registry of these markers (position + selection data)
+// so that incoming timer updates can be matched to the nearest marker and
+// applied in place, without recreating the marker or its popup.
+
+type TimerMarkerKind = "hexite" | "makers-tree" | "event";
+
+interface TimerTrackedMarker {
+  marker: L.Marker;
+  x: number;
+  z: number;
+  kind: TimerMarkerKind;
+  selectionData: { timer: string | undefined };
+}
+
+let timerTrackedMarkers: TimerTrackedMarker[] = [];
+
+// Match threshold from the loader spec: dx^2 + dz^2 < 50
+const TIMER_MATCH_RADIUS_SQ = 50;
+
+function computeEmpireResourceIcon(isHexite: boolean, timer: string | undefined): L.Icon {
+  const ready = !timer || new Date(timer).getTime() <= Date.now();
+  return isHexite
+    ? (ready ? hexiteIcon : hexiteDepletedIcon)
+    : (ready ? makersTreeIcon : makersTreeDepletedIcon);
+}
+
+function computeEventIcon(timer: string | undefined): L.Icon {
+  const ready =
+    !!timer && new Date(timer).getTime() - 15 * 60 * 1000 <= Date.now(); // highlight events within next 15 minutes
+  return ready ? eventIcon : eventDepletedIcon;
+}
+
+/**
+ * Match each incoming timer entry to the closest tracked marker (hexite,
+ * Maker's Tree or event) within TIMER_MATCH_RADIUS_SQ, and update that
+ * marker's timer + icon in place.
+ */
+export function applyTimerUpdates(timers: TimerEntry[]): void {
+  for (const timer of timers) {
+    let closest: TimerTrackedMarker | undefined;
+    let closestDistSq = TIMER_MATCH_RADIUS_SQ;
+
+    for (const record of timerTrackedMarkers) {
+      const dx = record.x - timer.x;
+      const dz = record.z - timer.z;
+      const distSq = dx * dx + dz * dz;
+      if (distSq < closestDistSq) {
+        closestDistSq = distSq;
+        closest = record;
+      }
+    }
+
+    if (!closest) continue;
+
+    closest.selectionData.timer = timer.endTimestamp;
+    closest.marker.setIcon(
+      closest.kind === "event"
+        ? computeEventIcon(timer.endTimestamp)
+        : computeEmpireResourceIcon(closest.kind === "hexite", timer.endTimestamp),
+    );
+  }
+}
+
 export async function loadTreesGeoJson(
   treesLayer: L.LayerGroup,
 ): Promise<void> {
@@ -93,18 +161,15 @@ export async function loadEmpireResourcesGeoJson(
   hexiteLayer: L.LayerGroup,
   makersTreeLayer: L.LayerGroup,
 ): Promise<void> {
+  timerTrackedMarkers = timerTrackedMarkers.filter((r) => r.kind === "event");
+
   const file = await fetch(geojsonUrl("empireResources.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
       const isHexite = feature.properties.type === "hexite";
       const targetLayer = isHexite ? hexiteLayer : makersTreeLayer;
-      const ready =
-        !feature.properties.timer ||
-        new Date(feature.properties.timer).getTime() <= Date.now();
-      const icon = isHexite
-        ? (ready ? hexiteIcon : hexiteDepletedIcon)
-        : (ready ? makersTreeIcon : makersTreeDepletedIcon);
+      const icon = computeEmpireResourceIcon(isHexite, feature.properties.timer);
 
       const selectionData = {
         type: "empire-resource" as const,
@@ -115,6 +180,13 @@ export async function loadEmpireResourcesGeoJson(
       };
       const marker = L.marker(latlng, { icon }).addTo(targetLayer);
       bindLazyPopup(marker, selectionData);
+      timerTrackedMarkers.push({
+        marker,
+        x: latlng.lng,
+        z: latlng.lat,
+        kind: isHexite ? "hexite" : "makers-tree",
+        selectionData,
+      });
       return marker;
     },
   });
@@ -245,6 +317,8 @@ export async function loadCavesGeoJson(
 export async function loadEventsGeoJson(
   eventsLayer: L.LayerGroup,
 ): Promise<void> {
+  timerTrackedMarkers = timerTrackedMarkers.filter((r) => r.kind !== "event");
+
   const file = await fetch(geojsonUrl("events.geojson"));
   const geojsonData = await file.json();
   L.geoJSON(geojsonData, {
@@ -255,11 +329,16 @@ export async function loadEventsGeoJson(
         latlng: { lat: latlng.lat, lng: latlng.lng },
         timer: feature.properties.timer,
       };
-      const ready =
-          feature.properties.timer &&
-          new Date(feature.properties.timer).getTime() - 15 * 60 * 1000 <= Date.now(); // highlight events within next 15 minutes
-      const marker = L.marker(latlng, { icon: ready ? eventIcon : eventDepletedIcon }).addTo(eventsLayer);
+      const icon = computeEventIcon(feature.properties.timer);
+      const marker = L.marker(latlng, { icon }).addTo(eventsLayer);
       bindLazyPopup(marker, selectionData);
+      timerTrackedMarkers.push({
+        marker,
+        x: latlng.lng,
+        z: latlng.lat,
+        kind: "event",
+        selectionData,
+      });
       return marker;
     },
   });

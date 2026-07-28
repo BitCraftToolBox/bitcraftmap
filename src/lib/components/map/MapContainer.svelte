@@ -30,6 +30,7 @@
   import {ResourceCanvasLayer} from "$lib/map/resource-canvas-layer";
   import {getLatestGistRaw} from "$lib/services/gist-service";
   import {destroyRelayService, initRelayService, trackEntity, trackPlayer, untrackEntity, untrackPlayer, updateAllEntityRegions,} from "$lib/services/relay-service";
+  import {startTimersService, stopTimersService} from "$lib/services/timers-service";
   import {hashHasFlyToOrZoom, resetView, restoreMapState, saveMapState, setMap,} from "$lib/stores/map-store";
   import {getRegionState, setRegions} from "$lib/stores/region-store.svelte";
   import {addLayerEntries, addSearchEntries,} from "$lib/stores/search-store.svelte";
@@ -494,7 +495,7 @@
 
     // Load GeoJSON data
     loadTreesGeoJson(treesLayer);
-    loadEmpireResourcesGeoJson(hexiteLayer, makersTreeLayer);
+    const empireResourcesPromise = loadEmpireResourcesGeoJson(hexiteLayer, makersTreeLayer);
     loadTemplesGeoJson(templesLayer);
     loadNpcsGeoJson(ruinedLayer, travelerCampLayer).then(() => {
       // Add search entries for NPC claims (ruined cities + traveler camps)
@@ -540,7 +541,7 @@
         });
       }
     });
-    loadEventsGeoJson(eventsLayer);
+    const eventsPromise = loadEventsGeoJson(eventsLayer);
     loadUnchartedGeoJson(
       geysersLayer,
       hermitCrabDensLayer,
@@ -552,6 +553,12 @@
 
     loadGridsGeoJson(gridsLayer, paintCtx);
     loadTowersGeoJson(towersLayer, territoriesLayer, map);
+
+    // Start polling for live timer updates (hexite/maker's tree/event markers)
+    // once the layers that carry timers have finished loading.
+    Promise.all([empireResourcesPromise, eventsPromise]).then(() => {
+      startTimersService();
+    });
 
     // Load from hash / gist / backend
     loadGeoJsonFromHash(waypointsLayer, paintCtx, map);
@@ -623,6 +630,7 @@
     return () => {
       unregisterColorSync();
       destroyRelayService();
+      stopTimersService();
       map.remove();
     };
   });
