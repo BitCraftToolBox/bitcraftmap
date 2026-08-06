@@ -1484,6 +1484,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Large Araknir Spawner",
         tag: "Enemy Spawner"
     },
+    "130920554": {
+        tier: 3,
+        name: "Cracked Sturdy Quarry Rock",
+        tag: "Rock"
+    },
     "134935169": {
         tier: 2,
         name: "Pyrelite Vein Interior Depleted",
@@ -1534,6 +1539,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Emarium Outcrop Interior",
         tag: "Ore Vein"
     },
+    "203834953": {
+        tier: 2,
+        name: "Hardened Simple Quarry Rock",
+        tag: "Rock"
+    },
     "204021372": {
         tier: 1,
         name: "Rough Sand Pile",
@@ -1542,6 +1552,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
     "205387239": {
         tier: 4,
         name: "Medium Elenvar Vein Interior Depleted",
+        tag: "Ore Vein"
+    },
+    "213706467": {
+        tier: 7,
+        name: "Rich Aurumite Deposit",
         tag: "Ore Vein"
     },
     "218270468": {
@@ -1618,6 +1633,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Hexite Fragment",
         tag: "Hexite"
+    },
+    "343489854": {
+        tier: 1,
+        name: "Glittering Rough Quarry Rock",
+        tag: "Rock"
     },
     "348497955": {
         tier: -1,
@@ -1844,6 +1864,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "School of Boot Fish",
         tag: "Boot Fish School"
     },
+    "616268871": {
+        tier: 9,
+        name: "Rich Umbracite Deposit",
+        tag: "Ore Vein"
+    },
     "623041128": {
         tier: 2,
         name: "Sunflower",
@@ -1864,10 +1889,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Volcanic Rock",
         tag: "Stone"
     },
+    "660395878": {
+        tier: 3,
+        name: "Sturdy Quarry Rock",
+        tag: "Rock"
+    },
     "673344019": {
         tier: 4,
         name: "Moderately Chummed Paranensis Pod",
         tag: "Paranensis"
+    },
+    "680064965": {
+        tier: 8,
+        name: "Rich Celestium Deposit",
+        tag: "Ore Vein"
     },
     "699727318": {
         tier: 2,
@@ -1893,6 +1928,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Blueberry Bush",
         tag: "Berry"
+    },
+    "716999604": {
+        tier: 1,
+        name: "Exposed Rough Quarry Rock",
+        tag: "Rock"
     },
     "722506673": {
         tier: 8,
@@ -1939,6 +1979,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "TEST BirdSpawn",
         tag: "Stick"
     },
+    "768659626": {
+        tier: 3,
+        name: "Hardened Sturdy Quarry Rock",
+        tag: "Rock"
+    },
     "769107383": {
         tier: 6,
         name: "Baited Vibrant Carangi Spot",
@@ -1979,6 +2024,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Umbracite Outcrop Interior",
         tag: "Ore Vein"
     },
+    "815748648": {
+        tier: 1,
+        name: "Rough Quarry Rock",
+        tag: "Rock"
+    },
     "817308838": {
         tier: 7,
         name: "Baited School Of Mossy Synan",
@@ -2004,6 +2054,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ornate Clay",
         tag: "Clay"
     },
+    "847832618": {
+        tier: -1,
+        name: "Calcic Ore",
+        tag: "Ore Vein"
+    },
     "849939303": {
         tier: -1,
         name: "Alpha Jakyl Puppy Den",
@@ -2023,6 +2078,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Collapsed Ruin Archway",
         tag: "Profession Dungeon Resource"
+    },
+    "869198967": {
+        tier: 2,
+        name: "Simple Quarry Rock",
+        tag: "Rock"
     },
     "875245395": {
         tier: 6,
@@ -2179,6 +2239,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Pyrelite Outcrop Interior",
         tag: "Ore Vein"
     },
+    "1048179054": {
+        tier: 6,
+        name: "Rich Rathium Deposit",
+        tag: "Ore Vein"
+    },
     "1048834532": {
         tier: 10,
         name: "Inactive Naskel Pod",
@@ -2192,6 +2257,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
     "1064484466": {
         tier: 3,
         name: "Emarium Outcrop Interior Depleted",
+        tag: "Ore Vein"
+    },
+    "1071155340": {
+        tier: 1,
+        name: "Rich Ferralith Deposit",
         tag: "Ore Vein"
     },
     "1072537375": {
@@ -2234,6 +2304,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ancient Repaired Bridge",
         tag: "Dungeon Obstacle"
     },
+    "1113266447": {
+        tier: 2,
+        name: "Glittering Simple Quarry Rock",
+        tag: "Rock"
+    },
     "1113640469": {
         tier: 9,
         name: "Tier 9 Outcrop",
@@ -2268,6 +2343,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Hexite Sealed Vault",
         tag: "World Event"
+    },
+    "1145307970": {
+        tier: 3,
+        name: "Glittering Sturdy Quarry Rock",
+        tag: "Rock"
     },
     "1146338010": {
         tier: -1,
@@ -2579,10 +2659,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Astralite Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "1544491693": {
+        tier: 4,
+        name: "Rich Elenvar Deposit",
+        tag: "Ore Vein"
+    },
     "1544633219": {
         tier: -1,
         name: "Hexite Sealed Vault (One Lock Broken)",
         tag: "World Event"
+    },
+    "1546013803": {
+        tier: 10,
+        name: "Rich Astralite Deposit",
+        tag: "Ore Vein"
+    },
+    "1549019042": {
+        tier: 3,
+        name: "Rich Emarium Deposit",
+        tag: "Ore Vein"
     },
     "1551712725": {
         tier: 2,
@@ -2699,6 +2794,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Terrified Adventurer's Note",
         tag: "Note"
     },
+    "1688237161": {
+        tier: 1,
+        name: "Cracked Rough Quarry Rock",
+        tag: "Rock"
+    },
+    "1688244192": {
+        tier: 2,
+        name: "Rich Pyrelite Deposit",
+        tag: "Ore Vein"
+    },
     "1689263994": {
         tier: 7,
         name: "Aurumite Outcrop Interior Depleted",
@@ -2733,6 +2838,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Brico's Buried Cache",
         tag: "Quest"
+    },
+    "1708271943": {
+        tier: 2,
+        name: "Cracked Simple Quarry Rock",
+        tag: "Rock"
     },
     "1709170104": {
         tier: 4,
@@ -2769,6 +2879,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Astralite Vein Interior",
         tag: "Ore Vein"
     },
+    "1772923809": {
+        tier: 1,
+        name: "Hardened Rough Quarry Rock",
+        tag: "Rock"
+    },
     "1774107141": {
         tier: -1,
         name: "Ancient Chest",
@@ -2788,6 +2903,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Medium Aurumite Vein Interior",
         tag: "Ore Vein"
+    },
+    "1800353403": {
+        tier: 3,
+        name: "Exposed Sturdy Quarry Rock",
+        tag: "Rock"
     },
     "1804382655": {
         tier: 3,
@@ -2949,6 +3069,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Hidden 38 Tiles Resource",
         tag: "Hidden Resource"
     },
+    "1993953753": {
+        tier: 5,
+        name: "Rich Luminite Deposit",
+        tag: "Ore Vein"
+    },
     "1996631377": {
         tier: 10,
         name: "Tier 10 Outcrop",
@@ -3003,6 +3128,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Aurumite Vein Interior",
         tag: "Ore Vein"
+    },
+    "2035679533": {
+        tier: 2,
+        name: "Exposed Simple Quarry Rock",
+        tag: "Rock"
     },
     "2055102471": {
         tier: -1,
