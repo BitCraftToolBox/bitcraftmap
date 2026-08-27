@@ -1169,6 +1169,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "School Of Mysterious Murky Oxy",
         tag: "Ocean Fish School"
     },
+    "3004381": {
+        tier: 2,
+        name: "Withering Birch Sapling",
+        tag: "Sapling"
+    },
     "3010008": {
         tier: 6,
         name: "Planted Maple Sapling",
@@ -1484,6 +1489,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Large Araknir Spawner",
         tag: "Enemy Spawner"
     },
+    "129262204": {
+        tier: 2,
+        name: "Growing Birch Sapling",
+        tag: "Sapling"
+    },
     "130920554": {
         tier: 3,
         name: "Cracked Sturdy Quarry Rock",
@@ -1554,6 +1564,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Elenvar Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "208912710": {
+        tier: 1,
+        name: "Basic Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
+    },
     "213706467": {
         tier: 7,
         name: "Rich Aurumite Deposit",
@@ -1568,6 +1583,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "King Jakyl Puppy Paw Imprints",
         tag: "Prospecting Clue"
+    },
+    "223456660": {
+        tier: 10,
+        name: "Flawless Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
     },
     "230905381": {
         tier: 8,
@@ -1684,6 +1704,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Inactive Velgrim Pod",
         tag: "Trophy Fishing Node"
     },
+    "385147670": {
+        tier: 5,
+        name: "Exquisite Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "387666932": {
         tier: 7,
         name: "Tier 7 Tree",
@@ -1724,10 +1749,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Disturbed Alpha Puppy Den",
         tag: "Monster Den"
     },
+    "433559430": {
+        tier: 3,
+        name: "Infused Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
+    },
     "440044897": {
         tier: -1,
         name: "Fully Stocked Study Desk",
         tag: "Uncharted Scholar"
+    },
+    "449797597": {
+        tier: 7,
+        name: "Ornate Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
+    },
+    "450946267": {
+        tier: 9,
+        name: "Magnificent Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
     },
     "451150522": {
         tier: -1,
@@ -1748,6 +1788,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Olivine Sand",
         tag: "Sand"
+    },
+    "470959611": {
+        tier: 1,
+        name: "Growing Beech Sapling",
+        tag: "Sapling"
     },
     "473828668": {
         tier: 10,
@@ -1814,6 +1859,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Indigo Milk Cap",
         tag: "Mushroom"
     },
+    "537004766": {
+        tier: 1,
+        name: "Growing Spruce Sapling",
+        tag: "Sapling"
+    },
     "541862086": {
         tier: 4,
         name: "Garnet Sand",
@@ -1839,10 +1889,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Magnificent Sand",
         tag: "Sand"
     },
+    "565707510": {
+        tier: 2,
+        name: "Simple Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "569033113": {
         tier: -1,
         name: "Small Araknir Spawner",
         tag: "Enemy Spawner"
+    },
+    "577500196": {
+        tier: 1,
+        name: "Withering Beech Sapling",
+        tag: "Sapling"
     },
     "582591086": {
         tier: 7,
@@ -2044,6 +2104,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Frenzied School Of Mossy Amia",
         tag: "Chummed Ocean Fish School"
     },
+    "826642662": {
+        tier: 2,
+        name: "Spooked Standard Equous",
+        tag: "Wild Equous"
+    },
     "828646787": {
         tier: 7,
         name: "Inactive Garbel Pod",
@@ -2054,10 +2119,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ornate Clay",
         tag: "Clay"
     },
+    "843597922": {
+        tier: 6,
+        name: "Peerless Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
+    },
     "847832618": {
         tier: -1,
         name: "Calcic Ore",
         tag: "Ore Vein"
+    },
+    "848062929": {
+        tier: 2,
+        name: "Simple Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
     },
     "849939303": {
         tier: -1,
@@ -2068,6 +2143,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Depleted Hexite Deposit",
         tag: "Hexite"
+    },
+    "854886442": {
+        tier: 7,
+        name: "Ornate Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
     },
     "859772632": {
         tier: 4,
@@ -2104,6 +2184,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Luminite Vein Interior",
         tag: "Ore Vein"
     },
+    "894948018": {
+        tier: 3,
+        name: "Infused Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "904022325": {
         tier: 7,
         name: "Dormant School of Mossy Synan",
@@ -2113,6 +2198,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Sparkstone Ore",
         tag: "Hardened Ore Node"
+    },
+    "906767565": {
+        tier: -1,
+        name: "Opened Lost Wreckage",
+        tag: "Sailing Cargo"
     },
     "908226880": {
         tier: -1,
@@ -2164,6 +2254,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Grand Treasure Chest",
         tag: "Treasure"
     },
+    "955632809": {
+        tier: 4,
+        name: "Fine Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "956829437": {
         tier: 6,
         name: "Inactive Corven Pod",
@@ -2183,6 +2278,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Medium Emarium Vein Interior Depleted",
         tag: "Ore Vein"
+    },
+    "988020071": {
+        tier: 1,
+        name: "Growing Oak Sapling",
+        tag: "Sapling"
     },
     "991140984": {
         tier: -1,
@@ -2259,6 +2359,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Emarium Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "1066015694": {
+        tier: 6,
+        name: "Peerless Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "1071155340": {
         tier: 1,
         name: "Rich Ferralith Deposit",
@@ -2313,6 +2418,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Tier 9 Outcrop",
         tag: "Rock Outcrop"
+    },
+    "1114223333": {
+        tier: 1,
+        name: "Withering Oak Sapling",
+        tag: "Sapling"
     },
     "1117235188": {
         tier: -1,
@@ -2369,6 +2479,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Owl Feathers",
         tag: "Taming Resource"
     },
+    "1159047139": {
+        tier: 5,
+        name: "Exquisite Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
+    },
     "1159270109": {
         tier: 10,
         name: "Tier 10 Tree",
@@ -2388,6 +2503,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Crystalized Sand",
         tag: "Sand"
+    },
+    "1200968939": {
+        tier: 8,
+        name: "Pristine Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
     },
     "1219773404": {
         tier: -1,
@@ -2458,6 +2578,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Tropical Grains",
         tag: "Wild Grain"
+    },
+    "1270583007": {
+        tier: -1,
+        name: "Opened Lost Treasure",
+        tag: "Sailing Cargo"
     },
     "1283632905": {
         tier: 1,
@@ -2714,6 +2839,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Pristine Hieroglyphs",
         tag: "Research"
     },
+    "1574032455": {
+        tier: 1,
+        name: "Basic Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "1574437474": {
         tier: 9,
         name: "Sapwood Tree",
@@ -2743,6 +2873,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Astralite Vein",
         tag: "Ore Vein"
+    },
+    "1611570790": {
+        tier: 8,
+        name: "Pristine Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
     },
     "1613056504": {
         tier: 3,
@@ -2879,6 +3014,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Astralite Vein Interior",
         tag: "Ore Vein"
     },
+    "1747827972": {
+        tier: 10,
+        name: "Flawless Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "1772923809": {
         tier: 1,
         name: "Hardened Rough Quarry Rock",
@@ -2959,6 +3099,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Pyrelite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1869364824": {
+        tier: 9,
+        name: "Magnificent Hexite Infused Tree",
+        tag: "Hexite Infused Tree"
+    },
     "1885803555": {
         tier: 8,
         name: "Baited Murky Nemato Spot",
@@ -2994,6 +3139,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ferralith Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1920916975": {
+        tier: -1,
+        name: "Opened Lost Shipment",
+        tag: "Sailing Cargo"
+    },
     "1922244008": {
         tier: -1,
         name: "Collapsed Ruin Bridge",
@@ -3008,6 +3158,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Baited Rocky Doimaach Spot",
         tag: "Lake Fish Spot"
+    },
+    "1941684774": {
+        tier: 1,
+        name: "Withering Spruce Sapling",
+        tag: "Sapling"
+    },
+    "1945207154": {
+        tier: 4,
+        name: "Fine Hexite Infused Stump",
+        tag: "Hexite Infused Tree"
     },
     "1946631068": {
         tier: 8,
