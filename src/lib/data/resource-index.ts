@@ -1354,6 +1354,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Crystal Shell Scallop",
         tag: "Mollusks"
     },
+    "4351006": {
+        tier: 5,
+        name: "Exquisite Deep Roots",
+        tag: "Fiber Plant"
+    },
     "5045122": {
         tier: 7,
         name: "School Of Mossy Amia",
@@ -1439,15 +1444,30 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Celestium Outcrop Interior",
         tag: "Ore Vein"
     },
+    "45429119": {
+        tier: 3,
+        name: "Inactive Infused Gypsite Pit",
+        tag: "Sand"
+    },
     "49710228": {
         tier: 5,
         name: "Luminite Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "53225446": {
+        tier: 8,
+        name: "Subterranean Ghost Mushroom",
+        tag: "Mushroom"
+    },
     "54674321": {
         tier: -1,
         name: "Inactive Hexite Sealed Vault",
         tag: "World Event"
+    },
+    "60513246": {
+        tier: 9,
+        name: "Magnificent Gypsite Pit",
+        tag: "Sand"
     },
     "61557407": {
         tier: 7,
@@ -1458,6 +1478,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Umbracite Vein Interior",
         tag: "Ore Vein"
+    },
+    "65901922": {
+        tier: 2,
+        name: "Citric Giant Savory Berry Bush",
+        tag: "Bountiful Berry Bush"
     },
     "70663203": {
         tier: 10,
@@ -1483,6 +1508,26 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Flawless Hieroglyphs",
         tag: "Research"
+    },
+    "93502474": {
+        tier: 4,
+        name: "Inactive Fine Gypsite Pit",
+        tag: "Sand"
+    },
+    "100197889": {
+        tier: 7,
+        name: "Ornate Gypsite Pit",
+        tag: "Sand"
+    },
+    "100555377": {
+        tier: 8,
+        name: "Inactive Pristine Gypsite Pit",
+        tag: "Sand"
+    },
+    "101510285": {
+        tier: 10,
+        name: "Flawless Deep Roots",
+        tag: "Fiber Plant"
     },
     "109403116": {
         tier: -1,
@@ -1564,15 +1609,30 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Elenvar Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "206224604": {
+        tier: 3,
+        name: "Withering Giant Zesty Berry Bush",
+        tag: "Bountiful Berry Bush"
+    },
     "208912710": {
         tier: 1,
         name: "Basic Hexite Infused Stump",
         tag: "Hexite Infused Tree"
     },
+    "209048760": {
+        tier: 10,
+        name: "Inactive Flawless Gypsite Pit",
+        tag: "Sand"
+    },
     "213706467": {
         tier: 7,
         name: "Rich Aurumite Deposit",
         tag: "Ore Vein"
+    },
+    "214913961": {
+        tier: 6,
+        name: "Inactive Peerless Gypsite Pit",
+        tag: "Sand"
     },
     "218270468": {
         tier: 1,
@@ -1664,6 +1724,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Hexite Deposit",
         tag: "Hexite"
     },
+    "353689546": {
+        tier: 2,
+        name: "Giant Bountiful Savory Berry Bush",
+        tag: "Bountiful Berry Bush"
+    },
     "367785441": {
         tier: 8,
         name: "Hidden Murky Nemato Spot",
@@ -1693,6 +1758,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Medium Emarium Vein Interior",
         tag: "Ore Vein"
+    },
+    "379556870": {
+        tier: 2,
+        name: "Withering Giant Savory Berry Bush",
+        tag: "Bountiful Berry Bush"
     },
     "384211022": {
         tier: 2,
@@ -1849,6 +1919,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Berserker Mushroom",
         tag: "Rare Mushroom"
     },
+    "529252257": {
+        tier: 8,
+        name: "Pristine Deep Roots",
+        tag: "Fiber Plant"
+    },
     "531704057": {
         tier: -1,
         name: "Rimefruit",
@@ -1924,6 +1999,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "School of Boot Fish",
         tag: "Boot Fish School"
     },
+    "599602020": {
+        tier: 7,
+        name: "Ornate Deep Roots",
+        tag: "Fiber Plant"
+    },
     "616268871": {
         tier: 9,
         name: "Rich Umbracite Deposit",
@@ -1933,6 +2013,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Sunflower",
         tag: "Seasonal"
+    },
+    "640884139": {
+        tier: 3,
+        name: "Infused Gypsite Pit",
+        tag: "Sand"
     },
     "642972236": {
         tier: 5,
@@ -1963,6 +2048,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Rich Celestium Deposit",
         tag: "Ore Vein"
+    },
+    "687249632": {
+        tier: 1,
+        name: "Subterranean Button Mushrooms",
+        tag: "Mushroom"
     },
     "699727318": {
         tier: 2,
@@ -2184,6 +2274,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Luminite Vein Interior",
         tag: "Ore Vein"
     },
+    "889481955": {
+        tier: 2,
+        name: "Simple Gypsite Pit",
+        tag: "Sand"
+    },
     "894948018": {
         tier: 3,
         name: "Infused Hexite Infused Tree",
@@ -2234,6 +2329,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Powerful Hexite Energy Font",
         tag: "Energy Font"
     },
+    "938536485": {
+        tier: 1,
+        name: "Inactive Rough Gypsite Pit",
+        tag: "Sand"
+    },
     "939382648": {
         tier: 10,
         name: "Wisteria Tree",
@@ -2269,6 +2369,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Magnificent Berry Bush",
         tag: "Berry"
     },
+    "968561419": {
+        tier: 7,
+        name: "Subterranean Oyster Mushroom",
+        tag: "Mushroom"
+    },
+    "974225980": {
+        tier: 1,
+        name: "Rough Gypsite Pit",
+        tag: "Sand"
+    },
     "976413177": {
         tier: -1,
         name: "Open Uncharted Shipment",
@@ -2289,10 +2399,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Open Hexite Sealed Vault (Three Lock Broken)",
         tag: "World Event"
     },
+    "998944900": {
+        tier: 6,
+        name: "Subterranean Morel Mushroom",
+        tag: "Mushroom"
+    },
     "999376882": {
         tier: 6,
         name: "Desert Sand",
         tag: "Sand"
+    },
+    "1001049055": {
+        tier: -1,
+        name: "Gentle Spring",
+        tag: "Foraging Resource"
     },
     "1005142992": {
         tier: 5,
@@ -2338,6 +2458,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Pyrelite Outcrop Interior",
         tag: "Ore Vein"
+    },
+    "1047539391": {
+        tier: 7,
+        name: "Inactive Ornate Gypsite Pit",
+        tag: "Sand"
     },
     "1048179054": {
         tier: 6,
@@ -2389,6 +2514,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Injured Cervus",
         tag: "Injured Animal"
     },
+    "1078881972": {
+        tier: 3,
+        name: "Subterranean Russala",
+        tag: "Mushroom"
+    },
     "1084956366": {
         tier: -1,
         name: "Lost Pirate's Treasure",
@@ -2423,6 +2553,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Withering Oak Sapling",
         tag: "Sapling"
+    },
+    "1115571382": {
+        tier: 1,
+        name: "Basic Deep Roots",
+        tag: "Fiber Plant"
     },
     "1117235188": {
         tier: -1,
@@ -2584,6 +2719,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Opened Lost Treasure",
         tag: "Sailing Cargo"
     },
+    "1278209224": {
+        tier: 4,
+        name: "Subterranean Indigo Cap",
+        tag: "Mushroom"
+    },
     "1283632905": {
         tier: 1,
         name: "Traveler's Fruit (Depleted)",
@@ -2619,6 +2759,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Rathium Outcrop Interior Depleted",
         tag: "Ore Vein"
     },
+    "1324294934": {
+        tier: 6,
+        name: "Peerless Gypsite Pit",
+        tag: "Sand"
+    },
     "1332535555": {
         tier: 7,
         name: "Ornate Sand",
@@ -2632,6 +2777,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
     "1333270269": {
         tier: 10,
         name: "Flawless Sand",
+        tag: "Sand"
+    },
+    "1333399073": {
+        tier: 9,
+        name: "Inactive Magnificent Gypsite Pit",
         tag: "Sand"
     },
     "1349960760": {
@@ -2669,6 +2819,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Hexite Sealed Vault (Four Locks Broken)",
         tag: "World Event"
     },
+    "1384427485": {
+        tier: 10,
+        name: "Subterranean Enoki",
+        tag: "Mushroom"
+    },
     "1384946093": {
         tier: 9,
         name: "Medium Umbracite Vein Interior",
@@ -2678,6 +2833,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Umbracite Vein",
         tag: "Ore Vein"
+    },
+    "1395310625": {
+        tier: 2,
+        name: "Subterranean Chanterelle",
+        tag: "Mushroom"
     },
     "1396949488": {
         tier: -1,
@@ -2704,6 +2864,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Large Gift Pile",
         tag: "Seasonal"
     },
+    "1426567739": {
+        tier: 9,
+        name: "Magnificent Deep Roots",
+        tag: "Fiber Plant"
+    },
     "1427096797": {
         tier: 3,
         name: "Pirate's Footlocker",
@@ -2723,6 +2888,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Medium Astralite Vein Interior Depleted",
         tag: "Ore Vein"
+    },
+    "1450830612": {
+        tier: 2,
+        name: "Inactive Simple Gypsite Pit",
+        tag: "Sand"
     },
     "1452484871": {
         tier: 10,
@@ -2774,6 +2944,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Hexite Sealed Vault (Two Locks Broken)",
         tag: "World Event"
     },
+    "1508217481": {
+        tier: 9,
+        name: "Subterranean King Trumpet",
+        tag: "Mushroom"
+    },
     "1526038154": {
         tier: 9,
         name: "Magnificent Clay",
@@ -2783,6 +2958,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Astralite Outcrop Interior Depleted",
         tag: "Ore Vein"
+    },
+    "1536772145": {
+        tier: 8,
+        name: "Pristine Gypsite Pit",
+        tag: "Sand"
     },
     "1544491693": {
         tier: 4,
@@ -2899,6 +3079,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Driftwood",
         tag: "Wood"
     },
+    "1636401484": {
+        tier: 10,
+        name: "Flawless Gypsite Pit",
+        tag: "Sand"
+    },
     "1637125903": {
         tier: 10,
         name: "Flawless Mushroom",
@@ -2908,6 +3093,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Baby Jakyl Den",
         tag: "Monster Den"
+    },
+    "1644972108": {
+        tier: 5,
+        name: "Exquisite Gypsite Pit",
+        tag: "Sand"
     },
     "1657885116": {
         tier: 8,
@@ -2928,6 +3118,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Terrified Adventurer's Note",
         tag: "Note"
+    },
+    "1688062540": {
+        tier: 1,
+        name: "Citric Giant Strawberry Bush",
+        tag: "Bountiful Berry Bush"
     },
     "1688237161": {
         tier: 1,
@@ -2988,6 +3183,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Coconut Pile",
         tag: "Coconut"
+    },
+    "1713099134": {
+        tier: 3,
+        name: "Giant Bountiful Zesty Berry Bush",
+        tag: "Bountiful Berry Bush"
     },
     "1720367743": {
         tier: -1,
@@ -3069,6 +3269,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Mature Sapwood Tree",
         tag: "Tree"
     },
+    "1822942131": {
+        tier: 1,
+        name: "Giant Bountiful Strawberry Bush",
+        tag: "Bountiful Berry Bush"
+    },
     "1823420883": {
         tier: -1,
         name: "Decayed Ancient Pots",
@@ -3099,10 +3304,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Pyrelite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1856494514": {
+        tier: 6,
+        name: "Peerless Deep Roots",
+        tag: "Fiber Plant"
+    },
     "1869364824": {
         tier: 9,
         name: "Magnificent Hexite Infused Tree",
         tag: "Hexite Infused Tree"
+    },
+    "1875092977": {
+        tier: 3,
+        name: "Citric Giant Zesty Berry Bush",
+        tag: "Bountiful Berry Bush"
+    },
+    "1876238623": {
+        tier: 2,
+        name: "Simple Deep Roots",
+        tag: "Fiber Plant"
     },
     "1885803555": {
         tier: 8,
@@ -3194,6 +3414,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Open Hexite Sealed Vault (One Lock Broken)",
         tag: "World Event"
     },
+    "1964258267": {
+        tier: 5,
+        name: "Subterranean Truffle Patch",
+        tag: "Mushroom"
+    },
     "1977811738": {
         tier: 1,
         name: "Packed Ice",
@@ -3244,6 +3469,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Unreasonably Chummed Paranensis Pod",
         tag: "Paranensis"
     },
+    "1997096210": {
+        tier: 5,
+        name: "Inactive Exquisite Gypsite Pit",
+        tag: "Sand"
+    },
+    "1999373592": {
+        tier: 4,
+        name: "Fine Gypsite Pit",
+        tag: "Sand"
+    },
     "1999842598": {
         tier: 4,
         name: "Inactive Varkel Pod",
@@ -3263,6 +3498,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Lightly Chummed Inactive Paranensis Pod",
         tag: "Paranensis"
+    },
+    "2019628526": {
+        tier: 4,
+        name: "Fine Deep Roots",
+        tag: "Fiber Plant"
+    },
+    "2022069397": {
+        tier: 1,
+        name: "Withering Giant Strawberry Bush",
+        tag: "Bountiful Berry Bush"
     },
     "2022104490": {
         tier: 3,
@@ -3293,6 +3538,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Exposed Simple Quarry Rock",
         tag: "Rock"
+    },
+    "2054412952": {
+        tier: 3,
+        name: "Sturdy Deep Roots",
+        tag: "Fiber Plant"
     },
     "2055102471": {
         tier: -1,
