@@ -3,6 +3,9 @@ import type { TrackingItem } from '$lib/types/geojson';
 const STORAGE_KEY = 'trackingColors';
 const NAMES_KEY = 'trackingNames';
 const FAVORITES_KEY = 'trackingFavorites';
+const ALL_PLAYERS_ENABLED_KEY = 'trackingAllPlayersEnabled';
+/** Sentinel id used to store/load the "all online players" layer color via the normal color-preference store. */
+export const ALL_PLAYERS_COLOR_ID = '__all_online_players__';
 let cachedStore: Record<string, string> | null = null;
 
 if (typeof window !== 'undefined') {
@@ -286,4 +289,20 @@ export function updateTrackingItemColorByEntityId(entityId: string, color: strin
 
 export function clearTracking(): void {
 	items = [];
+}
+
+export function loadAllPlayersEnabled(): boolean {
+	try {
+		return localStorage.getItem(ALL_PLAYERS_ENABLED_KEY) === 'true';
+	} catch {
+		return false;
+	}
+}
+
+export function saveAllPlayersEnabled(enabled: boolean): void {
+	try {
+		localStorage.setItem(ALL_PLAYERS_ENABLED_KEY, String(enabled));
+	} catch (e) {
+		console.warn('Failed to save all-players tracking preference:', e);
+	}
 }

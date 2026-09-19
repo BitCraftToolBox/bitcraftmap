@@ -1,7 +1,19 @@
 <script lang="ts">
 	import { Palette, RotateCcw, Star, X } from '@lucide/svelte';
 	import {getLodEnabled, getSidebarLabelsEnabled, setLodEnabled, setSidebarLabelsEnabled} from '$lib/stores/settings-store.svelte';
-	import { getAllColorPreferences, getAllDisplayNames, getAllFavorites, removeColorPreference, removeFavorite, clearAllColorPreferences, clearAllFavorites, clearTracking, updateTrackingItemColor, updateTrackingItemColorByEntityId } from '$lib/stores/tracking-store.svelte';
+	import {
+		getAllColorPreferences,
+		getAllDisplayNames,
+		getAllFavorites,
+		removeColorPreference,
+		removeFavorite,
+		clearAllColorPreferences,
+		clearAllFavorites,
+		clearTracking,
+		updateTrackingItemColor,
+		updateTrackingItemColorByEntityId,
+		ALL_PLAYERS_COLOR_ID
+	} from '$lib/stores/tracking-store.svelte';
 	import { selectAllRegions } from '$lib/stores/region-store.svelte';
 	import { resetView } from '$lib/stores/map-store';
 	import { resourceIndex, resourceIndexOverride, creatureIndex } from '$lib/data/resource-index';
@@ -15,6 +27,7 @@
 		if (savedName) return savedName;
 		if (type === 'enemy') return creatureIndex[id]?.name || `Enemy ${id}`;
 		if (type === 'resource') return resourceIndexOverride[id]?.name || resourceIndex[id]?.name || `Resource ${id}`;
+		if (type === 'player' && id == ALL_PLAYERS_COLOR_ID) return "All online players";
 		return `Player ${id}`;
 	}
 

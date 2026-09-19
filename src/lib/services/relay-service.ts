@@ -39,7 +39,7 @@
  * new subscription's onApplied so the server sends us only the delta.
  */
 
-import type {ResourceCanvasLayer} from '$lib/map/resource-canvas-layer';
+import type {PlayerPoint, ResourceCanvasLayer} from '$lib/map/resource-canvas-layer';
 import type {AppConfig} from '$lib/types/map';
 import type {RowTypedQuery} from 'spacetimedb';
 import {DbConnection, DbConnectionBuilder, type ErrorContext, type EventContext, type SubscriptionHandle, tables,} from '../../relay-bindings';
@@ -49,7 +49,14 @@ import type {EnemyLocation, PlayerLocation, PlayerState, ResourceLocation} from 
 // Types
 // ---------------------------------------------------------------------------
 
-export type EntityType = 'resource' | 'enemy';
+export type EntityType = 'resource' | 'enemy' | 'allPlayers';
+
+/**
+ * Fixed pseudo-id used to track the "all online players" layer through the
+ * same generic entity-tracking machinery as resources/enemies (which are
+ * keyed by a real numeric id). There is only ever one instance of this layer.
+ */
+export const ALL_PLAYERS_ID = 0;
 
 interface TrackedEntity {
 	type: EntityType;
@@ -90,53 +97,47 @@ const REBUILD_DEBOUNCE_MS = 500;
 // Dirty tracking for batched rebuilds
 const dirtyResourceRegions = new Set<string>();
 const dirtyEnemyRegions = new Set<string>();
+const dirtyAllPlayersRegions = new Set<string>();
 let rebuildTimer: ReturnType<typeof setTimeout> | null = null;
 
 class TrackedEntities {
 	resources = new Map<number, TrackedEntity>();
 	enemies = new Map<number, TrackedEntity>();
+	allPlayers = new Map<number, TrackedEntity>();
 	size() {
-		return this.resources.size + this.enemies.size;
+		return this.resources.size + this.enemies.size + this.allPlayers.size;
 	}
 	* entries() {
 		yield* this.resources.entries();
 		yield* this.enemies.entries();
+		yield* this.allPlayers.entries();
 	}
 	* values() {
 		yield* this.resources.values();
 		yield* this.enemies.values();
+		yield* this.allPlayers.values();
 	}
 	clear() {
 		this.resources.clear();
 		this.enemies.clear();
+		this.allPlayers.clear();
+	}
+	private _mapFor(type: EntityType) {
+		if (type === 'resource') return this.resources;
+		if (type === 'enemy') return this.enemies;
+		return this.allPlayers;
 	}
 	has(id: number, type: EntityType) {
-		if (type === 'resource') {
-			return this.resources.has(id);
-		} else {
-			return this.enemies.has(id);
-		}
+		return this._mapFor(type).has(id);
 	}
 	get(id: number, type: EntityType) {
-		if (type === 'resource') {
-			return this.resources.get(id);
-		} else {
-			return this.enemies.get(id);
-		}
+		return this._mapFor(type).get(id);
 	}
 	set(id: number, type: EntityType, value: TrackedEntity) {
-		if (type === 'resource') {
-			return this.resources.set(id, value);
-		} else {
-			return this.enemies.set(id, value);
-		}
+		return this._mapFor(type).set(id, value);
 	}
 	delete(id: number, type: EntityType) {
-		if (type === 'resource') {
-			return this.resources.delete(id);
-		} else {
-			return this.enemies.delete(id);
-		}
+		return this._mapFor(type).delete(id);
 	}
 }
 
@@ -144,6 +145,7 @@ const trackedEntities = new TrackedEntities();
 const trackedPlayers = new Map<string, TrackedPlayer>();
 let resourceAccessor: () => Record<number, ResourceCanvasLayer>;
 let enemyAccessor: () => Record<number, ResourceCanvasLayer>;
+let allPlayersAccessor: () => Record<number, ResourceCanvasLayer>;
 let regions: number[] = [];
 
 // ---------------------------------------------------------------------------
@@ -159,6 +161,7 @@ export function initRelayService(
 	config: AppConfig,
 	getResourceLayersFn: () => Record<number, ResourceCanvasLayer>,
 	getEnemyLayersFn: () => Record<number, ResourceCanvasLayer>,
+	getAllPlayersLayersFn: () => Record<number, ResourceCanvasLayer>,
 	initialRegions: number[]
 ): void {
 	if (builder) {
@@ -168,6 +171,7 @@ export function initRelayService(
 
 	resourceAccessor = getResourceLayersFn;
 	enemyAccessor = getEnemyLayersFn;
+	allPlayersAccessor = getAllPlayersLayersFn;
 	regions = initialRegions;
 
 	const tokenKey = `prism:${config.relayHost}/${config.relayModule}/auth_token`;
@@ -253,6 +257,7 @@ export function destroyRelayService(): void {
 	}
 	dirtyResourceRegions.clear();
 	dirtyEnemyRegions.clear();
+	dirtyAllPlayersRegions.clear();
 	trackedEntities.clear();
 	for (const player of trackedPlayers.values()) {
 		player.subscription?.unsubscribe();
@@ -261,6 +266,7 @@ export function destroyRelayService(): void {
 	builder = null;
 	resourceAccessor = () => ({});
 	enemyAccessor = () => ({});
+	allPlayersAccessor = () => ({});
 }
 
 /**
@@ -294,7 +300,7 @@ export function trackEntity(
  * Stop tracking an entity. Unsubscribes and clears the canvas layer.
  * Disconnects from the relay when no entities remain.
  */
-export function untrackEntity(id: number, type: 'enemy' | 'resource'): void {
+export function untrackEntity(id: number, type: EntityType): void {
 	const entity = trackedEntities.get(id, type);
 	if (!entity) return;
 
@@ -349,6 +355,8 @@ export function trackPlayer(entityId: string, callback: PlayerUpdateCallback): v
 	} else {
 		player.subscription = _createPlayerSubscription(connection, entityId);
 	}
+	// This player now has their own marker — drop their (laggier) all-players-layer dot.
+	_markAllPlayersDirtyForEntity(entityId);
 }
 
 /**
@@ -365,6 +373,20 @@ export function untrackPlayer(entityId: string): void {
 	if (trackedEntities.size() === 0 && trackedPlayers.size === 0) {
 		_disconnect();
 	}
+	// If they're still online, let them reappear as a plain dot on the all-players layer.
+	_markAllPlayersDirtyForEntity(entityId);
+}
+
+/**
+ * Marks the all-players layer dirty for whatever region this player's cached
+ * location currently belongs to (a no-op if we have no cached location for
+ * them, or the all-players layer isn't tracked).
+ */
+function _markAllPlayersDirtyForEntity(entityId: string): void {
+	if (!trackedEntities.has(ALL_PLAYERS_ID, 'allPlayers')) return;
+	const loc = connection?.db.player_location.entity_id.find(BigInt(entityId));
+	if (!loc) return;
+	_markRegionDirty('allPlayers', ALL_PLAYERS_ID, loc.regionId as number);
 }
 
 // ---------------------------------------------------------------------------
@@ -415,13 +437,35 @@ function _buildQueries(
 		return regions.map(rg =>
 			tables.resource_location.where(r => r.resourceId.eq(id).and(r.regionId.eq(rg)))
 		);
-	} else {
+	} else if (type === 'enemy') {
 		if (regions.length === 0) {
 			return [tables.enemy_location.where(r => r.enemyType.eq(id))];
 		}
 		return regions.map(rg =>
 			tables.enemy_location.where(r => r.enemyType.eq(id).and(r.regionId.eq(rg)))
 		);
+	} else {
+		// Online players: locations come from an inner join of player_location
+		// against player_state filtered to online=true (returns player_location
+		// rows, so the client cache and row callbacks are the same ones used for
+		// individually-tracked players — see handlePlayerLocation*). We also
+		// subscribe directly to the filtered player_state rows so every online
+		// player's name is available locally for click-selection tooltips.
+		const onlineLocations = (rg?: number) => {
+			const q = tables.player_state
+				.where(ps => ps.online.eq(true))
+				.rightSemijoin(tables.player_location, (ps, pl) => ps.entityId.eq(pl.entityId));
+			return rg === undefined ? q : q.where(pl => pl.regionId.eq(rg));
+		};
+		const onlineStates = (rg?: number) => {
+			const q = tables.player_state.where(ps => ps.online.eq(true));
+			return rg === undefined ? q : q.where(ps => ps.regionId.eq(rg));
+		};
+
+		if (regions.length === 0) {
+			return [onlineLocations(), onlineStates()];
+		}
+		return regions.flatMap(rg => [onlineLocations(rg), onlineStates(rg)]);
 	}
 }
 
@@ -486,6 +530,11 @@ function _createPlayerSubscription(conn: DbConnection, entityId: string): Subscr
  * Called once per entity per (re)connect, from onApplied.
  */
 function _populateFromCache(conn: DbConnection, id: number, type: EntityType): void {
+	if (type === 'allPlayers') {
+		_populateAllPlayersFromCache(conn, id);
+		return;
+	}
+
 	const layer = type === 'resource' ? resourceAccessor()[id] : enemyAccessor()[id];
 	if (!layer) return;
 
@@ -513,6 +562,44 @@ function _populateFromCache(conn: DbConnection, id: number, type: EntityType): v
 	for (const [regionId, coords] of byRegion.entries()) {
 		layer.setRegionPoints(regionId, coords);
 	}
+}
+
+function _populateAllPlayersFromCache(conn: DbConnection, id: number): void {
+	const layer = allPlayersAccessor()[id];
+	if (!layer) return;
+
+	const byRegion = new Map<number, PlayerPoint[]>();
+	for (const row of conn.db.player_location.iter()) {
+		const name = _getOnlineAllPlayerName(conn, row.entityId);
+		if (name === null) continue;
+		const rid = row.regionId as number;
+		let pts = byRegion.get(rid);
+		if (!pts) { pts = []; byRegion.set(rid, pts); }
+		pts.push({ x: row.x / 1000, z: row.z / 1000, entityId: row.entityId.toString(), name });
+	}
+
+	layer.clearAllRegions();
+	for (const [regionId, players] of byRegion.entries()) {
+		layer.setRegionPlayerPoints(regionId, players);
+	}
+}
+
+/**
+ * A player_location row may be in the local cache either because it's
+ * individually tracked (regardless of online status) or because it matched
+ * the "all online players" subscription (which also subscribes to the
+ * matching player_state rows directly — see _buildQueries). Returns the
+ * player's name if they should appear on the all-players layer, else null.
+ *
+ * Individually-tracked players are excluded here — they already have their
+ * own marker (updated via a separate subscription/callback), and rendering
+ * both causes a visibly lagging duplicate dot.
+ */
+function _getOnlineAllPlayerName(conn: DbConnection, entityId: bigint): string | null {
+	if (trackedPlayers.has(entityId.toString())) return null;
+	const state = conn.db.player_state.entity_id.find(entityId);
+	if (!state || !state.online) return null;
+	return state.name;
 }
 
 /**
@@ -574,9 +661,15 @@ function handlePlayerStateInsert(ctx: EventContext, row: PlayerState): void {
 	if (ctx.event.tag === "SubscribeApplied") return;
 	const entityId = row.entityId.toString();
 	const tracked = trackedPlayers.get(entityId);
-	if (!tracked) return;
-	const loc = connection?.db.player_location.entity_id.find(row.entityId);
-	tracked.callback(entityId, row.name, row.online, loc ? loc.x / 1000 : null, loc ? loc.z / 1000 : null);
+	if (tracked) {
+		const loc = connection?.db.player_location.entity_id.find(row.entityId);
+		tracked.callback(entityId, row.name, row.online, loc ? loc.x / 1000 : null, loc ? loc.z / 1000 : null);
+	}
+	// An online flip or name change here can affect the all-players layer even
+	// without a corresponding player_location event (e.g. a name-only change).
+	if (trackedEntities.has(ALL_PLAYERS_ID, 'allPlayers')) {
+		_markRegionDirty('allPlayers', ALL_PLAYERS_ID, row.regionId as number);
+	}
 }
 
 function handlePlayerStateUpdate(ctx: EventContext, _old: PlayerState, row: PlayerState): void {
@@ -587,10 +680,15 @@ function handlePlayerLocationInsert(ctx: EventContext, row: PlayerLocation): voi
 	if (ctx.event.tag === "SubscribeApplied") return;
 	const entityId = row.entityId.toString();
 	const tracked = trackedPlayers.get(entityId);
-	if (!tracked) return;
-	const state = connection?.db.player_state.entity_id.find(row.entityId);
-	if (!state) return;
-	tracked.callback(entityId, state.name, state.online, row.x / 1000, row.z / 1000);
+	if (tracked) {
+		const state = connection?.db.player_state.entity_id.find(row.entityId);
+		if (state) tracked.callback(entityId, state.name, state.online, row.x / 1000, row.z / 1000);
+	}
+	// This row may also belong to the "all online players" layer — the query behind
+	// that subscription targets this same player_location table (see _buildQueries).
+	if (trackedEntities.has(ALL_PLAYERS_ID, 'allPlayers')) {
+		_markRegionDirty('allPlayers', ALL_PLAYERS_ID, row.regionId as number);
+	}
 }
 
 function handlePlayerLocationUpdate(ctx: EventContext, _old: PlayerLocation, row: PlayerLocation): void {
@@ -601,10 +699,13 @@ function handlePlayerLocationDelete(ctx: EventContext, row: PlayerLocation): voi
 	if (ctx.event.tag === "SubscribeApplied") return;
 	const entityId = row.entityId.toString();
 	const tracked = trackedPlayers.get(entityId);
-	if (!tracked) return;
-	const state = connection?.db.player_state.entity_id.find(row.entityId);
-	if (!state) return;
-	tracked.callback(entityId, state.name, state.online, null, null);
+	if (tracked) {
+		const state = connection?.db.player_state.entity_id.find(row.entityId);
+		if (state) tracked.callback(entityId, state.name, state.online, null, null);
+	}
+	if (trackedEntities.has(ALL_PLAYERS_ID, 'allPlayers')) {
+		_markRegionDirty('allPlayers', ALL_PLAYERS_ID, row.regionId as number);
+	}
 }
 
 /**
@@ -614,8 +715,10 @@ function _markRegionDirty(type: EntityType, entityId: number, regionId: number):
 	const key = `${entityId}:${regionId}`;
 	if (type === 'resource') {
 		dirtyResourceRegions.add(key);
-	} else {
+	} else if (type === 'enemy') {
 		dirtyEnemyRegions.add(key);
+	} else {
+		dirtyAllPlayersRegions.add(key);
 	}
 
 	if (rebuildTimer === null) {
@@ -631,6 +734,7 @@ function _processDirtyRegions(): void {
 	if (!connection?.isActive) {
 		dirtyResourceRegions.clear();
 		dirtyEnemyRegions.clear();
+		dirtyAllPlayersRegions.clear();
 		rebuildTimer = null;
 		return;
 	}
@@ -725,6 +829,40 @@ function _processDirtyRegions(): void {
 		}
 
 		dirtyEnemyRegions.clear();
+	}
+
+	// Single pass for the "all online players" layer: there's only ever one
+	// instance (ALL_PLAYERS_ID), so we just need to collect by regionId.
+	if (dirtyAllPlayersRegions.size > 0) {
+		const dirtyRegions = new Set<number>();
+		for (const key of dirtyAllPlayersRegions) {
+			const [, regionIdStr] = key.split(':');
+			dirtyRegions.add(parseInt(regionIdStr, 10));
+		}
+
+		const playersByRegion = new Map<number, PlayerPoint[]>();
+		for (const regionId of dirtyRegions) playersByRegion.set(regionId, []);
+
+		for (const row of db.player_location.iter()) {
+			const pts = playersByRegion.get(row.regionId as number);
+			if (!pts) continue;
+			const name = _getOnlineAllPlayerName(connection, row.entityId);
+			if (name === null) continue;
+			pts.push({ x: row.x / 1000, z: row.z / 1000, entityId: row.entityId.toString(), name });
+		}
+
+		const layer = allPlayersAccessor()[ALL_PLAYERS_ID];
+		if (layer) {
+			for (const [regionId, players] of playersByRegion) {
+				if (players.length > 0) {
+					layer.setRegionPlayerPoints(regionId, players);
+				} else {
+					layer.clearRegion(regionId);
+				}
+			}
+		}
+
+		dirtyAllPlayersRegions.clear();
 	}
 
 	rebuildTimer = null;

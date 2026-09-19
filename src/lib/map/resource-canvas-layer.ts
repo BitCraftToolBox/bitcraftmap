@@ -14,6 +14,16 @@ export interface ResourceCanvasLayerOptions extends L.LayerOptions {
 interface RegionPoints {
 	lats: number[];
 	lngs: number[];
+	/** Only set for regions populated via setRegionPlayerPoints(). */
+	entityIds?: string[];
+	names?: string[];
+}
+
+export interface PlayerPoint {
+	x: number;
+	z: number;
+	entityId: string;
+	name: string;
 }
 
 export class ResourceCanvasLayer extends L.Layer {
@@ -30,8 +40,12 @@ export class ResourceCanvasLayer extends L.Layer {
 	private _dirty = false;
 	private _drawnScreenPoints: Float64Array | null = null;
 	private _drawnGameCoords: Float64Array | null = null;
+	private _drawnEntityIds: string[] | null = null;
+	private _drawnNames: string[] | null = null;
 	private _screenBuf: number[] = [];
 	private _coordBuf: number[] = [];
+	private _entityIdBuf: string[] = [];
+	private _nameBuf: string[] = [];
 	private _lastBoundsKey = '';
 
 	constructor(options: ResourceCanvasLayerOptions) {
@@ -86,6 +100,8 @@ export class ResourceCanvasLayer extends L.Layer {
 
 		this._drawnScreenPoints = null;
 		this._drawnGameCoords = null;
+		this._drawnEntityIds = null;
+		this._drawnNames = null;
 		return this;
 	}
 
@@ -98,6 +114,22 @@ export class ResourceCanvasLayer extends L.Layer {
 			lats[i] = coordinates[i][1];
 		}
 		this._pointsByRegion.set(regionId, { lats, lngs });
+		this._scheduleRedraw();
+	}
+
+	/** Like setRegionPoints, but each point carries the player identity needed for click selection. */
+	setRegionPlayerPoints(regionId: number, players: PlayerPoint[]): void {
+		const lats = new Array<number>(players.length);
+		const lngs = new Array<number>(players.length);
+		const entityIds = new Array<string>(players.length);
+		const names = new Array<string>(players.length);
+		for (let i = 0; i < players.length; i++) {
+			lngs[i] = players[i].x;
+			lats[i] = players[i].z;
+			entityIds[i] = players[i].entityId;
+			names[i] = players[i].name;
+		}
+		this._pointsByRegion.set(regionId, { lats, lngs, entityIds, names });
 		this._scheduleRedraw();
 	}
 
@@ -214,8 +246,12 @@ export class ResourceCanvasLayer extends L.Layer {
 		// Reuse buffers to reduce GC pressure
 		const screenPoints = this._screenBuf;
 		const gameCoords = this._coordBuf;
+		const entityIds = this._entityIdBuf;
+		const names = this._nameBuf;
 		screenPoints.length = 0;
 		gameCoords.length = 0;
+		entityIds.length = 0;
+		names.length = 0;
 
 		for (const data of this._pointsByRegion.values()) {
 			const { lats, lngs } = data;
@@ -238,11 +274,15 @@ export class ResourceCanvasLayer extends L.Layer {
 
 				screenPoints.push(x, y);
 				gameCoords.push(lat, lng);
+				entityIds.push(data.entityIds ? data.entityIds[i] : '');
+				names.push(data.names ? data.names[i] : '');
 			}
 		}
 
 		this._drawnScreenPoints = new Float64Array(screenPoints);
 		this._drawnGameCoords = new Float64Array(gameCoords);
+		this._drawnEntityIds = entityIds.slice();
+		this._drawnNames = names.slice();
 	}
 
 	private _onClick(e: L.LeafletMouseEvent): void {
@@ -270,15 +310,28 @@ export class ResourceCanvasLayer extends L.Layer {
 			const lat = this._drawnGameCoords[hitIdx];
 			const lng = this._drawnGameCoords[hitIdx + 1];
 			const latlng = L.latLng(lat, lng);
+			const pointIndex = hitIdx / 2;
+			const entityId = this._drawnEntityIds?.[pointIndex];
 
-			const selectionData = {
-				type: 'resource' as const,
-				name: this._name,
-				id: this._id,
-				tier: this._tier,
-				color: this._color,
-				latlng: { lat, lng }
-			};
+			const selectionData = entityId
+				? {
+					type: 'player' as const,
+					name: this._drawnNames?.[pointIndex] || 'Player',
+					latlng: { lat, lng },
+					entityId,
+					username: this._drawnNames?.[pointIndex] || 'Player',
+					signedIn: true,
+					color: this._color,
+					isFollowing: false,
+				}
+				: {
+					type: 'resource' as const,
+					name: this._name,
+					id: this._id,
+					tier: this._tier,
+					color: this._color,
+					latlng: { lat, lng }
+				};
 			setSelection(selectionData);
 
 			if (!isMobile()) {

@@ -29,14 +29,14 @@
   import {buildPopupHtml} from "$lib/map/popup-builder";
   import {ResourceCanvasLayer} from "$lib/map/resource-canvas-layer";
   import {getLatestGistRaw} from "$lib/services/gist-service";
-  import {destroyRelayService, initRelayService, trackEntity, trackPlayer, untrackEntity, untrackPlayer, updateAllEntityRegions,} from "$lib/services/relay-service";
+  import {ALL_PLAYERS_ID, destroyRelayService, initRelayService, trackEntity, trackPlayer, untrackEntity, untrackPlayer, updateAllEntityRegions,} from "$lib/services/relay-service";
   import {startTimersService, stopTimersService} from "$lib/services/timers-service";
   import {hashHasFlyToOrZoom, resetView, restoreMapState, saveMapState, setMap,} from "$lib/stores/map-store";
   import {getRegionState, setRegions} from "$lib/stores/region-store.svelte";
   import {addLayerEntries, addSearchEntries,} from "$lib/stores/search-store.svelte";
   import {setSelection} from "$lib/stores/selection-store.svelte";
   import {getLodEnabled} from "$lib/stores/settings-store.svelte";
-  import {addTrackingItem, loadColorPreference, loadFavorites, registerColorSyncHandler,} from "$lib/stores/tracking-store.svelte";
+  import {ALL_PLAYERS_COLOR_ID, addTrackingItem, loadAllPlayersEnabled, loadColorPreference, loadFavorites, registerColorSyncHandler, saveAllPlayersEnabled, saveColorPreference,} from "$lib/stores/tracking-store.svelte";
   import {filterUnique} from "$lib/utils/dedupe";
   import {buildChatCoordinateLink, buildCoordinateViewUrl} from "$lib/utils/coordinate-links";
   import {parseUrlParams, updateEnemyIdParam, updatePlayerIdParam, updateRegionIdParam, updateResourceIdParam,} from "$lib/utils/url-params";
@@ -101,6 +101,7 @@
   let allCaves: L.LayerGroup;
   let resourceLayers: Record<number, ResourceCanvasLayer> = {};
   let enemyLayers: Record<number, ResourceCanvasLayer> = {};
+  let allPlayersLayers: Record<number, ResourceCanvasLayer> = {};
   let liveLayer: L.FeatureGroup;
 
   // Toggle mapping for layer panel
@@ -454,6 +455,10 @@
       } else if (action === "follow-player") {
         const entityId = btn.dataset.entityId ?? "";
         if (entityId) {
+          // Following requires an individually-tracked marker (e.g. a player picked up via the
+          // "all online players" layer isn't tracked yet); this is a no-op if already tracked.
+          handlePlayerSelect(entityId, btn.dataset.username ?? "").catch(console.error);
+
           if (followingPlayerId == entityId) {
             followingPlayerId = null;
           } else {
@@ -573,8 +578,14 @@
         .catch(console.error);
     }
 
-    // Initialise SpacetimeDB relay connection for entity (resource/enemy) tracking
-    initRelayService(appConfig, () => resourceLayers, () => enemyLayers, [...regionState.selected]);
+    // Initialise SpacetimeDB relay connection for entity (resource/enemy/all-players) tracking
+    initRelayService(appConfig, () => resourceLayers, () => enemyLayers, () => allPlayersLayers, [...regionState.selected]);
+
+    // Restore the "all online players" layer toggle/color, and activate it if it was on.
+    allPlayersColor = loadColorPreference('player', ALL_PLAYERS_COLOR_ID) || allPlayersColor;
+    if (loadAllPlayersEnabled()) {
+      handleToggleAllPlayers(true);
+    }
 
     // Load URL-backed tracking first, then apply persisted favorites.
     (async () => {
@@ -646,6 +657,10 @@
   const playerSelectionDataStore = new Map<string, any>();
   const trackedPlayerIds = new Set<string>();
   let followingPlayerId = $state<string | null>(null);
+
+  // "All online players" layer state (handled like a resource/enemy layer, not individual tracking)
+  let allPlayersEnabled = $state(false);
+  let allPlayersColor = $state("#00ff00");
 
   const playerColorPalette = [
     "#00ff00",
@@ -999,6 +1014,34 @@
     updatePlayerIdParam(trackedPlayerIds);
   }
 
+  function handleToggleAllPlayers(enabled: boolean): void {
+    allPlayersEnabled = enabled;
+    saveAllPlayersEnabled(enabled);
+
+    if (enabled) {
+      if (!allPlayersLayers[ALL_PLAYERS_ID]) {
+        const canvasLayer = new ResourceCanvasLayer({ color: allPlayersColor, name: "All Online Players", id: ALL_PLAYERS_ID });
+        allPlayersLayers[ALL_PLAYERS_ID] = canvasLayer;
+        canvasLayer.addTo(map);
+        canvasLayer.setLodEnabled(getLodEnabled());
+      }
+      trackEntity(ALL_PLAYERS_ID, "allPlayers");
+    } else {
+      const canvasLayer = allPlayersLayers[ALL_PLAYERS_ID];
+      if (canvasLayer) {
+        canvasLayer.remove();
+        delete allPlayersLayers[ALL_PLAYERS_ID];
+      }
+      untrackEntity(ALL_PLAYERS_ID, "allPlayers");
+    }
+  }
+
+  function handleAllPlayersColorChange(color: string): void {
+    allPlayersColor = color;
+    saveColorPreference("player", ALL_PLAYERS_COLOR_ID, color);
+    allPlayersLayers[ALL_PLAYERS_ID]?.setColor(color);
+  }
+
   function handleRegionsChange(): void {
     updateRegionIdParam(regionState.selected);
     // Delegate to the relay service: it will create new subscriptions with the
@@ -1081,6 +1124,10 @@
       onRemoveResource={handleRemoveResource}
       onRemovePlayer={handleRemovePlayer}
       onRegionsChange={handleRegionsChange}
+      {allPlayersEnabled}
+      {allPlayersColor}
+      onToggleAllPlayers={handleToggleAllPlayers}
+      onAllPlayersColorChange={handleAllPlayersColorChange}
     />
     <DetailPanel
       onFollowPlayer={handlePlayerSelect}

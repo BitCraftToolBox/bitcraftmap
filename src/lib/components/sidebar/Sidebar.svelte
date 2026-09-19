@@ -21,7 +21,11 @@
 		onTogglePlayer,
 		onRemoveResource,
 		onRemovePlayer,
-		onRegionsChange
+		onRegionsChange,
+		allPlayersEnabled,
+		allPlayersColor,
+		onToggleAllPlayers,
+		onAllPlayersColorChange
 	}: {
 		genericToggle: Record<string, L.LayerGroup>;
 		isActive: (name: string) => boolean;
@@ -33,6 +37,10 @@
 		onRemoveResource: (id: number, type: 'enemy' | 'resource') => void;
 		onRemovePlayer: (entityId: string) => void;
 		onRegionsChange: () => void;
+		allPlayersEnabled: boolean;
+		allPlayersColor: string;
+		onToggleAllPlayers: (enabled: boolean) => void;
+		onAllPlayersColorChange: (color: string) => void;
 	} = $props();
 
 	const sidebar = getSidebarState();
@@ -105,6 +113,10 @@
 						{onTogglePlayer}
 						{onRemoveResource}
 						{onRemovePlayer}
+						{allPlayersEnabled}
+						{allPlayersColor}
+						{onToggleAllPlayers}
+						{onAllPlayersColorChange}
 					/>
 					<RegionSelector {onRegionsChange} />
 				{:else if sidebar.activeTab === 'settings'}
@@ -156,6 +168,10 @@
 						{onTogglePlayer}
 						{onRemoveResource}
 						{onRemovePlayer}
+						{allPlayersEnabled}
+						{allPlayersColor}
+						{onToggleAllPlayers}
+						{onAllPlayersColorChange}
 					/>
 				{:else if sidebar.activeTab === 'settings'}
 					<SettingsPanel />
