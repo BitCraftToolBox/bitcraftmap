@@ -22,7 +22,6 @@
     loadTemplesGeoJson,
     loadTowersGeoJson,
     loadTreesGeoJson,
-    loadUnchartedGeoJson,
   } from "$lib/map/geojson-loader";
   import {type PaintContext, paintGeoJson} from "$lib/map/geojson-painter";
   import {validateGeoJson} from "$lib/map/geojson-validator";
@@ -86,12 +85,6 @@
   let towersLayer: L.LayerGroup;
   let territoriesLayer: L.LayerGroup;
   let hexiteLayer: L.LayerGroup;
-  let makersTreeLayer: L.LayerGroup;
-  let geysersLayer: L.LayerGroup;
-  let hermitCrabDensLayer: L.LayerGroup;
-  let shipwrecksLayer: L.LayerGroup;
-  let unchartedRuinsLayer: L.LayerGroup;
-  let silkmothLayer: L.LayerGroup;
   let travelerCampLayer: L.LayerGroup;
   let waypointsLayer: L.LayerGroup;
   let roadsLayer: L.LayerGroup;
@@ -268,12 +261,6 @@
     towersLayer = L.layerGroup();
     territoriesLayer = L.layerGroup();
     hexiteLayer = L.layerGroup();
-    makersTreeLayer = L.layerGroup();
-    geysersLayer = L.layerGroup();
-    hermitCrabDensLayer = L.layerGroup();
-    shipwrecksLayer = L.layerGroup();
-    unchartedRuinsLayer = L.layerGroup();
-    silkmothLayer = L.layerGroup();
     travelerCampLayer = L.layerGroup();
     waypointsLayer = L.layerGroup();
 
@@ -310,15 +297,9 @@
       Events: eventsLayer,
       Wonders: treesLayer,
       "Hexite Deposits": hexiteLayer,
-      "Maker's Trees": makersTreeLayer,
       Temples: templesLayer,
       "Ruined Cities": ruinedLayer,
       "Traveler Camps": travelerCampLayer,
-      "Volcanic Geysers": geysersLayer,
-      "Hermit Crab Dens": hermitCrabDensLayer,
-      Shipwrecks: shipwrecksLayer,
-      "Uncharted Ruins": unchartedRuinsLayer,
-      "Silkmoth Breeding Grounds": silkmothLayer,
       Banks: banksLayer,
       Markets: marketsLayer,
       Waystones: waystonesLayer,
@@ -358,12 +339,6 @@
       eventsLayer,
       treesLayer,
       hexiteLayer,
-      makersTreeLayer,
-      geysersLayer,
-      hermitCrabDensLayer,
-      shipwrecksLayer,
-      unchartedRuinsLayer,
-      silkmothLayer,
       travelerCampLayer,
       templesLayer,
       ruinedLayer,
@@ -500,7 +475,7 @@
 
     // Load GeoJSON data
     loadTreesGeoJson(treesLayer);
-    const empireResourcesPromise = loadEmpireResourcesGeoJson(hexiteLayer, makersTreeLayer);
+    const empireResourcesPromise = loadEmpireResourcesGeoJson(hexiteLayer);
     loadTemplesGeoJson(templesLayer);
     loadNpcsGeoJson(ruinedLayer, travelerCampLayer).then(() => {
       // Add search entries for NPC claims (ruined cities + traveler camps)
@@ -547,13 +522,6 @@
       }
     });
     const eventsPromise = loadEventsGeoJson(eventsLayer);
-    loadUnchartedGeoJson(
-      geysersLayer,
-      hermitCrabDensLayer,
-      shipwrecksLayer,
-      unchartedRuinsLayer,
-      silkmothLayer
-    );
     loadDungeonsGeoJson(dungeonsLayer);
 
     loadGridsGeoJson(gridsLayer, paintCtx);

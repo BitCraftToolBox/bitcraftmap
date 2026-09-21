@@ -51,19 +51,6 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 			'Watchtowers',
 			'Territories',
 			'Hexite Deposits',
-			"Maker's Trees",
-		],
-		defaultCollapsed: true
-	},
-	uncharted: {
-		title: 'Uncharted',
-		layers: [
-			'Events',
-			'Volcanic Geysers',
-			'Hermit Crab Dens',
-			'Shipwrecks',
-			'Uncharted Ruins',
-			'Silkmoth Breeding Grounds'
 		],
 		defaultCollapsed: true
 	},

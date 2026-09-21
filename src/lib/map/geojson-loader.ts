@@ -159,7 +159,6 @@ export async function loadTreesGeoJson(
 
 export async function loadEmpireResourcesGeoJson(
   hexiteLayer: L.LayerGroup,
-  makersTreeLayer: L.LayerGroup,
 ): Promise<void> {
   timerTrackedMarkers = timerTrackedMarkers.filter((r) => r.kind === "event");
 
@@ -168,7 +167,7 @@ export async function loadEmpireResourcesGeoJson(
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
       const isHexite = feature.properties.type === "hexite";
-      const targetLayer = isHexite ? hexiteLayer : makersTreeLayer;
+      const targetLayer = hexiteLayer;
       const icon = computeEmpireResourceIcon(isHexite, feature.properties.timer);
 
       const selectionData = {
@@ -184,7 +183,7 @@ export async function loadEmpireResourcesGeoJson(
         marker,
         x: latlng.lng,
         z: latlng.lat,
-        kind: isHexite ? "hexite" : "makers-tree",
+        kind: "hexite",
         selectionData,
       });
       return marker;
@@ -339,49 +338,6 @@ export async function loadEventsGeoJson(
         kind: "event",
         selectionData,
       });
-      return marker;
-    },
-  });
-}
-
-export async function loadUnchartedGeoJson(
-  geysersLayer: L.LayerGroup,
-  hermitCrabDensLayer: L.LayerGroup,
-  shipwrecksLayer: L.LayerGroup,
-  ruinsLayer: L.LayerGroup,
-  silkmothLayer: L.LayerGroup,
-): Promise<void> {
-  const file = await fetch(geojsonUrl("uncharted.geojson"));
-  const geojsonData = await file.json();
-  L.geoJSON(geojsonData, {
-    pointToLayer(feature, latlng) {
-      const iconName = feature.properties.iconName;
-      let targetLayer = geysersLayer;
-      let icon = volcanicGeyserIcon;
-      if (iconName === "volcanic-geyser") {
-        targetLayer = geysersLayer;
-        icon = volcanicGeyserIcon;
-      } else if (iconName === "hermit-crab") {
-        targetLayer = hermitCrabDensLayer;
-        icon = hermitCrabIcon;
-      } else if (iconName === "shipwreck") {
-        targetLayer = shipwrecksLayer;
-        icon = shipwreckIcon;
-      } else if (iconName === "uncharted-ruin") {
-        targetLayer = ruinsLayer;
-        icon = unchartedRuinsIcon;
-      } else if (iconName === "silkmoth-grounds") {
-        targetLayer = silkmothLayer;
-        icon = silkmothIcon;
-      }
-
-      const selectionData = {
-        type: "other" as const,
-        name: feature.properties.popupText || feature.properties.name || "Uncharted",
-        latlng: { lat: latlng.lat, lng: latlng.lng },
-      };
-      const marker = L.marker(latlng, { icon }).addTo(targetLayer);
-      bindLazyPopup(marker, selectionData);
       return marker;
     },
   });
