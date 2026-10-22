@@ -1534,6 +1534,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Large Araknir Spawner",
         tag: "Enemy Spawner"
     },
+    "128155290": {
+        tier: 10,
+        name: "Hardened Flawless Quarry Rock",
+        tag: "Rock"
+    },
     "129262204": {
         tier: 2,
         name: "Growing Birch Sapling",
@@ -1624,6 +1629,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Inactive Flawless Gypsite Pit",
         tag: "Sand"
     },
+    "211284059": {
+        tier: 9,
+        name: "Cracked Magnificent Quarry Rock",
+        tag: "Rock"
+    },
     "213706467": {
         tier: 7,
         name: "Rich Aurumite Deposit",
@@ -1684,6 +1694,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 9 Flower",
         tag: "Flower"
     },
+    "292497859": {
+        tier: 7,
+        name: "Glittering Ornate Quarry Rock",
+        tag: "Rock"
+    },
+    "293751657": {
+        tier: 6,
+        name: "Peerless Quarry Rock",
+        tag: "Rock"
+    },
     "296306290": {
         tier: -1,
         name: "Overgrown Ancient Brick Pile",
@@ -1723,6 +1743,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Hexite Deposit",
         tag: "Hexite"
+    },
+    "350602972": {
+        tier: 5,
+        name: "Exquisite Quarry Rock",
+        tag: "Rock"
     },
     "353689546": {
         tier: 2,
@@ -1793,6 +1818,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Calmed Beehive",
         tag: "Taming"
+    },
+    "406311468": {
+        tier: -1,
+        name: "Blue Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "411376268": {
         tier: 7,
@@ -1929,6 +1959,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Rimefruit",
         tag: "Taming Resource"
     },
+    "531757988": {
+        tier: 9,
+        name: "Hardened Magnificent Quarry Rock",
+        tag: "Rock"
+    },
     "532077242": {
         tier: 4,
         name: "Indigo Milk Cap",
@@ -1943,6 +1978,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Garnet Sand",
         tag: "Sand"
+    },
+    "544364246": {
+        tier: 5,
+        name: "Hardened Exquisite Quarry Rock",
+        tag: "Rock"
     },
     "545609744": {
         tier: 7,
@@ -1989,6 +2029,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ornate Mushroom",
         tag: "Mushroom"
     },
+    "590489148": {
+        tier: 8,
+        name: "Cracked Pristine Quarry Rock",
+        tag: "Rock"
+    },
     "596660873": {
         tier: -1,
         name: "Hexite Meteor",
@@ -2003,6 +2048,21 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 7,
         name: "Ornate Deep Roots",
         tag: "Fiber Plant"
+    },
+    "603057275": {
+        tier: 10,
+        name: "Flawless Quarry Rock",
+        tag: "Rock"
+    },
+    "606363285": {
+        tier: 5,
+        name: "Exposed Exquisite Quarry Rock",
+        tag: "Rock"
+    },
+    "615515331": {
+        tier: 1,
+        name: "Sealed Door",
+        tag: "Dungeon"
     },
     "616268871": {
         tier: 9,
@@ -2023,6 +2083,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Luminite Outcrop Interior",
         tag: "Ore Vein"
+    },
+    "649642670": {
+        tier: 8,
+        name: "Hardened Pristine Quarry Rock",
+        tag: "Rock"
     },
     "650019671": {
         tier: 8,
@@ -2098,6 +2163,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Old Furnace",
         tag: "Uncharted Resource"
+    },
+    "733276442": {
+        tier: 8,
+        name: "Exposed Pristine Quarry Rock",
+        tag: "Rock"
+    },
+    "745592753": {
+        tier: 8,
+        name: "Pristine Quarry Rock",
+        tag: "Rock"
     },
     "746946997": {
         tier: 2,
@@ -2354,15 +2429,30 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Grand Treasure Chest",
         tag: "Treasure"
     },
+    "950161769": {
+        tier: -1,
+        name: "Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "955632809": {
         tier: 4,
         name: "Fine Hexite Infused Tree",
         tag: "Hexite Infused Tree"
     },
+    "956178572": {
+        tier: 6,
+        name: "Hardened Peerless Quarry Rock",
+        tag: "Rock"
+    },
     "956829437": {
         tier: 6,
         name: "Inactive Corven Pod",
         tag: "Trophy Fishing Node"
+    },
+    "962177968": {
+        tier: 10,
+        name: "Glittering Flawless Quarry Rock",
+        tag: "Rock"
     },
     "963451338": {
         tier: 9,
@@ -2398,6 +2488,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Open Hexite Sealed Vault (Three Lock Broken)",
         tag: "World Event"
+    },
+    "997509259": {
+        tier: 5,
+        name: "Cracked Exquisite Quarry Rock",
+        tag: "Rock"
     },
     "998944900": {
         tier: 6,
@@ -2448,6 +2543,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Luminescent Kelp",
         tag: "Quest Resource"
+    },
+    "1040890046": {
+        tier: 9,
+        name: "Magnificent Quarry Rock",
+        tag: "Rock"
     },
     "1043012047": {
         tier: -1,
@@ -2539,6 +2639,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ancient Repaired Bridge",
         tag: "Dungeon Obstacle"
     },
+    "1107837446": {
+        tier: 4,
+        name: "Exposed Fine Quarry Rock",
+        tag: "Rock"
+    },
     "1113266447": {
         tier: 2,
         name: "Glittering Simple Quarry Rock",
@@ -2579,6 +2684,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Web Encased Chest",
         tag: "Dungeon Resource"
     },
+    "1135188490": {
+        tier: 4,
+        name: "Glittering Fine Quarry Rock",
+        tag: "Rock"
+    },
     "1141184831": {
         tier: 9,
         name: "Frenzied School Of Abyssal Gladius",
@@ -2603,6 +2713,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Sawmill",
         tag: "Profession Dungeon Resource"
+    },
+    "1155416646": {
+        tier: 4,
+        name: "Cracked Fine Quarry Rock",
+        tag: "Rock"
     },
     "1157887989": {
         tier: 9,
@@ -2634,15 +2749,35 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Aurumite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1176034859": {
+        tier: 6,
+        name: "Cracked Peerless Quarry Rock",
+        tag: "Rock"
+    },
     "1180909566": {
         tier: 3,
         name: "Crystalized Sand",
         tag: "Sand"
     },
+    "1183606035": {
+        tier: 4,
+        name: "Fine Quarry Rock",
+        tag: "Rock"
+    },
+    "1190414270": {
+        tier: -1,
+        name: "Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1200968939": {
         tier: 8,
         name: "Pristine Hexite Infused Stump",
         tag: "Hexite Infused Tree"
+    },
+    "1219612154": {
+        tier: 10,
+        name: "Cracked Flawless Quarry Rock",
+        tag: "Rock"
     },
     "1219773404": {
         tier: -1,
@@ -2663,6 +2798,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Starseeker's Research Storage",
         tag: "Uncharted Scholar"
+    },
+    "1233891344": {
+        tier: 5,
+        name: "Glittering Exquisite Quarry Rock",
+        tag: "Rock"
     },
     "1235656080": {
         tier: -1,
@@ -2804,6 +2944,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Luminite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1370020507": {
+        tier: 4,
+        name: "Hardened Fine Quarry Rock",
+        tag: "Rock"
+    },
     "1373224735": {
         tier: -1,
         name: "Windstream",
@@ -2889,6 +3034,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Astralite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1449805610": {
+        tier: 9,
+        name: "Exposed Magnificent Quarry Rock",
+        tag: "Rock"
+    },
     "1450830612": {
         tier: 2,
         name: "Inactive Simple Gypsite Pit",
@@ -2918,6 +3068,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Dewberry Bush",
         tag: "Berry"
+    },
+    "1470589495": {
+        tier: -1,
+        name: "Purple Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1477126404": {
         tier: -1,
@@ -3003,6 +3158,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Inactive Trask Pod",
         tag: "Trophy Fishing Node"
+    },
+    "1559616345": {
+        tier: 6,
+        name: "Glittering Peerless Quarry Rock",
+        tag: "Rock"
     },
     "1565420196": {
         tier: 1,
@@ -3098,6 +3258,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Exquisite Gypsite Pit",
         tag: "Sand"
+    },
+    "1650661349": {
+        tier: 7,
+        name: "Hardened Ornate Quarry Rock",
+        tag: "Rock"
     },
     "1657885116": {
         tier: 8,
@@ -3209,6 +3374,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Magnificent Mushroom",
         tag: "Mushroom"
     },
+    "1745763567": {
+        tier: 6,
+        name: "Exposed Peerless Quarry Rock",
+        tag: "Rock"
+    },
     "1747556974": {
         tier: 10,
         name: "Astralite Vein Interior",
@@ -3239,6 +3409,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Baited Briny Argus Spot",
         tag: "Lake Fish Spot"
     },
+    "1797060932": {
+        tier: 10,
+        name: "Exposed Flawless Quarry Rock",
+        tag: "Rock"
+    },
     "1800013378": {
         tier: 7,
         name: "Medium Aurumite Vein Interior",
@@ -3258,6 +3433,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Ruin Bridge",
         tag: "Profession Dungeon Resource"
+    },
+    "1808984429": {
+        tier: 8,
+        name: "Glittering Pristine Quarry Rock",
+        tag: "Rock"
     },
     "1812221896": {
         tier: 9,
@@ -3319,6 +3499,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Citric Giant Zesty Berry Bush",
         tag: "Bountiful Berry Bush"
     },
+    "1875433014": {
+        tier: -1,
+        name: "Green Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1876238623": {
         tier: 2,
         name: "Simple Deep Roots",
@@ -3369,6 +3554,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Collapsed Ruin Bridge",
         tag: "Profession Dungeon Resource"
     },
+    "1937718173": {
+        tier: 7,
+        name: "Ornate Quarry Rock",
+        tag: "Rock"
+    },
     "1939036936": {
         tier: 1,
         name: "Oyster Shell Open",
@@ -3383,6 +3573,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Withering Spruce Sapling",
         tag: "Sapling"
+    },
+    "1944960384": {
+        tier: 7,
+        name: "Exposed Ornate Quarry Rock",
+        tag: "Rock"
     },
     "1945207154": {
         tier: 4,
@@ -3418,6 +3613,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Subterranean Truffle Patch",
         tag: "Mushroom"
+    },
+    "1974462821": {
+        tier: -1,
+        name: "Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "1977811738": {
         tier: 1,
@@ -3519,6 +3719,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Celestium Vein Interior",
         tag: "Ore Vein"
     },
+    "2025798857": {
+        tier: -1,
+        name: "Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "2027405944": {
         tier: 6,
         name: "Rathium Vein Interior",
@@ -3534,9 +3739,19 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Aurumite Vein Interior",
         tag: "Ore Vein"
     },
+    "2032662880": {
+        tier: 7,
+        name: "Cracked Ornate Quarry Rock",
+        tag: "Rock"
+    },
     "2035679533": {
         tier: 2,
         name: "Exposed Simple Quarry Rock",
+        tag: "Rock"
+    },
+    "2051693358": {
+        tier: 9,
+        name: "Glittering Magnificent Quarry Rock",
         tag: "Rock"
     },
     "2054412952": {
@@ -3553,6 +3768,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Beach Sand",
         tag: "Sand"
+    },
+    "2059101880": {
+        tier: -1,
+        name: "Green Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "2064671495": {
         tier: 1,
@@ -3866,5 +4086,55 @@ export const creatureIndex: CreatureIndex = { // Generated array
         tier: 1,
         name: "Giant Hexite Skitch",
         tag: "Monster"
+    },
+    "44": {
+        tier: 1,
+        name: "Distracted Sagi Bird",
+        tag: "Huntable Animal"
+    },
+    "45": {
+        tier: 2,
+        name: "Distracted Nubi Goat",
+        tag: "Huntable Animal"
+    },
+    "46": {
+        tier: 3,
+        name: "Distracted Cervus",
+        tag: "Huntable Animal"
+    },
+    "47": {
+        tier: 4,
+        name: "Distracted Scrofa",
+        tag: "Huntable Animal"
+    },
+    "48": {
+        tier: 5,
+        name: "Distracted Ox",
+        tag: "Huntable Animal"
+    },
+    "49": {
+        tier: 6,
+        name: "Distracted Yagi",
+        tag: "Huntable Animal"
+    },
+    "50": {
+        tier: 7,
+        name: "Distracted Jungle Terrorbird",
+        tag: "Huntable Animal"
+    },
+    "51": {
+        tier: 8,
+        name: "Distracted Elder Scrofa",
+        tag: "Huntable Animal"
+    },
+    "52": {
+        tier: 9,
+        name: "Distracted Tundra Ox",
+        tag: "Huntable Animal"
+    },
+    "53": {
+        tier: 10,
+        name: "Distracted Desert Terrorbird",
+        tag: "Huntable Animal"
     },
 };
