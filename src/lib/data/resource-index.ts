@@ -206,7 +206,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "35": {
         tier: 7,
-        name: "Young Baobab Tree",
+        name: "Mature Baobab Tree",
         tag: "Tree"
     },
     "36": {
@@ -316,7 +316,7 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "59": {
         tier: 1,
-        name: "Ferralith Outcrop",
+        name: "Large Ferralith Vein",
         tag: "Ore Vein"
     },
     "60": {
@@ -1126,12 +1126,12 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "2050000": {
         tier: 4,
-        name: "Garden Boulder",
+        name: "Rocky Garden Boulder",
         tag: "Rock Boulder"
     },
     "2050001": {
         tier: 2,
-        name: "Large Garden Boulder",
+        name: "Rocky Garden Large Boulder",
         tag: "Rock Outcrop"
     },
     "2110000": {
@@ -1291,27 +1291,27 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "4050000": {
         tier: 4,
-        name: "Garden Pillar",
+        name: "Rocky Garden Pillars",
         tag: "Rock Boulder"
     },
     "4050001": {
         tier: 4,
-        name: "Garden Formation",
+        name: "Rocky Garden Massive Formation",
         tag: "Rock Outcrop"
     },
     "4050002": {
         tier: 4,
-        name: "Rocky Garden Pillar",
+        name: "Rocky Garden Thin Pillar",
         tag: "Rock Boulder"
     },
     "4050003": {
         tier: 4,
-        name: "Rocky Garden Pillars",
+        name: "Rocky Garden Thick Pillar",
         tag: "Rock Boulder"
     },
     "4050004": {
         tier: 4,
-        name: "Rocky Garden Formation",
+        name: "Rocky Garden Tiny Formation",
         tag: "Rock Boulder"
     },
     "4050005": {
@@ -1321,12 +1321,12 @@ export const resourceIndex: ResourceIndex = { // Generated array
     },
     "4050006": {
         tier: 4,
-        name: "Large Rocky Garden Pillars",
+        name: "Rocky Garden Arch Formation",
         tag: "Rock Boulder"
     },
     "4050007": {
         tier: 4,
-        name: "Large Rocky Garden Formations",
+        name: "Rocky Garden Formation",
         tag: "Rock Boulder"
     },
     "4110000": {
@@ -1434,6 +1434,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Abyssal Oyster",
         tag: "Mollusks"
     },
+    "12451715": {
+        tier: 6,
+        name: "Peerless Purple Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
+    "13466331": {
+        tier: 7,
+        name: "Ornate Green Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "20400246": {
         tier: 9,
         name: "Umbracite Vein Interior Depleted",
@@ -1448,6 +1458,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Inactive Infused Gypsite Pit",
         tag: "Sand"
+    },
+    "49212251": {
+        tier: 7,
+        name: "Large Aurumite Vein",
+        tag: "Ore Vein"
     },
     "49710228": {
         tier: 5,
@@ -1494,10 +1509,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Celestium Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "71870989": {
+        tier: 9,
+        name: "Magnificent Green Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "74824355": {
         tier: 4,
         name: "Tropical Tree",
         tag: "Tree"
+    },
+    "82239943": {
+        tier: 3,
+        name: "Sturdy Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "90424896": {
+        tier: 2,
+        name: "Simple Purple Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "92565503": {
         tier: 3,
@@ -1513,6 +1543,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Inactive Fine Gypsite Pit",
         tag: "Sand"
+    },
+    "97998766": {
+        tier: 3,
+        name: "Sturdy Green Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "100197889": {
         tier: 7,
@@ -1543,6 +1578,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Growing Birch Sapling",
         tag: "Sapling"
+    },
+    "129915428": {
+        tier: 7,
+        name: "Ornate Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "130920554": {
         tier: 3,
@@ -1583,6 +1623,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Baited Abyssal Nobilis Spot",
         tag: "Lake Fish Spot"
+    },
+    "162515036": {
+        tier: 2,
+        name: "Simple Blue Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
+    "179090611": {
+        tier: 8,
+        name: "Pristine Purple Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "182331452": {
         tier: 1,
@@ -1649,6 +1699,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Ferralith Outcrop Interior",
         tag: "Ore Vein"
     },
+    "221899210": {
+        tier: -1,
+        name: "Smoldering Hexite Meteor",
+        tag: "Hexite Meteor"
+    },
     "222537784": {
         tier: -1,
         name: "King Jakyl Puppy Paw Imprints",
@@ -1658,6 +1713,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 10,
         name: "Flawless Hexite Infused Stump",
         tag: "Hexite Infused Tree"
+    },
+    "230499083": {
+        tier: 1,
+        name: "Lost Facility Door",
+        tag: "Obstacle"
     },
     "230905381": {
         tier: 8,
@@ -1704,10 +1764,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Peerless Quarry Rock",
         tag: "Rock"
     },
+    "295590668": {
+        tier: 4,
+        name: "Fine Green Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "296306290": {
         tier: -1,
         name: "Overgrown Ancient Brick Pile",
         tag: "Ruin Resource"
+    },
+    "310091002": {
+        tier: 8,
+        name: "Pristine Green Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "312574297": {
         tier: -1,
@@ -1723,6 +1793,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Faint Hexite Energy Font",
         tag: "Energy Font"
+    },
+    "324150453": {
+        tier: 2,
+        name: "Simple Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "331687458": {
         tier: 9,
@@ -1753,6 +1828,26 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Giant Bountiful Savory Berry Bush",
         tag: "Bountiful Berry Bush"
+    },
+    "354131551": {
+        tier: 9,
+        name: "Magnificent Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "360537282": {
+        tier: 6,
+        name: "Peerless Green Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "364017548": {
+        tier: 10,
+        name: "Flawless Green Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
+    "366182449": {
+        tier: 3,
+        name: "Sturdy Purple Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "367785441": {
         tier: 8,
@@ -1854,10 +1949,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Infused Hexite Infused Stump",
         tag: "Hexite Infused Tree"
     },
+    "437007740": {
+        tier: 6,
+        name: "Peerless Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "440044897": {
         tier: -1,
         name: "Fully Stocked Study Desk",
         tag: "Uncharted Scholar"
+    },
+    "443253769": {
+        tier: 7,
+        name: "Ornate Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "449797597": {
         tier: 7,
@@ -1894,6 +1999,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Growing Beech Sapling",
         tag: "Sapling"
     },
+    "472688681": {
+        tier: 8,
+        name: "Pristine Ancient Artifacts",
+        tag: "Research"
+    },
+    "473655067": {
+        tier: 10,
+        name: "Flawless Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "473828668": {
         tier: 10,
         name: "Bamboo",
@@ -1903,6 +2018,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Ferralith Outcrop Interior Depleted",
         tag: "Ore Vein"
+    },
+    "475240146": {
+        tier: 3,
+        name: "Sturdy Suspicious Dirt Pile",
+        tag: "Dirt"
     },
     "479638263": {
         tier: 8,
@@ -1948,6 +2068,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Berserker Mushroom",
         tag: "Rare Mushroom"
+    },
+    "520769981": {
+        tier: 5,
+        name: "Exquisite Purple Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "529252257": {
         tier: 8,
@@ -1998,6 +2123,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Medium Luminite Vein Interior",
         tag: "Ore Vein"
+    },
+    "553435848": {
+        tier: 2,
+        name: "Simple Green Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "553614880": {
+        tier: 7,
+        name: "Ornate Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "562432497": {
         tier: 9,
@@ -2074,10 +2209,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Sunflower",
         tag: "Seasonal"
     },
+    "624619893": {
+        tier: 4,
+        name: "Fine Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
+    "629686204": {
+        tier: 2,
+        name: "Simple Suspicious Dirt Pile",
+        tag: "Dirt"
+    },
     "640884139": {
         tier: 3,
         name: "Infused Gypsite Pit",
         tag: "Sand"
+    },
+    "641755128": {
+        tier: 7,
+        name: "Ornate Purple Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "642972236": {
         tier: 5,
@@ -2104,6 +2254,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Sturdy Quarry Rock",
         tag: "Rock"
     },
+    "668628667": {
+        tier: 4,
+        name: "Fine Blue Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "673344019": {
         tier: 4,
         name: "Moderately Chummed Paranensis Pod",
@@ -2113,6 +2268,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Rich Celestium Deposit",
         tag: "Ore Vein"
+    },
+    "685192075": {
+        tier: 4,
+        name: "Fine Green Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "687249632": {
         tier: 1,
@@ -2229,10 +2389,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Elenvar Outcrop Interior",
         tag: "Ore Vein"
     },
+    "787556256": {
+        tier: 10,
+        name: "Large Astralite Vein",
+        tag: "Ore Vein"
+    },
     "789563787": {
         tier: 4,
         name: "Strong Hexite Energy Font",
         tag: "Energy Font"
+    },
+    "792932767": {
+        tier: 9,
+        name: "Magnificent Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
+    "793157591": {
+        tier: 4,
+        name: "Fine Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "806722041": {
         tier: 4,
@@ -2253,6 +2428,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Rough Quarry Rock",
         tag: "Rock"
+    },
+    "816348166": {
+        tier: 2,
+        name: "Simple Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "817308838": {
         tier: 7,
@@ -2319,6 +2499,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Baited Azure Sphyra Spot",
         tag: "Lake Fish Spot"
     },
+    "860003907": {
+        tier: 4,
+        name: "Large Elenvar Vein",
+        tag: "Ore Vein"
+    },
     "868500054": {
         tier: -1,
         name: "Collapsed Ruin Archway",
@@ -2344,6 +2529,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Enraged Drone Nest",
         tag: "Taming"
     },
+    "878717288": {
+        tier: 7,
+        name: "Ornate Blue Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "887736443": {
         tier: 5,
         name: "Luminite Vein Interior",
@@ -2358,6 +2548,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Infused Hexite Infused Tree",
         tag: "Hexite Infused Tree"
+    },
+    "899507703": {
+        tier: 1,
+        name: "Basic Suspicious Dirt Pile",
+        tag: "Dirt"
     },
     "904022325": {
         tier: 7,
@@ -2424,6 +2619,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Active Sparkstone Ore",
         tag: "Weakened Ore"
     },
+    "944500845": {
+        tier: 5,
+        name: "Exquisite Suspicious Dirt Pile",
+        tag: "Dirt"
+    },
     "949468358": {
         tier: -1,
         name: "Grand Treasure Chest",
@@ -2459,10 +2659,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Magnificent Berry Bush",
         tag: "Berry"
     },
+    "967025828": {
+        tier: 10,
+        name: "Flawless Purple Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "968561419": {
         tier: 7,
         name: "Subterranean Oyster Mushroom",
         tag: "Mushroom"
+    },
+    "972649494": {
+        tier: 1,
+        name: "Broken Mak Spawner",
+        tag: "Obstacle"
     },
     "974225980": {
         tier: 1,
@@ -2473,6 +2683,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Open Uncharted Shipment",
         tag: "Sailing Cargo"
+    },
+    "980750699": {
+        tier: 3,
+        name: "Sturdy Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "986344159": {
         tier: 3,
@@ -2509,10 +2724,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Gentle Spring",
         tag: "Foraging Resource"
     },
+    "1003230775": {
+        tier: 5,
+        name: "Exquisite Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1005142992": {
         tier: 5,
         name: "Elephant Fibers",
         tag: "Fiber Plant"
+    },
+    "1005587768": {
+        tier: 8,
+        name: "Pristine Blue Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1005820274": {
         tier: 5,
@@ -2549,6 +2774,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Magnificent Quarry Rock",
         tag: "Rock"
     },
+    "1041092997": {
+        tier: 6,
+        name: "Large Rathium Vein",
+        tag: "Ore Vein"
+    },
     "1043012047": {
         tier: -1,
         name: "Lost Shipment",
@@ -2569,10 +2799,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Rich Rathium Deposit",
         tag: "Ore Vein"
     },
+    "1048583780": {
+        tier: -1,
+        name: "Energized Hexite Meteor",
+        tag: "Hexite Meteor"
+    },
     "1048834532": {
         tier: 10,
         name: "Inactive Naskel Pod",
         tag: "Trophy Fishing Node"
+    },
+    "1061244409": {
+        tier: 2,
+        name: "Simple Green Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1062382109": {
         tier: 9,
@@ -2588,6 +2828,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 6,
         name: "Peerless Hexite Infused Tree",
         tag: "Hexite Infused Tree"
+    },
+    "1068627371": {
+        tier: 8,
+        name: "Pristine Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "1071155340": {
         tier: 1,
@@ -2624,6 +2869,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Lost Pirate's Treasure",
         tag: "Treasure"
     },
+    "1088697184": {
+        tier: -1,
+        name: "Immortal Guardian Spawner",
+        tag: "Enemy Spawner"
+    },
+    "1090022434": {
+        tier: 8,
+        name: "Large Celestium Vein",
+        tag: "Ore Vein"
+    },
     "1091832489": {
         tier: -1,
         name: "Docile Alpha Puppy Den",
@@ -2643,6 +2898,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Exposed Fine Quarry Rock",
         tag: "Rock"
+    },
+    "1109702568": {
+        tier: 5,
+        name: "Exquisite Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "1113266447": {
         tier: 2,
@@ -2673,6 +2933,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Tier 8 Fibers",
         tag: "Fiber Plant"
+    },
+    "1126712081": {
+        tier: 4,
+        name: "Fine Suspicious Dirt Pile",
+        tag: "Dirt"
     },
     "1126774401": {
         tier: 5,
@@ -2709,6 +2974,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tough Pine Bark Pile",
         tag: "Quest Resource"
     },
+    "1146865969": {
+        tier: 5,
+        name: "Exquisite Ancient Artifacts",
+        tag: "Research"
+    },
+    "1147553081": {
+        tier: 8,
+        name: "Pristine Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "1154155891": {
         tier: -1,
         name: "Sawmill",
@@ -2718,6 +2993,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Cracked Fine Quarry Rock",
         tag: "Rock"
+    },
+    "1157690922": {
+        tier: 9,
+        name: "Magnificent Purple Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1157887989": {
         tier: 9,
@@ -2769,10 +3049,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Magenta Hexite Energy Exhaust",
         tag: "Dungeon"
     },
+    "1191382733": {
+        tier: 6,
+        name: "Peerless Suspicious Dirt Pile",
+        tag: "Dirt"
+    },
+    "1194268174": {
+        tier: 3,
+        name: "Sturdy Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1200968939": {
         tier: 8,
         name: "Pristine Hexite Infused Stump",
         tag: "Hexite Infused Tree"
+    },
+    "1210451686": {
+        tier: 6,
+        name: "Peerless Green Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1219612154": {
         tier: 10,
@@ -2829,10 +3124,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Lava Pool",
         tag: "Lava"
     },
+    "1255209378": {
+        tier: 2,
+        name: "Simple Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1255593240": {
         tier: -1,
         name: "Futuremaker's Research Storage",
         tag: "Uncharted Scholar"
+    },
+    "1259926721": {
+        tier: 5,
+        name: "Exquisite Green Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "1260515599": {
         tier: 3,
@@ -2859,6 +3164,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Opened Lost Treasure",
         tag: "Sailing Cargo"
     },
+    "1273787277": {
+        tier: 10,
+        name: "Flawless Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1278209224": {
         tier: 4,
         name: "Subterranean Indigo Cap",
@@ -2874,6 +3184,21 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Divine Tetra",
         tag: "Baitfish"
     },
+    "1284637141": {
+        tier: 6,
+        name: "Peerless Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "1286428370": {
+        tier: 3,
+        name: "Sturdy Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "1288414465": {
+        tier: 1,
+        name: "Overloaded Mak Spawner",
+        tag: "Obstacle"
+    },
     "1293969473": {
         tier: -1,
         name: "Lost Treasure",
@@ -2883,6 +3208,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 1,
         name: "Blossom Tree",
         tag: "Blossom Tree"
+    },
+    "1301589695": {
+        tier: 10,
+        name: "Flawless Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "1302896139": {
+        tier: 6,
+        name: "Peerless Blue Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1303955933": {
         tier: 1,
@@ -2914,6 +3249,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Celestium Vein",
         tag: "Ore Vein"
     },
+    "1333099082": {
+        tier: 6,
+        name: "Peerless Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
+    "1333174295": {
+        tier: 9,
+        name: "Magnificent Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1333270269": {
         tier: 10,
         name: "Flawless Sand",
@@ -2923,6 +3268,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Inactive Magnificent Gypsite Pit",
         tag: "Sand"
+    },
+    "1343259171": {
+        tier: 5,
+        name: "Exquisite Blue Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1349960760": {
         tier: 5,
@@ -2954,10 +3304,25 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Windstream",
         tag: "Quest Resource"
     },
+    "1374765351": {
+        tier: 7,
+        name: "Ornate Ancient Artifacts",
+        tag: "Research"
+    },
     "1376234165": {
         tier: 3,
         name: "Hidden Greenhorn Dolo Spot",
         tag: "Lake Fish Spot"
+    },
+    "1378626647": {
+        tier: -1,
+        name: "Energized Hexite Reservoir",
+        tag: "Hexite"
+    },
+    "1380303349": {
+        tier: 7,
+        name: "Ornate Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "1384187835": {
         tier: -1,
@@ -2989,6 +3354,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Beehive",
         tag: "Taming"
     },
+    "1410844594": {
+        tier: 9,
+        name: "Magnificent Green Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "1414503424": {
+        tier: 9,
+        name: "Magnificent Blue Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "1423043113": {
         tier: 3,
         name: "Peach Tree",
@@ -3009,6 +3384,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Large Gift Pile",
         tag: "Seasonal"
     },
+    "1425670186": {
+        tier: -1,
+        name: "Flaming Hexite Meteor",
+        tag: "Hexite Meteor"
+    },
     "1426567739": {
         tier: 9,
         name: "Magnificent Deep Roots",
@@ -3018,6 +3398,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Pirate's Footlocker",
         tag: "Uncharted Resource"
+    },
+    "1432290891": {
+        tier: 5,
+        name: "Large Luminite Vein",
+        tag: "Ore Vein"
+    },
+    "1433745234": {
+        tier: 1,
+        name: "Rough Ancient Artifacts",
+        tag: "Research"
     },
     "1435874592": {
         tier: 1,
@@ -3059,6 +3449,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Seaweed",
         tag: "Fiber Plant"
     },
+    "1461080442": {
+        tier: 2,
+        name: "Simple Ancient Artifacts",
+        tag: "Research"
+    },
     "1464160790": {
         tier: -1,
         name: "Lost Gift",
@@ -3073,6 +3468,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Purple Hexite Energy Vessel",
         tag: "Dungeon"
+    },
+    "1473851134": {
+        tier: 10,
+        name: "Flawless Ancient Artifacts",
+        tag: "Research"
     },
     "1477126404": {
         tier: -1,
@@ -3103,6 +3503,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 9,
         name: "Subterranean King Trumpet",
         tag: "Mushroom"
+    },
+    "1524144096": {
+        tier: -1,
+        name: "Inactive Hexite Reservoir",
+        tag: "Hexite"
     },
     "1526038154": {
         tier: 9,
@@ -3164,6 +3569,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Glittering Peerless Quarry Rock",
         tag: "Rock"
     },
+    "1560637933": {
+        tier: 1,
+        name: "Active Mak Spawner",
+        tag: "Obstacle"
+    },
     "1565420196": {
         tier: 1,
         name: "Medium Ferralith Vein Interior",
@@ -3178,6 +3588,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 8,
         name: "Pristine Hieroglyphs",
         tag: "Research"
+    },
+    "1569476318": {
+        tier: 9,
+        name: "Magnificent Ancient Artifacts",
+        tag: "Research"
+    },
+    "1570861711": {
+        tier: 7,
+        name: "Ornate Suspicious Dirt Pile",
+        tag: "Dirt"
     },
     "1574032455": {
         tier: 1,
@@ -3209,10 +3629,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Pristine Berry Bush",
         tag: "Berry"
     },
+    "1594782792": {
+        tier: 4,
+        name: "Fine Purple Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "1606770008": {
         tier: 10,
         name: "Astralite Vein",
         tag: "Ore Vein"
+    },
+    "1607856909": {
+        tier: 3,
+        name: "Sturdy Blue Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1611570790": {
         tier: 8,
@@ -3223,6 +3653,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Inactive Murrel Pod",
         tag: "Trophy Fishing Node"
+    },
+    "1619066961": {
+        tier: 9,
+        name: "Large Umbracite Vein",
+        tag: "Ore Vein"
     },
     "1619369727": {
         tier: 2,
@@ -3249,6 +3684,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Flawless Mushroom",
         tag: "Mushroom"
     },
+    "1638243061": {
+        tier: 5,
+        name: "Exquisite Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1643773046": {
         tier: -1,
         name: "Baby Jakyl Den",
@@ -3258,6 +3698,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Exquisite Gypsite Pit",
         tag: "Sand"
+    },
+    "1650563350": {
+        tier: 3,
+        name: "Sturdy Green Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "1650661349": {
         tier: 7,
@@ -3273,6 +3718,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Ancient Debris",
         tag: "Rare Research"
+    },
+    "1667056626": {
+        tier: 8,
+        name: "Pristine Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "1672470830": {
+        tier: 4,
+        name: "Fine Magenta Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "1672706925": {
         tier: -1,
@@ -3359,6 +3814,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Open Hexite Sealed Vault (All Locks Broken)",
         tag: "World Event"
     },
+    "1728003481": {
+        tier: 6,
+        name: "Peerless Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1731709368": {
         tier: 8,
         name: "Overwhelming Hexite Energy Font",
@@ -3384,10 +3844,20 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Astralite Vein Interior",
         tag: "Ore Vein"
     },
+    "1747640710": {
+        tier: 3,
+        name: "Sturdy Ancient Artifacts",
+        tag: "Research"
+    },
     "1747827972": {
         tier: 10,
         name: "Flawless Hexite Infused Tree",
         tag: "Hexite Infused Tree"
+    },
+    "1758121480": {
+        tier: 6,
+        name: "Peerless Ancient Artifacts",
+        tag: "Research"
     },
     "1772923809": {
         tier: 1,
@@ -3403,6 +3873,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 4,
         name: "Inactive Paranensis Pod",
         tag: "Paranensis"
+    },
+    "1789861273": {
+        tier: 9,
+        name: "Magnificent Suspicious Dirt Pile",
+        tag: "Dirt"
     },
     "1791475915": {
         tier: 1,
@@ -3484,6 +3959,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Medium Pyrelite Vein Interior Depleted",
         tag: "Ore Vein"
     },
+    "1855220745": {
+        tier: 8,
+        name: "Pristine Suspicious Dirt Pile",
+        tag: "Dirt"
+    },
+    "1855877712": {
+        tier: 10,
+        name: "Flawless Suspicious Dirt Pile",
+        tag: "Dirt"
+    },
     "1856494514": {
         tier: 6,
         name: "Peerless Deep Roots",
@@ -3509,6 +3994,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Simple Deep Roots",
         tag: "Fiber Plant"
     },
+    "1882406196": {
+        tier: 7,
+        name: "Ornate Green Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "1885803555": {
         tier: 8,
         name: "Baited Murky Nemato Spot",
@@ -3518,6 +4008,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: -1,
         name: "Depleted Ancient Chest",
         tag: "Depleted Resource"
+    },
+    "1889592521": {
+        tier: 8,
+        name: "Pristine Green Hexite Energy Vessel",
+        tag: "Dungeon"
     },
     "1902575241": {
         tier: 2,
@@ -3629,6 +4124,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Fruitless Maker's Tree",
         tag: "Wonder Resource"
     },
+    "1978543583": {
+        tier: 2,
+        name: "Simple Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1981854097": {
         tier: 7,
         name: "Tier 7 Fibers",
@@ -3649,6 +4149,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 10 Flower",
         tag: "Flower"
     },
+    "1988665595": {
+        tier: 4,
+        name: "Fine Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
     "1989268569": {
         tier: -1,
         name: "Hidden 38 Tiles Resource",
@@ -3658,6 +4163,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 5,
         name: "Rich Luminite Deposit",
         tag: "Ore Vein"
+    },
+    "1994051808": {
+        tier: 8,
+        name: "Pristine Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
+    },
+    "1996416496": {
+        tier: -1,
+        name: "First Temple Enemy Spawner",
+        tag: "Enemy Spawner"
     },
     "1996631377": {
         tier: 10,
@@ -3734,6 +4249,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Fiery Hexite Meteor",
         tag: "Hexite Meteor"
     },
+    "2030458489": {
+        tier: 5,
+        name: "Exquisite Green Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "2031243337": {
         tier: 7,
         name: "Aurumite Vein Interior",
@@ -3748,6 +4268,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 2,
         name: "Exposed Simple Quarry Rock",
         tag: "Rock"
+    },
+    "2041429368": {
+        tier: 10,
+        name: "Flawless Blue Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "2051693358": {
         tier: 9,
@@ -3774,6 +4299,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Green Hexite Energy Vessel",
         tag: "Dungeon"
     },
+    "2060043398": {
+        tier: 4,
+        name: "Fine Ancient Artifacts",
+        tag: "Research"
+    },
     "2064671495": {
         tier: 1,
         name: "Baited School Of Briny Argus",
@@ -3793,6 +4323,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Emarium Vein Interior Depleted",
         tag: "Ore Vein"
+    },
+    "2068942552": {
+        tier: 10,
+        name: "Flawless Green Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "2072988001": {
         tier: 3,
@@ -3819,6 +4354,11 @@ export const resourceIndex: ResourceIndex = { // Generated array
         name: "Tier 7 Outcrop",
         tag: "Rock Outcrop"
     },
+    "2109001093": {
+        tier: 5,
+        name: "Exquisite Magenta Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
     "2110330714": {
         tier: 10,
         name: "Flawless Berry Bush",
@@ -3828,6 +4368,16 @@ export const resourceIndex: ResourceIndex = { // Generated array
         tier: 3,
         name: "Beach Whetstone",
         tag: "Uncharted Resource"
+    },
+    "2115643604": {
+        tier: 10,
+        name: "Flawless Blue Hexite Energy Vessel",
+        tag: "Dungeon"
+    },
+    "2122146489": {
+        tier: 9,
+        name: "Magnificent Purple Hexite Energy Exhaust",
+        tag: "Dungeon"
     },
     "2124433785": {
         tier: -1,
@@ -4136,5 +4686,45 @@ export const creatureIndex: CreatureIndex = { // Generated array
         tier: 10,
         name: "Distracted Desert Terrorbird",
         tag: "Huntable Animal"
+    },
+    "54": {
+        tier: 1,
+        name: "Starseeker Guardian",
+        tag: "Monster"
+    },
+    "55": {
+        tier: 1,
+        name: "Starseeker Scout",
+        tag: "Monster"
+    },
+    "56": {
+        tier: 1,
+        name: "Immortal Guardian",
+        tag: "Monster"
+    },
+    "57": {
+        tier: 1,
+        name: "Immortal Watcher",
+        tag: "Monster"
+    },
+    "58": {
+        tier: 2,
+        name: "Immortal Guardian",
+        tag: "Monster"
+    },
+    "59": {
+        tier: 2,
+        name: "Immortal Watcher",
+        tag: "Monster"
+    },
+    "60": {
+        tier: 1,
+        name: "Starseeker Skirmisher",
+        tag: "Monster"
+    },
+    "61": {
+        tier: 1,
+        name: "Starseeker Captain",
+        tag: "Monster"
     },
 };
