@@ -4,8 +4,8 @@ import * as env from "$env/static/public";
 export function createAppConfig(): AppConfig {
   return {
     gistApi: "https://api.github.com/gists/",
-    exportsCdn: env.PUBLIC_EXPORTS_CDN ?? "https://prism.brico.app",
+    exportsCdn: env.PUBLIC_EXPORTS_CDN ?? "https://prism.brico.app/release",
     relayHost: env.PUBLIC_RELAY_HOST ?? "https://st.prism.brico.app", // STDB SDK converts this to ws/wss for us
-    relayModule: env.PUBLIC_RELAY_MODULE ?? "prism-relay",
+    relayModule: env.PUBLIC_RELAY_MODULE ?? "prism-release",
   };
 }
