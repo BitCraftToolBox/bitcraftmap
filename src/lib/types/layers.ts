@@ -9,6 +9,7 @@ export type LayerName =
 	| 'templesLayer'
 	| 'ruinedLayer'
 	| 'banksLayer'
+	| 'regionalBanksLayer'
 	| 'marketsLayer'
 	| 'waystonesLayer'
 	| 'gridsLayer'
@@ -58,6 +59,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 		title: 'Claims',
 		layers: [
 			'Banks',
+			'Regional Banks',
 			'Markets',
 			'Waystones',
 			'Claims T1',
