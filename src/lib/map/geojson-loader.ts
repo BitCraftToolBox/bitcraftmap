@@ -176,6 +176,7 @@ export async function loadEmpireResourcesGeoJson(
         latlng: { lat: latlng.lat, lng: latlng.lng },
         timer: feature.properties.timer,
         resourceType: feature.properties.type,
+        buildingDescId: feature.properties.building_desc,
       };
       const marker = L.marker(latlng, { icon }).addTo(targetLayer);
       bindLazyPopup(marker, selectionData);
@@ -240,6 +241,7 @@ export async function loadNpcsGeoJson(
 export async function loadClaimsGeoJson(
   claimLayers: L.LayerGroup[],
   banksLayer: L.LayerGroup,
+  regionalBanksLayer: L.LayerGroup,
   marketsLayer: L.LayerGroup,
   waystonesLayer: L.LayerGroup,
 ): Promise<void> {
@@ -255,6 +257,7 @@ export async function loadClaimsGeoJson(
         tier: feature.properties.tier,
         latlng: { lat: latlng.lat, lng: latlng.lng },
         hasBank: !!feature.properties.has_bank,
+        hasRegionalBank: !!feature.properties.has_regional_bank,
         hasMarket: !!feature.properties.has_market,
         hasWaystone: !!feature.properties.has_waystone,
       };
@@ -274,6 +277,11 @@ export async function loadClaimsGeoJson(
         const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 10 });
         bindLazyPopup(m, selectionData);
         m.addTo(banksLayer);
+      }
+      if (feature.properties.has_regional_bank) {
+        const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 10 });
+        bindLazyPopup(m, selectionData);
+        m.addTo(regionalBanksLayer);
       }
       if (feature.properties.has_market) {
         const m = L.marker(latlng, { icon: claimIcons[feature.properties.tier], zIndexOffset: feature.properties.tier * 10 });

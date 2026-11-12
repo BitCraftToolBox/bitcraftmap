@@ -64,6 +64,7 @@ export function buildPopupHtml(item: MapSelection, zoom: number = 0): string {
 				${divider}
 				<div class="bcm-popup-props">
 					${propRow('Bank', item.hasBank)}
+					${propRow('Regional Bank', item.hasRegionalBank)}
 					${propRow('Market', item.hasMarket)}
 					${propRow('Waystone', item.hasWaystone)}
 				</div>
@@ -152,6 +153,7 @@ export function buildPopupHtml(item: MapSelection, zoom: number = 0): string {
 						</div>
 					</div>
 				</div>
+				${item.type === "empire-resource" && item.buildingDescId === 1506763792 ? `<div class="bcm-popup-footer">Gatherable by anyone for 5 minutes every 23 hours.</div>` : ""}
 			</div>`;
 
 		default:

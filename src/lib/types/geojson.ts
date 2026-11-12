@@ -3,6 +3,7 @@ export interface BitcraftFeatureProperties {
 	entityId?: string;
 	tier?: number;
 	has_bank?: boolean;
+	has_regional_bank?: boolean;
 	has_market?: boolean;
 	has_waystone?: boolean;
 

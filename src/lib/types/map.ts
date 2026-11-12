@@ -40,6 +40,7 @@ export interface ClaimSelection {
 	entityId: string;
 	tier: number;
 	hasBank: boolean;
+	hasRegionalBank: boolean;
 	hasMarket: boolean;
 	hasWaystone: boolean;
 }
@@ -95,6 +96,7 @@ export interface EmpireResourceSelection {
 	latlng: SelectionLatLng;
 	timer: string | undefined;
 	resourceType?: string;
+	buildingDescId?: number;
 }
 
 export interface EventSelection {

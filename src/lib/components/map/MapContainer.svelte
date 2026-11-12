@@ -78,6 +78,7 @@
   let ruinedLayer: L.LayerGroup;
   let templesLayer: L.LayerGroup;
   let banksLayer: L.LayerGroup;
+  let regionalBanksLayer: L.LayerGroup;
   let marketsLayer: L.LayerGroup;
   let waystonesLayer: L.LayerGroup;
   let gridsLayer: L.LayerGroup;
@@ -254,6 +255,7 @@
     ruinedLayer = L.layerGroup();
     templesLayer = L.layerGroup();
     banksLayer = L.layerGroup();
+    regionalBanksLayer = L.layerGroup();
     marketsLayer = L.layerGroup();
     waystonesLayer = L.layerGroup();
     gridsLayer = L.layerGroup();
@@ -301,6 +303,7 @@
       "Ruined Cities": ruinedLayer,
       "Traveler Camps": travelerCampLayer,
       Banks: banksLayer,
+      "Regional Banks": regionalBanksLayer,
       Markets: marketsLayer,
       Waystones: waystonesLayer,
       Grids: gridsLayer,
@@ -343,6 +346,7 @@
       templesLayer,
       ruinedLayer,
       banksLayer,
+      regionalBanksLayer,
       marketsLayer,
       waystonesLayer,
       waypointsLayer,
@@ -500,6 +504,7 @@
     loadClaimsGeoJson(
       claimLayers,
       banksLayer,
+      regionalBanksLayer,
       marketsLayer,
       waystonesLayer,
     ).then(() => {
