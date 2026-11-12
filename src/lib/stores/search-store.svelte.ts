@@ -185,6 +185,7 @@ export function getSearchState() {
 		},
 
 		get resourceResults(): ResourceEntry[] {
+			return [];/*
 			return searchByNameTierAndTag(query, resourceIndex, (id, r) => ({
 				type: 'resource' as const,
 				id,
@@ -192,9 +193,11 @@ export function getSearchState() {
 				tier: r.tier,
 				tag: r.tag ?? '',
 			}));
+			*/
 		},
 
 		get creatureResults(): CreatureSearchEntry[] {
+			return [];/*
 			return searchByNameTierAndTag(query, creatureIndex, (id, c) => ({
 				type: 'creature' as const,
 				id,
@@ -202,6 +205,7 @@ export function getSearchState() {
 				tier: c.tier,
 				tag: c.tag ?? '',
 			}));
+			*/
 		},
 
 		get results(): SearchResult[] {

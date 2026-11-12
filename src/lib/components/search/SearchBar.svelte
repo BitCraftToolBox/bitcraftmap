@@ -60,7 +60,7 @@
 		<input
 			bind:this={inputEl}
 			type="text"
-			placeholder="Search claims, cities, creatures, resources, players..."
+			placeholder="Search claims, cities, players..."
 			bind:value={search.query}
 			onfocus={() => search.isOpen = true}
 			onblur={() => setTimeout(() => search.isOpen = false, 200)}
