@@ -151,6 +151,7 @@ export async function loadTreesGeoJson(
 
 export async function loadEmpireResourcesGeoJson(
   hexiteLayer: L.LayerGroup,
+  makersTreeLayer: L.LayerGroup,
 ): Promise<void> {
   timerTrackedMarkers = timerTrackedMarkers.filter((r) => r.kind === "event");
 
@@ -159,7 +160,7 @@ export async function loadEmpireResourcesGeoJson(
   L.geoJSON(geojsonData, {
     pointToLayer(feature, latlng) {
       const isHexite = feature.properties.type === "hexite";
-      const targetLayer = hexiteLayer;
+      const targetLayer = isHexite ? hexiteLayer : makersTreeLayer;
       const icon = computeEmpireResourceIcon(isHexite, feature.properties.timer);
 
       const selectionData = {
@@ -176,7 +177,7 @@ export async function loadEmpireResourcesGeoJson(
         marker,
         x: latlng.lng,
         z: latlng.lat,
-        kind: "hexite",
+        kind: isHexite ? "hexite" : "makers-tree",
         selectionData,
       });
       return marker;

@@ -54,6 +54,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 		layers: [
 			'Watchtowers',
 			'Territories',
+			"Maker's Trees",
 		],
 		defaultCollapsed: true
 	},
