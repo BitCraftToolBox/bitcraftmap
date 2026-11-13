@@ -153,7 +153,7 @@ export function buildPopupHtml(item: MapSelection, zoom: number = 0): string {
 						</div>
 					</div>
 				</div>
-				${item.type === "empire-resource" && item.buildingDescId === 1506763792 ? `<div class="bcm-popup-footer">Gatherable by anyone for 5 minutes every 23 hours.</div>` : ""}
+				${item.type === "empire-resource" && item.buildingDescId === 1506763792 ? `<div class="bcm-popup-footer">Gatherable by anyone for a few-minute window each day.</div>` : ""}
 			</div>`;
 
 		default:

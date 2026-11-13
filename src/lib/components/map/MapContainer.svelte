@@ -88,6 +88,7 @@
   let towersLayer: L.LayerGroup;
   let territoriesLayer: L.LayerGroup;
   let hexiteLayer: L.LayerGroup;
+  let makersTreeLayer: L.LayerGroup;
   let travelerCampLayer: L.LayerGroup;
   let waypointsLayer: L.LayerGroup;
   let roadsLayer: L.LayerGroup;
@@ -266,6 +267,7 @@
     towersLayer = L.layerGroup();
     territoriesLayer = L.layerGroup();
     hexiteLayer = L.layerGroup();
+    makersTreeLayer = L.layerGroup();
     travelerCampLayer = L.layerGroup();
     waypointsLayer = L.layerGroup();
 
@@ -302,6 +304,7 @@
       Events: eventsLayer,
       Wonders: treesLayer,
       "Hexite": hexiteLayer,
+      "Maker's Trees": makersTreeLayer,
       Temples: templesLayer,
       "Ruined Cities": ruinedLayer,
       "Traveler Camps": travelerCampLayer,
@@ -346,6 +349,7 @@
       eventsLayer,
       treesLayer,
       hexiteLayer,
+      makersTreeLayer,
       travelerCampLayer,
       templesLayer,
       ruinedLayer,
@@ -484,7 +488,7 @@
 
     // Load GeoJSON data
     loadTreesGeoJson(treesLayer);
-    const empireResourcesPromise = loadEmpireResourcesGeoJson(hexiteLayer);
+    const empireResourcesPromise = loadEmpireResourcesGeoJson(hexiteLayer, makersTreeLayer);
     loadTemplesGeoJson(templesLayer);
     loadNpcsGeoJson(ruinedLayer, travelerCampLayer).then(() => {
       // Add search entries for NPC claims (ruined cities + traveler camps)
