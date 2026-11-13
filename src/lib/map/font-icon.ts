@@ -14,15 +14,20 @@ export function fontIconKey(id: string | undefined): string | undefined {
 const cache = new Map<string, L.DivIcon>();
 
 /** Create a Leaflet DivIcon rendering an inline SVG from the game's icon font. */
-export function createFontIcon(id: string | undefined, size = 24): L.DivIcon | undefined {
+export function createFontIcon(
+  id: string | undefined,
+  size = 24,
+  options: { className?: string } = {},
+): L.DivIcon | undefined {
   const key = fontIconKey(id);
   const entry = key ? GLYPH_ICONS[key] : undefined;
   if (!key || !entry) return undefined;
-  const cacheKey = `${key}:${size}`;
+  const extra = options.className ?? "";
+  const cacheKey = `${key}:${size}:${extra}`;
   let icon = cache.get(cacheKey);
   if (!icon) {
     icon = L.divIcon({
-      className: "bcm-font-icon",
+      className: extra ? `bcm-font-icon ${extra}` : "bcm-font-icon",
       html: `<svg viewBox="${entry.viewBox}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${entry.c}</svg>`,
       iconSize: [size, size],
       iconAnchor: [size / 2, size / 2],

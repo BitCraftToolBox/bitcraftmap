@@ -29,10 +29,10 @@ let ruinedIcon: L.Icon;
 let templeIcon: L.Icon;
 let treeIcon: L.Icon;
 let towerIcon: L.Icon;
-let hexiteIcon: L.Icon;
-let hexiteDepletedIcon: L.Icon;
-let makersTreeIcon: L.Icon;
-let makersTreeDepletedIcon: L.Icon;
+let hexiteIcon: L.Icon | L.DivIcon;
+let hexiteDepletedIcon: L.Icon | L.DivIcon;
+let makersTreeIcon: L.Icon | L.DivIcon;
+let makersTreeDepletedIcon: L.Icon | L.DivIcon;
 let travelerCampIcon: L.Icon;
 
 export function initIcons(): void {
@@ -44,10 +44,14 @@ export function initIcons(): void {
   templeIcon = createIcon("temple");
   treeIcon = createIcon("travelerTree");
   towerIcon = createIcon("tower", [16, 32]);
-  hexiteIcon = createIcon("hexite-energy");
-  hexiteDepletedIcon = createIcon("hexite-energy", [32, 32], { className: "grayscale-icon" });
-  makersTreeIcon = createIcon("makers-tree");
-  makersTreeDepletedIcon = createIcon("makers-tree", [32, 32], { className: "grayscale-icon" });
+  hexiteIcon = createFontIcon("\u0111") ?? createIcon("hexite-energy");
+  hexiteDepletedIcon =
+    createFontIcon("\u0111", 24, { className: "grayscale-icon" }) ??
+    createIcon("hexite-energy", [32, 32], { className: "grayscale-icon" });
+  makersTreeIcon = createFontIcon("\uFFFE") ?? createIcon("makers-tree");
+  makersTreeDepletedIcon =
+    createFontIcon("\uFFFE", 24, { className: "grayscale-icon" }) ??
+    createIcon("makers-tree", [32, 32], { className: "grayscale-icon" });
   travelerCampIcon = createIcon("traveler-camp");
 }
 
@@ -85,7 +89,7 @@ let timerTrackedMarkers: TimerTrackedMarker[] = [];
 // Match threshold from the loader spec: dx^2 + dz^2 < 50
 const TIMER_MATCH_RADIUS_SQ = 50;
 
-function computeEmpireResourceIcon(isHexite: boolean, timer: string | undefined): L.Icon {
+function computeEmpireResourceIcon(isHexite: boolean, timer: string | undefined): L.Icon | L.DivIcon {
   const ready = !timer || new Date(timer).getTime() <= Date.now();
   const isSoon = timer && new Date(timer).getTime() - 15 * 60 * 1000 <= Date.now();
   return isHexite
