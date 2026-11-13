@@ -44,6 +44,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 			'Ruined Cities',
 			'Traveler Camps',
 			'Dungeons',
+			'Hexite',
 			'In-Game Map Icons',
 			'Custom Waypoints'
 		]
@@ -53,7 +54,6 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 		layers: [
 			'Watchtowers',
 			'Territories',
-			'Hexite',
 		],
 		defaultCollapsed: true
 	},
