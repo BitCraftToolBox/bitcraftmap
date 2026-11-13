@@ -53,11 +53,6 @@ export const iconsManifest: Record<string, string> = {
 	'hexite-energy': '/images/other/hexite_gem.png',
 	tower: '/images/other/tower.webp',
 	'makers-tree': '/images/other/makers-tree.webp',
-	'volcanic-geyser': '/images/other/volcanic-geyser.webp',
 	'traveler-camp': '/images/other/traveler-camp.webp',
-	'hermit-crab': '/images/other/hermit-crab.webp',
-	'shipwreck': '/images/other/shipwreck.webp',
-	'uncharted-ruins': '/images/other/uncharted-ruins.webp',
-	'silkmoth-grounds': '/images/other/silkmoth-grounds.webp',
 	'vault-event': '/images/other/vault-event.webp'
 };

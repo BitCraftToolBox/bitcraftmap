@@ -14,6 +14,7 @@
     loadCavesGeoJson,
     loadClaimsGeoJson,
     loadDungeonsGeoJson,
+    loadGameIconsGeoJson,
     loadEmpireResourcesGeoJson,
     loadEventsGeoJson,
     loadGeoJsonFromHash,
@@ -83,6 +84,7 @@
   let waystonesLayer: L.LayerGroup;
   let gridsLayer: L.LayerGroup;
   let dungeonsLayer: L.LayerGroup;
+  let gameIconsLayer: L.LayerGroup;
   let towersLayer: L.LayerGroup;
   let territoriesLayer: L.LayerGroup;
   let hexiteLayer: L.LayerGroup;
@@ -260,6 +262,7 @@
     waystonesLayer = L.layerGroup();
     gridsLayer = L.layerGroup();
     dungeonsLayer = L.layerGroup();
+    gameIconsLayer = L.layerGroup();
     towersLayer = L.layerGroup();
     territoriesLayer = L.layerGroup();
     hexiteLayer = L.layerGroup();
@@ -298,7 +301,7 @@
     genericToggle = {
       Events: eventsLayer,
       Wonders: treesLayer,
-      "Hexite Deposits": hexiteLayer,
+      "Hexite": hexiteLayer,
       Temples: templesLayer,
       "Ruined Cities": ruinedLayer,
       "Traveler Camps": travelerCampLayer,
@@ -308,6 +311,7 @@
       Waystones: waystonesLayer,
       Grids: gridsLayer,
       Dungeons: dungeonsLayer,
+      "In-Game Map Icons": gameIconsLayer,
       Territories: territoriesLayer,
       Watchtowers: towersLayer,
       "Custom Waypoints": waypointsLayer,
@@ -351,6 +355,7 @@
       waystonesLayer,
       waypointsLayer,
       dungeonsLayer,
+      gameIconsLayer,
       territoriesLayer,
       towersLayer,
       roadsLayer,
@@ -528,6 +533,7 @@
     });
     const eventsPromise = loadEventsGeoJson(eventsLayer);
     loadDungeonsGeoJson(dungeonsLayer);
+    loadGameIconsGeoJson(gameIconsLayer);
 
     loadGridsGeoJson(gridsLayer, paintCtx);
     loadTowersGeoJson(towersLayer, territoriesLayer, map);
