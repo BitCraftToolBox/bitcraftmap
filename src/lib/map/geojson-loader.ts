@@ -1,6 +1,7 @@
 import L from "leaflet";
 import "leaflet.markercluster";
 import { createIcon } from "./create-icon";
+import { createFontIcon } from "./font-icon";
 import { readableCoordinates } from "./coordinate-utils";
 import { validateGeoJson } from "./geojson-validator";
 import { paintGeoJson, type PaintContext } from "./geojson-painter";
@@ -32,12 +33,7 @@ let hexiteIcon: L.Icon;
 let hexiteDepletedIcon: L.Icon;
 let makersTreeIcon: L.Icon;
 let makersTreeDepletedIcon: L.Icon;
-let volcanicGeyserIcon: L.Icon;
 let travelerCampIcon: L.Icon;
-let hermitCrabIcon: L.Icon;
-let shipwreckIcon: L.Icon;
-let unchartedRuinsIcon: L.Icon;
-let silkmothIcon: L.Icon;
 
 export function initIcons(): void {
   caveIcons = Array.from({ length: 10 }, (_, i) => createIcon(`t${i + 1}`));
@@ -52,12 +48,7 @@ export function initIcons(): void {
   hexiteDepletedIcon = createIcon("hexite-energy", [32, 32], { className: "grayscale-icon" });
   makersTreeIcon = createIcon("makers-tree");
   makersTreeDepletedIcon = createIcon("makers-tree", [32, 32], { className: "grayscale-icon" });
-  volcanicGeyserIcon = createIcon("volcanic-geyser");
   travelerCampIcon = createIcon("traveler-camp");
-  hermitCrabIcon = createIcon("hermit-crab");
-  shipwreckIcon = createIcon("shipwreck");
-  unchartedRuinsIcon = createIcon("uncharted-ruins", [48, 32]);
-  silkmothIcon = createIcon("silkmoth-grounds");
 }
 
 /** Bind a lazy popup — the content function is only called when the popup opens. */
@@ -96,8 +87,9 @@ const TIMER_MATCH_RADIUS_SQ = 50;
 
 function computeEmpireResourceIcon(isHexite: boolean, timer: string | undefined): L.Icon {
   const ready = !timer || new Date(timer).getTime() <= Date.now();
+  const isSoon = timer && new Date(timer).getTime() - 15 * 60 * 1000 <= Date.now();
   return isHexite
-    ? (ready ? hexiteIcon : hexiteDepletedIcon)
+    ? (ready || isSoon ? hexiteIcon : hexiteDepletedIcon)
     : (ready ? makersTreeIcon : makersTreeDepletedIcon);
 }
 
@@ -367,6 +359,26 @@ export async function loadDungeonsGeoJson(
         latlng: { lat: latlng.lat, lng: latlng.lng },
       };
       const marker = L.marker(latlng, { icon }).addTo(dungeonsLayer);
+      bindLazyPopup(marker, selectionData);
+      return marker;
+    },
+  });
+}
+
+export async function loadGameIconsGeoJson(
+  gameIconsLayer: L.LayerGroup,
+): Promise<void> {
+  const file = await fetch(geojsonUrl("gameIcons.geojson"));
+  const geojsonData = await file.json();
+  L.geoJSON(geojsonData, {
+    pointToLayer(feature, latlng) {
+      const icon = createFontIcon(feature.properties.fontIcon) ?? createIcon("Hex_Logo");
+      const selectionData = {
+        type: "other" as const,
+        name: feature.properties.name,
+        latlng: { lat: latlng.lat, lng: latlng.lng },
+      };
+      const marker = L.marker(latlng, { icon }).addTo(gameIconsLayer);
       bindLazyPopup(marker, selectionData);
       return marker;
     },

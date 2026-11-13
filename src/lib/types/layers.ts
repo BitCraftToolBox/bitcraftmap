@@ -14,6 +14,7 @@ export type LayerName =
 	| 'waystonesLayer'
 	| 'gridsLayer'
 	| 'dungeonsLayer'
+	| 'gameIconsLayer'
 	| 'territoriesLayer'
 	| 'towersLayer'
 	| 'waypointsLayer'
@@ -43,6 +44,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 			'Ruined Cities',
 			'Traveler Camps',
 			'Dungeons',
+			'In-Game Map Icons',
 			'Custom Waypoints'
 		]
 	},
@@ -51,7 +53,7 @@ export const LAYER_GROUPS: Record<string, LayerGroupDef> = {
 		layers: [
 			'Watchtowers',
 			'Territories',
-			'Hexite Deposits',
+			'Hexite',
 		],
 		defaultCollapsed: true
 	},

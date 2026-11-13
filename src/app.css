@@ -433,3 +433,12 @@ body {
 	text-shadow: 0 0 3px #000, 0 0 6px #000;
 	pointer-events: none;
 }
+
+.bcm-font-icon {
+  color: #15557d;
+  background: none;
+  border: none;
+}
+.bcm-font-icon svg {
+  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 2px #fff);
+}
