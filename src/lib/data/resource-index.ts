@@ -4708,12 +4708,12 @@ export const creatureIndex: CreatureIndex = { // Generated array
         tag: "Monster"
     },
     "58": {
-        tier: 2,
+        tier: 1,
         name: "Immortal Guardian",
         tag: "Monster"
     },
     "59": {
-        tier: 2,
+        tier: 1,
         name: "Immortal Watcher",
         tag: "Monster"
     },
